@@ -191,8 +191,8 @@ export default function MetodoAstrologiaPdf() {
 
           <Reveal direction="up" distance={20} delay={0.12} duration={0.65} w="100%">
             <Text
-              color={`${astrologiaTxt}ee`}
-              fontSize={{ base: "md", md: "lg" }}
+              color="white"
+              fontSize={{ base: "lg", md: "xl" }}
               fontStyle="italic"
               textAlign="center"
               lineHeight="1.8"

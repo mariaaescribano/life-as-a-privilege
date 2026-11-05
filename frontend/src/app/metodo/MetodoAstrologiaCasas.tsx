@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Portal, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import { motion, useReducedMotion } from "framer-motion";
 import { keyframes } from "@emotion/react";
 import axios from "axios";
@@ -16,13 +16,11 @@ import { trazosSigno } from "../../components/metodo/signosIconos";
 import type { CartaNatal } from "../../components/metodo/CartaAstral3D/types";
 import { infoCasa, NUMEROS_ROMANOS, COLOR_SIGNO } from "../../components/metodo/casasAspectos";
 import { useNombresAstro } from "../../components/metodo/astrologiaNombres";
-import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import { useAstroLeidos } from "../../hooks/useAstroLeidos";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
 import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
 import { useT } from "../../i18n";
-import { PalabrasVivas } from "../../components/global/PalabrasVivas";
 
 // Contenido del popup «¿Qué es esto?» (botón flotante, encima del de la
 // llamada): explica esta página del recorrido. Edítalo libremente.
@@ -248,29 +246,10 @@ export default function MetodoAstrologiaCasas() {
             />
           </Reveal>
 
-          <Reveal
-            direction="up"
-            distance={34}
-            scaleFrom={0.97}
-            delay={0.12}
-            duration={0.75}
-            position="relative"
-            w="100%"
-            borderRadius="2xl"
-            overflow="hidden"
-            boxShadow={`0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${astrologiaTxt}1a, 0 0 48px ${astrologiaTxt}10`}
-          >
-            <SpaceBg overlay="rgba(8,13,30,0.28)" />
-
-            <Flex
-              position="relative"
-              zIndex={1}
-              direction={{ base: "column", lg: "row" }}
-              align="center"
-              gap={{ base: 6, lg: 10 }}
-              px={{ base: 5, md: 8 }}
-              py={{ base: 7, md: 9 }}
-            >
+          {/* DOS cajas del mismo alto: a la izquierda la rueda de las casas y a la derecha la casa elegida
+              (con su color, que es donde vive el color intenso). En móvil, una debajo de la otra. */}
+          <Box display="grid" gridTemplateColumns={{ base: "1fr", lg: "1fr 1fr" }} gap={{ base: 4, lg: 6 }}
+               alignItems="stretch" w="100%">
               {/* ── BOX de la casa seleccionada (debajo del círculo en móvil, dcha en desktop) ── */}
               {/* En móvil queda bajo la rueda (bajo el pliegue): entra al hacer scroll. */}
               <Reveal
@@ -283,19 +262,27 @@ export default function MetodoAstrologiaCasas() {
                 duration={0.7}
                 display="flex"
                 order={{ base: 1, lg: 1 }}
-                flex="1"
                 w="100%"
-                flexDirection="column"
-                justifyContent="center"
-                minH={{ lg: "253px" }}
+                position="relative"
+                borderRadius="2xl"
+                overflow="hidden"
+                boxShadow={`0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${astrologiaTxt}1a, 0 0 48px ${astrologiaTxt}10`}
+                minH={{ lg: "380px" }}
               >
-                <CasaBox info={info} colorSigno={colorSigno} textoSel={textoSel} sel={sel}
-                         leida={leidos.has(String(sel))} onLeer={() => marcarLeido(String(sel))} />
+                <SpaceBg overlay="rgba(8,13,30,0.28)" />
+                <Flex position="relative" zIndex={1} direction="column" justifyContent="center" w="100%"
+                      px={{ base: 5, md: 8 }} py={{ base: 7, md: 9 }}>
+                  <CasaBox info={info} colorSigno={colorSigno} textoSel={textoSel} sel={sel}
+                           leida={leidos.has(String(sel))} onLeer={() => marcarLeido(String(sel))} />
+                </Flex>
               </Reveal>
 
               {/* ── RUEDA giratoria (las casas: arriba en móvil, izda en desktop) ── */}
               <Reveal direction="right" distance={30} delay={0.22} duration={0.7}
-                      display="flex" order={{ base: 0, lg: 0 }} flex="1" justifyContent="center" alignItems="center" w="100%">
+                      display="flex" order={{ base: 0, lg: 0 }} w="100%" position="relative" borderRadius="2xl" overflow="hidden"
+                      boxShadow={`0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${astrologiaTxt}1a, 0 0 48px ${astrologiaTxt}10`}>
+                <SpaceBg overlay="rgba(8,13,30,0.28)" />
+                <Flex position="relative" zIndex={1} w="100%" align="center" justify="center" px={{ base: 5, md: 8 }} py={{ base: 7, md: 9 }}>
                 <Box w="100%" maxW="340px">
                   <Box
                     as="svg"
@@ -339,13 +326,13 @@ export default function MetodoAstrologiaCasas() {
                           >
                             <path
                               d={sectorPath(i)}
-                              fill={activa ? `${colorSigno}44` : `${astrologiaTxt}0a`}
+                              fill={activa ? `${astrologiaTxt}2e` : `${astrologiaTxt}0a`}
                               stroke={`${astrologiaTxt}33`}
                               strokeWidth={1}
                               style={{ cursor: "pointer", transition: "fill 0.3s" }}
                               onClick={() => { if (!dragRef.current?.moved) seleccionarCasa(casaNum); }}
                             />
-                            {activa && <path className="sector-latido" d={sectorPath(i)} fill={colorSigno} />}
+                            {activa && <path className="sector-latido" d={sectorPath(i)} fill={astrologiaTxt} />}
                             {/* número (se mantiene en pie con rotación inversa) */}
                             <g transform={`rotate(${-rot} ${lp.x} ${lp.y})`}
                                style={{ transition: dragRef.current ? "none" : "transform 0.55s cubic-bezier(.22,.68,.36,1)", pointerEvents: "none" }}>
@@ -408,9 +395,9 @@ export default function MetodoAstrologiaCasas() {
                     </Text>
                   )}
                 </Box>
+                </Flex>
               </Reveal>
-            </Flex>
-          </Reveal>
+          </Box>
         </Flex>
       </Flex>
 
@@ -441,28 +428,29 @@ function CasaBox({
 }) {
   const t = useT();
   const n = useNombresAstro();
-  const [open, setOpen] = useState(false);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
 
-  // Color del planeta REGENTE de esta casa: se usa para el glow/sombra del popup,
-  // para darle un toque de color propio a cada casa (más "divertido"). Si no hay
-  // regente, cae en el dorado de astrología.
-  const regenteColor = info?.regente?.color ?? astrologiaTxt;
-
-  // Abre el texto completo y marca la casa como leída.
-  const abrir = () => { setOpen(true); onLeer(); };
-
-  // Bloquea el scroll del fondo mientras el popup está abierto (solo scrollea la tarjeta).
-  useLockBodyScroll(open);
+  // Se marca como leída al llegar al final del texto (o al verse entero, si cabe sin scroll).
+  const comprobarLeido = () => {
+    const el = scrollRef.current;
+    if (!el || !textoSel || leida) return;
+    if (el.scrollTop + el.clientHeight >= el.scrollHeight - 8) onLeer();
+  };
+  useEffect(() => {
+    if (scrollRef.current) scrollRef.current.scrollTop = 0;
+    comprobarLeido();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sel, textoSel]);
 
   // `reserveClose`: en el modal hay una X arriba a la derecha; reservamos un
   // margen para que el regente no quede pegado a ella. En el box lateral (sin X)
   // no hace falta.
-  const cabecera = (reserveClose = false) => (
+  const cabecera = () => (
     <Flex align="center" gap={3} mb={4} wrap="nowrap">
       {/* Izquierda: Casa N · signo (se encoge/truncar si hace falta) */}
       <Flex align="center" gap={3} flex="1" minW={0}>
         <Text color={astrologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.04em"
-              whiteSpace="nowrap" flexShrink={0} style={{ textShadow: `0 0 12px ${astrologiaTxt}66` }}>
+              whiteSpace="nowrap" flexShrink={0} style={{ textShadow: `0 0 10px ${colorSigno}, 0 0 22px ${colorSigno}cc, 0 0 40px ${colorSigno}88` }}>
           {n.palabraCasa()} {NUMEROS_ROMANOS[sel - 1]}
         </Text>
         {info && (
@@ -478,7 +466,7 @@ function CasaBox({
 
       {/* Derecha: REGENTE siempre a la derecha y en una línea */}
       {info?.regente && (
-        <Flex align="center" gap={2} flexShrink={0} mr={reserveClose ? { base: "40px", md: "48px" } : undefined}>
+        <Flex align="center" gap={2} flexShrink={0}>
           <Text color={`${info.regente.color}cc`} fontSize="2xs" letterSpacing="0.18em" fontWeight="700" textTransform="uppercase"
                 whiteSpace="nowrap" style={{ textShadow: `0 0 8px ${info.regente.color}66` }}>
             <Box as="span" display={{ base: "inline", lg: "none" }}>{t("metodo.astro.regente")}</Box>
@@ -514,114 +502,36 @@ function CasaBox({
         {cabecera()}
         <Box h="1px" mb={4} bgGradient={`linear(to-r, transparent, ${astrologiaTxt}44, transparent)`} />
 
-        {/* texto recortado con … — máximo 2 líneas en cualquier tamaño.
-            El line-clamp (noOfLines) controla la altura y dibuja la elipsis; no
-            usamos overflow:hidden con altura fija porque recortaría la línea de
-            los puntos antes de que el clamp los pinte. */}
-        <Box flex={{ lg: "1" }} minH={{ base: "calc(1em * 1.85 * 2)", lg: 0 }}>
+        {/* Texto completo con scroll vertical visible; alto fijo para que el box no cambie de tamaño. */}
+        <Box ref={scrollRef} onScroll={comprobarLeido} h={{ base: "260px", lg: "240px" }} overflowY="scroll" pr={4}
+             overscrollBehavior="contain"
+             sx={{
+               scrollbarWidth: "thin", scrollbarColor: `${astrologiaTxt}99 ${astrologiaTxt}22`,
+               "&::-webkit-scrollbar": { width: "8px" },
+               "&::-webkit-scrollbar-track": { background: `${astrologiaTxt}22`, borderRadius: "8px" },
+               "&::-webkit-scrollbar-thumb": { background: `${astrologiaTxt}99`, borderRadius: "8px" },
+             }}>
           {textoSel ? (
-            <Text
-              color={`${astrologiaTxt}e6`}
-              fontSize={{ base: "md", md: "lg" }}
-              lineHeight="1.85"
-              letterSpacing="0.015em"
-              noOfLines={2}
-              style={{ textShadow: `0 0 8px ${astrologiaTxt}44` }}
-            >
+            <Text color={`${astrologiaTxt}e6`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" letterSpacing="0.015em"
+                  style={{ whiteSpace: "pre-wrap", textShadow: `0 0 8px ${astrologiaTxt}44` }}>
               {renderConNegritas(textoSel, astrologiaTxt)}
             </Text>
           ) : (
-            <Text color={`${astrologiaTxt}aa`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" fontStyle="italic"
-                  noOfLines={2}>
+            <Text color={`${astrologiaTxt}aa`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" fontStyle="italic">
               Aún no he escrito la lectura de esta Casa. Estará disponible pronto.
             </Text>
           )}
         </Box>
 
-        {/* botón Leer/Releer — abajo a la derecha, abre el texto completo.
-            Cuando ya se ha leído, el botón cambia (contorno + ✓ "Releer") para
-            que el usuario vea de un vistazo qué casas ya ha leído. */}
-        {textoSel && (
-          <Flex justify="flex-end" align="center" gap={3} mt={3}>
-            {leida && (
-              <Flex align="center" gap={1} title={t("metodo.astro.yaLeida")}>
-                <CheckIcon color={astrologiaTxt} size={14} />
-                <Text color={`${astrologiaTxt}cc`} fontSize="xs" fontWeight="700" letterSpacing="0.1em" textTransform="uppercase">
-                  {t("metodo.astro.leida")}
-                </Text>
-              </Flex>
-            )}
-            <Box as="button" onClick={abrir}
-                 px={6} py={2} borderRadius="full"
-                 bg={leida ? "transparent" : astrologiaTxt}
-                 color={leida ? astrologiaTxt : "#0a0a1a"}
-                 border={`1px solid ${astrologiaTxt}${leida ? "88" : "88"}`}
-                 fontFamily="'EB Garamond', serif" fontWeight="700"
-                 fontSize="sm" letterSpacing="0.06em" cursor="pointer"
-                 boxShadow={leida ? "none" : `0 0 14px ${astrologiaTxt}66`}
-                 _hover={{ boxShadow: `0 0 22px ${astrologiaTxt}99`, transform: "translateY(-1px)",
-                           bg: leida ? `${astrologiaTxt}1a` : astrologiaTxt }} transition="all 0.18s">
-              {leida ? "Releer" : "Leer"}
-            </Box>
+        {textoSel && leida && (
+          <Flex justify="flex-end" align="center" gap={1} mt={3} title={t("metodo.astro.yaLeida")}>
+            <CheckIcon color={astrologiaTxt} size={14} />
+            <Text color={`${astrologiaTxt}cc`} fontSize="xs" fontWeight="700" letterSpacing="0.1em" textTransform="uppercase">
+              {t("metodo.astro.leida")}
+            </Text>
           </Flex>
         )}
       </Box>
-
-      {/* modal con el texto completo — en Portal para escapar del stacking
-          context (zIndex 1) del contenedor y quedar por encima del header */}
-      {open && (
-        <Portal>
-        <Box position="fixed" inset={0} zIndex={2000} display="flex" alignItems="center" justifyContent="center"
-             px={{ base: 4, md: 10 }} py={{ base: 6, md: 10 }} bg="rgba(0,0,0,0.82)"
-             sx={{
-               backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)",
-               "@keyframes astroVelo": { from: { opacity: 0 }, to: { opacity: 1 } },
-               animation: "astroVelo 0.35s ease-out both",
-               "@media (prefers-reduced-motion: reduce)": { animation: "none" },
-             }}
-             onClick={() => setOpen(false)} fontFamily="'EB Garamond', serif">
-          <Box onClick={(e: React.MouseEvent) => e.stopPropagation()} position="relative" w="100%" maxW="620px"
-               sx={{
-               "@keyframes astroPopup": {
-                 from: { opacity: 0, transform: "translateY(18px) scale(0.965)", filter: "blur(6px)" },
-                 to: { opacity: 1, transform: "none", filter: "none" },
-               },
-               animation: "astroPopup 0.6s cubic-bezier(0.22,1,0.36,1) both",
-               "@media (prefers-reduced-motion: reduce)": { animation: "none" },
-        }}
-
-               // Mismo tamaño fijo que el resto de popups del recorrido (620×560
-               // en escritorio); scroll vertical dentro. Móvil (sin h base) igual.
-               h={{ md: "560px" }}
-               maxH={{ base: "calc(100vh - 48px)", md: "calc(100vh - 80px)" }} borderRadius="2xl" overflow="hidden"
-               border={`1px solid ${regenteColor}66`}
-               boxShadow={`0 0 32px ${regenteColor}55, 0 0 80px ${regenteColor}28, 0 12px 60px rgba(0,0,0,0.6)`}
-               display="flex" flexDirection="column">
-            <SpaceBg overlay="rgba(8,13,30,0.38)" quieto />
-            <Box as="button" onClick={() => setOpen(false)} position="absolute" top={3} right={3} zIndex={3}
-                 w="36px" h="36px" borderRadius="full" display="flex" alignItems="center" justifyContent="center"
-                 bg="rgba(0,0,0,0.6)" border={`1px solid ${astrologiaTxt}66`} color={astrologiaTxt} cursor="pointer"
-                 _hover={{ bg: "rgba(0,0,0,0.85)", borderColor: astrologiaTxt }}>
-              <svg xmlns="http://www.w3.org/2000/svg" height="14" viewBox="0 -960 960 960" width="14" fill="currentColor">
-                <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
-              </svg>
-            </Box>
-            <Box position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 8, md: 9 }}
-                 flex="1 1 auto" minH={0} overflowY="auto"
-                 overscrollBehavior="contain"
-                 sx={{ "&::-webkit-scrollbar": { width: "8px" }, "&::-webkit-scrollbar-thumb": { background: `${astrologiaTxt}55`, borderRadius: "8px" } }}>
-              {cabecera(true)}
-              <Box h="1px" mb={4} bgGradient={`linear(to-r, transparent, ${astrologiaTxt}44, transparent)`} />
-              <Text color={`${astrologiaTxt}e6`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" letterSpacing="0.015em"
-                    style={{ whiteSpace: "pre-wrap", textShadow: `0 0 8px ${astrologiaTxt}44` }}>
-                {/* Misma entrada que el texto de los cómics: palabra a palabra, con calma. */}
-                <PalabrasVivas texto={textoSel} colorNegrita={astrologiaTxt} retraso={0.5} total={1.1} />
-              </Text>
-            </Box>
-          </Box>
-        </Box>
-        </Portal>
-      )}
     </>
   );
 }

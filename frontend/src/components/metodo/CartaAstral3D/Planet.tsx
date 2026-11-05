@@ -12,6 +12,8 @@ interface PlanetProps {
   onClick?: () => void;
   /** Retraso (en segundos) de la entrada del planeta, para que salgan uno a uno. */
   appearDelay?: number;
+  /** Cuánto crece cuando está enfocado (por defecto 1,4). */
+  escalaFoco?: number;
 }
 
 // Cada planeta BROTA en su propio sitio (escala 0→1 + fundido), sin moverse.
@@ -69,7 +71,7 @@ function buildGlyphTexture(symbol: string, color: string): THREE.CanvasTexture {
   return tex;
 }
 
-export function Planet({ cuerpo, position, focused, onClick, appearDelay = 0 }: PlanetProps) {
+export function Planet({ cuerpo, position, focused, onClick, appearDelay = 0, escalaFoco = 1.4 }: PlanetProps) {
   const groupRef = useRef<THREE.Group>(null);
   const spriteRef = useRef<THREE.Sprite>(null);
   // Tiempo acumulado desde el montaje: controla la aparición escalonada.
@@ -80,7 +82,7 @@ export function Planet({ cuerpo, position, focused, onClick, appearDelay = 0 }: 
     [cuerpo.symbol, cuerpo.color]
   );
 
-  const targetScale = focused ? 1.4 : 1;
+  const targetScale = focused ? escalaFoco : 1;
   const targetBright = focused ? 1.6 : 1;
 
   useFrame((_, delta) => {

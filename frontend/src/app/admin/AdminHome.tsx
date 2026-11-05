@@ -12,8 +12,9 @@ import { abrirCaminoDe } from "../../api/persona";
 
 // Asesorías: las personas que María acompaña. Ella da de alta cada cuenta
 // (CREAR USUARIO) y a la persona le llega un correo para activarla. De cada fila
-// salen dos botones: «Datos» (/admin/asesorias/:userId/datos: sus datos personales,
-// la carta astral, la activación, su acceso, su diario y eliminar la cuenta) y el del
+// salen tres botones: «Datos» (/admin/asesorias/:userId/datos: sus datos personales,
+// la carta astral, la activación, su acceso, su diario y eliminar la cuenta), «Carta astral»
+// (/admin/astrologia/:userId: donde María escribe su lectura) y el del
 // mandala, que te mete en el espacio de los dos (su home): la cuenta de cada persona
 // es de ella y tuya, no un producto aparte. Ves y andas la web igual que ella, con lo
 // que solo tienes tú: abrirle pasos y escribirle notas. Aquí NO hay botones de borrar: un clic de más en una lista
@@ -139,6 +140,7 @@ export default function AdminHome() {
                   </Box>
                   <Flex gap={3} flexShrink={0}>
                     <BotonPildora marmol titulo={`Datos de ${p.name}`} onClick={() => navigate(`/admin/asesorias/${p.id}/datos`)}>Datos</BotonPildora>
+                    <BotonPildora marmol titulo={`Escribir la carta astral de ${p.name}`} onClick={() => navigate(`/admin/astrologia/${p.id}`)}>Carta astral</BotonPildora>
                     <BotonPildora marmol solido ocupado={entrando === p.id} titulo={`Abrir el camino de ${p.name}`} onClick={() => entrar(p)}>
                       <MandalaTurquesa tam="22px" color="white" />
                       <Text as="span" fontSize="lg" lineHeight="1" aria-hidden>→</Text>

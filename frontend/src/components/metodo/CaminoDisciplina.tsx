@@ -46,6 +46,8 @@ interface Props {
   esAdmin?: boolean;
   /** Se avisa a la página de si aún se está leyendo el progreso. */
   onCargando?: (cargando: boolean) => void;
+  /** false = el camino aún no se pinta (la página espera su turno tras el header y la barra). */
+  mostrar?: boolean;
 }
 
 const aPasos = (lista: PasoRecorrido[], expId: string, cerrado: (p: PasoRecorrido) => boolean): PasoCamino[] =>
@@ -162,7 +164,7 @@ function usarDatos(clave: CaminoKey, userId: string | undefined): DatosCamino {
   }
 }
 
-export default function CaminoDisciplina({ clave, userId, esAdmin = false, onCargando }: Props) {
+export default function CaminoDisciplina({ clave, userId, esAdmin = false, onCargando, mostrar = true }: Props) {
   const navigate = useNavigate();
   const datos = usarDatos(clave, userId);
   const vistas = useCaminoVistos(clave, userId);
@@ -174,7 +176,7 @@ export default function CaminoDisciplina({ clave, userId, esAdmin = false, onCar
 
   useEffect(() => { onCargando?.(datos.cargando); }, [datos.cargando, onCargando]);
 
-  if (!disc) return null;
+  if (!disc || !mostrar) return null;
 
   const admin: ControlAdmin | null = esAdmin && datos.control ? datos.control : null;
 

@@ -33,7 +33,7 @@ const ESTRELLAS = Array.from({ length: 26 }, (_, i) => {
 
 /** Capa de estrellas que titilan + estrella fugaz. Se puede poner encima de
  *  cualquier fondo de cielo (SpaceBg ya la incluye). */
-export const CieloVivo = ({ sinEstrellas = false, estrellas = ESTRELLAS.length }: { sinEstrellas?: boolean; estrellas?: number }) => (
+export const CieloVivo = ({ sinEstrellas = false, estrellas = ESTRELLAS.length, escala = 1 }: { sinEstrellas?: boolean; estrellas?: number; escala?: number }) => (
   <Box position="absolute" inset="0" pointerEvents="none" overflow="hidden" borderRadius="inherit" aria-hidden>
     {!sinEstrellas && ESTRELLAS.slice(0, estrellas).map((e, i) => (
       <Box
@@ -41,11 +41,11 @@ export const CieloVivo = ({ sinEstrellas = false, estrellas = ESTRELLAS.length }
         position="absolute"
         left={`${e.x}%`}
         top={`${e.y}%`}
-        w={`${e.r * 2}px`}
-        h={`${e.r * 2}px`}
+        w={`${e.r * 2 * escala}px`}
+        h={`${e.r * 2 * escala}px`}
         borderRadius="full"
         bg="white"
-        boxShadow="0 0 6px 1px rgba(255,255,255,0.8)"
+        boxShadow={`0 0 ${6 * escala}px ${1 * escala}px rgba(255,255,255,0.8)`}
         opacity={0.15}
         animation={`${titila} ${e.d}s ease-in-out ${e.delay}s infinite`}
         sx={SIN_MOV}
@@ -56,12 +56,12 @@ export const CieloVivo = ({ sinEstrellas = false, estrellas = ESTRELLAS.length }
       position="absolute"
       left="12%"
       top="10%"
-      w="70px"
-      h="1.5px"
+      w={`${70 * escala}px`}
+      h={`${Math.max(1, 1.5 * escala)}px`}
       borderRadius="full"
       opacity={0}
       bgGradient="linear(to-r, transparent, rgba(255,255,255,0.95))"
-      boxShadow="0 0 8px rgba(255,255,255,0.7)"
+      boxShadow={`0 0 ${8 * escala}px rgba(255,255,255,0.7)`}
       animation={`${fugaz} 16s linear 3s infinite`}
       sx={SIN_MOV}
     />
@@ -83,10 +83,12 @@ interface SpaceBgProps {
   sinEstrellas?: boolean;
   /** Cuántos puntitos que titilan (de 26). Pocos = cielo sobrio y elegante. */
   estrellas?: number;
+  /** Tamaño de las estrellas y de la fugaz (1 = el de las cajas grandes; menos = más finas). */
+  escala?: number;
 }
 
 /* Fondo espacial con degradado cósmico de respaldo */
-export const SpaceBg = ({ overlay = "rgba(8,13,30,0.25)", quieto = false, sinEstrellas = false, estrellas }: SpaceBgProps) => (
+export const SpaceBg = ({ overlay = "rgba(8,13,30,0.25)", quieto = false, sinEstrellas = false, estrellas, escala }: SpaceBgProps) => (
   <Box
     position="absolute"
     inset="0"
@@ -112,6 +114,6 @@ export const SpaceBg = ({ overlay = "rgba(8,13,30,0.25)", quieto = false, sinEst
       sx={SIN_MOV}
     />
     <Box position="absolute" inset="0" style={{ background: overlay }} />
-    {!quieto && <CieloVivo sinEstrellas={sinEstrellas} estrellas={estrellas} />}
+    {!quieto && <CieloVivo sinEstrellas={sinEstrellas} estrellas={estrellas} escala={escala} />}
   </Box>
 );

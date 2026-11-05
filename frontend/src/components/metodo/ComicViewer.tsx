@@ -56,6 +56,9 @@ export interface Vineta {
    *  quien tenga tres segundos se lleve lo esencial sin leerse la ficha entera.
    *  Mismo bloque que las fichas de Fisiología (ClavesRapidas). */
   claves?: string[];
+  /** Cuántos de los PRIMEROS párrafos son frases destacadas (el resumen). Si se indica, la entrada
+   *  va por orden: primero el título, luego esas frases y por último el resto del texto. */
+  destacadas?: number;
   /** Antetítulo pequeño en mayúsculas sobre el título (p.ej. "Ciclo generador"). */
   eyebrow?: string;
   /** La ilustración de esta viñeta es VERTICAL (9:16). En vez del cuadrado
@@ -1365,7 +1368,18 @@ export function ComicViewer({
                       sensación es de paz, no de prisa. El texto ya se lee a media
                       luz desde el principio, así que no hace esperar. Con el cuerpo borroso (escaparate)
                       no se anima. */}
-                  {textoBorroso ? bloque : <PalabrasVivas key={`${index}-${i}`} texto={bloque} total={0.9} duracion={1} retraso={(fotoMagica ? 0.6 : 0) + i * 0.3} />}
+                  {textoBorroso ? bloque : (() => {
+                    // Con `destacadas`, la entrada va por ORDEN: título → frases destacadas → texto.
+                    const nDest = !separarFrases ? (current.destacadas ?? 0) : 0;
+                    const base = fotoMagica ? 0.6 : 0;
+                    if (nDest <= 0) return <PalabrasVivas key={`${index}-${i}`} texto={bloque} total={0.9} duracion={1} retraso={base + i * 0.3} />;
+                    const tTitulo = current.titulo ? 0.2 + current.titulo.length * 0.018 + 0.45 : 0; // lo que tarda el título en escribirse
+                    const esDest = i < nDest;
+                    const retraso = esDest
+                      ? base + tTitulo + i * 0.45
+                      : base + tTitulo + nDest * 0.45 + 0.35 + (i - nDest) * 0.3;
+                    return <PalabrasVivas key={`${index}-${i}`} texto={bloque} total={esDest ? 0.7 : 0.9} duracion={1} retraso={retraso} />;
+                  })()}
                 </Text>
               ))}
               {/* Contenido extra de la página (p.ej. el mini-test del elemento). */}

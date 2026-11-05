@@ -52,7 +52,13 @@ function RayaFina({ color, ...rest }: { color: string } & BoxProps) {
  * hueco que dejaba whiteSpace="pre-wrap" + lineHeight 1.8. Los \n simples
  * dentro de un párrafo se conservan como salto de línea.
  */
-function renderTextoLargo(texto: string, color: string): React.ReactNode {
+/** EL ORDEN DE ENTRADA del popup: primero el título (≈0,8 s), luego las frases destacadas (una cada
+ *  0,4 s) y por último el texto. Estos tres números lo fijan. */
+const T_TITULO = 0.8;
+const PASO_DESTACADAS = 0.4;
+const PAUSA_ANTES_DEL_TEXTO = 0.35;
+
+function renderTextoLargo(texto: string, color: string, inicio = 0): React.ReactNode {
   const parrafos = texto.split(/\n\s*\n+/g).map((p) => p.trim()).filter(Boolean);
   return parrafos.map((parrafo, pi) => (
     <Text
@@ -66,7 +72,7 @@ function renderTextoLargo(texto: string, color: string): React.ReactNode {
     >
       {/* Misma entrada que el texto de los cómics: cada palabra se desvela con
           calma; las **negritas** conservan su color. */}
-      <PalabrasVivas texto={parrafo} colorNegrita={color} retraso={pi * 0.3} total={0.9} />
+      <PalabrasVivas texto={parrafo} colorNegrita={color} retraso={inicio + pi * 0.3} total={0.9} />
     </Text>
   ));
 }
@@ -98,7 +104,7 @@ function renderResumen(resumen: string, color: string): React.ReactNode {
       textAlign="center"
       mt={i === 0 ? 0 : { base: 2, md: 2.5 }}
     >
-      <PalabrasVivas texto={linea} colorNegrita={color} retraso={0.35 + i * 0.25} total={0.7} />
+      <PalabrasVivas texto={linea} colorNegrita={color} retraso={T_TITULO + i * PASO_DESTACADAS} total={0.7} />
     </Text>
   ));
 }
@@ -111,7 +117,10 @@ function renderResumen(resumen: string, color: string): React.ReactNode {
 function ContenidoArquetipo({ texto, color }: { texto: string; color: string }) {
   const { resumen, cuerpo } = splitResumen(texto);
 
-  if (!resumen) return <Box>{renderTextoLargo(texto, color)}</Box>;
+  // Sin resumen: el texto entra justo después del título.
+  if (!resumen) return <Box>{renderTextoLargo(texto, color, T_TITULO)}</Box>;
+  const nDestacadas = resumen.split(/\n+/).map((l) => l.trim()).filter(Boolean).length;
+  const inicioTexto = T_TITULO + nDestacadas * PASO_DESTACADAS + PAUSA_ANTES_DEL_TEXTO;
 
   // Se muestra TODO desplegado desde el principio (resumen + texto completo);
   // ya no hay botón «Seguir leyendo».
@@ -122,7 +131,7 @@ function ContenidoArquetipo({ texto, color }: { texto: string; color: string }) 
       {cuerpo && (
         <>
           <RayaFina color={color} my={{ base: 5, md: 6 }} />
-          <Box w="100%">{renderTextoLargo(cuerpo, color)}</Box>
+          <Box w="100%">{renderTextoLargo(cuerpo, color, inicioTexto)}</Box>
         </>
       )}
     </Flex>

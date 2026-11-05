@@ -32,12 +32,14 @@ const MESES = [
  * el estado ya guardado. Sirve para la primera vez y para corregir (`editando`).
  */
 export function FormularioNacimiento({
-  estado, editando = false, sinTitulo = false, modoAdmin = false, onCancelar, onEnviado,
+  estado, editando = false, sinTitulo = false, modoAdmin = false, lugarNoEncontrado = false, onCancelar, onEnviado,
 }: {
   estado: EstadoNacimiento | null;
   editando?: boolean;
   /** María corrigiendo los datos de una persona (endpoint de admin, sin correos). */
   modoAdmin?: boolean;
+  /** Ya se enviaron los datos pero no se pudo calcular la carta (lugar no encontrado): el aviso sale desde el principio. */
+  lugarNoEncontrado?: boolean;
   /** Sin el título y la frase de arriba (la página ya pone su propia presentación). */
   sinTitulo?: boolean;
   onCancelar?: () => void;
@@ -65,7 +67,8 @@ export function FormularioNacimiento({
   const [lugar, setLugar] = useState("");
   const [region, setRegion] = useState("");
   const [enviando, setEnviando] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const AVISO_LUGAR = "No he encontrado ese lugar. Revisa el lugar, la región y el país y vuelve a enviarlos.";
+  const [error, setError] = useState<string | null>(lugarNoEncontrado ? AVISO_LUGAR : null);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [popupError, setPopupError] = useState<string | null>(null);
   useLockBodyScroll(confirmOpen);
@@ -125,7 +128,7 @@ export function FormularioNacimiento({
       setConfirmOpen(false);
       if (r.data?.cartaCalculada === false || (modoAdmin && r.data?.recalculada === false)) {
         // Se guardó y se avisó, pero ese lugar no se encuentra: sin carta que pintar.
-        setError("No he encontrado ese lugar. Revisa el lugar, la región y el país y vuelve a enviarlos.");
+        setError(AVISO_LUGAR);
         return;
       }
       onEnviado(e.data ?? {});
@@ -263,11 +266,12 @@ export function FormularioNacimiento({
                   />
                 </Box>
               </Flex>
-              {dia && mes && anio && (
-                <Text color={`${astrologiaTxt}aa`} fontSize="xs" mt={2} fontStyle="italic" letterSpacing="0.04em">
-                  {dia} de {MESES.find((m) => m.num === mes)?.nombre.toLowerCase()} de {anio}
-                </Text>
-              )}
+              {/* El hueco de esta línea va SIEMPRE reservado: al escribir la fecha, la caja no cambia de
+                  alto (nada de saltos ni de que se mueva lo de debajo). */}
+              <Text color={`${astrologiaTxt}aa`} fontSize="xs" mt={2} h="1.4em" lineHeight="1.4em" noOfLines={1}
+                    fontStyle="italic" letterSpacing="0.04em" aria-live="polite">
+                {dia && mes && anio ? `${dia} de ${MESES.find((m) => m.num === mes)?.nombre.toLowerCase()} de ${anio}` : ""}
+              </Text>
             </RevealItem>
 
             <RevealItem>
@@ -309,9 +313,10 @@ export function FormularioNacimiento({
               <Campo label={t("metodo.astro.region")} value={region} onChange={setRegion} color={astrologiaTxt} placeholder={t("metodo.astro.regionEj")} />
             </RevealItem>
 
-            {error && (
-              <Text color="#ffb8b8" fontSize="sm" textAlign="center" fontStyle="italic">{error}</Text>
-            )}
+            {/* Hueco del aviso siempre reservado (2 líneas): al aparecer un error la caja no cambia de alto. */}
+            <Text role="alert" color="#ffb8b8" fontSize="sm" textAlign="center" fontStyle="italic" minH="2.9em" lineHeight="1.45">
+              {error ?? ""}
+            </Text>
 
             <RevealItem display="flex" justifyContent="flex-end" alignItems="center" gap={3} mt={4}>
               {editando && (

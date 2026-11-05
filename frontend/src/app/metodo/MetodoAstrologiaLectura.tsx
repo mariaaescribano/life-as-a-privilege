@@ -239,11 +239,9 @@ export default function MetodoAstrologiaLectura() {
           <Reveal direction="up" distance={20} delay={0.12} duration={0.65} w="100%"
                   display="flex" flexDirection="column" alignItems="center" gap={3}>
             {/* Sin sombra: el texto de debajo del header va sobre el fondo limpio. */}
-            <Text color="white" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center" maxW="640px">
-              {t("metodo.astro.lectura.intro", { nombre })}
-            </Text>
-            <Text color={`${astrologiaTxt}ee`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.8" textAlign="center" maxW="560px">
-              {t("metodo.astro.pulsaEstrella")}
+            {/* Las dos frases juntas, en un solo párrafo en cursiva, al tamaño de los demás textos de introducción. */}
+            <Text color="white" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center" fontStyle="italic" maxW="680px">
+              {t("metodo.astro.lectura.intro", { nombre })} {t("metodo.astro.pulsaEstrella")}
             </Text>
             {retos.length > 0 && (
               <Text color={todosRetosLeidos ? astrologiaTxt : `${astrologiaTxt}cc`} fontSize={{ base: "sm", md: "md" }}

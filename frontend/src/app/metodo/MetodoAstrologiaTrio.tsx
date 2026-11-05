@@ -1,6 +1,7 @@
+import { TextoMarcado } from "../../components/global/TextoMarcado";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Text, useBreakpointValue } from "@chakra-ui/react";
+import { Box, Flex, useBreakpointValue } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -34,6 +35,10 @@ type TrioData = Partial<Record<CuerpoKey, TrioValor>>;
  */
 export default function MetodoAstrologiaTrio() {
   const t = useT();
+  // Su nombre de pila (en el camino de una persona, el de ella).
+  const nombre = (() => {
+    try { return (localStorage.getItem("name") ?? "").trim().split(/\s+/)[0] ?? ""; } catch { return ""; }
+  })();
   const navigate = useNavigate();
   const esMovil = useBreakpointValue({ base: true, md: false }) ?? true;
   const [loading, setLoading] = useState(true);
@@ -55,7 +60,8 @@ export default function MetodoAstrologiaTrio() {
           axios.get<CartaNatal | null>(`${API_URL}/metodo-astrologia/carta-natal/${userId}`),
         ]);
         // Sin sus datos de nacimiento no hay carta: se vuelve al formulario.
-        if (!estadoRes.data?.solicitud_enviada_at) { navigate("/metodo/astrologia/introduccion", { replace: true }); return; }
+        // (María, mirando, entra siempre: sin datos verá la página vacía, pero no la echamos.)
+        if (!estadoRes.data?.solicitud_enviada_at && !esMariaMirando()) { navigate("/metodo/astrologia/introduccion", { replace: true }); return; }
         // La CARTA manda para signo y casa; del `data` guardado solo se conserva lo leído.
         let d: TrioData = soloClavesPlaneta<TrioValor>(estadoRes.data?.data ?? undefined);
         const carta = cartaRes.data;
@@ -68,8 +74,10 @@ export default function MetodoAstrologiaTrio() {
         }
         if (!cancel) setTrio(d);
       } catch {
-        if (!cancel) navigate("/metodo/astrologia/introduccion", { replace: true });
-        return;
+        if (!esMariaMirando()) {
+          if (!cancel) navigate("/metodo/astrologia/introduccion", { replace: true });
+          return;
+        }
       }
       if (!cancel) setLoading(false);
     })();
@@ -140,9 +148,9 @@ export default function MetodoAstrologiaTrio() {
 
           {/* Fuera de las cajas: blanco y sin sombra. */}
           <Reveal direction="up" distance={18} delay={0.15} duration={0.7} w="100%" maxW="660px">
-            <Text color="white" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center">
-              {t("metodo.astro.trio.intro")}
-            </Text>
+            {/* **Sol**, **Luna** y **Ascendente** van en negrita (mini-formato de TextoMarcado). */}
+            <TextoMarcado texto={t("metodo.astro.trio.intro", { nombre })} color="white"
+                          fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center" fontStyle="italic" />
           </Reveal>
 
           <Reveal

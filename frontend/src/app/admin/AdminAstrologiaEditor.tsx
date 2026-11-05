@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Box, Flex, Text, Textarea, Input } from "@chakra-ui/react";
 import { AstrologiaLoading } from "../../components/metodo/comicLoaders";
 import axios from "axios";
@@ -170,7 +170,6 @@ function Desplegable({ titulo, count, open, onToggle, accion, children }: {
 }
 
 export default function AdminAstrologiaEditor() {
-  const navigate = useNavigate();
   const { userId } = useParams<{ userId: string }>();
   const { verificando } = useAdminGuard();
 
@@ -436,9 +435,6 @@ export default function AdminAstrologiaEditor() {
 
       <Flex flex="1" justify="center" px={{ base: 4, md: 8 }} py={{ base: 6, md: 10 }}>
           <Box w="100%" maxW="820px">
-            <Text as="button" onClick={() => navigate("/admin/astrologia")} color="rgba(255,255,255,0.75)" fontSize="sm" mb={3}
-                  _hover={{ color: "white" }}>← Usuarios de astrología</Text>
-
             {/* header de disciplina con su imagen */}
             <AdminDisciplinaHeader disc={disc} fotoTalCual
                                    subtitle={`${nombre || "Usuario"}${email ? ` · ${email}` : ""}`} />
@@ -470,56 +466,60 @@ export default function AdminAstrologiaEditor() {
               </Box>
             </Flex>
 
-            {/* ── Correos a la persona ──
+            {/* ── Correos a la persona ── (DESACTIVADO: ya no hacen falta; el box y los botones se conservan
+                  aquí debajo. Para volver a activarlo, cambia `false &&` por `true &&`.)
+                  ──
                   Aparte de «Guardar» a propósito: guardar la lectura no manda
                   nada. El correo de datos registrados sale solo, al enviar ella
                   sus datos; estos dos se mandan desde aquí, cuando tú quieras. */}
-            <Box position="relative" borderRadius="xl" border={`1px solid ${turquesa}44`} mb={5} overflow="hidden"
-                 boxShadow={GLOW_CAJA}>
-              <DisciplinaBgLayer nom={astrologiaNom} borderRadius="xl" talCual />
-              <Box position="relative" zIndex={1} p={{ base: 4, md: 5 }}>
-                <Text color="#ffffff" fontWeight="700" fontSize="md" style={{ textShadow: GLOW }}>
-                  Avisar por email
-                </Text>
-                <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic" mt={1}>
-                  Nada de esto se manda al guardar: solo al pulsar. El correo con sus datos de
-                  nacimiento le llega automáticamente cuando los envía.
-                </Text>
-              </Box>
-
-              {/* Los dos botones */}
-              <Trozo>
-                <Flex gap={3} wrap="wrap">
-                  <BotonAviso
-                    label="Tu carta está en proceso de ser leída"
-                    enviado={avisadoAt.proceso}
-                    enviando={avisando === "proceso"}
-                    onClick={() => void avisar("proceso")}
-                  />
-                  <BotonAviso
-                    label="Tu carta ya ha sido leída"
-                    enviado={avisadoAt.leida}
-                    enviando={avisando === "leida"}
-                    onClick={() => void avisar("leida")}
-                  />
-                </Flex>
-
-                {avisoError && (
-                  <Text color="#ff9a9a" fontSize="sm" fontStyle="italic" mt={3} style={{ textShadow: GLOW }}>
-                    {avisoError}
+            {false && (
+              <Box position="relative" borderRadius="xl" border={`1px solid ${turquesa}44`} mb={5} overflow="hidden"
+                   boxShadow={GLOW_CAJA}>
+                <DisciplinaBgLayer nom={astrologiaNom} borderRadius="xl" talCual />
+                <Box position="relative" zIndex={1} p={{ base: 4, md: 5 }}>
+                  <Text color="#ffffff" fontWeight="700" fontSize="md" style={{ textShadow: GLOW }}>
+                    Avisar por email
                   </Text>
-                )}
-                {avisoMsg && (
-                  <Flex align="center" gap={1.5} color="#ffffff" fontSize="sm" fontStyle="italic" mt={3}
-                        style={{ textShadow: GLOW }}>
-                    <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="15px" h="15px" fill="#ffffff">
-                      <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
-                    </Box>
-                    {avisoMsg}
+                  <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic" mt={1}>
+                    Nada de esto se manda al guardar: solo al pulsar. El correo con sus datos de
+                    nacimiento le llega automáticamente cuando los envía.
+                  </Text>
+                </Box>
+
+                {/* Los dos botones */}
+                <Trozo>
+                  <Flex gap={3} wrap="wrap">
+                    <BotonAviso
+                      label="Tu carta está en proceso de ser leída"
+                      enviado={avisadoAt.proceso}
+                      enviando={avisando === "proceso"}
+                      onClick={() => void avisar("proceso")}
+                    />
+                    <BotonAviso
+                      label="Tu carta ya ha sido leída"
+                      enviado={avisadoAt.leida}
+                      enviando={avisando === "leida"}
+                      onClick={() => void avisar("leida")}
+                    />
                   </Flex>
-                )}
-              </Trozo>
-            </Box>
+
+                  {avisoError && (
+                    <Text color="#ff9a9a" fontSize="sm" fontStyle="italic" mt={3} style={{ textShadow: GLOW }}>
+                      {avisoError}
+                    </Text>
+                  )}
+                  {avisoMsg && (
+                    <Flex align="center" gap={1.5} color="#ffffff" fontSize="sm" fontStyle="italic" mt={3}
+                          style={{ textShadow: GLOW }}>
+                      <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="15px" h="15px" fill="#ffffff">
+                        <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
+                      </Box>
+                      {avisoMsg}
+                    </Flex>
+                  )}
+                </Trozo>
+              </Box>
+            )}
 
             {/* ── DATOS DE NACIMIENTO (editables) ──
                   Antes solo podía cambiarlos la propia persona en el paso 1 de su

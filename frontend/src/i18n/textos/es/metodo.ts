@@ -289,7 +289,7 @@ export const metodo = {
   "metodo.introCorto": "Intro",
   "metodo.astro.paso.astrologia": "Astrología",
   "metodo.astro.paso.introduccion": "Tu Carta Astral",
-  "metodo.astro.intro.cartaTexto": "{nombre}, esta es tu Carta Astral, tu mapa diseñado por tu alma para guiarte en esta vida. Juntos vamos a ir desglosándolo.",
+  "metodo.astro.intro.cartaTexto": "{nombre}, esta es tu Carta Astral, tu mapa diseñado por tu alma para guiarte en esta vida. Juntos vamos a ir desglosándola.",
   "metodo.astro.intro.datosTexto": "{nombre}, para poder leer tu Carta Astral, busca muy bien la hora y la ciudad en la que naciste. Cuanto más preciso sea, mejor saldrá la lectura.",
   "metodo.astro.intro.apuntes1": "No hace falta que tomes apuntes,",
   "metodo.astro.intro.apuntes2": "al final lo tendrás todo en pdf",
@@ -301,8 +301,8 @@ export const metodo = {
   "metodo.astro.lectura.intro": "{nombre}, estos son los puntos de tu carta que considero más importantes.",
   "metodo.astro.sintesis.intro": "{nombre}, esto es lo que no debes olvidar de tu carta...",
   "metodo.astro.paso.trio": "Ascendente, Sol y Luna",
-  "metodo.astro.trio.intro": "Esto es lo que la mayoría de la gente conoce sobre Astrología. Aunque es solo una pequeña parte de todo lo que abarca, es importante que tengas estas nociones antes de continuar.",
-  "metodo.astro.paso.explicacion": "Introducción",
+  "metodo.astro.trio.intro": "{nombre}, antes de continuar, recuerda: el **Sol** representa tu propósito y tu versión más elevada; la **Luna** simboliza tu emocionalidad y tu seguridad; y el **Ascendente** representa la energía del camino hacia tu mejor versión.",
+  "metodo.astro.paso.explicacion": "Explicación",
   "metodo.astro.historia.intro": "La Astrología es una disciplina milenaria, nació en las más antiguas civilizaciones. No es necesario leerlo, pero te gustará y te ayudará a entender el poder que tiene conocer tu Carta.",
   "metodo.astro.historia.leer": "Leer el cómic",
   "metodo.astro.historia.reel": "Ver el reel",
@@ -344,7 +344,7 @@ export const metodo = {
   /** Bloqueo secuencial de los aspectos: se lee planeta a planeta. */
   "metodo.astro.terminaAspectosDe":
     "Termina de leer los aspectos de {planeta} para desbloquear este planeta.",
-  "metodo.astro.pulsaEstrella": "Pulsa sobre cada estrella para descubrir tus puntos clave.",
+  "metodo.astro.pulsaEstrella": "Pulsa sobre cada estrella para descubrirlos.",
   "metodo.astro.puntosClavePronto": "Tus puntos clave aparecerán aquí muy pronto.",
   /** El lema va aparte: se pinta más fuerte y en blanco encima del resto. */
   "metodo.astro.llamadaLema": "Haz las paces contigo.",

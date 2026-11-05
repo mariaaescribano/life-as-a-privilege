@@ -14,6 +14,7 @@
 //     el control de cuántos pasos tiene abiertos la persona (− / +) y un botón
 //     «Abrir hasta aquí» en cada caja cerrada. La persona NUNCA ve esto.
 // ─────────────────────────────────────────────────────────────────────────────
+import { glowHeaderDisciplina } from "./MetodoStepHeader";
 import { MarcaLeido } from "./MarcaLeido";
 import React, { useState } from "react";
 import { Box, Flex, Text, useBreakpointValue } from "@chakra-ui/react";
@@ -72,18 +73,16 @@ const anchoCaja = (columnas: number): string =>
 /** Ancho máximo del camino en varias columnas (cajas de 208 px como siempre). */
 const ANCHO_MAX_CAMINO = 1000;
 
-/** Una flecha del camino: línea de puntos, punta y una chispa que va por ella. */
+/** Una flecha del camino: un hilo recto muy fino que se dibuja de una caja a la siguiente, con una
+ *  punta pequeña, y una luz tenue que lo recorre de vez en cuando. Sobria, sin adornos. */
 function Flecha({ dir, retraso = 0, entrada = 0 }: { dir: "right" | "left" | "down"; retraso?: number; entrada?: number }) {
   const reduce = useReducedMotion();
   const vertical = dir === "down";
   const giro = dir === "left" ? "scaleX(-1)" : vertical ? "rotate(90deg)" : "";
+  const vista = { once: true, amount: 0.6 } as const;
   return (
     // Entra tras la caja de la que sale: el camino se va dibujando casilla a casilla.
-    <Reveal
-      inView
-      direction="none"
-      duration={0.7}
-      delay={entrada}
+    <Box
       display="flex"
       flexShrink={0}
       alignItems="center"
@@ -93,25 +92,46 @@ function Flecha({ dir, retraso = 0, entrada = 0 }: { dir: "right" | "left" | "do
       h={vertical ? `${ANCHO_FLECHA}px` : "28px"}
       aria-hidden
     >
-      <Box position="absolute" top="50%" left="50%" w={`${ANCHO_FLECHA}px`} h="28px" style={{ transform: `translate(-50%, -50%) ${giro}`.trim() }}>
+      <Box position="absolute" top="50%" left="50%" w={`${ANCHO_FLECHA}px`} h="28px"
+           style={{ transform: `translate(-50%, -50%) ${giro}`.trim(), filter: "drop-shadow(0 0 3px rgba(255,255,255,0.35))" }}>
         <svg width={ANCHO_FLECHA} height="28" viewBox="0 0 56 28" fill="none">
-          <line x1="8" y1="14" x2="42" y2="14" stroke="white" strokeOpacity="0.7" strokeWidth="2" strokeLinecap="round" strokeDasharray="1 6" />
-          <path d="M36 7 L45 14 L36 21" stroke="white" strokeOpacity="0.95" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+          {/* El hilo. */}
+          <motion.line
+            x1="5" y1="14" x2="47" y2="14"
+            stroke="white" strokeOpacity="0.6" strokeWidth="1.2" strokeLinecap="round"
+            initial={reduce ? false : { pathLength: 0, opacity: 0 }}
+            whileInView={{ pathLength: 1, opacity: 1 }}
+            viewport={vista}
+            transition={{ duration: 0.5, delay: entrada, ease: [0.22, 1, 0.36, 1] }}
+          />
+          {/* La punta, al llegar. */}
+          <motion.path
+            d="M43 9.5 L49 14 L43 18.5"
+            stroke="white" strokeOpacity="0.9" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"
+            initial={reduce ? false : { opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={vista}
+            transition={{ duration: 0.3, delay: entrada + 0.4 }}
+          />
+          {/* La luz que lo recorre, despacio y con pausas largas (nunca todas a la vez). */}
           {!reduce && (
-            <motion.circle
-              r="3"
-              cy="14"
-              fill="white"
-              initial={{ cx: 8, opacity: 0 }}
-              animate={{ cx: [8, 40], opacity: [0, 1, 1, 0] }}
-              transition={{ duration: 2.2, repeat: Infinity, delay: retraso, ease: "easeInOut" }}
+            <motion.line
+              x1="5" y1="14" x2="47" y2="14"
+              stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeDasharray="9 120"
+              initial={{ strokeDashoffset: 9, opacity: 0 }}
+              animate={{ strokeDashoffset: [9, -45], opacity: [0, 0.95, 0.95, 0] }}
+              transition={{ duration: 1.5, ease: "easeInOut", repeat: Infinity, repeatDelay: 2.6, delay: entrada + 1.2 + retraso * 0.6 }}
             />
           )}
         </svg>
       </Box>
-    </Reveal>
+    </Box>
   );
 }
+
+/** El halo del header, un poco más grande (para cuando se pasa el ratón por una caja). */
+const glowHeaderGrande = (color: string) =>
+  `0 0 24px rgba(255,255,255,0.24), 0 0 52px rgba(255,255,255,0.13), 0 0 92px rgba(180,255,245,0.14), 0 0 30px ${color}2a, 0 0 72px ${color}1a`;
 
 const Candado = ({ color }: { color: string }) => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
@@ -121,12 +141,12 @@ const Candado = ({ color }: { color: string }) => (
 );
 
 function Caja({
-  paso, nom, bg, txt, actual, entraAunCerrado, admin, seccion, onIr, orden, ancho,
+  paso, nom, bg, txt, actual, entraAunCerrado, admin, seccion, onIr, retraso, ancho,
 }: {
   ancho: string;
   paso: PasoCamino; nom: string; bg: string; txt: string; actual: boolean;
   entraAunCerrado: boolean; admin?: ControlAdmin | null; seccion: number;
-  onIr: (ruta: string) => void; orden: number;
+  onIr: (ruta: string) => void; /** Segundos que espera antes de entrar (la coreografía del camino). */ retraso: number;
 }) {
   const [abriendo, setAbriendo] = useState(false);
   const cerrado = paso.bloqueado;
@@ -146,35 +166,24 @@ function Caja({
       onClick={pulsable ? () => onIr(paso.ruta) : undefined}
       aria-disabled={!pulsable}
       aria-label={paso.inicio ? paso.titulo : `${paso.n}. ${paso.titulo}`}
-      role="group"
       position="relative"
       overflow="hidden"
       w="100%"
       minH={{ base: "112px", md: "148px" }}
       borderRadius="24px"
       bg={bg}
-      boxShadow={actual ? `0 0 12px ${txt}33` : `0 0 8px ${txt}1f`}
+      // El MISMO halo que el header; al pasar el ratón por ESTA caja (solo por ella), el halo crece.
+      boxShadow={glowHeaderDisciplina(txt)}
       cursor={pulsable ? "pointer" : "not-allowed"}
-      transition="transform 0.45s cubic-bezier(0.22,1,0.36,1), box-shadow 0.45s ease"
-      _hover={pulsable ? { boxShadow: `0 0 22px ${txt}55, 0 0 46px ${txt}22`, transform: "translateY(-4px)" } : undefined}
+      transition="box-shadow 0.4s ease, transform 0.45s cubic-bezier(0.22,1,0.36,1)"
+      _hover={pulsable ? { boxShadow: glowHeaderGrande(txt) } : undefined}
       _active={pulsable ? { transform: "translateY(-1px) scale(0.985)" } : undefined}
       _focusVisible={focoBlanco}
     >
       {hasDisciplinaBg(nom) && (
-        <Box position="absolute" inset={0} transition="transform 0.9s cubic-bezier(0.22,1,0.36,1)" _groupHover={pulsable ? { transform: "scale(1.07)" } : undefined}>
+        <Box position="absolute" inset={0}>
           <DisciplinaBgLayer nom={nom} borderRadius="24px" overlay={`${bg}59`} />
         </Box>
-      )}
-      {/* Luz que cruza la casilla al pasar el ratón (luz, no sombra). */}
-      {pulsable && (
-        <Box
-          position="absolute" top={0} bottom={0} left={0} w="55%" zIndex={1} pointerEvents="none"
-          bgGradient="linear(to-r, #ffffff00, #ffffff2e, #ffffff00)"
-          transform="translateX(-130%) skewX(-18deg)"
-          transition="transform 1s cubic-bezier(0.22,1,0.36,1)"
-          _groupHover={{ transform: "translateX(260%) skewX(-18deg)" }}
-          sx={{ "@media (prefers-reduced-motion: reduce)": { display: "none" } }}
-        />
       )}
       {/* La casilla en la que vas: un aro de luz que late despacio. */}
       {actual && !cerrado && (
@@ -214,7 +223,6 @@ function Caja({
           color={txt}
           fontWeight="700"
           fontSize="md"
-          style={{ boxShadow: `0 0 12px ${txt}88` }}
         >
           {paso.inicio ? (
             // La casilla inicial lleva una punta de «play» en vez de un número.
@@ -249,7 +257,7 @@ function Caja({
   );
 
   return (
-    <Reveal inView direction="up" distance={20} scaleFrom={0.95} delay={Math.min(orden * 0.05, 0.45)} w={ancho} flexShrink={0} minW={0}>
+    <Reveal inView direction="up" distance={22} scaleFrom={0.9} blur duration={0.8} delay={retraso} w={ancho} flexShrink={0} minW={0}>
       {caja}
       {puedeAbrir && (
         <Flex justify="center" mt={2}>
@@ -308,7 +316,14 @@ export function CaminoVista({ nom, bg, txt, secciones: seccionesDe, conInicio, e
 
   const adminConAviso: ControlAdmin | null = admin ?? null;
 
-  let orden = 0;
+  // LA COREOGRAFÍA: el camino se va dibujando en el orden en que se lee. Caja, su flecha, la
+  // siguiente caja, su flecha… cada «tiempo» dura PULSO segundos. Las primeras CAJAS_SEGUIDAS
+  // (lo que cabe en la primera pantalla) van una tras otra; las de más abajo entran al asomar,
+  // por filas, sin esperar a las de arriba (si no, habría que esperar medio minuto en Cábala).
+  const PULSO = 0.17;
+  const CAJAS_SEGUIDAS = 8;
+  const tiempoCaja = (k: number) => (k < CAJAS_SEGUIDAS ? k : (k - CAJAS_SEGUIDAS) % Math.max(columnas, 1)) * 2 * PULSO;
+  let k = 0; // índice de la caja en el orden de lectura (a lo largo de todos los tramos)
 
   return (
     <Flex direction="column" align="center" w="100%">
@@ -317,7 +332,7 @@ export function CaminoVista({ nom, bg, txt, secciones: seccionesDe, conInicio, e
         const actual = actualDe(sec.pasos);
         return (
           <Flex key={si} direction="column" align="center" w="100%">
-            {si > 0 && <Flecha dir="down" />}
+            {si > 0 && <Flecha dir="down" entrada={Math.max(tiempoCaja(k) - PULSO, 0)} />}
             {sec.titulo && (
               <Reveal inView direction="up" distance={14} w="100%" mb={{ base: 5, md: 7 }} mt={si > 0 ? 3 : 0}>
                 <Flex align="center" gap={4} w="100%" maxW="900px" mx="auto">
@@ -350,14 +365,15 @@ export function CaminoVista({ nom, bg, txt, secciones: seccionesDe, conInicio, e
                             admin={adminConAviso}
                             seccion={si}
                             onIr={onIr}
-                            orden={orden++}
+                            retraso={tiempoCaja(k)}
                             ancho={anchoCaja(columnas)}
                           />
                         );
+                        const miK = k++;
                         return (
                           <React.Fragment key={p.n}>
                             {caja}
-                            {ci < fila.length - 1 && <Flecha dir={invertida ? "left" : "right"} retraso={(ci % 4) * 0.35} entrada={Math.min(orden * 0.05 + 0.12, 0.6)} />}
+                            {ci < fila.length - 1 && <Flecha dir={invertida ? "left" : "right"} retraso={(ci % 4) * 0.35} entrada={tiempoCaja(miK) + PULSO} />}
                           </React.Fragment>
                         );
                       })}
@@ -365,7 +381,7 @@ export function CaminoVista({ nom, bg, txt, secciones: seccionesDe, conInicio, e
                     {fi < filas.length - 1 && (
                       <Flex justify={columnas === 1 ? "center" : invertida ? "flex-start" : "flex-end"}>
                         <Flex w={anchoCaja(columnas)} justify="center">
-                          <Flecha dir="down" retraso={0.2} entrada={Math.min(orden * 0.05 + 0.12, 0.6)} />
+                          <Flecha dir="down" retraso={0.2} entrada={tiempoCaja(k - 1) + PULSO} />
                         </Flex>
                       </Flex>
                     )}

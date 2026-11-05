@@ -57,7 +57,7 @@ export default function MetodoAstrologiaSintesis() {
 
           {/* Fuera de las cajas: blanco y sin sombra. */}
           <Reveal direction="up" distance={18} delay={0.15} duration={0.7} w="100%" maxW="680px">
-            <Text color="white" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center">
+            <Text color="white" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center" fontStyle="italic">
               {t("metodo.astro.sintesis.intro", { nombre })}
             </Text>
           </Reveal>

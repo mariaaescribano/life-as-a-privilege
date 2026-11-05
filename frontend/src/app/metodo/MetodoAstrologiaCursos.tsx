@@ -137,8 +137,8 @@ export default function MetodoAstrologiaCursos() {
               grid, para que no se estire de lado a lado en pantallas anchas). */}
           <Reveal direction="up" distance={20} delay={0.12} duration={0.65} w="100%" maxW="850px">
             <Text
-              color={`${astrologiaTxt}ee`}
-              fontSize={{ base: "md", md: "lg" }}
+              color="white"
+              fontSize={{ base: "lg", md: "xl" }}
               fontStyle="italic"
               textAlign="center"
               lineHeight="1.8"

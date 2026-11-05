@@ -1,3 +1,4 @@
+import { esMariaMirando } from "../../../api/persona";
 import { useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -57,7 +58,8 @@ export function useCartaPlanetas() {
         });
         // Accesible en cuanto hay solicitud enviada (la carta ya está calculada);
         // el PDF (link_carta) solo desbloquea el "siguiente", no el acceso.
-        if (!res.data?.solicitud_enviada_at) {
+        // (María, mirando, entra siempre.)
+        if (!res.data?.solicitud_enviada_at && !esMariaMirando()) {
           navigate("/metodo/astrologia/introduccion", { replace: true });
           return;
         }
@@ -66,8 +68,10 @@ export function useCartaPlanetas() {
         // arrastráramos, al reguardar podríamos pisar un valor más reciente.
         if (res.data?.data) setCarta(soloClavesPlaneta<Valor>(res.data.data));
       } catch {
-        navigate("/metodo/astrologia/introduccion", { replace: true });
-        return;
+        if (!esMariaMirando()) {
+          navigate("/metodo/astrologia/introduccion", { replace: true });
+          return;
+        }
       } finally {
         setLoading(false);
       }

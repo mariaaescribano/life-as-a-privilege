@@ -67,7 +67,7 @@ export const auth = {
   "auth.recuperar.enlaceEnviado":
     "Si ese email tiene una cuenta, te acabamos de enviar un enlace para elegir una contraseña nueva. Caduca en una hora.",
   "auth.recuperar.cambiada": "Contraseña cambiada",
-  "auth.recuperar.cambiadaTexto": "Ya puedes entrar con la nueva. Te llevamos al inicio de sesión…",
+  "auth.recuperar.cambiadaTexto": "Ya puedes entrar. Te llevamos al inicio de sesión…",
 
   // ── Avisos de validación ───────────────────────────────────────────────
   "auth.error.faltanDatos": "Faltan datos",

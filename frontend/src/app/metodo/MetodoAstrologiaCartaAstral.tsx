@@ -12,6 +12,9 @@ import { IntroComicModal } from "../../components/metodo/IntroComicModal";
 import type { Vineta } from "../../components/metodo/ComicViewer";
 import { glowHeader } from "../../components/metodo/FotoBox";
 import { Glifo, GlifoSigno } from "../../components/metodo/Glifo";
+import { CartaAstral3D } from "../../components/metodo/CartaAstral3D/CartaAstral3D";
+import { MarcaLeido } from "../../components/metodo/MarcaLeido";
+import { focoBlanco } from "../../components/global/foco";
 import { useNombresAstro } from "../../components/metodo/astrologiaNombres";
 import { useCartaPlanetas, valorOf } from "../../components/metodo/Planetas";
 import { CUERPOS, ZODIAC_SIGNS, type Cuerpo, type CuerpoKey } from "../../components/metodo/astrologiaData";
@@ -36,20 +39,14 @@ interface PlanetaConCajas {
   casas: number[];
 }
 
-const CheckIcon = ({ color }: { color: string }) => (
-  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="15px" h="15px" fill={color} flexShrink={0}>
-    <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
-  </Box>
-);
-
 /** Texto de un arquetipo → párrafos para el visor: primero las frases del resumen, luego el cuerpo. */
-function aParrafos(texto: string): string[] {
+function aParrafos(texto: string): { parrafos: string[]; destacadas: number } {
   const m = texto.match(/^[ \t]*---[ \t]*$/m);
   const resumen = m && m.index != null ? texto.slice(0, m.index).trim() : "";
   const cuerpo = m && m.index != null ? texto.slice(m.index + m[0].length).trim() : texto;
   const lineas = resumen ? resumen.split(/\n+/).map((l) => l.trim()).filter(Boolean) : [];
   const parrafos = cuerpo.split(/\n\s*\n+/g).map((p) => p.trim()).filter(Boolean);
-  return [...lineas, ...parrafos];
+  return { parrafos: [...lineas, ...parrafos], destacadas: lineas.length };
 }
 
 export default function MetodoAstrologiaCartaAstral() {
@@ -58,7 +55,7 @@ export default function MetodoAstrologiaCartaAstral() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [carta, setCarta] = useState<CartaNatal | null>(null);
-  const { carta: cartaPlanetas, actualizar, todoCompletado } = useCartaPlanetas();
+  const { carta: cartaPlanetas, loading: cargandoProgreso, actualizar, todoCompletado } = useCartaPlanetas();
   const fotosListas = useImagesReady([SPACE_IMG]);
   const { bloqueada, cargado } = useAstrologiaProgreso();
 
@@ -79,7 +76,9 @@ export default function MetodoAstrologiaCartaAstral() {
           axios.get<{ solicitud_enviada_at?: string | null; link_carta?: string | null; retos?: { id: string }[] } | null>(`${API_URL}/metodo-astrologia/${userId}`),
           axios.get<CartaNatal | null>(`${API_URL}/metodo-astrologia/carta-natal/${userId}`),
         ]);
-        if (!estadoRes.data?.solicitud_enviada_at) { navigate("/metodo/astrologia/introduccion"); return; }
+        // Sin sus datos no hay carta: se vuelve a «Tu Carta Astral» a darlos. María, mirando, no se
+        // echa: entra siempre (los datos pueden estar puestos desde el panel, sin solicitud enviada).
+        if (!estadoRes.data?.solicitud_enviada_at && !esMariaMirando()) { navigate("/metodo/astrologia/introduccion"); return; }
 
         let cartaCargada = res.data;
 
@@ -145,6 +144,21 @@ export default function MetodoAstrologiaCartaAstral() {
     return indiceCasa === 0 ? !!v.profundizadoCasa : !!v.profundizadoCasa2;
   };
 
+  // El planeta que se está viendo (índice en `planetas`). Arranca en el primero SIN leer, para que
+  // quien vuelve siga justo donde lo dejó.
+  const [sel, setSel] = useState(0);
+  const arranque = useRef(false);
+  const planetaLeido = (pl: PlanetaConCajas): boolean =>
+    leidaCaja(pl.cuerpo.key, { tipo: "signo", signo: pl.signo }) &&
+    pl.casas.every((c, ci) => leidaCaja(pl.cuerpo.key, { tipo: "casa", casa: c }, ci));
+  useEffect(() => {
+    if (arranque.current || planetas.length === 0 || cargandoProgreso) return;
+    arranque.current = true;
+    const primero = planetas.findIndex((pl) => !planetaLeido(pl));
+    setSel(primero >= 0 ? primero : 0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [planetas, cargandoProgreso]);
+
   // Abre el visor en la caja pulsada. Las cajas del mismo planeta van seguidas en
   // el visor, así que se puede pasar del signo a la casa sin cerrar.
   const abrir = async (p: PlanetaConCajas, f: Faceta, indiceCasa = 0) => {
@@ -157,10 +171,13 @@ export default function MetodoAstrologiaCartaAstral() {
     const foto = `/viñetas/astrologia/planetas/${k}.webp`;
     const vinetas: Vineta[] = facetas.map((fa, i) => {
       const titulo = fa.tipo === "signo" ? n.enSigno(k, fa.signo) : n.enCasa(k, fa.casa);
+      const partes = textos[i] ? aParrafos(textos[i]!) : null;
       return {
         src: foto,
         titulo,
-        paragraphs: textos[i] ? aParrafos(textos[i]!) : [t("metodo.astro.textoNoDisponible", { arquetipo: titulo })],
+        paragraphs: partes ? partes.parrafos : [t("metodo.astro.textoNoDisponible", { arquetipo: titulo })],
+        // Primero el título, luego las frases destacadas, luego el texto.
+        destacadas: partes?.destacadas ?? 0,
       };
     });
     const inicial = f.tipo === "signo" ? 0 : 1 + indiceCasa;
@@ -202,45 +219,128 @@ export default function MetodoAstrologiaCartaAstral() {
             />
           </Reveal>
 
-          {/* Un bloque estrellado por planeta: su nombre y, debajo, sus cajas (una por
-              signo, una por casa, y una más si está sobre la cúspide de dos casas). */}
-          {planetas.map((p, i) => (
-            <Reveal key={p.cuerpo.key} inView amount={0.15} direction="up" distance={30} scaleFrom={0.96}
-                    delay={(i % 2) * 0.08} duration={0.7} w="100%"
-                    position="relative" borderRadius="2xl" overflow="hidden" boxShadow={glowHeader(astrologiaTxt)}>
-              <SpaceBg overlay="rgba(8,13,30,0.3)" />
-              <Flex position="relative" zIndex={1} direction="column" align="center" gap={{ base: 4, md: 5 }}
-                    px={{ base: 4, md: 8 }} py={{ base: 6, md: 8 }}>
-                <Flex align="center" gap={3}>
-                  <Glifo symbol={p.cuerpo.symbol} color={p.cuerpo.color} size={34} />
-                  <Text color={p.cuerpo.color} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.1em"
-                        textTransform="uppercase" style={{ textShadow: `0 0 12px ${p.cuerpo.color}66` }}>
-                    {n.cuerpo(p.cuerpo.key)}
-                  </Text>
-                </Flex>
+          {/* Los planetas en pequeño, bajo el header: cada uno en su círculo y de su color. Se ENCIENDEN
+              al leerlos (y los que faltan siguen apagados): el avance se ve de un vistazo. */}
+          {planetas.length > 0 && (
+            <Flex wrap="wrap" justify="center" gap={{ base: 2, md: 2.5 }} w="100%" role="list">
+              {planetas.map((pl, i) => {
+                const leido = planetaLeido(pl);
+                const activo = i === sel;
+                const c = pl.cuerpo.color;
+                return (
+                  <Box
+                    key={`${pl.cuerpo.key}-${leido ? "on" : "off"}`}
+                    as="button"
+                    type="button"
+                    role="listitem"
+                    onClick={() => setSel(i)}
+                    aria-label={n.cuerpo(pl.cuerpo.key)}
+                    title={n.cuerpo(pl.cuerpo.key)}
+                    aria-current={activo}
+                    w={{ base: "38px", md: "46px" }}
+                    h={{ base: "38px", md: "46px" }}
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    borderRadius="full"
+                    bg="rgba(8,13,30,0.72)"
+                    border={`1.5px solid ${activo ? "white" : leido ? c : `${c}55`}`}
+                    opacity={leido || activo ? 1 : 0.42}
+                    style={{ filter: leido || activo ? "none" : "grayscale(0.7)" }}
+                    boxShadow={leido ? `0 0 12px ${c}aa, 0 0 26px ${c}55` : activo ? "0 0 12px rgba(255,255,255,0.55)" : "none"}
+                    transition="opacity 0.5s ease, filter 0.5s ease, box-shadow 0.5s ease, border-color 0.3s ease, transform 0.25s ease"
+                    _hover={{ transform: "translateY(-2px)" }}
+                    _focusVisible={focoBlanco}
+                    sx={leido ? {
+                      animation: `chipEnciende 0.7s cubic-bezier(0.22,1,0.36,1) ${Math.min(i * 0.05, 0.6)}s both`,
+                      "@keyframes chipEnciende": {
+                        "0%": { transform: "scale(0.8)", opacity: 0.4 },
+                        "55%": { transform: "scale(1.28)", opacity: 1 },
+                        "100%": { transform: "scale(1)", opacity: 1 },
+                      },
+                      "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+                    } : undefined}
+                  >
+                    <Glifo symbol={pl.cuerpo.symbol} color={c} size={26} />
+                  </Box>
+                );
+              })}
+            </Flex>
+          )}
 
-                <Flex direction={{ base: "column", md: "row" }} wrap="wrap" justify="center" gap={{ base: 3, md: 4 }} w="100%">
-                  <CajaArquetipo
-                    color={p.cuerpo.color}
-                    titulo={n.enSigno(p.cuerpo.key, p.signo)}
-                    icono={<GlifoSigno nombre={p.signo} color={p.cuerpo.color} size={30} />}
-                    leida={leidaCaja(p.cuerpo.key, { tipo: "signo", signo: p.signo })}
-                    onClick={() => void abrir(p, { tipo: "signo", signo: p.signo })}
-                  />
-                  {p.casas.map((c, ci) => (
-                    <CajaArquetipo
-                      key={c}
-                      color={p.cuerpo.color}
-                      titulo={n.enCasa(p.cuerpo.key, c)}
-                      icono={<Text color={p.cuerpo.color} fontSize="2xl" fontWeight="700" lineHeight="1">{c}</Text>}
-                      leida={leidaCaja(p.cuerpo.key, { tipo: "casa", casa: c }, ci)}
-                      onClick={() => void abrir(p, { tipo: "casa", casa: c }, ci)}
-                    />
-                  ))}
+          {/* EL VISOR: la carta a la izquierda (con el planeta que se está viendo ENGRANDECIDO) y, a la
+              derecha, las cajas de ese planeta y debajo los dos botones. Todo con el cielo de Astrología.
+              La columna reserva SIEMPRE el hueco de tres cajas: al pasar de un planeta con dos cajas a
+              otro con tres, nada se mueve. */}
+          {planetas.length > 0 && carta && (() => {
+            const pl = planetas[Math.min(sel, planetas.length - 1)];
+            const c = pl.cuerpo.color;
+            const hay = (d: -1 | 1) => sel + d >= 0 && sel + d < planetas.length;
+            const ir = (d: -1 | 1) => { if (hay(d)) setSel(sel + d); };
+            const glowCaja = glowHeader(astrologiaTxt);
+            return (
+              <Box display="grid" gridTemplateColumns={{ base: "1fr", md: "minmax(0, 1.1fr) minmax(0, 1fr)" }} gap={{ base: 4, md: 6 }}
+                   alignItems="stretch" w="100%" maxW={{ md: "960px" }}>
+                {/* IZQUIERDA: la carta */}
+                <Reveal direction="none" duration={0.9} position="relative" borderRadius="2xl" overflow="hidden" boxShadow={glowCaja}
+                        display="flex" alignItems="center" justifyContent="center">
+                  <SpaceBg overlay="rgba(8,13,30,0.3)" />
+                  <Flex position="relative" zIndex={1} w="100%" align="center" justify="center" p={{ base: 3, md: 4 }}>
+                    <Box w="100%" maxW="430px">
+                      <CartaAstral3D color={astrologiaTxt} carta={carta} soloVista sinHalo anchoMax="430px" enfocado={pl.cuerpo.key} escalaFoco={1.9} />
+                    </Box>
+                  </Flex>
+                </Reveal>
+
+                {/* DERECHA: las cajas y los botones, centrados frente a la carta */}
+                <Flex key={pl.cuerpo.key} direction="column" justify="center" gap={3} w="100%"
+                      sx={{
+                        animation: "cambioPlaneta 0.5s cubic-bezier(0.22,1,0.36,1) both",
+                        "@keyframes cambioPlaneta": { from: { opacity: 0, transform: "translateX(16px)" }, to: { opacity: 1, transform: "none" } },
+                        "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+                      }}>
+                  {/* Tres huecos fijos: las cajas que haya, y el resto vacío (mismo alto siempre). */}
+                  {[0, 1, 2].map((slot) => {
+                    if (slot === 0) {
+                      return (
+                        <CajaArquetipo
+                          key="signo"
+                          color={c}
+                          titulo={n.enSigno(pl.cuerpo.key, pl.signo)}
+                          icono={<GlifoSigno nombre={pl.signo} color={c} size={28} />}
+                          leida={leidaCaja(pl.cuerpo.key, { tipo: "signo", signo: pl.signo })}
+                          onClick={() => void abrir(pl, { tipo: "signo", signo: pl.signo })}
+                        />
+                      );
+                    }
+                    const ci = slot - 1;
+                    const cs = pl.casas[ci];
+                    if (cs == null) return <Box key={`vacio-${slot}`} h={{ base: "0", md: ALTO_CAJA }} display={{ base: "none", md: "block" }} aria-hidden />;
+                    return (
+                      <CajaArquetipo
+                        key={cs}
+                        color={c}
+                        titulo={n.enCasa(pl.cuerpo.key, cs)}
+                        icono={<Text color={c} fontSize="2xl" fontWeight="700" lineHeight="1">{cs}</Text>}
+                        leida={leidaCaja(pl.cuerpo.key, { tipo: "casa", casa: cs }, ci)}
+                        onClick={() => void abrir(pl, { tipo: "casa", casa: cs }, ci)}
+                      />
+                    );
+                  })}
+
+                  {/* Los dos botones: el planeta anterior y el siguiente, con su símbolo. */}
+                  <Flex gap={3} mt={1} flexShrink={0}>
+                    <BotonPlaneta dir="prev" color={c} off={!hay(-1)} onClick={() => ir(-1)}
+                                  nombre={hay(-1) ? n.cuerpo(planetas[sel - 1].cuerpo.key) : ""}
+                                  vecino={hay(-1) ? planetas[sel - 1].cuerpo : undefined} />
+                    <BotonPlaneta dir="next" color={c} off={!hay(1)} onClick={() => ir(1)}
+                                  nombre={hay(1) ? n.cuerpo(planetas[sel + 1].cuerpo.key) : ""}
+                                  vecino={hay(1) ? planetas[sel + 1].cuerpo : undefined} />
+                  </Flex>
                 </Flex>
-              </Flex>
-            </Reveal>
-          ))}
+              </Box>
+            );
+          })()}
         </Flex>
       </Flex>
 
@@ -263,52 +363,96 @@ export default function MetodoAstrologiaCartaAstral() {
   );
 }
 
-/** Una caja: el planeta en su signo, o en su casa. Se pulsa para leerla. */
+/** Alto de cada caja de la columna (siempre el mismo, haya dos o tres). */
+const ALTO_CAJA = "88px";
+
+/** Una caja: el planeta en su signo, o en su casa. Lleva el cielo de Astrología de fondo, el borde y el
+ *  halo del color del planeta, y su tick arriba a la derecha si ya está leída. Se pulsa para leerla. */
 function CajaArquetipo({ color, titulo, icono, leida, onClick }: {
   color: string; titulo: string; icono: React.ReactNode; leida: boolean; onClick: () => void;
 }) {
-  const t = useT();
   return (
     <Box
       as="button"
       type="button"
       onClick={onClick}
-      role="group"
       position="relative"
-      flex={{ base: "none", md: "1 1 0" }}
-      minW={{ md: "220px" }}
-      maxW={{ md: "320px" }}
-      w={{ base: "100%", md: "auto" }}
+      overflow="hidden"
+      h={{ base: "76px", md: ALTO_CAJA }}
+      flexShrink={0}
+      w="100%"
       display="flex"
       alignItems="center"
-      gap={3}
-      px={5}
-      py={4}
-      borderRadius="xl"
-      bg="rgba(8,13,30,0.5)"
+      gap={4}
+      px={{ base: 4, md: 5 }}
+      borderRadius="2xl"
       border={`1px solid ${color}${leida ? "99" : "55"}`}
-      boxShadow={leida ? `0 0 22px ${color}44` : `0 0 14px ${color}22`}
+      boxShadow={leida ? `0 0 22px ${color}40, 0 0 46px ${color}1a` : `0 0 14px ${color}26, 0 0 34px ${color}12`}
       textAlign="left"
       cursor="pointer"
       transition="transform 0.28s cubic-bezier(0.22,1,0.36,1), box-shadow 0.28s ease, border-color 0.2s ease"
-      _hover={{ transform: "translateY(-3px)", boxShadow: `0 0 28px ${color}66`, borderColor: color }}
+      _hover={{ transform: "translateY(-2px)", borderColor: color, boxShadow: `0 0 28px ${color}55, 0 0 60px ${color}26` }}
       _active={{ transform: "translateY(-1px) scale(0.99)" }}
-      _focusVisible={{ outline: `2px solid ${color}`, outlineOffset: "3px" }}
+      _focusVisible={focoBlanco}
     >
-      <Flex flexShrink={0} w="44px" h="44px" align="center" justify="center" borderRadius="full"
-            bg={`${color}1a`} border={`1px solid ${color}55`}
-            transition="transform 0.3s ease" _groupHover={{ transform: "scale(1.1)" }}>
+      <SpaceBg quieto overlay="rgba(8,13,30,0.42)" />
+      <Flex position="relative" zIndex={1} flexShrink={0} w="46px" h="46px" align="center" justify="center" borderRadius="full"
+            bg="rgba(8,13,30,0.55)" border={`1px solid ${color}77`}>
         {icono}
       </Flex>
-      <Text flex="1" minW={0} color={color} fontSize={{ base: "md", md: "lg" }} fontWeight="700" lineHeight="1.25"
-            letterSpacing="0.02em" style={{ textShadow: `0 0 10px ${color}44` }}>
+      <Text position="relative" zIndex={1} flex="1" minW={0} color={color} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" lineHeight="1.2"
+            letterSpacing="0.03em" pr={leida ? 6 : 0} noOfLines={2} style={{ textShadow: `0 0 12px ${color}55, 0 1px 3px rgba(0,0,0,0.6)` }}>
         {titulo}
       </Text>
       {leida && (
-        <Flex flexShrink={0} align="center" gap={1} color={color} fontSize="xs" aria-label={t("metodo.astro.releer")}>
-          <CheckIcon color={color} />
-        </Flex>
+        <Box position="absolute" zIndex={2} top="8px" right="8px">
+          <MarcaLeido tinta={color} bg="#0a1024" inline size="22px" iconSize="13px" />
+        </Box>
       )}
+    </Box>
+  );
+}
+
+/** Botón de planeta anterior / siguiente: el cielo de fondo, el símbolo del planeta y su nombre. */
+function BotonPlaneta({ dir, color, nombre, vecino, off, onClick }: {
+  dir: "prev" | "next"; color: string; nombre: string; vecino?: Cuerpo; off: boolean; onClick: () => void;
+}) {
+  return (
+    <Box
+      as="button"
+      type="button"
+      onClick={off ? undefined : onClick}
+      disabled={off}
+      position="relative"
+      overflow="hidden"
+      flex="1"
+      minW={0}
+      display="flex"
+      alignItems="center"
+      justifyContent={dir === "prev" ? "flex-start" : "flex-end"}
+      gap={2}
+      px={4}
+      py="11px"
+      borderRadius="full"
+      border={`1.5px solid ${off ? `${color}22` : `${color}aa`}`}
+      color={off ? `${color}44` : color}
+      fontWeight="700"
+      fontSize={{ base: "sm", md: "md" }}
+      letterSpacing="0.03em"
+      cursor={off ? "not-allowed" : "pointer"}
+      opacity={off ? 0.55 : 1}
+      boxShadow={off ? "none" : `0 0 14px ${color}33`}
+      transition="transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease"
+      _hover={off ? undefined : { transform: "translateY(-1px)", boxShadow: `0 0 22px ${color}66`, borderColor: color }}
+      _focusVisible={focoBlanco}
+    >
+      <SpaceBg quieto overlay="rgba(8,13,30,0.5)" />
+      <Flex position="relative" zIndex={1} align="center" gap={2} minW={0}>
+        {dir === "prev" && <Text as="span" aria-hidden>←</Text>}
+        {vecino && <Glifo symbol={vecino.symbol} color={vecino.color} size={22} />}
+        <Text as="span" noOfLines={1}>{nombre}</Text>
+        {dir === "next" && <Text as="span" aria-hidden>→</Text>}
+      </Flex>
     </Box>
   );
 }

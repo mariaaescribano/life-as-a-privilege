@@ -152,7 +152,7 @@ interface BotonCompaniaProps {
   queEsEsto?: QueEsEsto;
 }
 
-export function BotonCompania({
+function BotonCompaniaInterno({
   color,
   bgColor,
   disciplinaNom,
@@ -511,6 +511,26 @@ export function BotonCompania({
       )}
     </>
   );
+}
+
+/**
+ * Los botones flotantes («¿Qué es esto?» y «Agenda una llamada») están APAGADOS en todo el
+ * recorrido (decisión de María, 2026-11-05). El flujo completo sigue en este fichero: para volver
+ * a encenderlos basta poner `MOSTRAR_BOTONES_FLOTANTES` en true. Una excepción: al volver del pago
+ * de una llamada (`?llamada_pagada` / `?llamada_cancelada`) el componente se monta igualmente, para
+ * que la reserva pagada se confirme.
+ */
+const MOSTRAR_BOTONES_FLOTANTES = false;
+
+export function BotonCompania(props: BotonCompaniaProps) {
+  const volviendoDelPago = (() => {
+    try {
+      const q = new URLSearchParams(window.location.search);
+      return !!(q.get("llamada_pagada") || q.get("llamada_cancelada"));
+    } catch { return false; }
+  })();
+  if (!MOSTRAR_BOTONES_FLOTANTES && !volviendoDelPago) return null;
+  return <BotonCompaniaInterno {...props} />;
 }
 
 export default BotonCompania;

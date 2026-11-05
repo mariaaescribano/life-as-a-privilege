@@ -10,6 +10,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Navigate, useParams } from "react-router-dom";
+import { useReducedMotion } from "framer-motion";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -47,7 +48,7 @@ function BarraAvance({ pct, color }: { pct: number; color: string }) {
         position="relative"
         overflow="hidden"
         bg={color}
-        transition="width 1.6s cubic-bezier(0.22, 1, 0.36, 1) 0.5s"
+        transition="width 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.15s"
         style={{ boxShadow: `0 0 14px ${color}aa, 0 0 30px ${color}55` }}
       >
         {/* el brillo que la recorre */}
@@ -85,13 +86,25 @@ export default function CaminoPagina() {
     return () => { cancel = true; };
   }, [disciplina]);
 
+  const listo = !cargando && progreso !== null;
+  // EL ORDEN DE ENTRADA, uno detrás de otro: 0 = el header; 1 = la barra (cuando el header ha
+  // acabado de entrar y de escribir su título); 2 = el camino (cuando la barra se ha llenado).
+  const reducir = useReducedMotion();
+  const [fase, setFase] = useState(0);
+  useEffect(() => {
+    if (!listo) return;
+    if (reducir) { setFase(2); return; }
+    if (fase >= 2) return;
+    const id = window.setTimeout(() => setFase((f) => f + 1), fase === 0 ? 1200 : 200);
+    return () => window.clearTimeout(id);
+  }, [listo, fase, reducir]);
+
   if (!clave) return <Navigate to={rutaHome()} replace />;
   const disc = disciplinaByKey(disciplina === "medicinachina" ? "tcm" : disciplina ?? "");
   const pct = progreso ? porcentajeCamino(progreso, clave) : 0;
   // Hasta tener el camino Y el progreso no se pinta nada de la página: solo el header de la casa
   // y, en el centro, el loader de ESTA disciplina (nada de mandala genérico ni de cabecera que
   // entra por su cuenta).
-  const listo = !cargando && progreso !== null;
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -115,18 +128,18 @@ export default function CaminoPagina() {
         )}
 
         {/* La barra de avance. Fuera de las cajas: blanco y sin sombra de texto. */}
-        {listo && <Reveal direction="up" distance={14} delay={0.3} duration={0.7} w="100%" display="flex" justifyContent="center"
+        {listo && fase >= 1 && <Reveal direction="up" distance={14} duration={0.45} w="100%" display="flex" justifyContent="center"
                 mt={{ base: 7, md: 9 }} mb={{ base: 9, md: 12 }}>
           <Flex align="center" gap={4} w={{ base: "86%", md: "460px" }} maxW="100%">
             <Box flex="1" minW={0}><BarraAvance pct={pct} color="white" /></Box>
             <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" minW="64px" textAlign="right" lineHeight="1">
-              <Contador valor={pct} sufijo="%" duracion={1.6} />
+              <Contador valor={pct} sufijo="%" duracion={0.9} />
             </Text>
           </Flex>
         </Reveal>}
 
         {/* María, dentro del camino de la persona, ve además los botones para abrirle pasos. */}
-        <CaminoDisciplina clave={clave} userId={personaActiva()?.id} esAdmin={esMariaMirando()} onCargando={setCargando} />
+        <CaminoDisciplina mostrar={fase >= 2} clave={clave} userId={personaActiva()?.id} esAdmin={esMariaMirando()} onCargando={setCargando} />
       </Flex>
 
       <SiteFooter />

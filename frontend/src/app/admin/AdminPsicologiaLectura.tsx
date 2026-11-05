@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { PsicologiaLoading } from "../../components/metodo/comicLoaders";
 import axios from "axios";
@@ -41,7 +41,6 @@ function arquetipoLabel(a: ArquetipoRef): string {
 }
 
 export default function AdminPsicologiaLectura() {
-  const navigate = useNavigate();
   const { userId } = useParams<{ userId: string }>();
   const { verificando } = useAdminGuard();
 
@@ -118,9 +117,6 @@ export default function AdminPsicologiaLectura() {
 
       <Flex flex="1" justify="center" px={{ base: 4, md: 8 }} py={{ base: 6, md: 10 }}>
         <Box w="100%" maxW="820px">
-          <Text as="button" onClick={() => navigate("/admin/psicologia")} color="rgba(255,255,255,0.85)" fontSize="sm" mb={3}
-                _hover={{ color: "white" }}>← Usuarios de psicología</Text>
-
           <AdminDisciplinaHeader disc={disc} subtitle={`${nombre || "Usuario"}${email ? ` · ${email}` : ""}`} />
 
           {!haleAlgo ? (

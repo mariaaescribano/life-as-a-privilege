@@ -3,8 +3,8 @@ import { FlechaBonita } from "../global/FlechaBonita";
 import { Box, Flex, Text, Tooltip } from "@chakra-ui/react";
 import { astrologiaNom, astrologiaTxt, ayurvedaNom, ayurvedaTxt, cabalaNom, cabalaTxt, culturaNom, fisiologiaNom, neuropsicologiaNom, nutricionNom, tcmNom, tcmTxt } from "../../GlobalVariables";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
-import { Float } from "../global/Reveal";
 import { LetrasVivas } from "../global/LetrasVivas";
+import { SpaceBg } from "./SpaceBg";
 import { cuandoSinComic } from "../../hooks/cuandoSinComic";
 import { CursosPsicologiaModal } from "./CursosPsicologiaModal";
 import { useT } from "../../i18n";
@@ -542,7 +542,11 @@ export function MetodoStepHeader({
           : `0 4px 20px rgba(0,0,0,0.22), 0 0 12px rgba(255,255,255,0.14), 0 0 26px rgba(255,255,255,0.07), 0 0 16px ${color}2b`)
       }
     >
-      {useDiscBg && <DisciplinaBgLayer nom={headerNom!} borderRadius="2xl" />}
+      {/* Astrología: el cielo VIVO (estrellas que titilan, estrella fugaz, la foto a la deriva), el
+          mismo que el de sus cajas. Las demás disciplinas, su foto de siempre. */}
+      {useDiscBg && (headerNom === astrologiaNom
+        ? <SpaceBg overlay="rgba(8,13,30,0.25)" escala={0.45} />
+        : <DisciplinaBgLayer nom={headerNom!} borderRadius="2xl" />)}
 
       <Box position="relative" zIndex={1} px={{ base: 4, md: dense ? 10 : 14 }}
            py={dense ? { base: 2.5, md: 3 } : { base: 3, md: 4 }}>
@@ -551,19 +555,12 @@ export function MetodoStepHeader({
             calidad; afecta a todos los headers). */}
         <Flex direction="row" align="center" justify="center" gap={dense ? 3.5 : 5}
               mt={dense ? { base: 0.5, md: 1 } : { base: 1.5, md: 2 }}>
-          {/* El icono flota, MUY despacio, en TODOS los headers del recorrido.
-              Vivía suelto en las páginas y solo lo habían puesto las de
-              Nutrición: el mismo header se movía en una disciplina y estaba
-              quieto en las otras siete. Ahora lo hace el componente, así que ni
-              hay que acordarse ni se puede olvidar. `Float` respeta «reducir
-              movimiento» del sistema: quien lo tenga puesto lo verá quieto. */}
+          {/* El icono va QUIETO (sin vaivén de subir y bajar), en todos los headers. */}
           {/* En `dense` el icono se encoge con el título (las páginas lo pasan
               a su tamaño normal y no hay que tocarlas una por una). */}
           <Box flexShrink={0} display="flex" alignItems="center" justifyContent="center"
                sx={dense ? { transform: "scale(0.95)", transformOrigin: "center" } : undefined}>
-            <Float amplitude={5} duration={5} display="flex" alignItems="center" justifyContent="center">
-              {icon}
-            </Float>
+            {icon}
           </Box>
           <Flex align="baseline" gap={{ base: 1.5, md: 2.5 }} minW={0} flexShrink={1}
                 mt={{ base: "2px", md: "4px" }}>

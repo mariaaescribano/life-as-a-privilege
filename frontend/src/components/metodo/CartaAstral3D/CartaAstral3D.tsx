@@ -24,6 +24,14 @@ interface CartaAstral3DProps {
   /** Solo para lucirla: sin flechas, sin botón «saber más» y sin poder enfocar
    *  planetas (ni con el clic ni con el teclado). La rueda se ve entera, quieta. */
   soloVista?: boolean;
+  /** Planeta que se ve ENGRANDECIDO y encendido, decidido por quien la usa (sin controles propios). */
+  enfocado?: CuerpoKey;
+  /** Sin la luz de alrededor del aro (ni el fondo más oscuro del círculo): solo la rueda. */
+  sinHalo?: boolean;
+  /** Ancho máximo de la rueda (por defecto 612px). */
+  anchoMax?: string;
+  /** Cuánto se engrandece el planeta enfocado (por defecto 1,4). */
+  escalaFoco?: number;
 }
 
 const R_ZODIAC_OUTER = 3.4;
@@ -56,7 +64,7 @@ function CameraRig({ z }: { z: number }) {
   return null;
 }
 
-export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas, completados, soloVista = false }: CartaAstral3DProps) {
+export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas, completados, soloVista = false, enfocado, escalaFoco, sinHalo = false, anchoMax = "612px" }: CartaAstral3DProps) {
   // Solo planetas que REALMENTE se dibujan (tienen glifo). Excluimos el
   // ascendente y cualquier cuerpo sin ilustración: así los aspectos nunca
   // trazan una raya hacia un punto vacío (donde no hay planeta).
@@ -117,7 +125,8 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
           key={p.planeta}
           cuerpo={c}
           position={[x, y, 0]}
-          focused={!soloVista && i === focusedIdx}
+          focused={enfocado ? p.planeta === enfocado : !soloVista && i === focusedIdx}
+          escalaFoco={escalaFoco}
           onClick={() => { if (!soloVista) setFocusedIdx(i); }}
           // Brotan uno a uno, alrededor de la rueda, con un desfase amplio para
           // que sea pausado y solemne (más épico que rápido).
@@ -125,7 +134,7 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
         />
       );
     });
-  }, [planetasOrdenados, angulos, carta.cusps, focusedIdx, soloVista]);
+  }, [planetasOrdenados, angulos, carta.cusps, focusedIdx, soloVista, enfocado, escalaFoco]);
 
   return (
     <Flex
@@ -323,7 +332,7 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
         // Canvas — el disco se quedaría del tamaño de antes y aparecería un
         // aro vacío alrededor (el feo "doble círculo").
         w={{ base: "100%", md: "90%" }}
-        maxW="612px"
+        maxW={anchoMax}
         mx="auto"
         mt={0}
         position="relative"
@@ -337,10 +346,10 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
           overflow: "hidden",
           // Interior 15% más oscuro que el fondo (capa negra al 15% sobre el SpaceBg,
           // visible por la transparencia del Canvas).
-          background: "rgba(0,0,0,0.15)",
+          background: sinHalo ? "transparent" : "rgba(0,0,0,0.15)",
           // Sin `border`: era el "segundo círculo" que se veía por fuera del
           // anillo zodiacal. Dejamos solo el glow suave (halo, no una línea).
-          boxShadow: `0 0 40px ${color}33, 0 0 80px ${color}22, inset 0 0 60px rgba(255,255,255,0.05)`,
+          boxShadow: sinHalo ? "none" : `0 0 40px ${color}33, 0 0 80px ${color}22, inset 0 0 60px rgba(255,255,255,0.05)`,
         }}
       >
         {/* Capa absoluta que rellena el cuadrado (el ::before ocupa el flujo).

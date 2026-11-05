@@ -64,22 +64,34 @@ export default function MetodoAstrologiaIntroduccion() {
     try { return (localStorage.getItem("name") ?? "").trim().split(/\s+/)[0] ?? ""; } catch { return ""; }
   })();
 
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "auto" });
+  // Si no se pudo LEER lo guardado (red, servidor), no se decide nada: ni formulario ni carta.
+  // Enseñar el formulario a quien ya dio sus datos, o la carta a quien no, sería un error.
+  const [fallo, setFallo] = useState(false);
+
+  const cargar = React.useCallback(() => {
     const userId = localStorage.getItem("userId");
-    if (!userId) { setCargando(false); return; }
+    if (!userId) { setCargando(false); return () => {}; }
     let cancel = false;
-    // Primero se mira si ya dio sus datos (y hay carta calculada) y SOLO entonces se pinta la carta.
+    setFallo(false);
+    setCargando(true);
+    // Primero se mira si ya dio sus datos (y hay carta calculada) y SOLO entonces se pinta nada.
     Promise.all([
-      axios.get<EstadoNacimiento | null>(`${API_URL}/metodo-astrologia/${userId}`).then((r) => r.data ?? null).catch(() => null),
-      axios.get<CartaNatal | null>(`${API_URL}/metodo-astrologia/carta-natal/${userId}`).then((r) => r.data ?? null).catch(() => null),
+      axios.get<EstadoNacimiento | null>(`${API_URL}/metodo-astrologia/${userId}`).then((r) => r.data ?? null),
+      axios.get<CartaNatal | null>(`${API_URL}/metodo-astrologia/carta-natal/${userId}`).then((r) => r.data ?? null),
     ]).then(([e, c]) => {
       if (cancel) return;
       setEstado(e);
       setCarta(c);
+    }).catch(() => {
+      if (!cancel) setFallo(true);
     }).finally(() => { if (!cancel) setCargando(false); });
     return () => { cancel = true; };
   }, []);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
+    return cargar();
+  }, [cargar]);
 
   // Con la carta calculada (y sin estar corrigiendo) se enseña la carta; si no, el formulario.
   // María mirando el camino de otra persona no rellena nada por ella: ve siempre la carta.
@@ -87,6 +99,10 @@ export default function MetodoAstrologiaIntroduccion() {
   const hayCarta = mariaMirando ? !!carta : !!estado?.solicitud_enviada_at && !!carta;
   // La persona solo rellena sus datos la primera vez; después, el lápiz es solo de María.
   const verFormulario = !hayCarta || editando;
+  // Ya mandó sus datos pero no hay carta (no se encontró el lugar): se le enseña el formulario
+  // PARA CORREGIR (con sus datos puestos), no el de la primera vez.
+  const sinCartaConDatos = !mariaMirando && !!estado?.solicitud_enviada_at && !carta;
+  const corrigiendo = editando || sinCartaConDatos;
 
   // Tras enviar los datos: se trae la carta recién calculada y la página cambia sola.
   const alEnviar = async (nuevo: EstadoNacimiento) => {
@@ -101,6 +117,22 @@ export default function MetodoAstrologiaIntroduccion() {
   };
 
   if (cargando || !fotosListas) return <RecorridoLoading />;
+
+  if (fallo) {
+    return (
+      <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+        <SiteHeader variant="private" />
+        <Flex flex="1" direction="column" align="center" justify="center" gap={6} px={6}>
+          <Text color="white" fontSize={{ base: "lg", md: "xl" }} textAlign="center" fontStyle="italic">{t("comun.error")}</Text>
+          <Box as="button" type="button" onClick={cargar} px={7} py="10px" borderRadius="full" bg="white" color="#008080"
+               fontWeight="700" letterSpacing="0.04em" cursor="pointer" boxShadow="0 0 22px rgba(255,255,255,0.3)" _focusVisible={focoBlanco}>
+            {t("comun.reintentar")}
+          </Box>
+        </Flex>
+        <SiteFooter />
+      </Box>
+    );
+  }
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -130,7 +162,7 @@ export default function MetodoAstrologiaIntroduccion() {
           {verFormulario ? (
             <>
               {/* Primera vez: lo que María le dice antes de pedirle la hora y el lugar. */}
-              {!editando && (
+              {!corrigiendo && (
                 <Reveal direction="up" distance={18} delay={0.4} duration={1} blur w="100%">
                   <Text color="white" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center" fontStyle="italic">
                     {t("metodo.astro.intro.datosTexto", { nombre })}
@@ -139,9 +171,10 @@ export default function MetodoAstrologiaIntroduccion() {
               )}
               <FormularioNacimiento
                 estado={estado}
-                editando={editando}
+                editando={corrigiendo}
+                lugarNoEncontrado={sinCartaConDatos}
                 modoAdmin={mariaMirando}
-                sinTitulo={!editando}
+                sinTitulo={!corrigiendo}
                 onCancelar={hayCarta ? () => setEditando(false) : undefined}
                 onEnviado={(e) => { void alEnviar(e); }}
               />
