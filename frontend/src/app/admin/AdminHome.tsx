@@ -121,22 +121,26 @@ export default function AdminHome() {
                   px={{ base: 5, md: 6 }}
                   py={{ base: 4, md: 5 }}
                   borderRadius="2xl"
-                  bg="rgba(255,255,255,0.07)"
-                  border="1px solid rgba(255,255,255,0.28)"
-                  boxShadow="0 0 22px rgba(255,255,255,0.12)"
+                  // El mármol de María, a resolución completa, con la letra en turquesa oscuro.
+                  bgColor="#efe5cf"
+                  bgImage="url('/img/fondos/marmolfondo-crema.webp')"
+                  bgSize="cover"
+                  bgPosition="center"
+                  border="1px solid rgba(255,255,255,0.65)"
+                  boxShadow="0 0 30px rgba(255,255,255,0.28), 0 0 70px rgba(180,255,245,0.14)"
                 >
                   <Box minW={0}>
-                    <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.03em" noOfLines={1}>
+                    <Text color="#004f4f" fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.03em" noOfLines={1}>
                       {p.name}
                     </Text>
                     {p.email_confirmado === false && (
-                      <Text color="#ffe7bd" fontSize="xs" fontStyle="italic">Pendiente de activar</Text>
+                      <Text color="#7a5200" fontSize="xs" fontStyle="italic">Pendiente de activar</Text>
                     )}
                   </Box>
                   <Flex gap={3} flexShrink={0}>
-                    <BotonPildora titulo={`Datos de ${p.name}`} onClick={() => navigate(`/admin/asesorias/${p.id}/datos`)}>Datos</BotonPildora>
-                    <BotonPildora solido ocupado={entrando === p.id} titulo={`Abrir el camino de ${p.name}`} onClick={() => entrar(p)}>
-                      <MandalaTurquesa tam="22px" />
+                    <BotonPildora marmol titulo={`Datos de ${p.name}`} onClick={() => navigate(`/admin/asesorias/${p.id}/datos`)}>Datos</BotonPildora>
+                    <BotonPildora marmol solido ocupado={entrando === p.id} titulo={`Abrir el camino de ${p.name}`} onClick={() => entrar(p)}>
+                      <MandalaTurquesa tam="22px" color="white" />
                       <Text as="span" fontSize="lg" lineHeight="1" aria-hidden>→</Text>
                     </BotonPildora>
                   </Flex>

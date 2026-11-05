@@ -20,8 +20,6 @@ const SITIOS = [
   { clave: "header.premium",      ruta: "/admin/premium" },
 ] as const;
 
-const HALO = "0 0 24px rgba(255,255,255,0.14), 0 0 60px rgba(180,255,245,0.08)";
-const HALO_HOVER = "0 0 30px rgba(255,255,255,0.32), 0 0 80px rgba(180,255,245,0.2)";
 
 export default function AdminInicio() {
   const navigate = useNavigate();
@@ -69,31 +67,34 @@ export default function AdminInicio() {
                 px={6}
                 py={{ base: 6, md: 8 }}
                 borderRadius="28px"
-                bg="rgba(255,255,255,0.07)"
-                border="1px solid rgba(255,255,255,0.3)"
-                boxShadow={HALO}
+                // El mármol de María, con la letra en turquesa oscuro.
+                bgColor="#efe5cf"
+                bgImage="url('/img/fondos/marmolfondo-crema.webp')"
+                bgSize="cover"
+                bgPosition="center"
+                border="1px solid rgba(255,255,255,0.65)"
+                boxShadow="0 0 30px rgba(255,255,255,0.28), 0 0 70px rgba(180,255,245,0.14)"
                 cursor="pointer"
-                transition="transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, border-color 0.3s ease"
-                _hover={{ transform: "translateY(-4px)", bg: "rgba(255,255,255,0.12)", borderColor: "rgba(255,255,255,0.6)", boxShadow: HALO_HOVER }}
+                transition="transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease"
+                _hover={{ transform: "translateY(-4px)", borderColor: "white", boxShadow: "0 0 38px rgba(255,255,255,0.45), 0 0 84px rgba(180,255,245,0.24)" }}
                 _focusVisible={focoBlanco}
                 role="group"
               >
                 <Text
-                  color="white"
+                  color="#004f4f"
                   fontSize={{ base: "xl", md: "2xl" }}
                   fontWeight="700"
                   letterSpacing="0.08em"
                   textTransform="uppercase"
                   lineHeight="1.2"
                   textAlign="center"
-                  textShadow="0 0 14px rgba(255,255,255,0.45)"
                 >
                   {t(s.clave)}
                 </Text>
                 <Box
                   h="1px"
                   w="36px"
-                  bg="rgba(255,255,255,0.6)"
+                  bg="#004f4f"
                   transition="width 0.35s ease"
                   _groupHover={{ w: "72px" }}
                 />

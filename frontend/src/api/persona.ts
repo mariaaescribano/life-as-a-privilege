@@ -51,6 +51,19 @@ const leerJson = <T,>(clave: string): T | null => {
   }
 };
 
+/**
+ * Borra el rastro de «estar mirando a una persona» (la persona abierta y lo apartado de María).
+ * Hay que llamarla al INICIAR SESIÓN: si María cerró la pestaña dentro del camino de alguien, esas
+ * claves se quedaban en el navegador y, al volver a entrar, cada petición seguía yendo sobre esa
+ * persona (X-Persona): el panel la trataba como un usuario más y la mandaba a /home.
+ */
+export function olvidarPersona() {
+  try {
+    localStorage.removeItem(CLAVE_PERSONA);
+    localStorage.removeItem(CLAVE_ADMIN);
+  } catch { /* modo privado */ }
+}
+
 /** La persona cuyo camino está abierto, o null si estoy en el mío. */
 export function personaActiva(): PersonaAbierta | null {
   const dato = leerJson<PersonaAbierta>(CLAVE_PERSONA);
@@ -81,6 +94,7 @@ const poner = (k: string, v: string | null) => {
  * Vacía si no hay persona abierta. Las de axios la llevan solas (axiosSetup.ts).
  */
 export function cabeceraPersona(): Record<string, string> {
+  if (window.location.pathname.startsWith("/admin")) return {}; // el panel nunca va sobre una persona
   const p = personaActiva();
   return p ? { "X-Persona": p.id } : {};
 }

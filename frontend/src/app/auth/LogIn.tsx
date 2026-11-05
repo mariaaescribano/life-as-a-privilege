@@ -1,4 +1,5 @@
 // LogIn.tsx
+import { olvidarPersona } from "../../api/persona";
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Image, Input, Spinner, Text, VStack } from "@chakra-ui/react";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -143,6 +144,7 @@ export default function LogIn() {
             : "/img/icono/noImg.webp"
         );
 
+        olvidarPersona(); // un inicio de sesión nuevo nunca mira a otra persona
         // Si el email es de admin, aún NO está desbloqueado (hace falta la
         // contraseña de administración): lo mandamos a la pantalla de desbloqueo.
         // Estar en la lista de emails ya no da acceso por sí solo.

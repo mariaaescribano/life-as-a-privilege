@@ -44,7 +44,8 @@ axios.interceptors.request.use((config) => {
   // María en el camino de una persona: la petición va sobre ELLA. El token sigue
   // siendo el de María; el servidor solo hace caso a la cabecera si lo es (ver
   // api/persona.ts y backend/src/auth/persona.util.ts).
-  const persona = personaActiva();
+  // El panel de administración (/admin…) nunca va sobre una persona: ahí María es María.
+  const persona = window.location.pathname.startsWith("/admin") ? null : personaActiva();
   if (persona) {
     config.headers = config.headers ?? {};
     config.headers["X-Persona"] = persona.id;

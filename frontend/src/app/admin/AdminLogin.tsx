@@ -1,3 +1,4 @@
+import { olvidarPersona } from "../../api/persona";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -42,6 +43,7 @@ export default function AdminLogin() {
         password: password.trim(),
       });
       if (res.data?.token && res.data?.user?.id) {
+        olvidarPersona(); // por si quedó abierto el camino de alguien de otra vez
         localStorage.setItem("userId", res.data.user.id);
         localStorage.setItem("name", res.data.user.name ?? "");
         localStorage.setItem("token", res.data.token);

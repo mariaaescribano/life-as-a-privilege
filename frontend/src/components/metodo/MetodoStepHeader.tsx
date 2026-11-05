@@ -494,6 +494,34 @@ export function MetodoStepHeader({
   // de TCM, `compact` sigue funcionando igual (tests con nombres largos).
   const compactEff = tituloUniforme ? false : compact;
   useEspacioBajoHeader(headerBoxRef);
+  const circulo = alCamino && discCirculo ? (
+              <Box
+                as="button"
+                type="button"
+                onClick={alCamino}
+                aria-label={t("metodo.header.alCamino")}
+                title={t("metodo.header.alCamino")}
+                flexShrink={0}
+                display="inline-flex"
+                alignItems="center"
+                justifyContent="center"
+                w={dense ? { base: "34px", md: "40px" } : { base: "38px", md: "46px" }}
+                h={dense ? { base: "34px", md: "40px" } : { base: "38px", md: "46px" }}
+                borderRadius="full"
+                bg={btnWhiteBg ? "rgba(255,255,255,0.14)" : `${color}1a`}
+                border={`1.5px solid ${color}aa`}
+                color={color}
+                cursor="pointer"
+                transition="background 0.08s ease, border-color 0.08s ease, box-shadow 0.08s ease, transform 0.08s ease"
+                boxShadow={`0 0 10px rgba(255,255,255,0.16), 0 0 22px ${color}44, inset 0 0 12px ${color}22`}
+                _hover={{ bg: btnWhiteBg ? "rgba(255,255,255,0.12)" : `${color}2b`, borderColor: `${color}cc`, boxShadow: `0 0 14px rgba(255,255,255,0.35), 0 0 30px ${color}44` }}
+                _active={{ transform: "scale(0.94)" }}
+                _focusVisible={focoBlanco}
+                sx={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
+              >
+                <discCirculo.Icon size={dense ? { base: "18px", md: "22px" } : { base: "20px", md: "24px" }} />
+              </Box>
+  ) : null;
   return (
     <>
     <Box
@@ -619,49 +647,36 @@ export function MetodoStepHeader({
             tanto en móvil como en desktop. Si no caben, los botones se
             encogen (gracias al flex:0 1 auto + minW:0 del StepBtn) en lugar
             de saltar a una segunda fila. */}
-        {(prev || next || extra || extra2 || showPsicoCursos) && (
-          <Flex
-            justify="center"
-            align="center"
-            gap={dense ? { base: 2.5, md: 4 } : { base: 3, md: 6 }}
-            direction="row"
-            wrap="nowrap"
-          >
-            {prev && <StepBtn {...prev} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} soloFlecha={prev.arrow ?? "prev"} />}
-            {alCamino && discCirculo && (
-              <Box
-                as="button"
-                type="button"
-                onClick={alCamino}
-                aria-label={t("metodo.header.alCamino")}
-                title={t("metodo.header.alCamino")}
-                flexShrink={0}
-                display="inline-flex"
-                alignItems="center"
-                justifyContent="center"
-                w={dense ? { base: "34px", md: "40px" } : { base: "38px", md: "46px" }}
-                h={dense ? { base: "34px", md: "40px" } : { base: "38px", md: "46px" }}
-                borderRadius="full"
-                bg={btnWhiteBg ? "rgba(255,255,255,0.14)" : `${color}1a`}
-                border={`1.5px solid ${color}aa`}
-                color={color}
-                cursor="pointer"
-                transition="background 0.08s ease, border-color 0.08s ease, box-shadow 0.08s ease, transform 0.08s ease"
-                boxShadow={`0 0 10px rgba(255,255,255,0.16), 0 0 22px ${color}44, inset 0 0 12px ${color}22`}
-                _hover={{ bg: btnWhiteBg ? "rgba(255,255,255,0.12)" : `${color}2b`, borderColor: `${color}cc`, boxShadow: `0 0 14px rgba(255,255,255,0.35), 0 0 30px ${color}44` }}
-                _active={{ transform: "scale(0.94)" }}
-                _focusVisible={focoBlanco}
-                sx={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
-              >
-                <discCirculo.Icon size={dense ? { base: "18px", md: "22px" } : { base: "20px", md: "24px" }} />
-              </Box>
-            )}
-            {extraFinal && <StepBtn {...extraFinal} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
-            {extra2 && <StepBtn {...extra2} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
-            {showPsicoCursos && <StepBtn label={t("header.cursos")} onClick={() => setCursosOpen(true)} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
-            {next && <StepBtn {...next} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} soloFlecha={next.arrow ?? "next"} />}
-          </Flex>
-        )}
+        {(prev || next || extra || extra2 || showPsicoCursos) && (() => {
+          const bPrev = prev && <StepBtn {...prev} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} soloFlecha={prev.arrow ?? "prev"} />;
+          const bNext = next && <StepBtn {...next} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} soloFlecha={next.arrow ?? "next"} />;
+          const bExtras = (
+            <>
+              {extraFinal && <StepBtn {...extraFinal} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
+              {extra2 && <StepBtn {...extra2} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
+              {showPsicoCursos && <StepBtn label={t("header.cursos")} onClick={() => setCursosOpen(true)} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
+            </>
+          );
+          const hueco = dense ? { base: 2.5, md: 4 } : { base: 3, md: 6 };
+          // Sin círculo (fuera del recorrido): la fila de siempre.
+          if (!(alCamino && discCirculo)) {
+            return (
+              <Flex justify="center" align="center" gap={hueco} direction="row" wrap="nowrap">
+                {bPrev}{bExtras}{bNext}
+              </Flex>
+            );
+          }
+          // Con círculo: tres columnas, y el círculo SIEMPRE en el centro exacto del header. Cada
+          // botón ocupa su lado (aunque uno sea más ancho que el otro, el círculo no se mueve):
+          // anterior a la izquierda, y a la derecha los extras (Ilustraciones, Cursos…) y el siguiente.
+          return (
+            <Box display="grid" gridTemplateColumns="minmax(0,1fr) auto minmax(0,1fr)" alignItems="center" columnGap={hueco}>
+              <Flex justify="flex-end" align="center" gap={hueco} minW={0}>{bPrev}</Flex>
+              {circulo}
+              <Flex justify="flex-start" align="center" gap={hueco} minW={0}>{bExtras}{bNext}</Flex>
+            </Box>
+          );
+        })()}
       </Box>
     </Box>
     {showPsicoCursos && <CursosPsicologiaModal isOpen={cursosOpen} onClose={() => setCursosOpen(false)} />}

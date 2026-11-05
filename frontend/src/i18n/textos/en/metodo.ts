@@ -236,7 +236,7 @@ export const metodo = {
   "metodo.astro.paso.astrologia": "Astrology",
   "metodo.astro.paso.introduccion": "Your Birth Chart",
   "metodo.astro.intro.cartaTexto": "{nombre}, this is your Birth Chart, the map your soul designed to guide you through this life. Together we will break it down.",
-  "metodo.astro.intro.datosTexto": "{nombre}, this is your Birth Chart, the map your soul designed to guide you through this life. Together we will break it down. To be able to read your Birth Chart, look up the time and the city you were born in as carefully as you can. The more precise you are, the better the reading will turn out.",
+  "metodo.astro.intro.datosTexto": "{nombre}, to be able to read your Birth Chart, look up the time and the city you were born in as carefully as you can. The more precise you are, the better the reading will turn out.",
   "metodo.astro.intro.apuntes1": "You do not need to take notes,",
   "metodo.astro.intro.apuntes2": "at the end you will have everything in a PDF",
   "metodo.astro.paso.historia": "History",

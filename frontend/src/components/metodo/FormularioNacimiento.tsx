@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Box, Flex, Input, Select, Text } from "@chakra-ui/react";
+import { Box, Flex, Input, Text } from "@chakra-ui/react";
 import axios from "axios";
 import { useT } from "../../i18n";
 import { glowHeader } from "./FotoBox";
 import { SpaceBg } from "./SpaceBg";
+import { DesplegableEstrellas } from "./DesplegableEstrellas";
 import { Reveal, RevealStagger, RevealItem } from "../global/Reveal";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import { API_URL, astrologiaTxt } from "../../GlobalVariables";
+import { adminHeaders } from "../../app/admin/useAdminGuard";
 
 export interface EstadoNacimiento {
   fecha_nacimiento?: string | null;
@@ -30,10 +32,12 @@ const MESES = [
  * el estado ya guardado. Sirve para la primera vez y para corregir (`editando`).
  */
 export function FormularioNacimiento({
-  estado, editando = false, sinTitulo = false, onCancelar, onEnviado,
+  estado, editando = false, sinTitulo = false, modoAdmin = false, onCancelar, onEnviado,
 }: {
   estado: EstadoNacimiento | null;
   editando?: boolean;
+  /** María corrigiendo los datos de una persona (endpoint de admin, sin correos). */
+  modoAdmin?: boolean;
   /** Sin el título y la frase de arriba (la página ya pone su propia presentación). */
   sinTitulo?: boolean;
   onCancelar?: () => void;
@@ -44,6 +48,19 @@ export function FormularioNacimiento({
   const [mes, setMes] = useState("");
   const [anio, setAnio] = useState("");
   const [hora, setHora] = useState("");
+  // Lo que se ve en el campo de la hora mientras se teclea; `hora` solo vale cuando está completa.
+  const [horaTxt, setHoraTxt] = useState("");
+  const escribirHora = (crudo: string) => {
+    let d = crudo.replace(/\D/g, "").slice(0, 4);
+    // Una primera cifra que no puede ser de hora (3-9) se completa con un 0 delante.
+    if (d.length >= 1 && Number(d[0]) > 2) d = "0" + d.slice(0, 3);
+    if (d.length >= 2 && Number(d.slice(0, 2)) > 23) d = "23" + d.slice(2);
+    // Lo mismo con los minutos: la primera cifra, como mucho 5.
+    if (d.length >= 3 && Number(d[2]) > 5) d = d.slice(0, 2) + "5" + d.slice(3);
+    const txt = d.length > 2 ? `${d.slice(0, 2)}:${d.slice(2)}` : d;
+    setHoraTxt(txt);
+    setHora(d.length === 4 ? txt : "");
+  };
   const [pais, setPais] = useState("");
   const [lugar, setLugar] = useState("");
   const [region, setRegion] = useState("");
@@ -58,7 +75,7 @@ export function FormularioNacimiento({
     if (!estado) return;
     const [a, m, d] = (estado.fecha_nacimiento ?? "").slice(0, 10).split("-");
     if (a && m && d) { setAnio(a); setMes(m); setDia(String(parseInt(d, 10))); }
-    if (estado.hora_nacimiento) setHora(estado.hora_nacimiento.slice(0, 5));
+    if (estado.hora_nacimiento) { setHora(estado.hora_nacimiento.slice(0, 5)); setHoraTxt(estado.hora_nacimiento.slice(0, 5)); }
     if (estado.pais) setPais(estado.pais);
     if (estado.lugar) setLugar(estado.lugar);
     if (estado.region) setRegion(estado.region);
@@ -90,14 +107,21 @@ export function FormularioNacimiento({
     setEnviando(true);
     setPopupError(null);
     try {
-      const r = await axios.post(`${API_URL}/metodo-astrologia/solicitud/${userId}`, {
+      const cuerpo = {
         fecha_nacimiento: fecha, hora_nacimiento: hora,
         pais: pais.trim(), lugar: lugar.trim(), region: region.trim(),
-      });
-      if (r.data?.success === false) { setPopupError("No se pudo guardar. Inténtalo de nuevo."); return; }
+      };
+      // María corrige por la vía de admin: sin correos de acuse y sin tocar la solicitud.
+      const r = modoAdmin
+        ? await axios.patch(`${API_URL}/metodo-astrologia/admin/${userId}/nacimiento`, cuerpo, { headers: adminHeaders() })
+        : await axios.post(`${API_URL}/metodo-astrologia/solicitud/${userId}`, cuerpo);
+      if (r.data?.success === false) {
+        setPopupError(modoAdmin && r.data?.message ? r.data.message : "No se pudo guardar. Inténtalo de nuevo.");
+        return;
+      }
       const e = await axios.get<EstadoNacimiento>(`${API_URL}/metodo-astrologia/${userId}`);
       setConfirmOpen(false);
-      if (r.data?.cartaCalculada === false) {
+      if (r.data?.cartaCalculada === false || (modoAdmin && r.data?.recalculada === false)) {
         // Se guardó y se avisó, pero ese lugar no se encuentra: sin carta que pintar.
         setError("No he encontrado ese lugar. Revisa el lugar, la región y el país y vuelve a enviarlos.");
         return;
@@ -185,30 +209,14 @@ export function FormularioNacimiento({
                   />
                 </Box>
                 <Box flex="1.6">
-                  <Select
-                    value={mes}
-                    onChange={(e) => setMes(e.target.value)}
+                  <DesplegableEstrellas
+                    valor={mes}
+                    onChange={setMes}
                     placeholder={t("metodo.astro.mes")}
-                    bg="rgba(8,13,30,0.55)"
-                    border={`1px solid ${astrologiaTxt}44`}
+                    ariaLabel={t("metodo.astro.mes")}
                     color={astrologiaTxt}
-                    borderRadius="lg"
-                    size="md"
-                    fontFamily="'EB Garamond', serif"
-                    sx={{
-                      "> option": { background: "#0c1230", color: astrologiaTxt },
-                    }}
-                    _hover={{ borderColor: `${astrologiaTxt}88` }}
-                    _focus={{
-                      borderColor: astrologiaTxt,
-                      boxShadow: `0 0 0 1px ${astrologiaTxt}55, 0 0 14px ${astrologiaTxt}33`,
-                      bg: "rgba(8,13,30,0.7)",
-                    }}
-                  >
-                    {MESES.map((m) => (
-                      <option key={m.num} value={m.num}>{m.nombre}</option>
-                    ))}
-                  </Select>
+                    opciones={MESES.map((m) => ({ valor: m.num, etiqueta: m.nombre }))}
+                  />
                 </Box>
                 <Box flex="1">
                   <Input
@@ -246,24 +254,30 @@ export function FormularioNacimiento({
               <Text color={`${astrologiaTxt}aa`} fontSize="xs" letterSpacing="0.14em" mb={1.5} fontWeight="600" textTransform="uppercase">
                 {t("metodo.astro.horaNacimiento")}
               </Text>
+              {/* Hora en formato de 24 h (de 00:00 a 23:59): las 9 de la noche son las 21:00.
+                  Se teclea (2100 → 21:00); los dos puntos los pone solo. */}
               <Input
-                type="time"
-                value={hora}
-                onChange={(e) => setHora(e.target.value)}
+                value={horaTxt}
+                onChange={(e) => escribirHora(e.target.value)}
+                inputMode="numeric"
+                autoComplete="off"
+                placeholder="HH:MM"
+                maxLength={5}
+                aria-label={t("metodo.astro.horaNacimiento")}
                 bg="rgba(8,13,30,0.55)"
                 border={`1px solid ${astrologiaTxt}44`}
                 color={astrologiaTxt}
                 borderRadius="lg"
                 size="md"
                 fontFamily="'EB Garamond', serif"
+                fontSize="lg"
+                letterSpacing="0.12em"
+                _placeholder={{ color: `${astrologiaTxt}55` }}
                 _hover={{ borderColor: `${astrologiaTxt}88` }}
                 _focus={{
                   borderColor: astrologiaTxt,
                   boxShadow: `0 0 0 1px ${astrologiaTxt}55, 0 0 14px ${astrologiaTxt}33`,
                   bg: "rgba(8,13,30,0.7)",
-                }}
-                sx={{
-                  "::-webkit-calendar-picker-indicator": { filter: "invert(0.9)" },
                 }}
               />
             </RevealItem>

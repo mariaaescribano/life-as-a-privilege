@@ -428,6 +428,10 @@ caja siguiente); el ancho de las cajas se calcula (`anchoCaja`) para que cajas +
 (el más bajo, el que María prefiere); no pasar `dense` a mano. Cajitas del camino: sin borde y con el
 círculo del número transparente (solo su aro).
 
+**Desplegables (2026-11-05):** nada de `<Select>` del navegador en las cajas de cielo: `DesplegableEstrellas`
+(`components/metodo/`), un panel de cajitas con el cielo de estrellas; la elegida se ilumina con el halo
+de la disciplina. Hoy lo usa el mes de nacimiento. La hora se teclea en 24 h (HH:MM), no se despliega.
+
 **Headers con DOS botones (2026-11-05):** todo `MetodoStepHeader` bajo `/metodo/<disciplina>` lleva siempre un
 botón a la izquierda y otro a la derecha; si la página no pone el suyo (primera/última del recorrido), el que
 falta lleva al camino de la disciplina («← Camino» / «Camino →»). La casilla inicial del camino dice EMPEZAR

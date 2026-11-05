@@ -19,7 +19,7 @@ import React, { useState } from "react";
 import { Box, Flex, Text, useBreakpointValue } from "@chakra-ui/react";
 import { motion, useReducedMotion } from "framer-motion";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
-import { sombraTexto } from "../global/disciplinaSombras";
+import { sombraSoloContraste } from "../global/disciplinaSombras";
 import { Reveal } from "../global/Reveal";
 import { focoBlanco } from "../global/foco";
 import { useT } from "../../i18n";
@@ -197,7 +197,7 @@ function Caja({
           letterSpacing="0.02em"
           textAlign="center"
           noOfLines={3}
-          style={{ textShadow: sombraTexto(nom, bg) }}
+          style={{ textShadow: sombraSoloContraste(nom) }}
         >
           {paso.titulo}
         </Text>

@@ -26,7 +26,8 @@ import { focoBlanco } from "../../components/global/foco";
  *
  * Primero revisa si la persona ya dio sus datos de nacimiento: si no (o si no se pudo calcular
  * su carta), sale el formulario; al enviarlo el servidor avisa a María por email y ESTA misma
- * página pasa a enseñar la carta. María, mirando el camino de alguien, nunca ve el formulario.
+ * página pasa a enseñar la carta. La persona solo rellena sus datos esa primera vez; el lápiz
+ * de la caja de la carta (corregir hora/lugar) es solo de María, por la vía de admin.
  *
  * Es para lucir la carta astral de la persona: el header de siempre (sin el botón
  * «Ilustraciones»), debajo un saludo en blanco, la carta (solo para mirarla: sin
@@ -82,8 +83,10 @@ export default function MetodoAstrologiaIntroduccion() {
 
   // Con la carta calculada (y sin estar corrigiendo) se enseña la carta; si no, el formulario.
   // María mirando el camino de otra persona no rellena nada por ella: ve siempre la carta.
-  const hayCarta = !!estado?.solicitud_enviada_at && !!carta;
-  const verFormulario = !mariaMirando && (!hayCarta || editando);
+  // Para María basta con que haya carta: sus correcciones (vía admin) no tocan la solicitud.
+  const hayCarta = mariaMirando ? !!carta : !!estado?.solicitud_enviada_at && !!carta;
+  // La persona solo rellena sus datos la primera vez; después, el lápiz es solo de María.
+  const verFormulario = !hayCarta || editando;
 
   // Tras enviar los datos: se trae la carta recién calculada y la página cambia sola.
   const alEnviar = async (nuevo: EstadoNacimiento) => {
@@ -137,6 +140,7 @@ export default function MetodoAstrologiaIntroduccion() {
               <FormularioNacimiento
                 estado={estado}
                 editando={editando}
+                modoAdmin={mariaMirando}
                 sinTitulo={!editando}
                 onCancelar={hayCarta ? () => setEditando(false) : undefined}
                 onEnviado={(e) => { void alEnviar(e); }}
@@ -154,6 +158,9 @@ export default function MetodoAstrologiaIntroduccion() {
             {/* La carta, en su caja estrellada, TAN ANCHA como el header. Entrada SOLO de opacidad:
                 el <Canvas> mide su contenedor una vez al montar, y con un transform en marcha
                 mediría una caja escalada (ver la página de Arquetipos). */}
+            {/* Sin carta calculada (p. ej. la persona no dio su hora) NO se pinta nada:
+                CartaAstral3D sin `carta` dibuja la carta de MUESTRA y parecería la suya. */}
+            {carta && (
             <Reveal
               inView
               amount={0.15}
@@ -167,14 +174,29 @@ export default function MetodoAstrologiaIntroduccion() {
             >
               <SpaceBg overlay="rgba(8,13,30,0.28)" />
               <Flex ref={setCajaCarta} position="relative" zIndex={1} direction="column" align="center" px={{ base: 5, md: 12 }} py={{ base: 10, md: 14 }}>
+                {/* Corregir los datos (solo María): lápiz pequeño, abajo a la derecha DENTRO de la caja. */}
+                {mariaMirando && (
+                  <Box as="button" type="button"
+                       onClick={() => { setEditando(true); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+                       aria-label={t("metodo.astro.cambiar")} title={t("metodo.astro.cambiar")}
+                       position="absolute" bottom="14px" right="14px" zIndex={2}
+                       display="inline-flex" alignItems="center" justifyContent="center" w="26px" h="26px"
+                       borderRadius="full" bg="rgba(255,255,255,0.14)" color="white" cursor="pointer"
+                       transition="all 0.2s" _hover={{ bg: "rgba(255,255,255,0.28)" }} _focusVisible={focoBlanco}>
+                    <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="13px" h="13px" fill="currentColor">
+                      <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T846-647L319-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
+                    </Box>
+                  </Box>
+                )}
                 {cartaVisible ? (
-                  <CartaAstral3D color={astrologiaTxt} {...(carta ? { carta } : {})} soloVista />
+                  <CartaAstral3D color={astrologiaTxt} carta={carta} soloVista />
                 ) : (
                   // Mismo tamaño que la rueda (cuadrado) para que la página no salte al montarla.
                   <Box w={{ base: "100%", md: "90%" }} maxW="612px" sx={{ aspectRatio: "1 / 1" }} />
                 )}
               </Flex>
             </Reveal>
+            )}
 
             <Reveal direction="up" distance={18} delay={0.3} duration={0.7} w="100%">
               {/* Estirada, en UNA sola línea (en móvil, si no cabe, baja). */}
@@ -184,21 +206,6 @@ export default function MetodoAstrologiaIntroduccion() {
               </Text>
             </Reveal>
 
-              {/* Corregir los datos: un lápiz muy pequeño, abajo a la derecha. */}
-              {!mariaMirando && (
-                <Flex w="100%" justify="flex-end">
-                  <Box as="button" type="button"
-                       onClick={() => { setEditando(true); window.scrollTo({ top: 0, behavior: "smooth" }); }}
-                       aria-label={t("metodo.astro.cambiar")} title={t("metodo.astro.cambiar")}
-                       display="inline-flex" alignItems="center" justifyContent="center" w="26px" h="26px"
-                       borderRadius="full" bg="rgba(255,255,255,0.14)" color="white" cursor="pointer"
-                       transition="all 0.2s" _hover={{ bg: "rgba(255,255,255,0.28)" }} _focusVisible={focoBlanco}>
-                    <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="13px" h="13px" fill="currentColor">
-                      <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T846-647L319-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
-                    </Box>
-                  </Box>
-                </Flex>
-              )}
             </>
           )}
         </Flex>
