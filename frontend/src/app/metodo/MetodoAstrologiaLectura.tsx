@@ -194,10 +194,10 @@ export default function MetodoAstrologiaLectura() {
         });
         const lista = Array.isArray(res.data?.retos) ? res.data!.retos! : [];
         // Si no hay ni PDF ni puntos clave, la carta aún no está lista.
-        if (!res.data?.link_carta && lista.length === 0) { navigate("/metodo/astrologia"); return; }
+        if (!res.data?.link_carta && lista.length === 0) { navigate("/metodo/astrologia/introduccion"); return; }
         setRetos(lista);
       } catch {
-        navigate("/metodo/astrologia");
+        navigate("/metodo/astrologia/introduccion");
         return;
       } finally {
         setLoading(false);

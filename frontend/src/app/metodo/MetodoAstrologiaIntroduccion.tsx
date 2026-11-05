@@ -125,12 +125,23 @@ export default function MetodoAstrologiaIntroduccion() {
           </Reveal>
 
           {verFormulario ? (
-            <FormularioNacimiento
-              estado={estado}
-              editando={editando}
-              onCancelar={hayCarta ? () => setEditando(false) : undefined}
-              onEnviado={(e) => { void alEnviar(e); }}
-            />
+            <>
+              {/* Primera vez: lo que María le dice antes de pedirle la hora y el lugar. */}
+              {!editando && (
+                <Reveal direction="up" distance={18} delay={0.15} duration={0.7} w="100%">
+                  <Text color="white" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center" fontStyle="italic">
+                    {t("metodo.astro.intro.datosTexto", { nombre })}
+                  </Text>
+                </Reveal>
+              )}
+              <FormularioNacimiento
+                estado={estado}
+                editando={editando}
+                sinTitulo={!editando}
+                onCancelar={hayCarta ? () => setEditando(false) : undefined}
+                onEnviado={(e) => { void alEnviar(e); }}
+              />
+            </>
           ) : (
             <>
             {/* Fuera de las cajas: blanco y sin sombra. */}
@@ -166,23 +177,27 @@ export default function MetodoAstrologiaIntroduccion() {
             </Reveal>
 
             <Reveal direction="up" distance={18} delay={0.3} duration={0.7} w="100%">
-              <Text color="white" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center">
-                {t("metodo.astro.intro.apuntes1")}
-                <br />
-                {t("metodo.astro.intro.apuntes2")}
+              {/* Estirada, en UNA sola línea (en móvil, si no cabe, baja). */}
+              <Text color="white" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center"
+                    whiteSpace={{ base: "normal", md: "nowrap" }}>
+                {t("metodo.astro.intro.apuntes1")} {t("metodo.astro.intro.apuntes2")}
               </Text>
             </Reveal>
 
-              {/* Los datos con los que se calculó, y la puerta para corregirlos. */}
+              {/* Corregir los datos: un lápiz muy pequeño, abajo a la derecha. */}
               {!mariaMirando && (
-                <Reveal direction="up" distance={14} delay={0.4} duration={0.6} w="100%" display="flex" justifyContent="center">
-                  <Box as="button" onClick={() => setEditando(true)} px={4} py={1.5} borderRadius="full"
-                       bg="rgba(255,255,255,0.14)" color="white" fontFamily="'EB Garamond', serif" fontSize="sm"
-                       fontWeight="600" letterSpacing="0.04em" cursor="pointer" boxShadow="0 0 16px rgba(255,255,255,0.25)"
-                       transition="all 0.2s" _hover={{ bg: "rgba(255,255,255,0.26)" }} _focusVisible={focoBlanco}>
-                    {t("metodo.astro.cambiar")}
+                <Flex w="100%" justify="flex-end">
+                  <Box as="button" type="button"
+                       onClick={() => { setEditando(true); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+                       aria-label={t("metodo.astro.cambiar")} title={t("metodo.astro.cambiar")}
+                       display="inline-flex" alignItems="center" justifyContent="center" w="26px" h="26px"
+                       borderRadius="full" bg="rgba(255,255,255,0.14)" color="white" cursor="pointer"
+                       transition="all 0.2s" _hover={{ bg: "rgba(255,255,255,0.28)" }} _focusVisible={focoBlanco}>
+                    <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="13px" h="13px" fill="currentColor">
+                      <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T846-647L319-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
+                    </Box>
                   </Box>
-                </Reveal>
+                </Flex>
               )}
             </>
           )}

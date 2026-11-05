@@ -55,7 +55,7 @@ export default function MetodoAstrologiaTrio() {
           axios.get<CartaNatal | null>(`${API_URL}/metodo-astrologia/carta-natal/${userId}`),
         ]);
         // Sin sus datos de nacimiento no hay carta: se vuelve al formulario.
-        if (!estadoRes.data?.solicitud_enviada_at) { navigate("/metodo/astrologia", { replace: true }); return; }
+        if (!estadoRes.data?.solicitud_enviada_at) { navigate("/metodo/astrologia/introduccion", { replace: true }); return; }
         // La CARTA manda para signo y casa; del `data` guardado solo se conserva lo leído.
         let d: TrioData = soloClavesPlaneta<TrioValor>(estadoRes.data?.data ?? undefined);
         const carta = cartaRes.data;
@@ -68,7 +68,7 @@ export default function MetodoAstrologiaTrio() {
         }
         if (!cancel) setTrio(d);
       } catch {
-        if (!cancel) navigate("/metodo/astrologia", { replace: true });
+        if (!cancel) navigate("/metodo/astrologia/introduccion", { replace: true });
         return;
       }
       if (!cancel) setLoading(false);

@@ -30,10 +30,12 @@ const MESES = [
  * el estado ya guardado. Sirve para la primera vez y para corregir (`editando`).
  */
 export function FormularioNacimiento({
-  estado, editando = false, onCancelar, onEnviado,
+  estado, editando = false, sinTitulo = false, onCancelar, onEnviado,
 }: {
   estado: EstadoNacimiento | null;
   editando?: boolean;
+  /** Sin el título y la frase de arriba (la página ya pone su propia presentación). */
+  sinTitulo?: boolean;
   onCancelar?: () => void;
   onEnviado: (estado: EstadoNacimiento) => void;
 }) {
@@ -133,24 +135,26 @@ export function FormularioNacimiento({
 
         <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}>
           <RevealStagger display="flex" flexDirection="column" gap={5} stagger={0.09} delayChildren={0.35}>
-            <RevealItem>
-              {/* Sin textShadow: el brillo sobre el velo del cielo ensuciaba la letra. */}
-              <Text color={astrologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" letterSpacing="0.04em" textAlign="center">
-                {editando ? "Corrige tus datos" : "Tu Carta Astral"}
-              </Text>
-            </RevealItem>
-            <RevealItem>
-              <Text color={`${astrologiaTxt}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.75" textAlign="center" maxW="600px" mx="auto">
-                {editando
-                  ? "Cambia lo que haga falta y vuelve a enviarlos: tu carta se calcula de nuevo con los datos corregidos."
-                  : "Necesito tus datos de nacimiento para poder leer tu carta."}
-              </Text>
-            </RevealItem>
-
-            <RevealItem>
-              <Box h="1px" my={2} bgGradient={`linear(to-r, transparent, ${astrologiaTxt}55, transparent)`} />
-            </RevealItem>
-
+            {!sinTitulo && (
+              <>
+                <RevealItem>
+                  {/* Sin textShadow: el brillo sobre el velo del cielo ensuciaba la letra. */}
+                  <Text color={astrologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" letterSpacing="0.04em" textAlign="center">
+                    {editando ? "Corrige tus datos" : "Tu Carta Astral"}
+                  </Text>
+                </RevealItem>
+                <RevealItem>
+                  <Text color={`${astrologiaTxt}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.75" textAlign="center" maxW="600px" mx="auto">
+                    {editando
+                      ? "Cambia lo que haga falta y vuelve a enviarlos: tu carta se calcula de nuevo con los datos corregidos."
+                      : "Necesito tus datos de nacimiento para poder leer tu carta."}
+                  </Text>
+                </RevealItem>
+                <RevealItem>
+                  <Box h="1px" my={2} bgGradient={`linear(to-r, transparent, ${astrologiaTxt}55, transparent)`} />
+                </RevealItem>
+              </>
+            )}
             <RevealItem>
               <Text color={`${astrologiaTxt}aa`} fontSize="xs" letterSpacing="0.14em" mb={1.5} fontWeight="600" textTransform="uppercase">
                 {t("metodo.astro.fechaNacimiento")}

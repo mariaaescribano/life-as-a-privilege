@@ -37,7 +37,10 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   // pueda ofrecer «Continuar por dónde lo dejé». Persiste en localStorage, así
   // sigue ahí por mucho tiempo que pase entre sesiones.
   useEffect(() => {
-    if (location.pathname.toLowerCase().startsWith("/metodo/")) {
+    // «/metodo/astrologia» a secas es la puerta del cómic de la historia espiritual (EMPEZAR), no
+    // un paso: ni se recuerda para «Continuar» ni cuenta como página vista.
+    const esPuertaDelComic = location.pathname.toLowerCase().replace(/\/+$/, "") === "/metodo/astrologia";
+    if (location.pathname.toLowerCase().startsWith("/metodo/") && !esPuertaDelComic) {
       try { localStorage.setItem("ultimoRecorrido", location.pathname + location.search); } catch { /* noop */ }
       // También queda apuntada como «vista» (tick del camino), salvo si es María mirando a otra persona.
       const clave = claveDeRutaMetodo(location.pathname);

@@ -66,7 +66,7 @@ export default function MetodoAstrologiaExplicacion() {
 
           {/* Fuera de las cajas: blanco y sin sombra. */}
           <Reveal direction="up" distance={18} delay={0.15} duration={0.7} w="100%" maxW="680px">
-            <Text color="white" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center">
+            <Text color="white" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center" fontStyle="italic">
               {t("metodo.astro.explica.intro")}
             </Text>
           </Reveal>
@@ -90,7 +90,7 @@ export default function MetodoAstrologiaExplicacion() {
                           delay={(i % 3) * 0.08} duration={0.6} w={ANCHO_TARJETA} flexShrink={0}>
                     <Box h="100%">
                       <FotoBox
-                        titulo={c.titulo}
+                        titulo={String(c.titulo).toLocaleUpperCase()}
                         descripcion={c.frase}
                         foto={c.foto}
                         nom={astrologiaNom}

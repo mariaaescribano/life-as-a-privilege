@@ -20,13 +20,14 @@ import { LifeLoader } from "../metodo/comicLoaders";
 import { useT } from "../../i18n";
 import { focoBlanco } from "./foco";
 import { personaActiva } from "../../api/persona";
+import { useNotaPagina, NotaPaginaContenido } from "./NotaPagina";
 
 /** Icono del diario (libro abierto). El color se adapta vía `fill`.
  *  Exportado: lo usa también el pin de «Mis notas» del /home. */
 export function DiarioIcon({ fill = "currentColor", size = "24px" }: { fill?: string; size?: string }) {
   return (
-    <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={size} h={size} fill={fill}>
-      <path d="M480-160q-48-38-104-59t-116-21q-42 0-82.5 11T100-198q-21 11-40.5-1T40-234v-482q0-11 5.5-21T62-752q46-24 96-36t102-12q58 0 113.5 15T480-740v484q51-32 107-48t113-16q36 0 70.5 6t69.5 18v-480q15 5 29.5 10.5T898-752q11 5 16.5 15t5.5 21v482q0 23-19.5 35t-40.5 1q-37-20-77.5-31T700-240q-60 0-116 21t-104 59Zm80-200v-380l200-200v400L560-360Zm-160 65v-396q-33-14-68.5-21.5T260-720q-37 0-72 7t-68 21v397q35-13 69.5-19t70.5-6q36 0 70.5 6t69.5 19Zm0 0v-396 396Z" />
+    <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" w={size} h={size} fill={fill}>
+      <path d="M8,20q-0.82,0-1.41-0.59T6,18V15H9V12.75Q8.13,12.7 7.34,12.36T5.9,11.35v-1.1H4.75L1.5,7Q2.4,5.85 3.73,5.38T6.4,4.9Q7.08,4.9 7.71,5T9,5.38V4H21V17q0,1.25-0.88,2.13T18,20H8Zm3-5h6v2q0,0.43 0.29,0.71T18,18t0.71-0.29Q19,17.43 19,17V6H11V6.6l6,6V14H15.6l-2.85-2.85l-0.2,0.2q-0.35,0.35-0.74,0.63T11,12.4V15ZM5.6,8.25H7.9V10.4q0.3,0.2 0.63,0.28T9.2,10.75q0.57,0 1.04-0.18t0.91-0.63l0.2-0.2l-1.4-1.4Q9.23,7.63 8.33,7.26T6.4,6.9q-0.5,0-0.95,0.07T4.55,7.2L5.6,8.25ZM15,17H8v1h7.15q-0.07-0.23-0.11-0.48T15,17ZM8,18q0-0.23 0-0.48T8,17q0,0.25 0,0.5T8,18Z" />
     </Box>
   );
 }
@@ -68,7 +69,9 @@ const fmtFecha = (iso: string) => {
 export function MiniDiario() {
   const t = useT();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [vista, setVista] = useState<"escribir" | "notas">("escribir");
+  const [vista, setVista] = useState<"escribir" | "notas" | "pagina">("escribir");
+  // La nota de María de ESTA página (vive aquí dentro, en su propia pestaña del popup).
+  const np = useNotaPagina();
 
   // Estado de escritura
   const [texto, setTexto] = useState("");
@@ -112,6 +115,12 @@ export function MiniDiario() {
     } finally {
       setCargandoNotas(false);
     }
+  };
+
+  // Quien tiene una nota nueva de María en esta página, al abrir va derecho a ella.
+  const abrir = () => {
+    if (np.visible && np.sinLeer) { setVista("pagina"); np.marcarVista(); }
+    onOpen();
   };
 
   const irANotas = () => {
@@ -166,7 +175,7 @@ export function MiniDiario() {
           «¿Qué es esto?» / «Agenda una llamada» y la barra de María. ── */}
       <Flex
         as="button"
-        onClick={onOpen}
+        onClick={abrir}
         position="fixed"
         bottom={{ base: "18px", md: "26px" }}
         right={{ base: "16px", md: "26px" }}
@@ -210,6 +219,9 @@ export function MiniDiario() {
         >
           {t("diario.titulo")}
         </Text>
+        {np.visible && np.sinLeer && (
+          <Box as="span" w="9px" h="9px" borderRadius="full" bg="#ffe7bd" boxShadow="0 0 10px #ffe7bd" aria-hidden />
+        )}
       </Flex>
 
       {/* ── Popup ── */}
@@ -265,7 +277,53 @@ export function MiniDiario() {
             flexDirection="column"
             overflow="hidden"
           >
-            {vista === "escribir" ? (
+            {/* Dos pestañas cuando esta página tiene nota de María (siempre para ella). */}
+            {np.visible && (
+              <Flex gap={2} mb={4} justify="center" flexShrink={0}>
+                {([
+                  ["escribir", t("diario.titulo")],
+                  ["pagina", np.maria ? "Nota" : t("metodo.notaMaria.titulo")],
+                ] as const).map(([v, etiqueta]) => {
+                  const activa = v === "pagina" ? vista === "pagina" : vista !== "pagina";
+                  return (
+                    <Box
+                      key={v}
+                      as="button"
+                      type="button"
+                      onClick={() => { if (v === "pagina") { setVista("pagina"); np.marcarVista(); } else setVista("escribir"); }}
+                      display="inline-flex"
+                      alignItems="center"
+                      gap={2}
+                      px={4}
+                      py="5px"
+                      borderRadius="full"
+                      border="1.5px solid rgba(255,255,255,0.75)"
+                      bg={activa ? "white" : "rgba(255,255,255,0.12)"}
+                      color={activa ? "#008080" : "white"}
+                      fontWeight="700"
+                      fontSize="sm"
+                      letterSpacing="0.04em"
+                      cursor="pointer"
+                      transition="all 0.2s"
+                      _focusVisible={focoBlanco}
+                    >
+                      {etiqueta}
+                      {v === "pagina" && np.sinLeer && !activa && (
+                        <Box as="span" w="8px" h="8px" borderRadius="full" bg="#ffe7bd" boxShadow="0 0 8px #ffe7bd" aria-hidden />
+                      )}
+                    </Box>
+                  );
+                })}
+              </Flex>
+            )}
+            {vista === "pagina" && np.visible ? (
+              <>
+                {np.maria && np.nombre && (
+                  <Text fontSize="sm" opacity={0.8} fontStyle="italic" textAlign="center" mb={3} noOfLines={1}>para {np.nombre}</Text>
+                )}
+                <NotaPaginaContenido n={np} />
+              </>
+            ) : vista === "escribir" || vista === "pagina" ? (
               <VistaEscribir
                 texto={texto}
                 setTexto={setTexto}

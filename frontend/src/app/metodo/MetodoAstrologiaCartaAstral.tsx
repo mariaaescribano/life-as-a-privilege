@@ -79,7 +79,7 @@ export default function MetodoAstrologiaCartaAstral() {
           axios.get<{ solicitud_enviada_at?: string | null; link_carta?: string | null; retos?: { id: string }[] } | null>(`${API_URL}/metodo-astrologia/${userId}`),
           axios.get<CartaNatal | null>(`${API_URL}/metodo-astrologia/carta-natal/${userId}`),
         ]);
-        if (!estadoRes.data?.solicitud_enviada_at) { navigate("/metodo/astrologia"); return; }
+        if (!estadoRes.data?.solicitud_enviada_at) { navigate("/metodo/astrologia/introduccion"); return; }
 
         let cartaCargada = res.data;
 

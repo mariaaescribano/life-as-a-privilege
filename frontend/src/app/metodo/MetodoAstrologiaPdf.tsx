@@ -93,7 +93,7 @@ export default function MetodoAstrologiaPdf() {
         // (ni PDF de María ni puntos clave), aquí no hay nada que descargar.
         const retos = Array.isArray(rowRes.data?.retos) ? rowRes.data!.retos! : [];
         if (!rowRes.data?.link_carta && retos.length === 0) {
-          navigate("/metodo/astrologia");
+          navigate("/metodo/astrologia/introduccion");
           return;
         }
         setRow({ ...rowRes.data, retos });

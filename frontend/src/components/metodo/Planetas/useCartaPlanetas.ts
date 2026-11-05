@@ -58,7 +58,7 @@ export function useCartaPlanetas() {
         // Accesible en cuanto hay solicitud enviada (la carta ya está calculada);
         // el PDF (link_carta) solo desbloquea el "siguiente", no el acceso.
         if (!res.data?.solicitud_enviada_at) {
-          navigate("/metodo/astrologia", { replace: true });
+          navigate("/metodo/astrologia/introduccion", { replace: true });
           return;
         }
         // Cargamos SOLO las claves de planeta. El JSONB `data` también guarda
@@ -66,7 +66,7 @@ export function useCartaPlanetas() {
         // arrastráramos, al reguardar podríamos pisar un valor más reciente.
         if (res.data?.data) setCarta(soloClavesPlaneta<Valor>(res.data.data));
       } catch {
-        navigate("/metodo/astrologia", { replace: true });
+        navigate("/metodo/astrologia/introduccion", { replace: true });
         return;
       } finally {
         setLoading(false);

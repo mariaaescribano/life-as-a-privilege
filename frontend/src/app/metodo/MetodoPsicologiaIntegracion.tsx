@@ -401,7 +401,7 @@ export default function MetodoPsicologiaIntegracion() {
                   <Box position="absolute" inset={0} bg="rgba(8,13,30,0.3)" pointerEvents="none" />
                   <Box position="relative" zIndex={1} flex="1" px={{ base: 5, md: 8 }} py={{ base: 8, md: 10 }}>
                     <ArquetiposBloqueados
-                      onIr={() => navigate("/metodo/astrologia")}
+                      onIr={() => navigate("/metodo/astrologia/introduccion")}
                       texto={[
                         t("metodo.psico.bloqRelacion1"),
                         t("metodo.psico.bloqRelacionPagina"),
@@ -475,7 +475,7 @@ export default function MetodoPsicologiaIntegracion() {
                         // Sin carta astral la columna va BLOQUEADA: se explica qué
                         // se hace aquí y que para completarlo hace falta la carta.
                         <ArquetiposBloqueados
-                          onIr={() => navigate("/metodo/astrologia")}
+                          onIr={() => navigate("/metodo/astrologia/introduccion")}
                           texto={[
                             t("metodo.psico.bloqRelacion1"),
                             t("metodo.psico.bloqRelacion2"),

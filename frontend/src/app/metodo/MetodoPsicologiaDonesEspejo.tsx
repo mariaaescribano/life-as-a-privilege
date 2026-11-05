@@ -418,7 +418,7 @@ export default function MetodoPsicologiaDonesEspejo() {
                         // Sin carta astral la columna va BLOQUEADA: se explica qué
                         // se hace aquí y que para completarlo hace falta la carta.
                         <ArquetiposBloqueados
-                          onIr={() => navigate("/metodo/astrologia")}
+                          onIr={() => navigate("/metodo/astrologia/introduccion")}
                           texto={[
                             t("metodo.psico.bloqEspejo1"),
                             t("metodo.psico.bloqEspejo2"),
@@ -600,7 +600,7 @@ export default function MetodoPsicologiaDonesEspejo() {
               </Text>
 
               <Flex gap={3} mt={2} wrap="wrap" justify="center">
-                <Box as="button" onClick={() => navigate("/metodo/astrologia")}
+                <Box as="button" onClick={() => navigate("/metodo/astrologia/introduccion")}
                      px={6} py={2.5} borderRadius="full" bg={PAPEL} color={TINTA}
                      fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "md", md: "lg" }}
                      cursor="pointer" boxShadow={`0 0 18px ${astrologiaTxt}44`} transition="all 0.18s"

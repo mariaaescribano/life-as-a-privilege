@@ -102,7 +102,7 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
     const c = cuerpoByKey(p.planeta);
     if (!c) return [];
     const real = angulos.real.get(p.planeta)!;
-    return [{ real, glifo: angulos.glifo.get(p.planeta) ?? real, color: c.color }];
+    return [{ real, color: c.color }];
   }), [planetasOrdenados, angulos]);
 
   const planetMeshes = useMemo(() => {
@@ -371,7 +371,7 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
             outerRadius={R_HOUSES_OUTER}
             cusps={carta.cusps}
           />
-          <PlanetTicks marcas={marcas} radioMarca={R_HOUSES_INNER} radioGlifo={R_PLANETS} delay={0.6} />
+          <PlanetTicks marcas={marcas} radioMarca={R_HOUSES_INNER} delay={0.6} />
           <Aspects
             planetas={planetasOrdenados}
             aspectos={carta.aspectos}

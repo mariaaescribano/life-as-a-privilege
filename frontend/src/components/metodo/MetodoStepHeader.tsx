@@ -8,8 +8,10 @@ import { LetrasVivas } from "../global/LetrasVivas";
 import { cuandoSinComic } from "../../hooks/cuandoSinComic";
 import { CursosPsicologiaModal } from "./CursosPsicologiaModal";
 import { useT } from "../../i18n";
+import { focoBlanco } from "../global/foco";
 import { useLocation, useNavigate } from "react-router-dom";
 import { claveDeSlug, rutaCamino } from "../../data/camino";
+import { disciplinaByKey } from "../../data/adminDisciplinas";
 
 interface StepButton {
   label: React.ReactNode;
@@ -241,6 +243,81 @@ const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip, white
   return btn;
 };
 
+/**
+ * El hueco entre el header y lo primero que viene debajo (casi siempre la primera línea de texto
+ * blanco) es SIEMPRE el mismo en todas las páginas: 24 px en móvil y 32 px en ordenador, que es el
+ * de la Introducción de Astrología (gap 6 / 8). Cada página ponía el suyo (gap 4…16 en el
+ * contenedor, mb en el header…), así que se medía distinto de una a otra.
+ *
+ * Se mide lo que hay realmente (offsetTop, que no se deja engañar por las animaciones de entrada)
+ * y se ajusta el margen inferior de la pieza del header hasta dejarlo en el valor común. Solo
+ * actúa si la pieza está en una columna (flex/grid) y tiene debajo un hermano normal; si no, no
+ * toca nada. Se repite al redimensionar y cuando la página añade contenido.
+ */
+const ESPACIO_BAJO_HEADER = { base: 24, md: 32 };
+
+function useEspacioBajoHeader(ref: React.RefObject<HTMLElement | null>) {
+  useLayoutEffect(() => {
+    const root = ref.current;
+    if (!root) return;
+
+    const esColumna = (el: HTMLElement | null): boolean => {
+      if (!el) return false;
+      const cs = getComputedStyle(el);
+      return cs.display === "grid" || ((cs.display === "flex" || cs.display === "inline-flex") && cs.flexDirection.startsWith("column"));
+    };
+
+    // La «pieza» del header: él mismo o, si va envuelto (Reveal…), su envoltorio, hasta llegar a
+    // la columna que lo contiene. Solo se sube mientras sea el primer hijo (un envoltorio).
+    const buscarPieza = (): HTMLElement | null => {
+      let pieza: HTMLElement = root;
+      for (let i = 0; i < 4; i++) {
+        const padre = pieza.parentElement;
+        if (!padre || padre === document.body) return null;
+        if (esColumna(padre)) return pieza;
+        if (padre.firstElementChild !== pieza) return null;
+        pieza = padre;
+      }
+      return null;
+    };
+
+    const aplicar = () => {
+      const pieza = buscarPieza();
+      if (!pieza) return;
+      // El siguiente hermano que ocupa sitio en el flujo (no fijos ni ocultos).
+      let sig = pieza.nextElementSibling as HTMLElement | null;
+      while (sig) {
+        const cs = getComputedStyle(sig);
+        if (cs.display !== "none" && cs.position !== "fixed" && cs.position !== "absolute" && sig.offsetHeight > 0) break;
+        sig = sig.nextElementSibling as HTMLElement | null;
+      }
+      if (!sig || sig.offsetParent !== pieza.offsetParent) return;
+      const objetivo = window.matchMedia("(min-width: 48em)").matches ? ESPACIO_BAJO_HEADER.md : ESPACIO_BAJO_HEADER.base;
+      pieza.style.marginBottom = "0px";
+      const natural = sig.offsetTop - (pieza.offsetTop + pieza.offsetHeight);
+      pieza.style.marginBottom = `${objetivo - natural}px`;
+    };
+
+    aplicar();
+    const raf = requestAnimationFrame(aplicar);
+    const tardia = window.setTimeout(aplicar, 400);
+    window.addEventListener("resize", aplicar);
+    // Si la página pinta su contenido después (carga de datos), se vuelve a ajustar.
+    const contenedor = root.parentElement?.parentElement ?? root.parentElement;
+    const mo = contenedor ? new MutationObserver(aplicar) : null;
+    mo?.observe(contenedor!, { childList: true });
+    const ro = new ResizeObserver(aplicar);
+    ro.observe(root);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.clearTimeout(tardia);
+      window.removeEventListener("resize", aplicar);
+      mo?.disconnect();
+      ro.disconnect();
+    };
+  }, [ref]);
+}
+
 export function MetodoStepHeader({
   icon,
   title,
@@ -273,6 +350,9 @@ export function MetodoStepHeader({
   const navigate = useNavigate();
   const claveCamino = claveDeSlug(pathname.match(/^\/metodo\/([a-z]+)/i)?.[1]?.toLowerCase());
   const alCamino = claveCamino ? () => navigate(rutaCamino(claveCamino)) : null;
+  // El círculo del centro: el icono de la disciplina, que SIEMPRE lleva a su camino (así quien
+  // quiera volver puede, desde cualquier página del recorrido).
+  const discCirculo = claveCamino ? disciplinaByKey(pathname.match(/^\/metodo\/([a-z]+)/i)?.[1]?.toLowerCase() ?? "") : undefined;
   // Recordamos el título del paso en que se quedó, para el botón «Continuar: …» de /home.
   const { search } = useLocation();
   React.useEffect(() => {
@@ -413,6 +493,7 @@ export function MetodoStepHeader({
   // ignoramos el `compact` que traen sus páginas (era el que los encogía). Fuera
   // de TCM, `compact` sigue funcionando igual (tests con nombres largos).
   const compactEff = tituloUniforme ? false : compact;
+  useEspacioBajoHeader(headerBoxRef);
   return (
     <>
     <Box
@@ -547,6 +628,34 @@ export function MetodoStepHeader({
             wrap="nowrap"
           >
             {prev && <StepBtn {...prev} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} soloFlecha={prev.arrow ?? "prev"} />}
+            {alCamino && discCirculo && (
+              <Box
+                as="button"
+                type="button"
+                onClick={alCamino}
+                aria-label={t("metodo.header.alCamino")}
+                title={t("metodo.header.alCamino")}
+                flexShrink={0}
+                display="inline-flex"
+                alignItems="center"
+                justifyContent="center"
+                w={dense ? { base: "34px", md: "40px" } : { base: "38px", md: "46px" }}
+                h={dense ? { base: "34px", md: "40px" } : { base: "38px", md: "46px" }}
+                borderRadius="full"
+                bg={btnWhiteBg ? "rgba(255,255,255,0.14)" : `${color}1a`}
+                border={`1.5px solid ${color}aa`}
+                color={color}
+                cursor="pointer"
+                transition="background 0.08s ease, border-color 0.08s ease, box-shadow 0.08s ease, transform 0.08s ease"
+                boxShadow={`0 0 10px rgba(255,255,255,0.16), 0 0 22px ${color}44, inset 0 0 12px ${color}22`}
+                _hover={{ bg: btnWhiteBg ? "rgba(255,255,255,0.12)" : `${color}2b`, borderColor: `${color}cc`, boxShadow: `0 0 14px rgba(255,255,255,0.35), 0 0 30px ${color}44` }}
+                _active={{ transform: "scale(0.94)" }}
+                _focusVisible={focoBlanco}
+                sx={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
+              >
+                <discCirculo.Icon size={dense ? { base: "18px", md: "22px" } : { base: "20px", md: "24px" }} />
+              </Box>
+            )}
             {extraFinal && <StepBtn {...extraFinal} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
             {extra2 && <StepBtn {...extra2} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
             {showPsicoCursos && <StepBtn label={t("header.cursos")} onClick={() => setCursosOpen(true)} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}

@@ -1,37 +1,32 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // LA NOTA DE MARÍA EN CADA PÁGINA del recorrido (/metodo/...).
 //
-// Cada página tiene asociada una nota que María escribe PARA la persona. Vive en
-// una pestaña en el borde derecho de la pantalla que se despliega como un panel
-// lateral (en móvil, desde abajo): así no ocupa sitio en la página ni compite con
-// «Índice» y «Mis notas», que están a la izquierda.
+// Cada página tiene asociada una nota que María escribe PARA la persona. Vive DENTRO del popup
+// de «Notas» (MiniDiario), en su propia pestaña: ya no hay pestaña lateral ni panel aparte.
 //
-//   · María ve la pestaña SIEMPRE y escribe en un borrador que la persona NO ve.
-//     Solo al pulsar «Publicar» lo que hay en el borrador pasa a verlo ella; puede
-//     retirarlo cuando quiera.
-//   · La persona solo ve la pestaña si hay algo publicado en esa página, con un
-//     puntito hasta que lo abre. No puede modificarlo.
+//   · María la ve SIEMPRE y escribe en un borrador que la persona NO ve. Solo al pulsar
+//     «Publicar» lo que hay en el borrador pasa a verlo ella; puede retirarlo cuando quiera.
+//   · La persona solo ve la pestaña si hay algo publicado en esa página, con un puntito hasta
+//     que la abre. No puede modificarlo.
 //
-// ¿Quién es María aquí? La sesión de admin desbloqueada, para la persona que
-// eligió en su panel (`notasPersona` en sessionStorage, lo pone el camino de esa
-// persona), o dentro del camino de esa persona (api/persona.ts). Una admin sin persona
-// elegida no tiene a quién escribir y no ve la pestaña.
+// ¿Quién es María aquí? La sesión de admin desbloqueada, para la persona que eligió en su panel
+// (`notasPersona` en sessionStorage), o dentro del camino de esa persona (api/persona.ts). Una
+// admin sin persona elegida no tiene a quién escribir y no ve la pestaña.
 //
 // La clave de la nota es la ruta de la página, sin barra final.
+//
+// Aquí vive la LÓGICA (`useNotaPagina`) y el contenido de la pestaña (`NotaPaginaContenido`);
+// el popup y su botón son de MiniDiario.
 // ─────────────────────────────────────────────────────────────────────────────
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import { Box, Flex, Text, Textarea } from "@chakra-ui/react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { API_URL } from "../../GlobalVariables";
 import { esAdminDesbloqueado } from "../../api/sesion";
 import { personaActiva } from "../../api/persona";
-import { useT } from "../../i18n";
 import { fechaDMA } from "../../utils/fechas";
 import { focoBlanco } from "./foco";
-
-const MotionBox = motion(Box) as any;
 
 /** A quién escribe María desde el panel (lo guarda el camino de esa persona). */
 export const CLAVE_PERSONA_NOTAS = "notasPersona";
@@ -65,17 +60,14 @@ type Guardado = "quieto" | "guardando" | "guardado" | "error";
 
 const cabecera = () => ({ headers: { Authorization: `Bearer ${localStorage.getItem("token") ?? ""}` } });
 
-export function NotaPagina() {
-  const t = useT();
+export function useNotaPagina() {
   const { pathname } = useLocation();
-  const reducir = useReducedMotion();
   const ruta = pathname.replace(/\/+$/, "");
   const enRecorrido = ruta.startsWith("/metodo/");
   const ctx = contextoNota();
 
   const [nota, setNota] = useState<Nota | null>(null);
   const [texto, setTexto] = useState("");
-  const [abierto, setAbierto] = useState(false);
   const [estado, setEstado] = useState<Guardado>("quieto");
   const [aviso, setAviso] = useState<string | null>(null);
   const [ocupado, setOcupado] = useState(false);
@@ -91,7 +83,6 @@ export function NotaPagina() {
   // Lee la nota al llegar a una página (y al cambiar de página).
   useEffect(() => {
     setNota(null);
-    setAbierto(false);
     setAviso(null);
     setEstado("quieto");
     if (!enRecorrido || !userId) return;
@@ -137,29 +128,16 @@ export function NotaPagina() {
     return () => clearTimeout(id);
   }, [texto, maria, nota, guardar]);
 
-  // Escape cierra el panel.
-  useEffect(() => {
-    if (!abierto) return;
-    const alTeclear = (e: KeyboardEvent) => { if (e.key === "Escape") setAbierto(false); };
-    window.addEventListener("keydown", alTeclear);
-    return () => window.removeEventListener("keydown", alTeclear);
-  }, [abierto]);
-
-  if (!enRecorrido || !userId || !nota) return null;
-
-  const hayPublicada = !!nota.publicada?.trim();
+  const hayPublicada = !!nota?.publicada?.trim();
   // La persona solo ve la pestaña si hay algo publicado.
-  if (!maria && !hayPublicada) return null;
+  const visible = !!(enRecorrido && userId && nota && (maria || hayPublicada));
+  const sinLeer = !maria && hayPublicada && visto !== (nota?.publicada_at ?? null);
 
-  const sinLeer = !maria && hayPublicada && visto !== nota.publicada_at;
-
-  const abrir = () => {
-    const ahora = !abierto;
-    setAbierto(ahora);
-    if (ahora && !maria && nota.publicada_at) {
-      try { localStorage.setItem(claveVisto, nota.publicada_at); } catch { /* modo privado */ }
-      setVisto(nota.publicada_at);
-    }
+  /** La persona abre la pestaña: queda marcada como vista (se apaga el puntito). */
+  const marcarVista = () => {
+    if (maria || !nota?.publicada_at) return;
+    try { localStorage.setItem(claveVisto, nota.publicada_at); } catch { /* modo privado */ }
+    setVisto(nota.publicada_at);
   };
 
   const publicar = async () => {
@@ -191,6 +169,30 @@ export function NotaPagina() {
     }
   };
 
+  return {
+    visible, maria, nombre: ctx.nombre, nota, texto, setTexto, estado, aviso, setAviso, ocupado,
+    hayPublicada, sinLeer, guardar, publicar, retirar, marcarVista,
+  };
+}
+
+export type NotaPaginaEstado = ReturnType<typeof useNotaPagina>;
+
+/** El contenido de la pestaña de la página dentro del popup de Notas. */
+export function NotaPaginaContenido({ n }: { n: NotaPaginaEstado }) {
+  const { maria, nota, texto, hayPublicada } = n;
+  if (!nota) return null;
+
+  if (!maria) {
+    return (
+      <Box overflowY="auto" minH={0} flex="1">
+        <Text fontSize="lg" lineHeight="1.7" whiteSpace="pre-wrap">{nota.publicada}</Text>
+        {nota.publicada_at && (
+          <Text fontSize="sm" opacity={0.7} fontStyle="italic" mt={4}>{fechaDMA(nota.publicada_at)}</Text>
+        )}
+      </Box>
+    );
+  }
+
   const estadoNota = !hayPublicada ? "Borrador: no la ve" : nota.publicada === texto ? "Publicada" : "Cambios sin publicar";
   const pildora = (children: React.ReactNode, onClick: () => void, opts: { solido?: boolean; peligro?: boolean; off?: boolean } = {}) => (
     <Box
@@ -218,178 +220,55 @@ export function NotaPagina() {
   );
 
   return (
-    <>
-      {/* ── La pestaña del borde derecho ── */}
-      <Box
-        as="button"
-        type="button"
-        onClick={abrir}
-        aria-expanded={abierto}
-        aria-label={maria ? "Nota para esta página" : t("metodo.notaMaria.titulo")}
-        position="fixed"
-        right={0}
-        top={{ base: "42%", md: "46%" }}
-        zIndex={990}
-        display="flex"
-        alignItems="center"
-        gap={2}
-        px={{ base: "7px", md: "9px" }}
-        py={{ base: "14px", md: "18px" }}
-        bg="#006b6b"
+    <Box overflowY="auto" minH={0} flex="1">
+      <Flex align="center" justify="space-between" gap={3} mb={3} wrap="wrap">
+        <Box
+          px={3}
+          py="3px"
+          borderRadius="full"
+          fontSize="sm"
+          fontWeight="600"
+          border="1px solid rgba(255,255,255,0.55)"
+          bg={estadoNota === "Publicada" ? "rgba(255,255,255,0.22)" : "rgba(255,231,189,0.14)"}
+        >
+          {estadoNota}
+        </Box>
+        <Text fontSize="sm" opacity={0.75} fontStyle="italic" role="status">
+          {n.estado === "guardando" ? "Guardando…" : n.estado === "guardado" ? "Guardado" : n.estado === "error" ? "Sin guardar" : ""}
+        </Text>
+      </Flex>
+      <Textarea
+        value={texto}
+        onChange={(e) => { n.setTexto(e.target.value); n.setAviso(null); }}
+        onBlur={() => { void n.guardar(); }}
+        placeholder="Escribe aquí. Nadie lo ve hasta que pulses «Publicar»."
+        aria-label="Nota para esta página"
+        rows={8}
+        resize="vertical"
+        bg="rgba(255,255,255,0.09)"
+        border="1px solid rgba(255,255,255,0.34)"
         color="white"
-        border="1px solid rgba(255,255,255,0.6)"
-        borderRight="none"
-        borderRadius="16px 0 0 16px"
+        borderRadius="20px"
         fontFamily="'EB Garamond', serif"
-        fontWeight="700"
-        fontSize={{ base: "sm", md: "md" }}
-        letterSpacing="0.12em"
-        textTransform="uppercase"
-        boxShadow="0 0 18px rgba(255,255,255,0.28)"
-        cursor="pointer"
-        transition="all 0.25s ease"
-        _hover={{ paddingRight: "14px", boxShadow: "0 0 26px rgba(255,255,255,0.45)" }}
-        _focusVisible={focoBlanco}
-        sx={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
-      >
-        {sinLeer && (
-          <MotionBox
-            as="span"
-            w="9px"
-            h="9px"
-            borderRadius="full"
-            bg="#ffe7bd"
-            boxShadow="0 0 10px #ffe7bd"
-            animate={reducir ? undefined : { scale: [1, 1.5, 1], opacity: [1, 0.6, 1] }}
-            transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-          />
-        )}
-        {maria ? "Nota" : t("metodo.notaMaria.titulo")}
-      </Box>
-
-      {/* ── El panel que se despliega ── */}
-      <AnimatePresence>
-        {abierto && (
-          <MotionBox
-            key="panel"
-            role="dialog"
-            aria-label={maria ? "Nota para esta página" : t("metodo.notaMaria.titulo")}
-            initial={reducir ? { opacity: 0 } : { opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={reducir ? { opacity: 0 } : { opacity: 0, x: 40 }}
-            transition={{ duration: reducir ? 0 : 0.35, ease: [0.22, 1, 0.36, 1] }}
-            position="fixed"
-            zIndex={1300}
-            bg="#008080"
-            color="white"
-            fontFamily="'EB Garamond', serif"
-            display="flex"
-            flexDirection="column"
-            // Escritorio: panel a la derecha, de arriba abajo. Móvil: hoja desde abajo.
-            top={{ base: "auto", md: 0 }}
-            bottom={0}
-            right={0}
-            left={{ base: 0, md: "auto" }}
-            w={{ base: "100%", md: "400px" }}
-            maxH={{ base: "78vh", md: "100vh" }}
-            h={{ base: "auto", md: "100vh" }}
-            borderTop={{ base: "1px solid rgba(255,255,255,0.45)", md: "none" }}
-            borderLeft={{ base: "none", md: "1px solid rgba(255,255,255,0.45)" }}
-            borderRadius={{ base: "24px 24px 0 0", md: "0" }}
-            boxShadow="0 0 40px rgba(255,255,255,0.18), 0 0 90px rgba(180,255,245,0.1)"
-          >
-            <Flex align="center" justify="space-between" gap={3} px={6} pt={6} pb={3}>
-              <Box minW={0}>
-                <Text fontSize="xl" fontWeight="700" letterSpacing="0.08em" textTransform="uppercase" textShadow="0 0 12px rgba(255,255,255,0.4)">
-                  {maria ? "Nota" : t("metodo.notaMaria.titulo")}
-                </Text>
-                {maria && ctx.nombre && <Text fontSize="sm" opacity={0.8} fontStyle="italic" noOfLines={1}>para {ctx.nombre}</Text>}
-              </Box>
-              <Box
-                as="button"
-                type="button"
-                onClick={() => setAbierto(false)}
-                aria-label={t("metodo.notaMaria.cerrar")}
-                w="36px"
-                h="36px"
-                borderRadius="full"
-                border="1px solid rgba(255,255,255,0.5)"
-                fontSize="xl"
-                lineHeight="1"
-                cursor="pointer"
-                _hover={{ bg: "rgba(255,255,255,0.18)" }}
-                _focusVisible={focoBlanco}
-              >
-                ×
-              </Box>
-            </Flex>
-            <Box h="1px" mx={6} bg="rgba(255,255,255,0.35)" />
-
-            <Box flex="1" overflowY="auto" px={6} py={5}>
-              {!maria ? (
-                <>
-                  <Text fontSize="lg" lineHeight="1.7" whiteSpace="pre-wrap">{nota.publicada}</Text>
-                  {nota.publicada_at && (
-                    <Text fontSize="sm" opacity={0.7} fontStyle="italic" mt={4}>{fechaDMA(nota.publicada_at)}</Text>
-                  )}
-                </>
-              ) : (
-                <>
-                  <Flex align="center" justify="space-between" gap={3} mb={3} wrap="wrap">
-                    <Box
-                      px={3}
-                      py="3px"
-                      borderRadius="full"
-                      fontSize="sm"
-                      fontWeight="600"
-                      border="1px solid rgba(255,255,255,0.55)"
-                      bg={estadoNota === "Publicada" ? "rgba(255,255,255,0.22)" : "rgba(255,231,189,0.14)"}
-                    >
-                      {estadoNota}
-                    </Box>
-                    <Text fontSize="sm" opacity={0.75} fontStyle="italic" role="status">
-                      {estado === "guardando" ? "Guardando…" : estado === "guardado" ? "Guardado" : estado === "error" ? "Sin guardar" : ""}
-                    </Text>
-                  </Flex>
-                  <Textarea
-                    value={texto}
-                    onChange={(e) => { setTexto(e.target.value); setAviso(null); }}
-                    onBlur={() => { void guardar(); }}
-                    placeholder="Escribe aquí. Nadie lo ve hasta que pulses «Publicar»."
-                    aria-label="Nota para esta página"
-                    autoFocus
-                    rows={11}
-                    resize="vertical"
-                    bg="rgba(255,255,255,0.09)"
-                    border="1px solid rgba(255,255,255,0.34)"
-                    color="white"
-                    borderRadius="20px"
-                    fontFamily="'EB Garamond', serif"
-                    fontSize="lg"
-                    lineHeight="1.6"
-                    px={5}
-                    py={4}
-                    _placeholder={{ color: "rgba(255,255,255,0.45)" }}
-                    _hover={{ borderColor: "rgba(255,255,255,0.55)" }}
-                    _focus={{ borderColor: "white", boxShadow: "0 0 0 2px rgba(255,255,255,0.55), 0 0 18px rgba(255,255,255,0.3)", outline: "none" }}
-                    _focusVisible={{ borderColor: "white", boxShadow: "0 0 0 2px rgba(255,255,255,0.55), 0 0 18px rgba(255,255,255,0.3)", outline: "none" }}
-                  />
-                  {nota.sinTabla && (
-                    <Text color="#ffe7bd" fontSize="sm" fontStyle="italic" mt={3}>
-                      Falta crear la tabla de notas en la base de datos (backend/sql/nota-pagina.sql). Hasta entonces no se guarda nada.
-                    </Text>
-                  )}
-                  {aviso && <Text role="alert" color="#ffe7bd" fontSize="sm" fontStyle="italic" mt={3}>{aviso}</Text>}
-                  <Flex gap={3} mt={5} wrap="wrap">
-                    {pildora(ocupado ? "Publicando…" : "Publicar", publicar, { solido: true, off: ocupado || !texto.trim() || (hayPublicada && nota.publicada === texto) })}
-                    {hayPublicada && pildora("Quitar de su vista", retirar, { peligro: true, off: ocupado })}
-                  </Flex>
-                </>
-              )}
-            </Box>
-          </MotionBox>
-        )}
-      </AnimatePresence>
-    </>
+        fontSize="lg"
+        lineHeight="1.6"
+        px={5}
+        py={4}
+        _placeholder={{ color: "rgba(255,255,255,0.45)" }}
+        _hover={{ borderColor: "rgba(255,255,255,0.55)" }}
+        _focus={{ borderColor: "white", boxShadow: "0 0 0 2px rgba(255,255,255,0.55), 0 0 18px rgba(255,255,255,0.3)", outline: "none" }}
+        _focusVisible={{ borderColor: "white", boxShadow: "0 0 0 2px rgba(255,255,255,0.55), 0 0 18px rgba(255,255,255,0.3)", outline: "none" }}
+      />
+      {nota.sinTabla && (
+        <Text color="#ffe7bd" fontSize="sm" fontStyle="italic" mt={3}>
+          Falta crear la tabla de notas en la base de datos (backend/sql/nota-pagina.sql). Hasta entonces no se guarda nada.
+        </Text>
+      )}
+      {n.aviso && <Text role="alert" color="#ffe7bd" fontSize="sm" fontStyle="italic" mt={3}>{n.aviso}</Text>}
+      <Flex gap={3} mt={5} wrap="wrap">
+        {pildora(n.ocupado ? "Publicando…" : "Publicar", n.publicar, { solido: true, off: n.ocupado || !texto.trim() || (hayPublicada && nota.publicada === texto) })}
+        {hayPublicada && pildora("Quitar de su vista", n.retirar, { peligro: true, off: n.ocupado })}
+      </Flex>
+    </Box>
   );
 }

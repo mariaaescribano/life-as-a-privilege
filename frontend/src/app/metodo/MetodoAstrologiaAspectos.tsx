@@ -120,7 +120,7 @@ export default function MetodoAstrologiaAspectos() {
         // Abierta si la carta está procesada (hay PDF O retos), igual que el
         // resto del recorrido. Es el GET quien decide: si hay info, se entra.
         const lista = Array.isArray(rowRes.data?.retos) ? rowRes.data!.retos! : [];
-        if (!rowRes.data?.link_carta && lista.length === 0) { navigate("/metodo/astrologia"); return; }
+        if (!rowRes.data?.link_carta && lista.length === 0) { navigate("/metodo/astrologia/introduccion"); return; }
         setRetos(lista);
         setTextos((rowRes.data?.aspectos_texto ?? {}) as Record<string, string>);
         setCasasTexto((rowRes.data?.casas_texto ?? {}) as Record<string, string>);

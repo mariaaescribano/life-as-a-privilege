@@ -104,6 +104,7 @@ const CheckoutMetodo = lazy(() => import("./app/web/CheckoutMetodo"));
 const MetodoAstrologia = lazyConMetodo(() => import("./app/metodo/MetodoAstrologia"));
 // El camino de cada disciplina (sus páginas como cajitas con flechas): usa los
 // títulos del recorrido (`metodo.*`), por eso lleva el diccionario del recorrido.
+import { CaminoCargando } from "./components/metodo/CaminoCargando";
 const CaminoPagina = lazyConMetodo(() => import("./app/metodo/CaminoPagina"));
 const MetodoAstrologiaCartaAstral = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaCartaAstral"));
 const MetodoAstrologiaPlanetas = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaPlanetas"));
@@ -279,7 +280,6 @@ import AvisoCookies from "./components/global/AvisoCookies";
 import BarraPersona from "./components/global/BarraPersona";
 import { MigaDelMapa } from "./components/global/VolverAlMapa";
 import { GuardiaPagoRecorrido } from "./components/global/GuardiaPagoRecorrido";
-import { NotaPagina } from "./components/global/NotaPagina";
 import { RegistroActividad } from "./components/global/RegistroActividad";
 // Pantalla de espera mientras se descarga el trozo de código de cada página.
 // Va EAGER a propósito: es justo lo que hay que poder pintar antes de que llegue
@@ -375,7 +375,6 @@ export default function App()
     {/* Sin pagar no se entra en una disciplina: vuelve a /home y sale su pago. */}
     <GuardiaPagoRecorrido />
     {/* La nota de María en cada página del recorrido: pestaña en el borde derecho. */}
-    <NotaPagina />
     {/* Apunta qué recursos gratuitos abre quien tiene cuenta (para los emails). */}
     <RegistroActividad />
     <ExitIntentSubscribeModal />
@@ -460,12 +459,12 @@ export default function App()
           Ruta corta porque va impresa: /d/cabala, /d/nutricion, … */}
       <Route path="/d/:disciplina" element={<PresentacionDisciplina />} />
       <Route path="/checkoutMetodo" element={<CheckoutMetodo />} />
-      <Route path="/camino/:disciplina" element={<PrivateRoute><CaminoPagina /></PrivateRoute>} />
+      <Route path="/camino/:disciplina" element={<PrivateRoute><Suspense fallback={<CaminoCargando />}><CaminoPagina /></Suspense></PrivateRoute>} />
       <Route path="/metodo/astrologia" element={<PrivateRoute><MetodoAstrologia /></PrivateRoute>} />
       {/* «Lo primero de tu carta» vive ahora DENTRO de /metodo/astrologia (una
           sola página: datos + Sol/Luna/Ascendente). La ruta vieja se conserva
           como redirección: hay migas del Mapa y marcadores apuntándole. */}
-      <Route path="/metodo/astrologia/solascendenteluna" element={<Navigate to="/metodo/astrologia" replace />} />
+      <Route path="/metodo/astrologia/solascendenteluna" element={<Navigate to="/metodo/astrologia/trio" replace />} />
       <Route path="/metodo/astrologia/cartaAstral" element={<PrivateRoute><MetodoAstrologiaCartaAstral /></PrivateRoute>} />
       <Route path="/metodo/astrologia/lectura" element={<PrivateRoute><MetodoAstrologiaLectura /></PrivateRoute>} />
       <Route path="/metodo/astrologia/planetas" element={<PrivateRoute><MetodoAstrologiaPlanetas /></PrivateRoute>} />

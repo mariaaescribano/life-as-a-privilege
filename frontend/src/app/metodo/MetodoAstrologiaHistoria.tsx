@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, SimpleGrid } from "@chakra-ui/react";
+import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { IndiceAstrologia } from "../../components/metodo/IndiceAstrologia";
@@ -59,6 +59,13 @@ export default function MetodoAstrologiaHistoria() {
                 disabled: siguienteCerrado,
               }}
             />
+          </Reveal>
+
+          {/* Fuera de las cajas: blanco y sin sombra. */}
+          <Reveal direction="up" distance={18} delay={0.15} duration={0.7} w="100%" maxW="680px">
+            <Text color="white" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center" fontStyle="italic">
+              {t("metodo.astro.historia.intro")}
+            </Text>
           </Reveal>
 
           {/* Con reel: dos tarjetas lado a lado. Sin reel: el cómic solo, centrado. */}
