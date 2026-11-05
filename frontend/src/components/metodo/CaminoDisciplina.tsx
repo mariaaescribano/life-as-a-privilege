@@ -16,7 +16,8 @@ import { useNavigate } from "react-router-dom";
 import { useIdioma, useT } from "../../i18n";
 import { API_URL } from "../../GlobalVariables";
 import { disciplinaByKey } from "../../data/adminDisciplinas";
-import type { CaminoKey } from "../../data/camino";
+import { CAMINO, rutaVista, type CaminoKey } from "../../data/camino";
+import { useCaminoVistos } from "../../hooks/useCaminoVistos";
 import { useAstrologiaProgreso } from "../../hooks/useAstrologiaProgreso";
 import { usePasoMax } from "../../hooks/usePasoMax";
 import { flushSaves } from "../../utils/flushSaves";
@@ -164,6 +165,11 @@ function usarDatos(clave: CaminoKey, userId: string | undefined): DatosCamino {
 export default function CaminoDisciplina({ clave, userId, esAdmin = false, onCargando }: Props) {
   const navigate = useNavigate();
   const datos = usarDatos(clave, userId);
+  const vistas = useCaminoVistos(clave, userId);
+  const secciones = datos.secciones.map((s) => ({
+    ...s,
+    pasos: s.pasos.map((p) => ({ ...p, visto: vistas.has(rutaVista(p.ruta)) })),
+  }));
   const disc = disciplinaByKey(ADMIN_KEY[clave]);
 
   useEffect(() => { onCargando?.(datos.cargando); }, [datos.cargando, onCargando]);
@@ -177,7 +183,10 @@ export default function CaminoDisciplina({ clave, userId, esAdmin = false, onCar
       nom={disc.nombre}
       bg={disc.bg}
       txt={disc.txt}
-      secciones={datos.secciones}
+      secciones={secciones}
+      // Todas las disciplinas empiezan con la casilla EMPEZAR (START): lleva a la entrada de la
+      // disciplina (su cómic de origen). En Astrología, al saltarlo desemboca en la Introducción.
+      conInicio={CAMINO[clave].ruta}
       entraAunCerrado={esAdmin}
       admin={admin}
       onIr={async (ruta) => {

@@ -18,6 +18,9 @@ export interface ApuntesCapitulo {
   key: string;
   /** Lo que se lee en la casilla y encabeza el capítulo del PDF. */
   titulo: string;
+  /** Si está, la pantalla agrupa los capítulos y pone este encabezado al empezar cada grupo
+   *  (Astrología: Signos, Casas, Planetas, Aspectos). */
+  grupo?: string;
   /** Una línea explicando qué se lleva si lo marca. */
   resumen: string;
   /** Todas las ilustraciones que usa (para precargarlas y pesar el archivo). */

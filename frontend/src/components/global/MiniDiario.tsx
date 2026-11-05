@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Flex,
@@ -18,6 +18,8 @@ import { ADMIN_DISCIPLINAS, disciplinaByKey } from "../../data/adminDisciplinas"
 import { DisciplinaBgLayer, hasDisciplinaBg } from "./DisciplinaBgLayer";
 import { LifeLoader } from "../metodo/comicLoaders";
 import { useT } from "../../i18n";
+import { focoBlanco } from "./foco";
+import { personaActiva } from "../../api/persona";
 
 /** Icono del diario (libro abierto). El color se adapta vía `fill`.
  *  Exportado: lo usa también el pin de «Mis notas» del /home. */
@@ -42,6 +44,8 @@ export interface Nota {
   contenido: string;
   categoria: string | null;
   created_at: string;
+  /** Quién la escribió: 'maria', o null/ausente si fue la propia persona. */
+  autor?: string | null;
 }
 
 const fmtFecha = (iso: string) => {
@@ -58,8 +62,9 @@ const fmtFecha = (iso: string) => {
   }
 };
 
-/** Botón flotante (abajo a la derecha) + popup del mini-diario. Se monta una
- *  sola vez a nivel de app y aparece en todas las páginas con sesión iniciada. */
+/** «Notas»: el bloc que comparten María y la persona (los dos escriben y ven lo
+ *  mismo). Botón flotante abajo a la izquierda, siempre en el mismo sitio, + popup.
+ *  Se monta una sola vez a nivel de app. */
 export function MiniDiario() {
   const t = useT();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -79,16 +84,7 @@ export function MiniDiario() {
 
   const disciplinaSel = categoria ? disciplinaByKey(categoria) : undefined;
 
-  // Disciplina de la página actual (astrología / psicología / ayurveda…), para
-  // que el botón flotante adopte sus colores. Turquesa por defecto en el resto.
   const { pathname } = useLocation();
-  const disciplinaRuta = useMemo(() => {
-    const m = pathname.match(/\/(?:metodo|admin)\/([a-z]+)/i);
-    return m ? disciplinaByKey(m[1].toLowerCase()) : undefined;
-  }, [pathname]);
-  const btnBg = disciplinaRuta?.bg ?? turquesa;
-  const btnFg = disciplinaRuta?.txt ?? "#0f2f2c";
-  const btnConImg = !!disciplinaRuta && hasDisciplinaBg(disciplinaRuta.nombre);
 
   const resetEscritura = () => {
     setTexto("");
@@ -155,68 +151,62 @@ export function MiniDiario() {
     }
   };
 
-  // No mostramos el diario sin sesión (las notas son por usuario).
-  if (!userId) return null;
-  // «Mis notas» solo aparece dentro de El Recorrido (páginas /metodo/...), que
-  // es donde el usuario hace su trabajo personal. Fuera de ahí (home, web y el
-  // panel /admin) el botón flotante no se muestra.
-  if (!/^\/metodo(\/|$)/i.test(pathname)) return null;
+  // No mostramos el bloc sin sesión (las notas son de una persona), ni a la admin
+  // sin persona abierta (`userId` «admin»: no hay a quién escribirle).
+  if (!userId || userId === "admin") return null;
+  // «Notas» está en /home y dentro de El Recorrido (/metodo/...), siempre en el
+  // mismo sitio. En la web pública y el panel /admin no se muestra.
+  if (!/^\/(home|metodo)(\/|$)/i.test(pathname)) return null;
 
   return (
     <>
-      {/* ── Botón flotante abajo a la izquierda (fondo = img de la disciplina) ── */}
+      {/* ── Botón flotante abajo a la DERECHA, siempre en el mismo sitio. Del color
+          del fondo de la web (el turquesa), con letra e icono blancos y un halo de
+          luz (la casa se define con luz, no con sombra). Encima de él se apilan
+          «¿Qué es esto?» / «Agenda una llamada» y la barra de María. ── */}
       <Flex
         as="button"
         onClick={onOpen}
         position="fixed"
         bottom={{ base: "18px", md: "26px" }}
-        left={{ base: "16px", md: "26px" }}
+        right={{ base: "16px", md: "26px" }}
         zIndex={1000}
-        overflow="hidden"
         align="center"
         gap={{ base: 2, md: 3 }}
         pl={{ base: 3, md: 4 }}
         pr={{ base: 4, md: 6 }}
         py={{ base: "10px", md: "13px" }}
         borderRadius="full"
-        bg={btnBg}
-        // En móvil el trazo va más fino y algo apagado: a ese tamaño los 2px
-        // llenos dibujaban un contorno duro que se comía el botón. En escritorio
-        // se queda como estaba.
-        border={{ base: `1px solid ${btnFg}80`, md: `2px solid ${btnFg}` }}
-        boxShadow={`0 4px 20px rgba(0,0,0,0.28), 0 0 18px ${btnBg}66`}
+        bg="#008080"
+        border={{ base: "1.5px solid rgba(255,255,255,0.8)", md: "2px solid rgba(255,255,255,0.9)" }}
+        boxShadow="0 0 18px rgba(255,255,255,0.28), 0 0 40px rgba(180,255,245,0.14)"
         cursor="pointer"
         transition="all 0.22s ease"
         _hover={{
           transform: "translateY(-2px)",
-          boxShadow: `0 6px 28px rgba(0,0,0,0.35), 0 0 28px ${btnBg}aa`,
+          boxShadow: "0 0 26px rgba(255,255,255,0.45), 0 0 54px rgba(180,255,245,0.22)",
         }}
         _active={{ transform: "translateY(0)" }}
+        _focusVisible={focoBlanco}
         aria-label={t("diario.abrir")}
       >
-        {btnConImg && <DisciplinaBgLayer nom={disciplinaRuta!.nombre} borderRadius="full" />}
         <Box
           flexShrink={0}
-          position="relative"
-          zIndex={1}
           w={{ base: "24px", md: "27px" }}
           h={{ base: "24px", md: "27px" }}
           display="flex"
           alignItems="center"
           justifyContent="center"
         >
-          <DiarioIcon fill={btnFg} size="100%" />
+          <DiarioIcon fill="white" size="100%" />
         </Box>
         <Text
-          position="relative"
-          zIndex={1}
-          color={btnFg}
+          color="white"
           fontFamily="'EB Garamond', serif"
           fontWeight="700"
           fontSize={{ base: "sm", md: "lg" }}
           letterSpacing="0.06em"
           lineHeight="1"
-          style={{ textShadow: `0 1px 6px ${btnBg}cc` }}
         >
           {t("diario.titulo")}
         </Text>
@@ -580,13 +570,16 @@ function VistaNotas({
   );
 }
 
-/** Exportada: la reutiliza el visor de «Mis notas» del /home (PinesDiario). */
 export function NotaCard({ nota, onBorrar }: { nota: Nota; onBorrar: (id: string) => void }) {
   const t = useT();
   const disc = nota.categoria ? disciplinaByKey(nota.categoria) : undefined;
   const nom = disc?.nombre;
   const conFondo = !!nom && hasDisciplinaBg(nom);
   const txtColor = disc?.txt ?? "white";
+  // Quién la escribió: las de María llevan su nombre; si es María quien mira, las
+  // de la persona llevan el suyo. Si ve la persona sus propias notas, ninguno.
+  const persona = personaActiva();
+  const autor = nota.autor === "maria" ? "María" : persona ? persona.name : null;
 
   return (
     <Box
@@ -643,7 +636,7 @@ export function NotaCard({ nota, onBorrar }: { nota: Nota; onBorrar: (id: string
           {nota.contenido}
         </Text>
         <Text color={`${txtColor}99`} fontSize="xs" mt={2} fontStyle="italic">
-          {fmtFecha(nota.created_at)}
+          {autor ? `${autor} · ` : ""}{fmtFecha(nota.created_at)}
         </Text>
       </Box>
     </Box>

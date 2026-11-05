@@ -8,6 +8,8 @@ import { useT } from "../../i18n";
 import SelectorIdioma from "./SelectorIdioma";
 import MenuHamburguesa, { type ItemMenu } from "./MenuHamburguesa";
 import { focoBlanco } from "./foco";
+import { claveDeRutaMetodo } from "../../data/camino";
+import { marcarVisto } from "../../hooks/useCaminoVistos";
 
 type SiteHeaderProps = {
   /**
@@ -37,6 +39,9 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   useEffect(() => {
     if (location.pathname.toLowerCase().startsWith("/metodo/")) {
       try { localStorage.setItem("ultimoRecorrido", location.pathname + location.search); } catch { /* noop */ }
+      // También queda apuntada como «vista» (tick del camino), salvo si es María mirando a otra persona.
+      const clave = claveDeRutaMetodo(location.pathname);
+      if (clave && !personaActiva() && localStorage.getItem("userId")) marcarVisto(clave, location.pathname);
     }
   }, [location.pathname, location.search]);
 

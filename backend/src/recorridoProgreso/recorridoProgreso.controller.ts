@@ -37,6 +37,27 @@ export class RecorridoProgresoController {
     return { fecha };
   }
 
+  // ── Páginas del camino ya vistas (el tick de las cajitas) ────────────────
+  // Antes de las rutas con `:disciplina`, para que «vistos» no se tome por una disciplina.
+  @Get('vistos')
+  @UseGuards(JwtAuthGuard)
+  async getVistos(@Req() req: any) {
+    return await this.service.getVistos(req.user.userId);
+  }
+
+  @Post('visto')
+  @UseGuards(JwtAuthGuard)
+  async marcarVisto(@Req() req: any, @Body() body: { disciplina?: string; ruta?: string }) {
+    // María mirando el camino de una persona no marca nada por ella.
+    if (req.user?.suplantadoPor) return { ok: false };
+    const disciplina = String(body?.disciplina ?? '');
+    const ruta = String(body?.ruta ?? '');
+    if (!DISCIPLINAS_MAPA_ADMIN.includes(disciplina)) throw new BadRequestException('disciplina inválida');
+    if (!ruta.startsWith('/metodo/') || ruta.length > 300) throw new BadRequestException('ruta inválida');
+    await this.service.marcarVisto(req.user.userId, disciplina, ruta.toLowerCase());
+    return { ok: true };
+  }
+
   // ── El mapa lo abre la admin ───────────────────────────────────────────────
   // Progreso de UNA usuaria (para el panel) y fijar hasta qué paso llega.
   @Get('admin/:userId')

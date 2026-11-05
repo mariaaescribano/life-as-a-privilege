@@ -20,23 +20,37 @@ import type { PasoRecorrido } from "./psicologiaRecorrido";
 // página para dar los datos y leer lo primero de la carta; la intro (los
 // cómics) vuelve a verse cada vez que se entra a ese paso 1.
 export const astrologiaIndice = (): PasoRecorrido[] => [
-  { n: 1, titulo: traducir("metodo.astro.paso.astrologia"), ruta: () => "/metodo/astrologia" },
-  { n: 2, titulo: traducir("metodo.astro.paso.arquetipos"), ruta: () => "/metodo/astrologia/cartaAstral" },
-  { n: 3, titulo: traducir("metodo.astro.paso.puntosClave"), ruta: () => "/metodo/astrologia/lectura" },
-  { n: 4, titulo: traducir("metodo.astro.paso.casas"), ruta: () => "/metodo/astrologia/casas" },
-  { n: 5, titulo: traducir("metodo.astro.paso.aspectos"), ruta: () => "/metodo/astrologia/aspectos" },
-  // Su carta entera en un PDF descargable: va justo después de haberla leído
-  // toda y antes de la llamada, que es cuando ya tiene sentido llevársela.
+  // 1 · la Introducción con la carta (a ella se llega al saltar el cómic de la
+  //     historia espiritual, que sale en /metodo/astrologia al pulsar START).
+  { n: 1, titulo: traducir("metodo.astro.paso.introduccion"), ruta: () => "/metodo/astrologia/introduccion" },
+  // 2 · la Historia: el cómic (y su reel) en UNA caja.
+  { n: 2, titulo: traducir("metodo.astro.paso.historia"), ruta: () => "/metodo/astrologia/historia" },
+  // 3 · la Introducción que lo explica todo: signos, casas, planetas y aspectos.
+  { n: 3, titulo: traducir("metodo.astro.paso.explicacion"), ruta: () => "/metodo/astrologia/explicacion" },
+  // 4 · Ascendente, Sol y Luna: lo que la mayoría conoce de la astrología.
+  { n: 4, titulo: traducir("metodo.astro.paso.trio"), ruta: () => "/metodo/astrologia/trio" },
+  // 5 · los puntos clave de SU carta, según María.
+  { n: 5, titulo: traducir("metodo.astro.paso.puntosClave"), ruta: () => "/metodo/astrologia/lectura" },
+  // 6 · Arquetipos: cada planeta en su signo y en su casa, en cajas.
+  { n: 6, titulo: traducir("metodo.astro.paso.arquetipos"), ruta: () => "/metodo/astrologia/cartaAstral" },
+  // 7-8 · los pasos de siempre, PROVISIONALES hasta que se rehaga el resto.
+  { n: 7, titulo: traducir("metodo.astro.paso.casas"), ruta: () => "/metodo/astrologia/casas" },
+  { n: 8, titulo: traducir("metodo.astro.paso.aspectos"), ruta: () => "/metodo/astrologia/aspectos" },
+  // 9 · su carta entera en un PDF descargable.
   {
-    n: 6,
+    n: 9,
     titulo: traducir("metodo.astro.paso.pdf"),
     tituloCorto: traducir("metodo.astro.paso.pdfCorto"),
     ruta: () => "/metodo/astrologia/pdf",
   },
-  { n: 7, titulo: traducir("metodo.astro.paso.llamada"), ruta: () => "/metodo/astrologia/llamada" },
-  { n: 8, titulo: traducir("metodo.astro.paso.cursos"), ruta: () => "/metodo/astrologia/cursos" },
+  // 10 · los apuntes personales: signos, casas, planetas y aspectos a elegir.
+  { n: 10, titulo: traducir("metodo.astro.paso.apuntes"), ruta: () => "/metodo/astrologia/apuntes" },
+  // 11 · la Síntesis: lo que María quiere que no olvide.
+  { n: 11, titulo: traducir("metodo.astro.paso.sintesis"), ruta: () => "/metodo/astrologia/sintesis" },
+  // 12
+  { n: 12, titulo: traducir("metodo.astro.paso.cursos"), ruta: () => "/metodo/astrologia/cursos" },
 ];
 
 /** Cuántos pasos tiene el recorrido. Constante: no depende del idioma.
  *  ⚠️ Si cambia, cambia también `metodo.total` en data/camino.ts. */
-export const ASTROLOGIA_TOTAL = 8;
+export const ASTROLOGIA_TOTAL = 12;

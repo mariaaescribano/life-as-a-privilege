@@ -10,7 +10,8 @@ import { HousesRing } from "./HousesRing";
 import { Planet } from "./Planet";
 import { Aspects } from "./Aspects";
 import { cartaDemo } from "./demoChart";
-import { gradoAVisualRad, type CartaNatal } from "./types";
+import { gradoAVisualRad, separarAngulos, type CartaNatal } from "./types";
+import { PlanetTicks, type MarcaPlaneta } from "./PlanetTicks";
 void React;
 
 interface CartaAstral3DProps {
@@ -20,6 +21,9 @@ interface CartaAstral3DProps {
   onSaberMas?: (cuerpoKey: CuerpoKey) => void;
   /** Para marcar planetas ya completados (ponemos un ✓ en su etiqueta). */
   completados?: Partial<Record<CuerpoKey, boolean>>;
+  /** Solo para lucirla: sin flechas, sin botón «saber más» y sin poder enfocar
+   *  planetas (ni con el clic ni con el teclado). La rueda se ve entera, quieta. */
+  soloVista?: boolean;
 }
 
 const R_ZODIAC_OUTER = 3.4;
@@ -27,6 +31,12 @@ const R_ZODIAC_INNER = 2.85;
 const R_HOUSES_OUTER = 2.82;
 const R_HOUSES_INNER = 2.35;
 const R_PLANETS = 2.05;
+// Radio al que acaban las líneas de aspecto: por DENTRO de los glifos, para que cada línea
+// llegue al grado exacto del cuerpo sin tapar su símbolo.
+const R_ASPECTOS = 1.7;
+// Separación mínima entre glifos vecinos (radianes al radio de los glifos): cada glifo ocupa
+// ~0,5 de ancho a R 2,05 → ~14°.
+const SEP_GLIFOS = 0.27;
 
 // Distancia de cámara: a fov 50 la media-altura visible = z·tan(25°). El anillo
 // zodiacal llega a 3.4, así que con z≈7.3 (media-altura ≈ 3.40) la rueda LLENA
@@ -46,7 +56,7 @@ function CameraRig({ z }: { z: number }) {
   return null;
 }
 
-export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas, completados }: CartaAstral3DProps) {
+export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas, completados, soloVista = false }: CartaAstral3DProps) {
   // Solo planetas que REALMENTE se dibujan (tienen glifo). Excluimos el
   // ascendente y cualquier cuerpo sin ilustración: así los aspectos nunca
   // trazan una raya hacia un punto vacío (donde no hay planeta).
@@ -72,19 +82,34 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (!focusInside) return;
+      if (soloVista || !focusInside) return;
       if (e.key === "ArrowLeft")  { e.preventDefault(); stepFocus(1); }
       if (e.key === "ArrowRight") { e.preventDefault(); stepFocus(-1);  }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [focusInside, stepFocus]);
+  }, [soloVista, focusInside, stepFocus]);
+
+  // Dónde se dibuja cada glifo: en su grado real, salvo que dos cuerpos estén tan cerca que se
+  // taparían (entonces se apartan lo justo y una marca + guía fina señalan su grado exacto).
+  const angulos = useMemo(() => {
+    const real = planetasOrdenados.map((p) => ({ key: p.planeta, ang: gradoAVisualRad(p.grado, carta.cusps) }));
+    const glifo = separarAngulos(real, SEP_GLIFOS);
+    return { real: new Map(real.map((r) => [r.key, r.ang])), glifo };
+  }, [planetasOrdenados, carta.cusps]);
+
+  const marcas: MarcaPlaneta[] = useMemo(() => planetasOrdenados.flatMap((p) => {
+    const c = cuerpoByKey(p.planeta);
+    if (!c) return [];
+    const real = angulos.real.get(p.planeta)!;
+    return [{ real, glifo: angulos.glifo.get(p.planeta) ?? real, color: c.color }];
+  }), [planetasOrdenados, angulos]);
 
   const planetMeshes = useMemo(() => {
     return planetasOrdenados.map((p, i) => {
       const c = cuerpoByKey(p.planeta);
       if (!c) return null;
-      const theta = gradoAVisualRad(p.grado, carta.cusps);
+      const theta = angulos.glifo.get(p.planeta) ?? gradoAVisualRad(p.grado, carta.cusps);
       const x = Math.cos(theta) * R_PLANETS;
       const y = Math.sin(theta) * R_PLANETS;
       return (
@@ -92,15 +117,15 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
           key={p.planeta}
           cuerpo={c}
           position={[x, y, 0]}
-          focused={i === focusedIdx}
-          onClick={() => setFocusedIdx(i)}
+          focused={!soloVista && i === focusedIdx}
+          onClick={() => { if (!soloVista) setFocusedIdx(i); }}
           // Brotan uno a uno, alrededor de la rueda, con un desfase amplio para
           // que sea pausado y solemne (más épico que rápido).
           appearDelay={0.6 + i * 0.26}
         />
       );
     });
-  }, [planetasOrdenados, carta.cusps, focusedIdx]);
+  }, [planetasOrdenados, angulos, carta.cusps, focusedIdx, soloVista]);
 
   return (
     <Flex
@@ -118,6 +143,7 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
       sx={{ userSelect: "none" }}
     >
       {/* ── Controles (flechas + etiqueta) DEBAJO del círculo (order flex) ── */}
+      {!soloVista && (
       <Flex
         order={1}
         align="center"
@@ -285,6 +311,7 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
 
         <ArrowButton dir="right" color={color} onClick={() => stepFocus(-1)}  />
       </Flex>
+      )}
 
       {/* ── Círculo de la carta (va ARRIBA; los controles debajo vía order) ── */}
       <Box
@@ -342,12 +369,14 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
           <HousesRing
             innerRadius={R_HOUSES_INNER}
             outerRadius={R_HOUSES_OUTER}
+            cusps={carta.cusps}
           />
+          <PlanetTicks marcas={marcas} radioMarca={R_HOUSES_INNER} radioGlifo={R_PLANETS} delay={0.6} />
           <Aspects
             planetas={planetasOrdenados}
             aspectos={carta.aspectos}
             cusps={carta.cusps}
-            radio={R_PLANETS}
+            radio={R_ASPECTOS}
             // Arranca cuando ya ha brotado el último planeta (ver appearDelay + APPEAR_DUR).
             startDelay={0.6 + (planetasOrdenados.length - 1) * 0.26 + 1.1}
           />

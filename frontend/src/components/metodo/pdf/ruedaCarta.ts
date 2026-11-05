@@ -4,7 +4,7 @@
 // Por qué no se reutiliza CartaAstral3D: eso es three.js (WebGL) y vive en otra
 // página; sacarle una foto desde aquí no es fiable. Esto la vuelve a dibujar,
 // pero usando las MISMAS piezas para que salga la misma carta:
-//   · gradoAVisualRad  → el reparto de grados por casa (Placidus «igualado»)
+//   · gradoAVisualRad  → la geometría estándar (Ascendente a la izquierda, zodíaco uniforme)
 //   · SIGNO_TRAZOS     → los signos dibujados a trazo (nada de caracteres ♈)
 //   · COLOR_ASPECTO    → el color de cada tipo de aspecto
 //
@@ -146,9 +146,10 @@ export function dibujarRuedaCarta(
     ctx.restore();
   }
 
-  // ── Casas: las cúspides caen en π + h·π/6 por construcción ──
+  // ── Casas: cada cúspide en su grado real (no miden todas lo mismo) ──
+  const angCusp = cusps.map((c) => gradoAVisualRad(c, cusps));
   for (let h = 0; h < 12; h++) {
-    const a = Math.PI + h * (Math.PI / 6);
+    const a = angCusp[h];
     const angular = h === 0 || h === 3 || h === 6 || h === 9; // AC, IC, DC, MC
     const p1 = punto(cx, cy, a, angular ? 0 : rCasasInt);
     const p2 = punto(cx, cy, a, rCasasInt + (rZodiacoInt - rCasasInt));
@@ -165,8 +166,10 @@ export function dibujarRuedaCarta(
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
   for (let h = 0; h < 12; h++) {
-    const a = Math.PI + (h + 0.5) * (Math.PI / 6);
-    const p = punto(cx, cy, a, (rCasasInt + rZodiacoInt) / 2);
+    const a0 = angCusp[h];
+    let a1 = angCusp[(h + 1) % 12];
+    if (a1 <= a0) a1 += Math.PI * 2;
+    const p = punto(cx, cy, (a0 + a1) / 2, (rCasasInt + rZodiacoInt) / 2);
     ctx.fillText(String(h + 1), p.x, p.y);
   }
 

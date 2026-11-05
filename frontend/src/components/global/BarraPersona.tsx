@@ -10,9 +10,11 @@
 //
 // Sale SOLO en el navegador de María. La persona no ve nada de esto.
 //
-// Va abajo a la DERECHA porque abajo a la izquierda viven «Índice» y «Mis notas».
+// Va abajo a la DERECHA (encima de «Notas» donde esta existe) porque abajo a la
+// izquierda vive «Índice».
 // ─────────────────────────────────────────────────────────────────────────────
 import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { salirDeLaPersona, personaActiva } from "../../api/persona";
 import { focoBlanco } from "./foco";
@@ -22,7 +24,12 @@ const HALO = "0 0 22px rgba(255,255,255,0.32), 0 0 50px rgba(180,255,245,0.14)";
 export default function BarraPersona() {
   // Se lee una sola vez: la sesión no cambia de dueña sin recargar la página.
   const [quien] = useState(() => personaActiva());
-  const [encogida, setEncogida] = useState(false);
+  const [encogida, setEncogida] = useState(true);
+  // Donde hay «Notas» (/home y /metodo) ocupa la esquina de abajo a la derecha:
+  // la barra se apila encima.
+  const { pathname } = useLocation();
+  const conNotas = /^\/(home|metodo)(\/|$)/i.test(pathname);
+  const abajo = conNotas ? { base: "78px", md: "98px" } : { base: "18px", md: "26px" };
 
   if (!quien) return null;
 
@@ -36,7 +43,7 @@ export default function BarraPersona() {
         title={`Camino de ${quien.name}`}
         aria-label={`Camino de ${quien.name}`}
         position="fixed"
-        bottom={{ base: "18px", md: "26px" }}
+        bottom={abajo}
         right={{ base: "16px", md: "26px" }}
         zIndex={1500}
         align="center"
@@ -60,7 +67,7 @@ export default function BarraPersona() {
   return (
     <Flex
       position="fixed"
-      bottom={{ base: "18px", md: "26px" }}
+      bottom={abajo}
       right={{ base: "16px", md: "26px" }}
       zIndex={1500}
       maxW={{ base: "calc(100vw - 32px)", md: "440px" }}

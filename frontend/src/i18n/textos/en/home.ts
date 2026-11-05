@@ -14,7 +14,7 @@ export const home = {
     "Unlock {disciplina} whenever you want — it's the {ordinal} we recommend, but you can start here.",
 
   "home.bienvenida": "Welcome to a deeper understanding of yourself{coma}",
-  "home.continuar": "Continue →",
+  "home.continuar": "Continue:",
   "home.foto": "Your photo",
   "home.fotoError": "The photo couldn't be uploaded",
   "home.fotoErrorTexto": "Try again in a moment.",
@@ -26,7 +26,7 @@ export const home = {
   "home.camino.completa": "completed",
   "home.camino.sinEmpezar": "not started",
 
-  "home.pin.misNotas": "My notes",
+  "home.pin.misNotas": "Notes",
 
   "home.pago.titulo": "{disciplina} payment complete",
   "home.pago.puedesEmpezar": "You can now start the {ordinal} discipline of The Map.",

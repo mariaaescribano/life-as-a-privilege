@@ -806,7 +806,7 @@ export function AyudaRecorrido({ pagina, ocultarCompania }: { pagina: keyof type
           desbloqueado y los va abriendo al llegar al siguiente. */}
       <IndiceRecorrido progresoKey="psicologia" registroKey="psicologia" />
 
-      <Flex position="fixed" bottom={{ base: 4, md: 6 }} right={{ base: 4, md: 6 }} zIndex={20}
+      <Flex position="fixed" bottom={{ base: "78px", md: "98px" }} right={{ base: 4, md: 6 }} zIndex={20}
             direction="column" align="flex-end" gap={2}>
         {/* Orden fijo de la columna: Orientación arriba y «Agenda una llamada»
             SIEMPRE abajo del todo. (El botón «Ejemplo» ya no existe: sus

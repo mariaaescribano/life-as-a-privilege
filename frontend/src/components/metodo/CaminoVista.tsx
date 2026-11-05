@@ -14,13 +14,15 @@
 //     el control de cuántos pasos tiene abiertos la persona (− / +) y un botón
 //     «Abrir hasta aquí» en cada caja cerrada. La persona NUNCA ve esto.
 // ─────────────────────────────────────────────────────────────────────────────
+import { MarcaLeido } from "./MarcaLeido";
 import React, { useState } from "react";
 import { Box, Flex, Text, useBreakpointValue } from "@chakra-ui/react";
 import { motion, useReducedMotion } from "framer-motion";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
 import { sombraTexto } from "../global/disciplinaSombras";
-import { Breathe, Reveal } from "../global/Reveal";
+import { Reveal } from "../global/Reveal";
 import { focoBlanco } from "../global/foco";
+import { useT } from "../../i18n";
 
 export interface PasoCamino {
   n: number;
@@ -28,6 +30,10 @@ export interface PasoCamino {
   ruta: string;
   /** Cerrado para la persona (candado). María entra igualmente. */
   bloqueado: boolean;
+  /** La casilla inicial (START): no es un paso, solo lleva al primero. */
+  inicio?: boolean;
+  /** La persona ya ha pasado por esta página: tick arriba a la derecha. */
+  visto?: boolean;
 }
 
 export interface SeccionCamino {
@@ -47,6 +53,8 @@ export interface ControlAdmin {
 }
 
 interface Props {
+  /** Pone delante la casilla inicial START, que lleva a esta ruta. */
+  conInicio?: string;
   nom: string;
   bg: string;
   txt: string;
@@ -57,14 +65,18 @@ interface Props {
   onIr: (ruta: string) => void;
 }
 
-const ANCHO_CAJA = { base: "min(84vw, 320px)", md: "208px" };
 const ANCHO_FLECHA = 56;
+/** Ancho de una caja con `columnas` por fila: lo que queda tras las flechas, a partes iguales. */
+const anchoCaja = (columnas: number): string =>
+  columnas <= 1 ? "min(84vw, 320px)" : `calc((100% - ${(columnas - 1) * ANCHO_FLECHA}px) / ${columnas})`;
+/** Ancho máximo del camino en varias columnas (cajas de 208 px como siempre). */
+const ANCHO_MAX_CAMINO = 1000;
 
 /** Una flecha del camino: línea de puntos, punta y una chispa que va por ella. */
 function Flecha({ dir, retraso = 0 }: { dir: "right" | "left" | "down"; retraso?: number }) {
   const reduce = useReducedMotion();
   const vertical = dir === "down";
-  const giro = dir === "left" ? "scaleX(-1)" : vertical ? "rotate(90deg)" : "none";
+  const giro = dir === "left" ? "scaleX(-1)" : vertical ? "rotate(90deg)" : "";
   return (
     <Flex
       flexShrink={0}
@@ -75,17 +87,17 @@ function Flecha({ dir, retraso = 0 }: { dir: "right" | "left" | "down"; retraso?
       h={vertical ? `${ANCHO_FLECHA}px` : "28px"}
       aria-hidden
     >
-      <Box position="absolute" top="50%" left="50%" w={`${ANCHO_FLECHA}px`} h="28px" style={{ transform: `translate(-50%, -50%) ${giro}` }}>
+      <Box position="absolute" top="50%" left="50%" w={`${ANCHO_FLECHA}px`} h="28px" style={{ transform: `translate(-50%, -50%) ${giro}`.trim() }}>
         <svg width={ANCHO_FLECHA} height="28" viewBox="0 0 56 28" fill="none">
-          <line x1="6" y1="14" x2="46" y2="14" stroke="white" strokeOpacity="0.7" strokeWidth="2" strokeLinecap="round" strokeDasharray="1 6" />
-          <path d="M40 7 L49 14 L40 21" stroke="white" strokeOpacity="0.95" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+          <line x1="8" y1="14" x2="42" y2="14" stroke="white" strokeOpacity="0.7" strokeWidth="2" strokeLinecap="round" strokeDasharray="1 6" />
+          <path d="M36 7 L45 14 L36 21" stroke="white" strokeOpacity="0.95" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
           {!reduce && (
             <motion.circle
               r="3"
               cy="14"
               fill="white"
-              initial={{ cx: 6, opacity: 0 }}
-              animate={{ cx: [6, 44], opacity: [0, 1, 1, 0] }}
+              initial={{ cx: 8, opacity: 0 }}
+              animate={{ cx: [8, 40], opacity: [0, 1, 1, 0] }}
               transition={{ duration: 2.2, repeat: Infinity, delay: retraso, ease: "easeInOut" }}
             />
           )}
@@ -103,8 +115,9 @@ const Candado = ({ color }: { color: string }) => (
 );
 
 function Caja({
-  paso, nom, bg, txt, actual, entraAunCerrado, admin, seccion, onIr, orden,
+  paso, nom, bg, txt, actual, entraAunCerrado, admin, seccion, onIr, orden, ancho,
 }: {
+  ancho: string;
   paso: PasoCamino; nom: string; bg: string; txt: string; actual: boolean;
   entraAunCerrado: boolean; admin?: ControlAdmin | null; seccion: number;
   onIr: (ruta: string) => void; orden: number;
@@ -126,7 +139,7 @@ function Caja({
       type="button"
       onClick={pulsable ? () => onIr(paso.ruta) : undefined}
       aria-disabled={!pulsable}
-      aria-label={`${paso.n}. ${paso.titulo}`}
+      aria-label={paso.inicio ? paso.titulo : `${paso.n}. ${paso.titulo}`}
       role="group"
       position="relative"
       overflow="hidden"
@@ -134,11 +147,10 @@ function Caja({
       minH={{ base: "112px", md: "148px" }}
       borderRadius="24px"
       bg={bg}
-      border={`1px solid ${txt}${actual ? "dd" : "66"}`}
-      boxShadow={actual ? `0 0 34px ${txt}99, 0 0 70px ${txt}44` : `0 0 20px ${txt}44`}
+      boxShadow={actual ? `0 0 12px ${txt}33` : `0 0 8px ${txt}1f`}
       cursor={pulsable ? "pointer" : "not-allowed"}
-      transition="transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease"
-      _hover={pulsable ? { transform: "translateY(-4px)", boxShadow: `0 0 34px ${txt}88, 0 0 70px ${txt}33`, borderColor: `${txt}cc` } : undefined}
+      transition="transform 0.3s ease, box-shadow 0.3s ease"
+      _hover={pulsable ? { boxShadow: `0 0 14px ${txt}3d` } : undefined}
       _focusVisible={focoBlanco}
     >
       {hasDisciplinaBg(nom) && (
@@ -165,14 +177,17 @@ function Caja({
           w="38px"
           h="38px"
           borderRadius="full"
-          bg={bg}
+          bg="transparent"
           border={`2px solid ${txt}`}
           color={txt}
           fontWeight="700"
           fontSize="md"
           style={{ boxShadow: `0 0 12px ${txt}88` }}
         >
-          {paso.n}
+          {paso.inicio ? (
+            // La casilla inicial lleva una punta de «play» en vez de un número.
+            <svg width="16" height="16" viewBox="0 0 24 24" fill={txt} aria-hidden><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z" /></svg>
+          ) : paso.n}
         </Flex>
         <Text
           color={txt}
@@ -192,12 +207,18 @@ function Caja({
           <Candado color={txt} />
         </Box>
       )}
+      {/* Visto: el tick va en el mismo sitio que el candado. */}
+      {!cerrado && paso.visto && !paso.inicio && (
+        <Box position="absolute" top="10px" right="10px" zIndex={2}>
+          <MarcaLeido tinta={txt} bg={bg} inline />
+        </Box>
+      )}
     </Box>
   );
 
   return (
-    <Reveal inView direction="up" distance={20} scaleFrom={0.95} delay={Math.min(orden * 0.05, 0.45)} w={ANCHO_CAJA} flexShrink={0}>
-      {actual ? <Breathe scale={0.025} duration={3.4}>{caja}</Breathe> : caja}
+    <Reveal inView direction="up" distance={20} scaleFrom={0.95} delay={Math.min(orden * 0.05, 0.45)} w={ancho} flexShrink={0} minW={0}>
+      {caja}
       {puedeAbrir && (
         <Flex justify="center" mt={2}>
           <Box
@@ -234,10 +255,17 @@ const trocear = <T,>(lista: T[], n: number): T[][] => {
   return filas;
 };
 
-export function CaminoVista({ nom, bg, txt, secciones, entraAunCerrado = false, admin, onIr }: Props) {
+export function CaminoVista({ nom, bg, txt, secciones: seccionesDe, conInicio, entraAunCerrado = false, admin, onIr }: Props) {
+  const t = useT();
+  // EMPEZAR (START en inglés): una casilla delante del primer paso, que lleva a donde diga `conInicio`.
+  const secciones: SeccionCamino[] = conInicio && seccionesDe[0]
+    ? [
+        { ...seccionesDe[0], pasos: [{ n: 0, titulo: t("metodo.camino.empezar"), ruta: conInicio, bloqueado: false, inicio: true }, ...seccionesDe[0].pasos] },
+        ...seccionesDe.slice(1),
+      ]
+    : seccionesDe;
   // Cajas por fila: 1 en móvil (columna), 3 en tablet, 4 en escritorio.
   const columnas = useBreakpointValue({ base: 1, md: 3, lg: 4 }, { ssr: false }) ?? 1;
-  const [errorFijar, setErrorFijar] = useState(false);
 
   // El paso «actual» de cada tramo: el último abierto antes del primer candado.
   const actualDe = (pasos: PasoCamino[]): number | null => {
@@ -246,77 +274,12 @@ export function CaminoVista({ nom, bg, txt, secciones, entraAunCerrado = false, 
     return abiertos[abiertos.length - 1].n;
   };
 
-  const adminConAviso: ControlAdmin | null = admin
-    ? {
-        ...admin,
-        fijar: async (n) => {
-          setErrorFijar(false);
-          try { await admin.fijar(n); } catch (e) { setErrorFijar(true); throw e; }
-        },
-      }
-    : null;
+  const adminConAviso: ControlAdmin | null = admin ?? null;
 
   let orden = 0;
 
   return (
     <Flex direction="column" align="center" w="100%">
-      {/* ── Solo María: cuántos pasos tiene abiertos la persona ── */}
-      {adminConAviso && (
-        <Reveal direction="down" distance={14} mb={{ base: 8, md: 10 }}>
-          <Flex
-            align="center"
-            gap={3}
-            px={5}
-            py={2}
-            borderRadius="full"
-            bg="rgba(255,255,255,0.1)"
-            border="1.5px solid rgba(255,255,255,0.6)"
-            boxShadow="0 0 22px rgba(255,255,255,0.2)"
-            color="white"
-            wrap="wrap"
-            justify="center"
-          >
-            <Text fontSize="md" fontWeight="600" letterSpacing="0.04em">
-              Abierto hasta el paso {adminConAviso.pasoMax} de {adminConAviso.total}
-            </Text>
-            {(["−", "+"] as const).map((signo) => {
-              const nuevo = adminConAviso.pasoMax + (signo === "+" ? 1 : -1);
-              const fuera = nuevo < 1 || nuevo > adminConAviso.total;
-              return (
-                <Box
-                  key={signo}
-                  as="button"
-                  type="button"
-                  onClick={fuera ? undefined : () => { void adminConAviso.fijar(nuevo).catch(() => {}); }}
-                  disabled={fuera}
-                  aria-label={signo === "+" ? "Abrir el siguiente paso" : "Cerrar el último paso abierto"}
-                  title={signo === "+" ? "Abrir el siguiente paso" : "Cerrar el último paso abierto"}
-                  w="32px"
-                  h="32px"
-                  borderRadius="full"
-                  border="1.5px solid rgba(255,255,255,0.75)"
-                  bg="rgba(255,255,255,0.14)"
-                  color="white"
-                  fontWeight="700"
-                  fontSize="lg"
-                  lineHeight="1"
-                  cursor={fuera ? "not-allowed" : "pointer"}
-                  opacity={fuera ? 0.4 : 1}
-                  transition="all 0.2s"
-                  _hover={fuera ? undefined : { bg: "rgba(255,255,255,0.28)" }}
-                  _focusVisible={focoBlanco}
-                >
-                  {signo}
-                </Box>
-              );
-            })}
-          </Flex>
-          {errorFijar && (
-            <Text color="#ffe7bd" fontSize="sm" fontStyle="italic" textAlign="center" mt={2}>No se pudo guardar. Inténtalo de nuevo.</Text>
-          )}
-        </Reveal>
-      )}
-
       {secciones.map((sec, si) => {
         const filas = trocear(sec.pasos, columnas);
         const actual = actualDe(sec.pasos);
@@ -336,7 +299,7 @@ export function CaminoVista({ nom, bg, txt, secciones, entraAunCerrado = false, 
             )}
 
             {/* El camino de este tramo: una columna que mide lo que la fila más larga. */}
-            <Flex direction="column" align="stretch" w="fit-content" maxW="100%">
+            <Flex direction="column" align="stretch" w="100%" maxW={columnas > 1 ? `${ANCHO_MAX_CAMINO}px` : "100%"} mx="auto">
               {filas.map((fila, fi) => {
                 const invertida = columnas > 1 && fi % 2 === 1;
                 return (
@@ -356,6 +319,7 @@ export function CaminoVista({ nom, bg, txt, secciones, entraAunCerrado = false, 
                             seccion={si}
                             onIr={onIr}
                             orden={orden++}
+                            ancho={anchoCaja(columnas)}
                           />
                         );
                         return (
@@ -368,7 +332,7 @@ export function CaminoVista({ nom, bg, txt, secciones, entraAunCerrado = false, 
                     </Flex>
                     {fi < filas.length - 1 && (
                       <Flex justify={columnas === 1 ? "center" : invertida ? "flex-start" : "flex-end"}>
-                        <Flex w={ANCHO_CAJA} justify="center">
+                        <Flex w={anchoCaja(columnas)} justify="center">
                           <Flecha dir="down" retraso={0.2} />
                         </Flex>
                       </Flex>

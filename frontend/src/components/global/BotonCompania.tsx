@@ -202,7 +202,8 @@ export function BotonCompania({
           llamada» debajo. */}
       <Flex
         position="fixed"
-        bottom={{ base: 4, md: 6 }}
+        // Sube para dejar la esquina a «Notas» (MiniDiario), abajo a la derecha.
+        bottom={{ base: "78px", md: "98px" }}
         right={{ base: 4, md: 6 }}
         zIndex={20}
         direction="column"

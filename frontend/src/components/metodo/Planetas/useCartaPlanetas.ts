@@ -9,6 +9,8 @@ export interface Valor {
   casa?: number;
   profundizadoSigno?: boolean;
   profundizadoCasa?: boolean;
+  /** La 2.ª casa, cuando el planeta está sobre la cúspide de dos (ver astrologiaCasas.ts). */
+  profundizadoCasa2?: boolean;
 }
 
 export type CartaData = Partial<Record<CuerpoKey, Valor>>;

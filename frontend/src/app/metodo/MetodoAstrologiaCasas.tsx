@@ -13,9 +13,6 @@ import { SpaceBg, SPACE_IMG } from "../../components/metodo/SpaceBg";
 import { useImagesReady } from "../../hooks/useImagesReady";
 import { Glifo, GlifoSigno } from "../../components/metodo/Glifo";
 import { trazosSigno } from "../../components/metodo/signosIconos";
-import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
-import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
-import { VINETAS_ASPECTOS } from "../../components/metodo/comicAspectos";
 import type { CartaNatal } from "../../components/metodo/CartaAstral3D/types";
 import { infoCasa, NUMEROS_ROMANOS, COLOR_SIGNO } from "../../components/metodo/casasAspectos";
 import { useNombresAstro } from "../../components/metodo/astrologiaNombres";
@@ -117,9 +114,7 @@ export default function MetodoAstrologiaCasas() {
   const [loading, setLoading] = useState(true);
   const [carta, setCarta] = useState<CartaNatal | null>(null);
   const [casasTexto, setCasasTexto] = useState<Record<string, string>>({});
-  const [comicOpen, setComicOpen] = useState(false);
   // El cómic de los aspectos, intercalado antes de la página de Aspectos.
-  const [comicAspectosOpen, setComicAspectosOpen] = useState(false);
 
   const { leidos, marcarLeido, cargado } = useAstroLeidos("casas");
   const fotosListas = useImagesReady([SPACE_IMG]);
@@ -228,8 +223,7 @@ export default function MetodoAstrologiaCasas() {
 
   const headerNext = {
     label: `${t("metodo.astro.paso.aspectos")} →`,
-    // Antes de ver SUS aspectos se lee qué es cada aspecto.
-    onClick: () => setComicAspectosOpen(true),
+    onClick: () => navigate("/metodo/astrologia/aspectos"),
     disabled: !todasCasasLeidas,
     disabledTooltip: "Lee todas tus Casas para continuar.",
   };
@@ -247,10 +241,9 @@ export default function MetodoAstrologiaCasas() {
               bgColor={`${astrologiaBg}dd`}
               color={astrologiaTxt}
               space
-              step={{ current: 4, total: 8 }}
+              step={{ current: 7, total: 12 }}
               mb={0}
-              prev={{ label: `← ${t("metodo.astro.paso.puntosClave")}`, onClick: () => navigate("/metodo/astrologia/lectura") }}
-              extra={{ label: t("metodo.ilustraciones"), onClick: () => setComicOpen(true)}}
+              prev={{ label: `← ${t("metodo.astro.paso.arquetipos")}`, onClick: () => navigate("/metodo/astrologia/cartaAstral") }}
               next={headerNext}
             />
           </Reveal>
@@ -421,17 +414,7 @@ export default function MetodoAstrologiaCasas() {
         </Flex>
       </Flex>
 
-      <ComicAstrologiaModal isOpen={comicOpen} onClose={() => setComicOpen(false)} />
 
-      {/* Cómic de los aspectos: intercalado antes de «Aspectos». */}
-      <ComicPasoModal
-        isOpen={comicAspectosOpen}
-        onClose={() => setComicAspectosOpen(false)}
-        onContinue={() => navigate("/metodo/astrologia/aspectos")}
-        vinetas={VINETAS_ASPECTOS}
-        continueLabel="Aspectos"
-        themeColor={astrologiaTxt}
-      />
       <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom}
                      llamadaTitulo={t("metodo.astro.reservaLlamada")} queEsEsto={QUE_ES_ESTO} />
       <IndiceAstrologia />

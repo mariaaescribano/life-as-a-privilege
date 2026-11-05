@@ -18,7 +18,7 @@ export const home = {
 
   /** Saludo grande del Mapa. `{coma}` trae ", Nombre" cuando se sabe el nombre. */
   "home.bienvenida": "Bienvenido a una comprensión más profunda de ti{coma}",
-  "home.continuar": "Continuar →",
+  "home.continuar": "Continuar:",
   "home.foto": "Tu foto",
   "home.fotoError": "No se pudo subir la foto",
   "home.fotoErrorTexto": "Inténtalo de nuevo en un momento.",
@@ -33,7 +33,7 @@ export const home = {
   "home.camino.sinEmpezar": "sin empezar",
 
   // ── Pines del diario (abajo a la derecha, solo con diario de terapias) ──
-  "home.pin.misNotas": "Mis notas",
+  "home.pin.misNotas": "Notas",
 
   "home.pago.titulo": "Pago de {disciplina} realizado",
   "home.pago.puedesEmpezar": "Ya puedes empezar la {ordinal} disciplina del Mapa.",

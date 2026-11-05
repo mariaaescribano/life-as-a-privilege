@@ -54,7 +54,7 @@ export interface CaminoDisciplina {
  * paso mayor que el total declarado.
  */
 export const CAMINO: Record<CaminoKey, CaminoDisciplina> = {
-  metodo:     { total: 8,  ruta: "/metodo/astrologia" },
+  metodo:     { total: 12,  ruta: "/metodo/astrologia" },
   psicologia: { total: 29, ruta: "/metodo/psicologia" },
   fisiologia: { total: 12,  ruta: "/metodo/fisiologia" },
   nutricion:  { total: 15, ruta: "/metodo/nutricion" },
@@ -109,3 +109,14 @@ export function porcentajeCamino(progreso: Record<string, number>, key: CaminoKe
   if (!def?.total) return 0;
   return Math.round((pasosAndados(progreso, key) / def.total) * 100);
 }
+
+/** /metodo/<segmento> → clave del camino (astrología cuelga de «astrologia»; el resto, igual). */
+const SEGMENTO_METODO: Record<string, CaminoKey> = {
+  astrologia: 'metodo', psicologia: 'psicologia', fisiologia: 'fisiologia', nutricion: 'nutricion',
+  ayurveda: 'ayurveda', tcm: 'tcm', cabala: 'cabala', cultura: 'cultura',
+};
+export const claveDeRutaMetodo = (pathname: string): CaminoKey | null =>
+  SEGMENTO_METODO[pathname.toLowerCase().match(/^\/metodo\/([a-z]+)/)?.[1] ?? ''] ?? null;
+
+/** La ruta de un paso tal como se apunta como «vista»: sin query, sin barra final, en minúscula. */
+export const rutaVista = (ruta: string): string => ruta.split('?')[0].replace(/\/+$/, '').toLowerCase();

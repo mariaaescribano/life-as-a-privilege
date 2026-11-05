@@ -92,6 +92,33 @@ export class RecorridoProgresoService {
     return ahora;
   }
 
+
+  /**
+   * Las páginas del camino que la persona ya ha visto: { disciplina: [ruta, …] }.
+   * Si la tabla `camino_visto` aún no existe (SQL sin correr) devuelve {} sin romper nada.
+   */
+  async getVistos(userId: string): Promise<Record<string, string[]>> {
+    const { data, error } = await this.databaseService.getClient()
+      .from('camino_visto')
+      .select('disciplina, ruta')
+      .eq('user_id', userId);
+    if (error || !data) return {};
+    const salida: Record<string, string[]> = {};
+    for (const fila of data as any[]) {
+      if (typeof fila?.disciplina !== 'string' || typeof fila?.ruta !== 'string') continue;
+      (salida[fila.disciplina] ??= []).push(fila.ruta);
+    }
+    return salida;
+  }
+
+  /** Apunta que ha visto una página (repetirlo no hace nada). */
+  async marcarVisto(userId: string, disciplina: string, ruta: string): Promise<void> {
+    const { error } = await this.databaseService.getClient()
+      .from('camino_visto')
+      .upsert({ user_id: userId, disciplina, ruta }, { onConflict: 'user_id,disciplina,ruta', ignoreDuplicates: true });
+    if (error) console.error('Error apuntando camino_visto:', error.message);
+  }
+
   async avanzar(userId: string, disciplina: string, paso: number): Promise<number> {
     const actual = await this.getPasoMax(userId, disciplina);
     const nuevo = Math.max(actual, Math.floor(paso) || 1, 1);

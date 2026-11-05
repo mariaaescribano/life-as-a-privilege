@@ -28,6 +28,10 @@ export class ConsentimientoSaludGuard implements CanActivate {
     const req = context.switchToHttp().getRequest();
     if (!METODOS_QUE_ESCRIBEN.has(req.method)) return true;
 
+    // María escribiendo en el camino de una persona: lo que escribe es suyo (no
+    // son datos de salud de la persona), así que no necesita su consentimiento.
+    if (req.user?.suplantadoPor) return true;
+
     const userId: string | undefined = req.user?.userId;
     if (!userId) throw new ForbiddenException('No autenticado');
 

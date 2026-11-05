@@ -56,8 +56,15 @@ export function FotoBox({
   aspect = 1,
   glow,
   vivo = false,
+  descripcion,
+  lineasDescripcion = 4,
 }: {
   titulo: React.ReactNode;
+  /** Frase breve bajo el título. Ocupa SIEMPRE el hueco de `lineasDescripcion`
+   *  líneas (aunque la frase sea más corta), para que todas las tarjetas de una
+   *  rejilla midan lo mismo; si pasa de ahí se corta con puntos suspensivos. */
+  descripcion?: string;
+  lineasDescripcion?: number;
   foto?: string;
   /** Ilustración de reserva: si `foto` no existe todavía, se pinta esta en su
    *  lugar (mismo espíritu que `srcFallback` en las viñetas del ComicViewer).
@@ -204,7 +211,8 @@ export function FotoBox({
       )}
 
       {/* Pie: título alineado a la izquierda. */}
-      <Flex position="relative" zIndex={1} flex="1" align="center"
+      <Flex position="relative" zIndex={1} flex="1" direction={descripcion ? "column" : "row"}
+            align={descripcion ? "stretch" : "center"} justify={descripcion ? "flex-start" : undefined} gap={descripcion ? 1.5 : 0}
             px={{ base: 3.5, md: 4 }} py={{ base: 3, md: 3.5 }}>
         <Text color={tinta} fontWeight="700" fontSize={{ base: "sm", md: "md" }} lineHeight="1.25"
               letterSpacing="0.02em" style={{ textShadow: `0 1px 4px ${bg}` }}
@@ -212,6 +220,15 @@ export function FotoBox({
               _groupHover={vivo ? { transform: "translateX(3px)" } : undefined}>
           {titulo}
         </Text>
+        {descripcion && (
+          <Text color={tinta} opacity={0.92} fontSize={{ base: "sm", md: "sm" }} lineHeight="1.45"
+                noOfLines={lineasDescripcion}
+                // El hueco de las N líneas va reservado: así todas miden lo mismo.
+                minH={`${lineasDescripcion * 1.45}em`}
+                style={{ textShadow: `0 1px 4px ${bg}` }}>
+            {descripcion}
+          </Text>
+        )}
       </Flex>
     </Box>
   );

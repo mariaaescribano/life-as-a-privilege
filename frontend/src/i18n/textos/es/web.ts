@@ -177,7 +177,7 @@ export const web = {
   "login.entrar": "Iniciar sesión →",
 
   // ── Mis notas (MiniDiario) ─────────────────────────────────────────────
-  "diario.titulo": "Mis notas",
+  "diario.titulo": "Notas",
   "diario.abrir": "Abrir mis notas",
   "diario.borrarNota": "Borrar nota",
   "diario.volverEscribir": "← Volver a escribir",

@@ -11,7 +11,6 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { SpaceBg, SPACE_IMG } from "../../components/metodo/SpaceBg";
 import { useImagesReady } from "../../hooks/useImagesReady";
 import { Glifo } from "../../components/metodo/Glifo";
-import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
 import { cuerpoByKey, CUERPOS } from "../../components/metodo/astrologiaData";
 import type { CartaNatal, Aspecto } from "../../components/metodo/CartaAstral3D/types";
 import { COLOR_ASPECTO } from "../../components/metodo/CartaAstral3D/types";
@@ -80,7 +79,6 @@ export default function MetodoAstrologiaAspectos() {
   const [loading, setLoading] = useState(true);
   const [aspectos, setAspectos] = useState<Aspecto[]>([]);
   const [textos, setTextos] = useState<Record<string, string>>({});
-  const [comicOpen, setComicOpen] = useState(false);
   const [abierto, setAbierto] = useState<Aspecto | null>(null);
   const [casasTexto, setCasasTexto] = useState<Record<string, string>>({});
   const { leidos, marcarLeido, cargado } = useAstroLeidos("aspectos");
@@ -214,10 +212,9 @@ export default function MetodoAstrologiaAspectos() {
               bgColor={`${astrologiaBg}dd`}
               color={astrologiaTxt}
               space
-              step={{ current: 5, total: 8 }}
+              step={{ current: 8, total: 12 }}
               mb={0}
               prev={{ label: `← ${t("metodo.astro.paso.casas")}`, onClick: () => navigate("/metodo/astrologia/casas") }}
-              extra={{ label: t("metodo.ilustraciones"), onClick: () => setComicOpen(true)}}
               next={headerNext}
             />
           </Reveal>
@@ -505,7 +502,6 @@ export default function MetodoAstrologiaAspectos() {
         );
       })()}
 
-      <ComicAstrologiaModal isOpen={comicOpen} onClose={() => setComicOpen(false)} />
       <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} llamadaTitulo={t("metodo.astro.reservaLlamada")} />
       <IndiceAstrologia />
       <SiteFooter />

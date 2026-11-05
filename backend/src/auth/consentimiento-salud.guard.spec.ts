@@ -35,6 +35,12 @@ describe('ConsentimientoSaludGuard', () => {
     await expect(g.canActivate(contexto('PATCH', 'u1'))).rejects.toBeInstanceOf(ForbiddenException);
   });
 
+  it('María en el camino de una persona escribe sin su consentimiento', async () => {
+    const g = guardConFila(null);
+    const ctx: any = { switchToHttp: () => ({ getRequest: () => ({ method: 'POST', user: { userId: 'u1', suplantadoPor: 'admin' } }) }) };
+    await expect(g.canActivate(ctx)).resolves.toBe(true);
+  });
+
   it('deja escribir con consentimiento', async () => {
     const g = guardConFila({ updated_at: '2026-10-19' });
     await expect(g.canActivate(contexto('PATCH', 'u1'))).resolves.toBe(true);

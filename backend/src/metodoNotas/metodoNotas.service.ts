@@ -39,7 +39,9 @@ export class MetodoNotasService {
   }
 
   // ── Crear una nota nueva ──
-  async crear(userId: string, dto: NuevaNota) {
+  // `autor`: 'maria' si la escribe María; null si la escribe la persona. Si la
+  // columna aún no existe (falta correr sql/notas-autor.sql) se guarda sin ella.
+  async crear(userId: string, dto: NuevaNota, autor: 'maria' | null = null) {
     const contenido = (dto?.contenido ?? '').trim();
     if (!contenido) {
       return { success: false, error: 'La nota está vacía' };
@@ -47,11 +49,13 @@ export class MetodoNotasService {
     const categoria =
       dto?.categoria && CATEGORIAS_VALIDAS.has(dto.categoria) ? dto.categoria : null;
 
-    const { data, error } = await this.databaseService.getClient()
-      .from('notas')
-      .insert({ user_id: userId, contenido, categoria })
-      .select()
-      .single();
+    const insertar = (fila: Record<string, any>) =>
+      this.databaseService.getClient().from('notas').insert(fila).select().single();
+
+    let { data, error } = await insertar({ user_id: userId, contenido, categoria, autor });
+    if (error && /autor/i.test(error.message ?? '')) {
+      ({ data, error } = await insertar({ user_id: userId, contenido, categoria }));
+    }
 
     if (error) {
       console.warn('[metodoNotas.crear] error:', error.message);
@@ -62,13 +66,21 @@ export class MetodoNotasService {
     return { success: true, nota: data };
   }
 
-  // ── Borrar una nota (solo del propio usuario) ──
-  async eliminar(userId: string, notaId: string) {
-    const { error } = await this.databaseService.getClient()
-      .from('notas')
-      .delete()
-      .eq('id', notaId)
-      .eq('user_id', userId);
+  // ── Borrar una nota ──
+  // La persona borra las suyas, no las de María; María borra cualquiera.
+  async eliminar(userId: string, notaId: string, esMaria = false) {
+    const borrar = (soloSuyas: boolean) => {
+      let q = this.databaseService.getClient()
+        .from('notas')
+        .delete()
+        .eq('id', notaId)
+        .eq('user_id', userId);
+      if (soloSuyas) q = q.or('autor.is.null,autor.neq.maria');
+      return q;
+    };
+
+    let { error } = await borrar(!esMaria);
+    if (error && /autor/i.test(error.message ?? '')) ({ error } = await borrar(false));
 
     if (error) {
       console.warn('[metodoNotas.eliminar] error:', error.message);

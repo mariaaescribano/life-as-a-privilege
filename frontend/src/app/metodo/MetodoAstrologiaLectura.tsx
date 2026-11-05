@@ -13,8 +13,6 @@ import { RecorridoLoading } from "../../components/metodo/RecorridoLoading";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { SpaceBg, SPACE_IMG } from "../../components/metodo/SpaceBg";
 import { useImagesReady } from "../../hooks/useImagesReady";
-import { ComicAstrologiaModal, VINETAS_CASAS } from "../../components/metodo/ComicAstrologiaModal";
-import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { useAstroLeidos } from "../../hooks/useAstroLeidos";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
@@ -164,13 +162,14 @@ function EstrellaReto({ index, pos, leido, onOpen }: { index: number; pos: { top
 
 export default function MetodoAstrologiaLectura() {
   const t = useT();
+  const nombre = (() => {
+    try { return (localStorage.getItem("name") ?? "").trim().split(/\s+/)[0] ?? ""; } catch { return ""; }
+  })();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [retos, setRetos] = useState<Reto[]>([]);
   const [retoAbierto, setRetoAbierto] = useState<Reto | null>(null);
-  const [comicOpen, setComicOpen] = useState(false);
   // Cómic de las casas: se intercala antes de pasar a «Casas».
-  const [comicCasasOpen, setComicCasasOpen] = useState(false);
   const { leidos: retosLeidos, marcarLeido: marcarReto, cargado } = useAstroLeidos("retos");
   const fotosListas = useImagesReady([SPACE_IMG]);
 
@@ -223,14 +222,12 @@ export default function MetodoAstrologiaLectura() {
               bgColor={`${astrologiaBg}dd`}
               color={astrologiaTxt}
               space
-              step={{ current: 3, total: 8 }}
+              step={{ current: 5, total: 12 }}
               mb={0}
-              prev={{ label: `← ${t("metodo.astro.paso.arquetipos")}`, onClick: () => navigate("/metodo/astrologia/cartaAstral") }}
-              extra={{ label: t("metodo.ilustraciones"), onClick: () => setComicOpen(true)}}
+              prev={{ label: `← ${t("metodo.astro.paso.trio")}`, onClick: () => navigate("/metodo/astrologia/trio") }}
               next={{
-                label: `${t("metodo.astro.paso.casas")} →`,
-                // Antes de pasar a «Casas» intercalamos el cómic de las casas.
-                onClick: () => setComicCasasOpen(true),
+                label: `${t("metodo.astro.paso.arquetipos")} →`,
+                onClick: () => navigate("/metodo/astrologia/cartaAstral"),
                 disabled: !todosRetosLeidos,
                 disabledTooltip: "Lee todos tus puntos clave para continuar.",
               }}
@@ -242,6 +239,9 @@ export default function MetodoAstrologiaLectura() {
           <Reveal direction="up" distance={20} delay={0.12} duration={0.65} w="100%"
                   display="flex" flexDirection="column" alignItems="center" gap={3}>
             {/* Sin sombra: el texto de debajo del header va sobre el fondo limpio. */}
+            <Text color="white" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center" maxW="640px">
+              {t("metodo.astro.lectura.intro", { nombre })}
+            </Text>
             <Text color={`${astrologiaTxt}ee`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.8" textAlign="center" maxW="560px">
               {t("metodo.astro.pulsaEstrella")}
             </Text>
@@ -249,7 +249,7 @@ export default function MetodoAstrologiaLectura() {
               <Text color={todosRetosLeidos ? astrologiaTxt : `${astrologiaTxt}cc`} fontSize={{ base: "sm", md: "md" }}
                     fontWeight="600" letterSpacing="0.04em" textAlign="center">
                 {todosRetosLeidos
-                  ? "Has leído todos tus puntos clave. Ya puedes continuar a Casas."
+                  ? `Has leído todos tus puntos clave. Ya puedes continuar a ${t("metodo.astro.paso.arquetipos")}.`
                   : `Has leído ${retos.filter((r) => retosLeidos.has(r.id)).length} de ${retos.length} puntos clave.`}
               </Text>
             )}
@@ -360,17 +360,7 @@ export default function MetodoAstrologiaLectura() {
         </ModalContent>
       </Modal>
 
-      <ComicAstrologiaModal isOpen={comicOpen} onClose={() => setComicOpen(false)} />
 
-      {/* Cómic de las casas: intercalado antes de «Casas». */}
-      <ComicPasoModal
-        isOpen={comicCasasOpen}
-        onClose={() => setComicCasasOpen(false)}
-        onContinue={() => navigate("/metodo/astrologia/casas")}
-        vinetas={VINETAS_CASAS}
-        continueLabel="Casas"
-        themeColor={astrologiaTxt}
-      />
       <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} llamadaTitulo={t("metodo.astro.reservaLlamada")} />
       <IndiceAstrologia />
       <SiteFooter />

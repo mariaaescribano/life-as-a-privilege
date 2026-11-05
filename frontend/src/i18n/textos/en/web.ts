@@ -174,7 +174,7 @@ export const web = {
   "login.entrar": "Log in →",
 
   // ── My notes (MiniDiario) ──────────────────────────────────────────────
-  "diario.titulo": "My notes",
+  "diario.titulo": "Notes",
   "diario.abrir": "Open my notes",
   "diario.borrarNota": "Delete note",
   "diario.volverEscribir": "← Back to writing",

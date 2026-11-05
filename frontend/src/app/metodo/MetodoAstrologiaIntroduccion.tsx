@@ -1,0 +1,196 @@
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Box, Flex, Text } from "@chakra-ui/react";
+import axios from "axios";
+import SiteHeader from "../../components/global/SiteHeader";
+import SiteFooter from "../../components/global/Footer";
+import { IndiceAstrologia } from "../../components/metodo/IndiceAstrologia";
+import { RecorridoLoading } from "../../components/metodo/RecorridoLoading";
+import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
+import { SpaceBg, SPACE_IMG } from "../../components/metodo/SpaceBg";
+import { FormularioNacimiento, type EstadoNacimiento } from "../../components/metodo/FormularioNacimiento";
+import { CartaAstral3D } from "../../components/metodo/CartaAstral3D/CartaAstral3D";
+import type { CartaNatal } from "../../components/metodo/CartaAstral3D/types";
+import { useImagesReady } from "../../hooks/useImagesReady";
+import { Reveal } from "../../components/global/Reveal";
+import { esMariaMirando } from "../../api/persona";
+import { useAstrologiaProgreso } from "../../hooks/useAstrologiaProgreso";
+import { API_URL, astrologiaBg, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
+import { useT } from "../../i18n";
+import { focoBlanco } from "../../components/global/foco";
+
+/**
+ * Paso 1 del recorrido de Astrología: la Introducción. A ella se llega al saltar
+ * (con la X) el cómic de la historia espiritual, que sale al entrar en la disciplina
+ * desde la casilla START del camino.
+ *
+ * Primero revisa si la persona ya dio sus datos de nacimiento: si no (o si no se pudo calcular
+ * su carta), sale el formulario; al enviarlo el servidor avisa a María por email y ESTA misma
+ * página pasa a enseñar la carta. María, mirando el camino de alguien, nunca ve el formulario.
+ *
+ * Es para lucir la carta astral de la persona: el header de siempre (sin el botón
+ * «Ilustraciones»), debajo un saludo en blanco, la carta (solo para mirarla: sin
+ * ir de planeta en planeta; eso es la página de Arquetipos) y dos frases.
+ */
+export default function MetodoAstrologiaIntroduccion() {
+  const t = useT();
+  const navigate = useNavigate();
+  const [cargando, setCargando] = useState(true);
+  const [carta, setCarta] = useState<CartaNatal | null>(null);
+  const [estado, setEstado] = useState<EstadoNacimiento | null>(null);
+  const [editando, setEditando] = useState(false);
+  const mariaMirando = esMariaMirando();
+  const fotosListas = useImagesReady([SPACE_IMG]);
+  // La rueda solo se monta cuando el box ya está a la vista: sus planetas brotan uno a uno
+  // desde que se monta, y si la caja estaba bajo el pliegue la animación se gastaba sin que
+  // nadie la viera.
+  // (Observador propio con ref de callback: la caja aparece DESPUÉS de cargar o de enviar el
+  // formulario, y un ref normal no vería cuándo se monta.)
+  const [cajaCarta, setCajaCarta] = useState<HTMLDivElement | null>(null);
+  const [cartaVisible, setCartaVisible] = useState(false);
+  useEffect(() => {
+    if (!cajaCarta || cartaVisible) return;
+    if (typeof IntersectionObserver === "undefined") { setCartaVisible(true); return; }
+    const obs = new IntersectionObserver((es) => {
+      if (es.some((e) => e.isIntersecting)) { setCartaVisible(true); obs.disconnect(); }
+    }, { threshold: 0.3 });
+    obs.observe(cajaCarta);
+    return () => obs.disconnect();
+  }, [cajaCarta, cartaVisible]);
+  const { bloqueada, cargado: cargadoPasos } = useAstrologiaProgreso();
+  // «nombre de user»: su nombre de pila. En el camino de una persona, el de ella.
+  const nombre = (() => {
+    try { return (localStorage.getItem("name") ?? "").trim().split(/\s+/)[0] ?? ""; } catch { return ""; }
+  })();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
+    const userId = localStorage.getItem("userId");
+    if (!userId) { setCargando(false); return; }
+    let cancel = false;
+    // Primero se mira si ya dio sus datos (y hay carta calculada) y SOLO entonces se pinta la carta.
+    Promise.all([
+      axios.get<EstadoNacimiento | null>(`${API_URL}/metodo-astrologia/${userId}`).then((r) => r.data ?? null).catch(() => null),
+      axios.get<CartaNatal | null>(`${API_URL}/metodo-astrologia/carta-natal/${userId}`).then((r) => r.data ?? null).catch(() => null),
+    ]).then(([e, c]) => {
+      if (cancel) return;
+      setEstado(e);
+      setCarta(c);
+    }).finally(() => { if (!cancel) setCargando(false); });
+    return () => { cancel = true; };
+  }, []);
+
+  // Con la carta calculada (y sin estar corrigiendo) se enseña la carta; si no, el formulario.
+  // María mirando el camino de otra persona no rellena nada por ella: ve siempre la carta.
+  const hayCarta = !!estado?.solicitud_enviada_at && !!carta;
+  const verFormulario = !mariaMirando && (!hayCarta || editando);
+
+  // Tras enviar los datos: se trae la carta recién calculada y la página cambia sola.
+  const alEnviar = async (nuevo: EstadoNacimiento) => {
+    setEstado(nuevo);
+    setEditando(false);
+    try {
+      const userId = localStorage.getItem("userId");
+      const r = await axios.get<CartaNatal | null>(`${API_URL}/metodo-astrologia/carta-natal/${userId}`);
+      setCarta(r.data ?? null);
+    } catch { setCarta(null); }
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  if (cargando || !fotosListas) return <RecorridoLoading />;
+
+  return (
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+      <SiteHeader variant="private" />
+
+      <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 28, md: 36 }}>
+        <Flex direction="column" align="center" w="100%" maxW="850px" gap={{ base: 6, md: 8 }}>
+          <Reveal direction="down" distance={16} duration={0.6} w="100%">
+            <MetodoStepHeader
+              icon={<AstrologiaIcon size={{ base: "40px", md: "52px" }} />}
+              title={t("metodo.astro.paso.introduccion")}
+              bgColor={`${astrologiaBg}dd`}
+              color={astrologiaTxt}
+              space
+              dense
+              step={{ current: 1, total: 12 }}
+              mb={0}
+              next={{
+                label: `${t("metodo.astro.paso.historia")} →`,
+                onClick: () => navigate("/metodo/astrologia/historia"),
+                // Cerrado hasta que María abra el paso 2 (ella entra siempre).
+                disabled: !mariaMirando && ((cargadoPasos && bloqueada(2)) || verFormulario),
+              }}
+            />
+          </Reveal>
+
+          {verFormulario ? (
+            <FormularioNacimiento
+              estado={estado}
+              editando={editando}
+              onCancelar={hayCarta ? () => setEditando(false) : undefined}
+              onEnviado={(e) => { void alEnviar(e); }}
+            />
+          ) : (
+            <>
+            {/* Fuera de las cajas: blanco y sin sombra. */}
+            <Reveal direction="up" distance={18} delay={0.15} duration={0.7} w="100%">
+              <Text color="white" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center" fontStyle="italic">
+                {t("metodo.astro.intro.cartaTexto", { nombre })}
+              </Text>
+            </Reveal>
+
+            {/* La carta, en su caja estrellada, TAN ANCHA como el header. Entrada SOLO de opacidad:
+                el <Canvas> mide su contenedor una vez al montar, y con un transform en marcha
+                mediría una caja escalada (ver la página de Arquetipos). */}
+            <Reveal
+              inView
+              amount={0.15}
+              direction="none"
+              duration={0.9}
+              position="relative"
+              w="100%"
+              borderRadius="2xl"
+              overflow="hidden"
+              boxShadow={`0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${astrologiaTxt}1a, 0 0 48px ${astrologiaTxt}10`}
+            >
+              <SpaceBg overlay="rgba(8,13,30,0.28)" />
+              <Flex ref={setCajaCarta} position="relative" zIndex={1} direction="column" align="center" px={{ base: 5, md: 12 }} py={{ base: 10, md: 14 }}>
+                {cartaVisible ? (
+                  <CartaAstral3D color={astrologiaTxt} {...(carta ? { carta } : {})} soloVista />
+                ) : (
+                  // Mismo tamaño que la rueda (cuadrado) para que la página no salte al montarla.
+                  <Box w={{ base: "100%", md: "90%" }} maxW="612px" sx={{ aspectRatio: "1 / 1" }} />
+                )}
+              </Flex>
+            </Reveal>
+
+            <Reveal direction="up" distance={18} delay={0.3} duration={0.7} w="100%">
+              <Text color="white" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center">
+                {t("metodo.astro.intro.apuntes1")}
+                <br />
+                {t("metodo.astro.intro.apuntes2")}
+              </Text>
+            </Reveal>
+
+              {/* Los datos con los que se calculó, y la puerta para corregirlos. */}
+              {!mariaMirando && (
+                <Reveal direction="up" distance={14} delay={0.4} duration={0.6} w="100%" display="flex" justifyContent="center">
+                  <Box as="button" onClick={() => setEditando(true)} px={4} py={1.5} borderRadius="full"
+                       bg="rgba(255,255,255,0.14)" color="white" fontFamily="'EB Garamond', serif" fontSize="sm"
+                       fontWeight="600" letterSpacing="0.04em" cursor="pointer" boxShadow="0 0 16px rgba(255,255,255,0.25)"
+                       transition="all 0.2s" _hover={{ bg: "rgba(255,255,255,0.26)" }} _focusVisible={focoBlanco}>
+                    {t("metodo.astro.cambiar")}
+                  </Box>
+                </Reveal>
+              )}
+            </>
+          )}
+        </Flex>
+      </Flex>
+
+      <IndiceAstrologia />
+      <SiteFooter />
+    </Box>
+  );
+}

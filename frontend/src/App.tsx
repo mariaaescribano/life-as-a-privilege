@@ -112,7 +112,12 @@ const MetodoAstrologiaLectura = lazyConMetodo(() => import("./app/metodo/MetodoA
 const MetodoAstrologiaCasas = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaCasas"));
 const MetodoAstrologiaAspectos = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaAspectos"));
 const MetodoAstrologiaPdf = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaPdf"));
-const MetodoAstrologiaLlamada = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaLlamada"));
+const MetodoAstrologiaIntroduccion = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaIntroduccion"));
+const MetodoAstrologiaHistoria = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaHistoria"));
+const MetodoAstrologiaExplicacion = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaExplicacion"));
+const MetodoAstrologiaTrio = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaTrio"));
+const MetodoAstrologiaApuntes = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaApuntes"));
+const MetodoAstrologiaSintesis = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaSintesis"));
 const MetodoAstrologiaCursos = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaCursos"));
 const AdminHome = lazy(() => import("./app/admin/AdminHome"));
 const AdminInicio = lazy(() => import("./app/admin/AdminInicio"));
@@ -467,7 +472,12 @@ export default function App()
       <Route path="/metodo/astrologia/casas" element={<PrivateRoute><MetodoAstrologiaCasas /></PrivateRoute>} />
       <Route path="/metodo/astrologia/aspectos" element={<PrivateRoute><MetodoAstrologiaAspectos /></PrivateRoute>} />
       <Route path="/metodo/astrologia/pdf" element={<PrivateRoute><MetodoAstrologiaPdf /></PrivateRoute>} />
-      <Route path="/metodo/astrologia/llamada" element={<PrivateRoute><MetodoAstrologiaLlamada /></PrivateRoute>} />
+      <Route path="/metodo/astrologia/introduccion" element={<PrivateRoute><MetodoAstrologiaIntroduccion /></PrivateRoute>} />
+      <Route path="/metodo/astrologia/historia" element={<PrivateRoute><MetodoAstrologiaHistoria /></PrivateRoute>} />
+      <Route path="/metodo/astrologia/explicacion" element={<PrivateRoute><MetodoAstrologiaExplicacion /></PrivateRoute>} />
+      <Route path="/metodo/astrologia/trio" element={<PrivateRoute><MetodoAstrologiaTrio /></PrivateRoute>} />
+      <Route path="/metodo/astrologia/apuntes" element={<PrivateRoute><MetodoAstrologiaApuntes /></PrivateRoute>} />
+      <Route path="/metodo/astrologia/sintesis" element={<PrivateRoute><MetodoAstrologiaSintesis /></PrivateRoute>} />
       <Route path="/metodo/astrologia/cursos" element={<PrivateRoute><MetodoAstrologiaCursos /></PrivateRoute>} />
       <Route path="/metodo/astrologia/:planetaKey/:campo" element={<PrivateRoute><MetodoAstrologiaProfundizar /></PrivateRoute>} />
       <Route path="/admin/login" element={<AdminLogin />} />

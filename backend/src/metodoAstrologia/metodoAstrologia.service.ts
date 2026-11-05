@@ -361,7 +361,7 @@ export class MetodoAstrologiaService {
     return { latitud, longitud, timezone, carta_natal_json };
   }
 
-  async solicitarCarta(userId: string, datos: SolicitudCarta): Promise<{ success: boolean }> {
+  async solicitarCarta(userId: string, datos: SolicitudCarta): Promise<{ success: boolean; cartaCalculada?: boolean }> {
     const user = await this.userService.getUserById(userId).catch(() => null);
     if (!user) throw new NotFoundException('Usuario no encontrado');
 
@@ -413,7 +413,8 @@ export class MetodoAstrologiaService {
     await this.mailService.enviarSolicitudCarta(user.email, user.name, datos, esCorreccion);
     await this.mailService.enviarCartaRegistrada(user.email, user.name, datos, esCorreccion);
 
-    return { success: true };
+    // `cartaCalculada` false = no se encontró el lugar: la página no puede pintar la carta.
+    return { success: true, cartaCalculada: !!carta_natal_json };
   }
 
   // --------- ADMIN: corregir los datos de nacimiento ---------

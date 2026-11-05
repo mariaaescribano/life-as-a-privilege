@@ -20,7 +20,6 @@ import { RecorridoLoading } from "../../components/metodo/RecorridoLoading";
 import { MetodoStepHeader, glowHeaderDisciplina } from "../../components/metodo/MetodoStepHeader";
 import { SpaceBg, SPACE_IMG } from "../../components/metodo/SpaceBg";
 import { useImagesReady } from "../../hooks/useImagesReady";
-import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
 import { Reveal, Breathe } from "../../components/global/Reveal";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import type { CartaNatal } from "../../components/metodo/CartaAstral3D/types";
@@ -70,7 +69,6 @@ export default function MetodoAstrologiaPdf() {
   const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [comicOpen, setComicOpen] = useState(false);
   const [carta, setCarta] = useState<CartaNatal | null>(null);
   const [row, setRow] = useState<Row | null>(null);
   const [generando, setGenerando] = useState(false);
@@ -184,11 +182,10 @@ export default function MetodoAstrologiaPdf() {
               bgColor={`${astrologiaBg}dd`}
               color={astrologiaTxt}
               space
-              step={{ current: 6, total: 8 }}
+              step={{ current: 9, total: 12 }}
               mb={0}
               prev={{ label: `← ${t("metodo.astro.paso.aspectos")}`, onClick: () => navigate("/metodo/astrologia/aspectos") }}
-              extra={{ label: t("metodo.ilustraciones"), onClick: () => setComicOpen(true)}}
-              next={{ label: `${t("metodo.astro.paso.llamada")} →`, onClick: () => navigate("/metodo/astrologia/llamada") }}
+              next={{ label: `${t("metodo.astro.paso.apuntes")} →`, onClick: () => navigate("/metodo/astrologia/apuntes") }}
             />
           </Reveal>
 
@@ -279,7 +276,6 @@ export default function MetodoAstrologiaPdf() {
       <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom}
                      llamadaTitulo={t("metodo.astro.reservaLlamada")} />
       <IndiceAstrologia />
-      <ComicAstrologiaModal isOpen={comicOpen} onClose={() => setComicOpen(false)} />
       <SiteFooter />
     </Box>
   );

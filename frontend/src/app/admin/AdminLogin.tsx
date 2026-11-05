@@ -93,10 +93,6 @@ export default function AdminLogin() {
 
           <Box w="70%" h="1px" bgGradient="linear(to-r, transparent, rgba(255,255,255,0.6), transparent)" />
 
-          <Text color="rgba(255,255,255,0.82)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.7" fontStyle="italic">
-            Introduce la contraseña de administración para entrar al panel.
-          </Text>
-
           <Box w="100%">
             <Input
               value={name}

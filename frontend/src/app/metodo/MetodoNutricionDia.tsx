@@ -443,8 +443,7 @@ export default function MetodoNutricionDia() {
             <MetodoStepHeader
               icon={<NutricionIcon size={{ base: "40px", md: "56px" }} />}
               title={t("metodo.nutri.paso.dia")}
-              // Header NORMAL, como el resto de Nutrición: sin `dense`/`compact`
-              // (que lo dejaban bajito y con el título pequeño) y con el ancho
+              // Mismo header que el resto (ahora `dense` por defecto) y con el ancho
               // por defecto (850px), no estirado a los 1200 del contenido.
               bgColor={`${nutricionBg}dd`}
               color={nutricionTxt}

@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import * as Astronomy from 'astronomy-engine';
 import { DateTime } from 'luxon';
 import { find as findTimezone } from 'geo-tz';
+import { CHIRON_EPH } from './chironEph';
 import type {
   Aspecto,
   CartaNatal,
@@ -241,8 +242,9 @@ export class CartaNatalService {
 
     // 6.b) Quirón (Chiron, 95P / 2060) — astronomy-engine no lo incluye, lo calculamos
     //      por propagación Kepleriana de los elementos orbitales en J2000.
-    //      Precisión típica ~1-2° respecto a Swiss Ephemeris para fechas cercanas a 2000.
-    const quironLon = chironGeoLongitude(utc);
+    //      Con la tabla de JPL Horizons (chironEph.ts) el error es < 0,01°; fuera de 1900-2060
+    //      cae al cálculo Kepleriano (~1° de error).
+    const quironLon = chironLongitud(utc);
     planetas.push({
       planeta: 'quiron',
       grado: quironLon,
@@ -333,6 +335,40 @@ function meanLilith(date: Date): number {
 
   // Perigeo medio = Lp − Mp; apogeo (Lilith) = perigeo + 180°
   return norm360(Lp - Mp + 180);
+}
+
+
+/* Días UTC (desde 1970) de cada fila de la tabla de Quirón, calculados una vez. */
+const CHIRON_DIAS: number[] = (() => {
+  const d = [CHIRON_EPH.d0];
+  for (const g of CHIRON_EPH.gaps) d.push(d[d.length - 1] + g);
+  return d;
+})();
+
+/** Longitud de Quirón (0-360) por interpolación Hermite cúbica de la tabla de Horizons.
+ *  Fuera del rango de la tabla (1900-2060) usa la aproximación Kepleriana. */
+function chironLongitud(date: Date): number {
+  const t = date.getTime() / 86400000;
+  const n = CHIRON_DIAS.length;
+  if (t < CHIRON_DIAS[0] || t > CHIRON_DIAS[n - 1]) return chironGeoLongitude(date);
+  // Búsqueda binaria del tramo [i, i+1] que contiene t.
+  let lo = 0, hi = n - 1;
+  while (hi - lo > 1) {
+    const mid = (lo + hi) >> 1;
+    if (CHIRON_DIAS[mid] <= t) lo = mid; else hi = mid;
+  }
+  const L = CHIRON_EPH.lon;
+  const pendiente = (k: number): number => {
+    const a = Math.max(k - 1, 0), b = Math.min(k + 1, n - 1);
+    return (L[b] - L[a]) / (CHIRON_DIAS[b] - CHIRON_DIAS[a]);
+  };
+  const h = CHIRON_DIAS[hi] - CHIRON_DIAS[lo];
+  const u = (t - CHIRON_DIAS[lo]) / h;
+  const u2 = u * u, u3 = u2 * u;
+  const lon =
+    (2 * u3 - 3 * u2 + 1) * L[lo] + (u3 - 2 * u2 + u) * h * pendiente(lo) +
+    (-2 * u3 + 3 * u2) * L[hi] + (u3 - u2) * h * pendiente(hi);
+  return norm360(lon);
 }
 
 /** Longitud eclíptica geocéntrica de Quirón (2060 Chiron), grados.

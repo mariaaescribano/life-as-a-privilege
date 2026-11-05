@@ -90,7 +90,7 @@ corrige este documento):
 ```
 
 - **Footer anclado abajo:** `minH 100vh` + columna flex + contenido `flex=1`.
-- **Esquinas fijas ocupadas:** abajo-izq «Índice / Mis notas», abajo-dcha «Agenda una llamada».
+- **Esquinas fijas ocupadas:** abajo-izq «Índice / Notas», abajo-dcha «Agenda una llamada».
   No añadir un tercer botón fijo encima. El botón de fin de página va dentro del contenido.
 - **Mientras carga:** el `*Loading` de la propia disciplina (`comicLoaders.tsx`, `RecorridoLoading`).
   Spinner blanco sobre turquesa, sin velo oscuro. Fuera del mapa: `LifeLoading`.
@@ -367,13 +367,14 @@ Cuando haya duda, **la página hermana de la misma disciplina manda**.
 
 ### 12.0 El mapa de una persona en /home (`MapaDePersona`, solo María)
 
-Una caja por disciplina, **copiada de las de «Tu camino»** (`CaminoUsuario`): fondo = su color,
-la foto de la disciplina dentro (`DisciplinaBgLayer`, velo `rgba(8,13,30,0.22)` solo en las
-oscuras, ninguno en las claras), marco de 2px `<disc>Txt`, halo suave del acento, icono a la
-izquierda, textos con `<disc>Txt` + `sombraTexto()` (sin sombra en las claras). Los botones
-(Abrir/Cerrar, − / +) son píldoras con marco `<disc>Txt` y fondo `<disc>Bg` al 85%. Cerrada = la
-caja al 70% de opacidad (nunca un velo oscuro). Barra de avance = la de «Tu camino» (`Barra`).
-Entrada con `Reveal inView` por caja; el título, fuera de las cajas: blanco y sin sombra.
+Un **desplegable** (empieza plegado, como «Tu camino»; botón blanco con la punta de flecha) con una
+caja por disciplina, **copiada de las de «Tu camino»** (`CaminoUsuario`): fondo = su color, la foto de
+la disciplina dentro (`DisciplinaBgLayer`, velo `rgba(8,13,30,0.22)` solo en las oscuras, ninguno en las
+claras), marco de 2px `<disc>Txt`, halo suave del acento, icono a la izquierda, textos con `<disc>Txt` +
+`sombraTexto()` (sin sombra en las claras). UN solo botón por caja: Abrir/Cerrar la disciplina (píldora con
+marco `<disc>Txt` y fondo `<disc>Bg` al 85%). Los pasos NO se tocan aquí, sino dentro de `/camino/<slug>`.
+Cerrada = la caja al 70% de opacidad (nunca un velo oscuro). Cascada de entrada al desplegar; el título,
+fuera de las cajas: blanco y sin sombra.
 
 ### 12.1 El camino de una disciplina (`CaminoVista`)
 
@@ -415,3 +416,31 @@ Cada página de dentro de una disciplina es una **cajita con la foto y el color 
 - Spinners: borrado el antiguo; cada disciplina usa su `*Loading`.
 - Dev server propio siempre con `--port 5199`.
 - Los PDFs salen de `utils/pdf/`; la EB Garamond del PDF no trae ✓, → ni hebreo.
+
+**Fondo del camino (2026-11-05):** se probó la foto de Astrología de fondo con cajitas transparentes y se
+DESCARTÓ: la página sigue turquesa y la foto va DENTRO de cada cajita (regla de la casa). Sin la pastilla
+«Abierto hasta el paso X de N» de María (la línea de evolución basta; los «Abrir hasta aquí» de cada caja
+cerrada se quedan) ni botón «Volver». **Flechas:** el `transform` de una flecha NUNCA puede acabar en
+`translate(...) none` (CSS inválido: el navegador ignora todo y la flecha se desplaza media flecha hacia la
+caja siguiente); el ancho de las cajas se calcula (`anchoCaja`) para que cajas + flechas sumen el 100 %.
+
+**Header único, el bajito (2026-11-05):** `MetodoStepHeader` es `dense` por defecto en TODAS las páginas
+(el más bajo, el que María prefiere); no pasar `dense` a mano. Cajitas del camino: sin borde y con el
+círculo del número transparente (solo su aro).
+
+**Headers con DOS botones (2026-11-05):** todo `MetodoStepHeader` bajo `/metodo/<disciplina>` lleva siempre un
+botón a la izquierda y otro a la derecha; si la página no pone el suyo (primera/última del recorrido), el que
+falta lleva al camino de la disciplina («← Camino» / «Camino →»). La casilla inicial del camino dice EMPEZAR
+(START en inglés). El botón flotante «Índice» ya no se enseña (`MOSTRAR_BOTON` en `IndiceRecorrido.tsx`), pero
+el componente sigue montado: es quien apunta por dónde va la persona y alimenta la barra de avance.
+
+**Quietas (2026-11-05):** las cajitas del camino NO se mueven ni respiran: sin `Breathe` en el paso actual
+y sin levantarse al pasar el ratón (solo cambia el halo/borde). El header del camino no lleva «← Home»: se
+vuelve pinchando el icono del header.
+
+**Entrada y cabecera (2026-11-05):** dentro de la sesión, pulsar una disciplina abierta de `/home` lleva
+DIRECTO a `/camino/<slug>` (se quitó la portada intermedia de Ilustraciones · Cursos · El Recorrido para
+quien ya ha entrado). Arriba el header de la casa (icono + nombre con la foto de la disciplina) y
+bajo él la barra de avance (`BarraAvance`: se llena con muelle, un brillo la recorre, el % cuenta con
+`Contador`); misma medida que «Tu camino». Astrología (`conInicio`) abre el camino con una casilla **START** (punta de «play» en
+vez de número) que lleva al primer paso.

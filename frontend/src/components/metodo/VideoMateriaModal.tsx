@@ -35,7 +35,7 @@ export function marcarVideoVisto(clave: string) {
 
 /** El popup en sí, para cualquier reel de YouTube (`url` = enlace o ID).
  *  `onEnded` avisa cuando el vídeo llega al final. */
-export function ReelInmersivo({ url, onClose, onEnded }: { url: string; onClose: () => void; onEnded?: () => void }) {
+export function ReelInmersivo({ url, onClose, onEnded, fondo = FONDO }: { url: string; onClose: () => void; onEnded?: () => void; /** Foto de fondo (por defecto la de Fisiología). */ fondo?: string }) {
   const { idioma } = useIdioma();
   const id = youtubeId(url);
   const iframe = useRef<HTMLIFrameElement>(null);
@@ -80,7 +80,7 @@ export function ReelInmersivo({ url, onClose, onEnded }: { url: string; onClose:
       onClick={onClose}
     >
       <Box position="absolute" inset={0} overflow="hidden" pointerEvents="none">
-        <Box as="img" src={FONDO} alt="" loading="eager" position="absolute" inset={0} w="100%" h="100%"
+        <Box as="img" src={fondo} alt="" loading="eager" position="absolute" inset={0} w="100%" h="100%"
              style={{ objectFit: "cover", objectPosition: "center" }} />
       </Box>
 

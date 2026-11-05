@@ -239,10 +239,24 @@ export function CreaTusApuntes({
           {libro.capitulos.map((c, ci) => {
             const marcado = seleccion.includes(c.key);
             const bloqueado = !!c.bloqueado;
+            // Libros con grupos (Astrología): un encabezado al empezar cada grupo.
+            const empiezaGrupo = !!c.grupo && c.grupo !== libro.capitulos[ci - 1]?.grupo;
             return (
-              // Un Reveal POR FILA (no un stagger de toda la lista, que es
-              // larga): cada capítulo entra al asomar, con un pequeño escalón.
-              <Reveal key={c.key} inView direction="up" distance={14} duration={0.5}
+              <React.Fragment key={c.key}>
+              {empiezaGrupo && (
+                <Reveal inView direction="up" distance={12} duration={0.5} amount={0.5} w="100%">
+                  <Flex align="center" gap={3} mt={ci === 0 ? 0 : 5} mb={1}>
+                    <Text color={txt} fontSize={{ base: "md", md: "lg" }} fontWeight={700} letterSpacing="0.14em"
+                          textTransform="uppercase">
+                      {c.grupo}
+                    </Text>
+                    <Box flex="1" h="1px" bg={`${txt}55`} />
+                  </Flex>
+                </Reveal>
+              )}
+              {/* Un Reveal POR FILA (no un stagger de toda la lista, que es
+                  larga): cada capítulo entra al asomar, con un pequeño escalón. */}
+              <Reveal inView direction="up" distance={14} duration={0.5}
                       amount={0.3} delay={(ci % 4) * 0.05} w="100%">
               <Flex
                 as={bloqueado ? "div" : "button"}
@@ -302,6 +316,7 @@ export function CreaTusApuntes({
                 )}
               </Flex>
               </Reveal>
+              </React.Fragment>
             );
           })}
         </Flex>

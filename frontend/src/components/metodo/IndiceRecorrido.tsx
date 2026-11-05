@@ -249,9 +249,15 @@ export function IndiceRecorrido({
     ? grupos.reduce((a, s) => a + s.pasos.length, 0)
     : total;
 
+  // El botón «Índice» ya no se enseña (el camino de la disciplina lo sustituye), pero este
+  // componente SIGUE montado en cada página: es quien apunta por dónde va la persona
+  // (el efecto de arriba, que alimenta la barra de avance). Para volver a verlo: true.
+  const MOSTRAR_BOTON = false;
+
   return (
     <>
       {/* Botón flotante (abajo a la izquierda, sobre «Mis notas») */}
+      {MOSTRAR_BOTON && (
       <Flex
         as="button"
         onClick={() => { setOpen(true); onOpen?.(); }}
@@ -284,6 +290,7 @@ export function IndiceRecorrido({
           {t("metodo.indice")}
         </Text>
       </Flex>
+      )}
 
       {/* Popup con el índice */}
       {open && (

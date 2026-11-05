@@ -1,53 +1,30 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // EL MAPA DE ESTA PERSONA · solo María, en el /home del camino de esa persona.
 //
-// Aquí se ve y se decide TODO lo del mapa de una persona: qué disciplinas tiene
-// abiertas y hasta qué paso llega en cada una. La persona no ve nada de esto; solo
-// ve lo que María abre. Lo propio de cada disciplina (escribir la carta astral, por
-// ejemplo) se sigue haciendo dentro de ella.
-//
-//   · Abrir / cerrar la disciplina → POST /user/admin/acceso
-//   · Subir / bajar los pasos      → POST /recorrido-progreso/admin/:userId/:disciplina
-//     (usePasoMax con `userId`). Es el mismo techo en las OCHO disciplinas.
+// Un desplegable (empieza plegado, como «Tu camino») con las ocho disciplinas y,
+// en cada una, UN botón: abrirla o cerrarla (POST /user/admin/acceso). Los pasos
+// de cada disciplina NO se tocan aquí: se abren dentro de su camino
+// (/camino/<slug>). La persona no ve nada de esto; solo ve lo que María abre.
 // ─────────────────────────────────────────────────────────────────────────────
 import React, { useState } from "react";
 import axios from "axios";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { API_URL } from "../../GlobalVariables";
 import { focoBlanco } from "../../components/global/foco";
-import { usePasoMax } from "../../hooks/usePasoMax";
 import { DISCIPLINAS_CAMINO, type CaminoKey } from "../../data/camino";
-import { CARA, Barra } from "./CaminoUsuario";
+import { CARA } from "./CaminoUsuario";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
 import { sombraTexto } from "../../components/global/disciplinaSombras";
 import { Reveal } from "../../components/global/Reveal";
 import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
-import { astrologiaIndice } from "../../components/metodo/astrologiaRecorrido";
-import { psicologiaIndice } from "../../components/metodo/psicologiaRecorrido";
-import { fisiologiaNiveles } from "../../components/metodo/fisiologiaRecorrido";
-import { nutricionIndice } from "../../components/metodo/nutricionRecorrido";
-import { tcmIndice } from "../../components/metodo/tcmRecorrido";
-import { ayurvedaDoshaIndice } from "../../components/metodo/ayurvedaRecorrido";
-import { CABALA_TOTAL } from "../../components/metodo/useCabalaIndice";
-import { HISTORIAS_CULTURA } from "../../components/metodo/culturaHistorias";
 
-/** Cuántos pasos tiene el techo de cada disciplina (en ayurveda, el submapa del doṣha). */
-const totalDe = (k: CaminoKey): number => {
-  switch (k) {
-    case "metodo": return astrologiaIndice().length;
-    case "psicologia": return psicologiaIndice().length;
-    case "fisiologia": return fisiologiaNiveles().reduce((a, g) => a + g.pasos.length, 0);
-    case "nutricion": return nutricionIndice().length;
-    case "tcm": return tcmIndice().length;
-    case "ayurveda": return ayurvedaDoshaIndice().length;
-    case "cabala": return CABALA_TOTAL;
-    case "cultura": return Object.keys(HISTORIAS_CULTURA).length;
-  }
-};
+// Si lo ha abierto, sigue abierto al volver a /home dentro de la misma sesión (en
+// una visita nueva vuelve a empezar plegado). Mismo criterio que «Tu camino».
+let desplegadoCache = false;
 
 /** Botón de píldora con los colores de SU disciplina (letra Txt, marco Txt, halo). */
-const Pildora = ({ children, onClick, desactivado, titulo, ancho, cara }: {
-  children: React.ReactNode; onClick?: () => void; desactivado?: boolean; titulo?: string; ancho?: string;
+const Pildora = ({ children, onClick, desactivado, titulo, cara }: {
+  children: React.ReactNode; onClick?: () => void; desactivado?: boolean; titulo?: string;
   cara: (typeof CARA)[CaminoKey];
 }) => (
   <Box
@@ -57,9 +34,9 @@ const Pildora = ({ children, onClick, desactivado, titulo, ancho, cara }: {
     disabled={desactivado}
     title={titulo}
     aria-label={titulo}
-    minW={ancho ?? "32px"}
+    minW="82px"
     h="32px"
-    px={ancho ? 4 : 0}
+    px={4}
     borderRadius="full"
     border={`1.5px solid ${cara.txt}`}
     bg={`${cara.bg}d9`}
@@ -80,28 +57,15 @@ const Pildora = ({ children, onClick, desactivado, titulo, ancho, cara }: {
   </Box>
 );
 
-function Fila({ clave, personaId, abierta, ocupada, onAbrirCerrar }: {
-  clave: CaminoKey; personaId: string; abierta: boolean; ocupada: boolean; onAbrirCerrar: () => void;
+function Fila({ clave, abierta, ocupada, onAbrirCerrar }: {
+  clave: CaminoKey; abierta: boolean; ocupada: boolean; onAbrirCerrar: () => void;
 }) {
   const cara = CARA[clave];
   const nombreDisciplina = useNombreDisciplina();
-  const total = totalDe(clave);
-  const { pasoMax, cargado, fijar } = usePasoMax(clave, personaId);
-  const [guardando, setGuardando] = useState(false);
-  const [error, setError] = useState(false);
   const Icon = cara.Icon;
   // Sobre acuarela clara (psicología, nutrición, ayurveda) la tinta se lee sola;
   // sobre las oscuras, la sombra de la casa.
   const sombra = cara.clara ? "none" : sombraTexto(cara.nom, cara.bg);
-  const abiertos = Math.min(pasoMax, total);
-
-  const mover = async (nuevo: number) => {
-    if (!fijar || guardando || nuevo < 1 || nuevo > total) return;
-    setGuardando(true);
-    setError(false);
-    try { await fijar(nuevo); } catch { setError(true); }
-    setGuardando(false);
-  };
 
   return (
     <Box
@@ -130,12 +94,11 @@ function Fila({ clave, personaId, abierta, ocupada, onAbrirCerrar }: {
             {nombreDisciplina(cara.nom, true)}
           </Text>
           <Text color={cara.txt} opacity={0.88} fontSize="xs" noOfLines={1} textShadow={sombra}>
-            {!abierta ? "Cerrada" : cargado ? `Pasos abiertos: ${abiertos} de ${total}` : "…"}
+            {abierta ? "Abierta" : "Cerrada"}
           </Text>
         </Box>
         <Pildora
           cara={cara}
-          ancho="82px"
           desactivado={ocupada}
           onClick={onAbrirCerrar}
           titulo={abierta ? "Cerrar la disciplina" : "Abrir la disciplina"}
@@ -143,24 +106,6 @@ function Fila({ clave, personaId, abierta, ocupada, onAbrirCerrar }: {
           {abierta ? "Cerrar" : "Abrir"}
         </Pildora>
       </Flex>
-
-      {abierta && (
-        <Flex position="relative" zIndex={1} align="center" gap={3} mt={3}>
-          <Box flex="1" minW={0}>
-            <Barra pct={cargado ? (abiertos / total) * 100 : 0} color={cara.txt}
-                   pista={cara.clara ? `${cara.txt}2b` : "rgba(255,255,255,0.24)"} />
-          </Box>
-          <Flex gap={2} flexShrink={0}>
-            <Pildora cara={cara} desactivado={!cargado || guardando || pasoMax <= 1} onClick={() => void mover(pasoMax - 1)} titulo="Cerrar el último paso abierto">−</Pildora>
-            <Pildora cara={cara} desactivado={!cargado || guardando || pasoMax >= total} onClick={() => void mover(pasoMax + 1)} titulo="Abrir el siguiente paso">+</Pildora>
-          </Flex>
-        </Flex>
-      )}
-      {error && (
-        <Text position="relative" zIndex={1} color={cara.txt} fontSize="xs" fontStyle="italic" mt={1.5} textShadow={sombra}>
-          No se pudo guardar. Inténtalo de nuevo.
-        </Text>
-      )}
     </Box>
   );
 }
@@ -170,8 +115,11 @@ export default function MapaDePersona({ personaId, nombre, suscritas }: {
   nombre: string;
   suscritas: Partial<Record<CaminoKey, boolean | null>>;
 }) {
+  const [desplegado, setDesplegado] = useState(desplegadoCache);
   const [ocupada, setOcupada] = useState(false);
   const [error, setError] = useState(false);
+
+  const alternar = () => setDesplegado((d) => { desplegadoCache = !d; return !d; });
 
   const abrirCerrar = async (clave: CaminoKey, abierta: boolean) => {
     if (ocupada) return;
@@ -188,25 +136,75 @@ export default function MapaDePersona({ personaId, nombre, suscritas }: {
   };
 
   return (
-    <Flex direction="column" gap={3} w="100%" maxW="332px">
-      {/* Texto fuera de las cajas: blanco y sin sombra */}
+    <Flex direction="column" w="100%" maxW="332px">
+      {/* El botón que despliega: texto fuera de las cajas, blanco y sin sombra. */}
       <Reveal direction="right" distance={20}>
-        <Text color="white" fontWeight="700" fontSize="sm" letterSpacing="0.14em" textTransform="uppercase">
-          Mapa de {nombre}
-        </Text>
-      </Reveal>
-      {DISCIPLINAS_CAMINO.map((k, i) => (
-        <Reveal key={k} inView amount={0.15} direction="right" distance={24} delay={0.1 + i * 0.07}>
-          <Fila
-            clave={k}
-            personaId={personaId}
-            abierta={suscritas[k] === true}
-            ocupada={ocupada}
-            onAbrirCerrar={() => void abrirCerrar(k, suscritas[k] === true)}
+        <Flex
+          as="button"
+          type="button"
+          onClick={alternar}
+          aria-expanded={desplegado}
+          align="center"
+          justify="space-between"
+          gap={3}
+          w="100%"
+          px={4}
+          py={3}
+          borderRadius="lg"
+          bg="rgba(255,255,255,0.08)"
+          border="1px solid rgba(255,255,255,0.22)"
+          cursor="pointer"
+          transition="background 0.2s ease, border-color 0.2s ease"
+          _hover={{ bg: "rgba(255,255,255,0.12)", borderColor: "rgba(255,255,255,0.38)" }}
+          _focusVisible={focoBlanco}
+        >
+          <Text color="white" fontSize="sm" fontWeight="700" letterSpacing="0.14em" textTransform="uppercase" textAlign="left" noOfLines={1}>
+            Mapa de {nombre}
+          </Text>
+          {/* la punta de flecha: apunta abajo plegado, arriba desplegado */}
+          <Box
+            as="span"
+            flexShrink={0}
+            w="8px"
+            h="8px"
+            borderRight="2px solid rgba(255,255,255,0.8)"
+            borderBottom="2px solid rgba(255,255,255,0.8)"
+            transform={desplegado ? "rotate(-135deg) translate(-2px, -2px)" : "rotate(45deg)"}
+            transition="transform 0.3s cubic-bezier(0.22, 1, 0.36, 1)"
           />
-        </Reveal>
-      ))}
-      {error && <Text color="#ffe7bd" fontSize="sm" fontStyle="italic">No se pudo guardar. Inténtalo de nuevo.</Text>}
+        </Flex>
+      </Reveal>
+
+      {/* Las cajas aparecen al desplegar. El alto se anima con grid-template-rows
+          (de 0fr a 1fr): dura lo mismo con ocho cajas y nunca corta el contenido. */}
+      <Box
+        display="grid"
+        gridTemplateRows={desplegado ? "1fr" : "0fr"}
+        transition="grid-template-rows 0.45s cubic-bezier(0.22, 1, 0.36, 1)"
+      >
+        <Box overflow="hidden" minH="0">
+          <Flex direction="column" gap={2.5} pt={desplegado ? 3 : 0} transition="padding-top 0.45s ease">
+            {DISCIPLINAS_CAMINO.map((k, i) => (
+              <Box
+                key={k}
+                // La cascada: al desplegar, cada caja entra después de la anterior.
+                opacity={desplegado ? 1 : 0}
+                transform={desplegado ? "translate(0, 0)" : "translate(-18px, -10px) scale(0.94)"}
+                transition={`opacity 0.5s cubic-bezier(0.22,1,0.36,1) ${desplegado ? 0.1 + i * 0.07 : 0}s, transform 0.65s cubic-bezier(0.22,1,0.36,1) ${desplegado ? 0.1 + i * 0.07 : 0}s`}
+                sx={{ "@media (prefers-reduced-motion: reduce)": { transition: "none !important" } }}
+              >
+                <Fila
+                  clave={k}
+                  abierta={suscritas[k] === true}
+                  ocupada={ocupada}
+                  onAbrirCerrar={() => void abrirCerrar(k, suscritas[k] === true)}
+                />
+              </Box>
+            ))}
+            {error && <Text color="#ffe7bd" fontSize="sm" fontStyle="italic">No se pudo guardar. Inténtalo de nuevo.</Text>}
+          </Flex>
+        </Box>
+      </Box>
     </Flex>
   );
 }

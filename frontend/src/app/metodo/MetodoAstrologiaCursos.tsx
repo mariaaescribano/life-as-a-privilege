@@ -11,7 +11,6 @@ import { CursoCardDetalle } from "../../components/aprendizaje/CursoCardDetalle"
 import { CursosGrid } from "../../components/aprendizaje/CursosGrid";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { PagoPsicologiaModal } from "../../components/metodo/PagoPsicologiaModal";
-import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
 import { useCursosData } from "../../data/cursosApi";
@@ -39,7 +38,6 @@ export default function MetodoAstrologiaCursos() {
   const t = useT();
   const navigate = useNavigate();
   const { cursosData, loading } = useCursosData();
-  const [comicOpen, setComicOpen] = useState(false);
   // null = aún no se sabe (ver MetodoAyurvedaDoshaCursos): nunca se confunde
   // «todavía no ha contestado el servidor» con «no lo ha pagado».
   const [psicologiaSuscrito, setPsicologiaSuscrito] = useState<boolean | null>(null);
@@ -110,10 +108,9 @@ export default function MetodoAstrologiaCursos() {
               bgColor={`${astrologiaBg}dd`}
               color={astrologiaTxt}
               space
-              step={{ current: 8, total: 8 }}
+              step={{ current: 12, total: 12 }}
               mb={0}
-              prev={{ label: `← ${t("metodo.astro.paso.llamada")}`, onClick: () => navigate("/metodo/astrologia/llamada") }}
-              extra={{ label: t("metodo.ilustraciones"), onClick: () => setComicOpen(true)}}
+              prev={{ label: `← ${t("metodo.astro.paso.sintesis")}`, onClick: () => navigate("/metodo/astrologia/sintesis") }}
               next={{
                 label: `${t("disciplina.psicologia")} →`,
                 onClick: onPsicologia,
@@ -218,7 +215,6 @@ export default function MetodoAstrologiaCursos() {
         </Flex>
       </Flex>
 
-      <ComicAstrologiaModal isOpen={comicOpen} onClose={() => setComicOpen(false)} />
 
       <PagoPsicologiaModal
         isOpen={pagoPsicoOpen}

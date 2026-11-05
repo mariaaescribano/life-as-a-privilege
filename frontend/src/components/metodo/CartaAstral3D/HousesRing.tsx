@@ -1,6 +1,7 @@
 import React, { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
+import { gradoAVisualRad } from "./types";
 void React;
 
 // Entrada: el anillo de casas SOLO se funde (no rota). Contiene los ejes
@@ -13,15 +14,15 @@ const H_DELAY = 0.2;
 interface HousesRingProps {
   innerRadius: number;
   outerRadius: number;
+  /** Las 12 cúspides reales (longitud eclíptica): las casas miden lo que miden. */
+  cusps: number[];
 }
 
 /**
- * Render Placidus: las 12 cúspides ocupan posiciones fijas en la carta, cada
- * una a 30° de ángulo (sumando 360°). La cúspide 1 está a la izquierda (math
- * angle π), la 4 abajo, la 7 a la derecha, la 10 arriba. Las cúspides
- * intermedias dividen cada cuadrante en 3 tercios iguales.
+ * Las 12 cúspides van en su grado real (gradoAVisualRad): la 1 (Ascendente) a la izquierda y
+ * la 7 a la derecha; la 4 y la 10 donde caigan, igual que en cualquier carta natal.
  */
-function buildTexture(): THREE.CanvasTexture {
+function buildTexture(cusps: number[]): THREE.CanvasTexture {
   const size = 2048;
   const canvas = document.createElement("canvas");
   canvas.width = size;
@@ -44,10 +45,10 @@ function buildTexture(): THREE.CanvasTexture {
   ctx.arc(cx, cy, innerR, 0, Math.PI * 2);
   ctx.stroke();
 
-  // 12 cúspides a ángulos fijos (cada 30°). Convención math angle:
-  //  cusp 1 → π (izquierda), cusp 4 → 3π/2 (abajo), cusp 7 → 0 (derecha), cusp 10 → π/2 (arriba)
+  const ang = cusps.map((c) => gradoAVisualRad(c, cusps));
+
   for (let i = 0; i < 12; i++) {
-    const a = Math.PI + i * (Math.PI / 6);
+    const a = ang[i];
     const isAngular = i === 0 || i === 3 || i === 6 || i === 9;
     ctx.strokeStyle = isAngular ? "rgba(255,255,255,0.7)" : "rgba(255,255,255,0.22)";
     ctx.lineWidth = isAngular ? 2 : 1;
@@ -57,12 +58,15 @@ function buildTexture(): THREE.CanvasTexture {
     ctx.stroke();
   }
 
-  // Etiquetas de casa, en el centro de cada arco (chart angle de la cúspide + 15°).
+  // Etiquetas de casa, en el centro angular de cada arco.
   ctx.font = "500 48px 'EB Garamond', Georgia, serif";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
   for (let i = 0; i < 12; i++) {
-    const mid = Math.PI + i * (Math.PI / 6) + Math.PI / 12;
+    const a0 = ang[i];
+    let a1 = ang[(i + 1) % 12];
+    if (a1 <= a0) a1 += Math.PI * 2;
+    const mid = (a0 + a1) / 2;
     const x = cx + Math.cos(mid) * midR;
     const y = cy - Math.sin(mid) * midR;
     ctx.shadowColor = "rgba(255,255,255,0.35)";
@@ -77,8 +81,8 @@ function buildTexture(): THREE.CanvasTexture {
   return tex;
 }
 
-export function HousesRing({ innerRadius, outerRadius }: HousesRingProps) {
-  const texture = useMemo(() => buildTexture(), []);
+export function HousesRing({ innerRadius, outerRadius, cusps }: HousesRingProps) {
+  const texture = useMemo(() => buildTexture(cusps), [cusps]);
 
   const matRef = useRef<THREE.MeshBasicMaterial>(null);
   const elapsed = useRef(0);

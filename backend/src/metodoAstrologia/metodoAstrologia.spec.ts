@@ -97,7 +97,7 @@ describe('1 · Solicitud de carta (el formulario del paso 1)', () => {
     const { service, astro } = montar();
     const r = await service.solicitarCarta(USER, DATOS);
 
-    expect(r).toEqual({ success: true });
+    expect(r).toEqual({ success: true, cartaCalculada: true });
     expect(astro).toHaveLength(1);
     expect(astro[0]).toMatchObject({
       user_id: USER,
@@ -150,7 +150,7 @@ describe('1 · Solicitud de carta (el formulario del paso 1)', () => {
     const { service, cartaNatal, astro } = montar();
     cartaNatal.geocode.mockResolvedValue(null);
     const r = await service.solicitarCarta(USER, DATOS);
-    expect(r).toEqual({ success: true });
+    expect(r).toEqual({ success: true, cartaCalculada: false });
     expect(astro[0]).toMatchObject({
       fecha_nacimiento: '1990-05-17',
       latitud: null,

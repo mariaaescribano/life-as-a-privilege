@@ -33,8 +33,8 @@ import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { irAPagoDisciplina } from "../../components/metodo/pagoDisciplinaLink";
 import CaminoUsuario from "./CaminoUsuario";
 import MapaDePersona from "./MapaDePersona";
+import { rutaCamino } from "../../data/camino";
 import { personaActiva } from "../../api/persona";
-import PinesDiario from "./PinesDiario";
 import { ComunidadPrimeraVez } from "../../components/global/ComunidadPrimeraVez";
 import { useT, type ClaveTexto } from "../../i18n";
 import { encogerFoto } from "../../utils/encogerFoto";
@@ -204,7 +204,7 @@ const Home = () => {
   const [imagesReady, setImagesReady] = useState(imagesReadyCache);
 
   const continuarAstrologia = async () => {
-    navigate("/disciplina/astrologia");
+    navigate(rutaCamino("metodo"));
   };
 
   const irAstrologia = async () => {
@@ -264,7 +264,7 @@ const Home = () => {
   // Psicología (2ª disciplina): clic en su círculo del mandala.
   const irPsicologia = () => {
     if (psicologiaSuscrito) {
-      navigate("/disciplina/psicologia");
+      navigate(rutaCamino("psicologia"));
     } else {
       setPagoPsicoError(null);
       setPagoPsicoOpen(true);
@@ -289,7 +289,7 @@ const Home = () => {
   // Ayurveda (3ª disciplina): clic en su círculo del mandala.
   const irAyurveda = () => {
     if (ayurvedaSuscrito) {
-      navigate("/disciplina/ayurveda");
+      navigate(rutaCamino("ayurveda"));
     } else {
       setPagoAyurError(null);
       setPagoAyurOpen(true);
@@ -314,7 +314,7 @@ const Home = () => {
   // Medicina China (4ª disciplina): clic en su círculo del mandala.
   const irTcm = () => {
     if (tcmSuscrito) {
-      navigate("/disciplina/medicinachina");
+      navigate(rutaCamino("tcm"));
     } else {
       setPagoTcmError(null);
       setPagoTcmOpen(true);
@@ -339,7 +339,7 @@ const Home = () => {
   // Fisiología (5ª disciplina): clic en su círculo del mandala.
   const irFisiologia = () => {
     if (fisiologiaSuscrito) {
-      navigate("/disciplina/fisiologia");
+      navigate(rutaCamino("fisiologia"));
     } else {
       setPagoFisioError(null);
       setPagoFisioOpen(true);
@@ -364,7 +364,7 @@ const Home = () => {
   // Nutrición (6ª disciplina): clic en su círculo del mandala.
   const irNutricion = () => {
     if (nutricionSuscrito) {
-      navigate("/disciplina/nutricion");
+      navigate(rutaCamino("nutricion"));
     } else {
       setPagoNutriError(null);
       setPagoNutriOpen(true);
@@ -389,7 +389,7 @@ const Home = () => {
   // Cábala (7ª disciplina): clic en su círculo del mandala.
   const irCabala = () => {
     if (cabalaSuscrito) {
-      navigate("/disciplina/cabala");
+      navigate(rutaCamino("cabala"));
     } else {
       setPagoCabalaError(null);
       setPagoCabalaOpen(true);
@@ -414,7 +414,7 @@ const Home = () => {
   // Cultura (8ª disciplina): clic en su círculo del mandala.
   const irCultura = () => {
     if (culturaSuscrito) {
-      navigate("/disciplina/cultura");
+      navigate(rutaCamino("cultura"));
     } else {
       setPagoCulturaError(null);
       setPagoCulturaOpen(true);
@@ -898,18 +898,19 @@ const Home = () => {
     ? <MapaDePersona personaId={personaMaria.id} nombre={personaMaria.name} suscritas={suscritasCamino} />
     : null;
 
-  const columnaCamino = mapaMaria
-    ? (
-      <Flex direction="column" align="center" gap={8} w="100%">
-        {mapaMaria}
-        <CaminoUsuario suscritas={suscritasCamino} />
-      </Flex>
-    )
-    : <CaminoUsuario suscritas={suscritasCamino} />;
+  // María no ve «Tu mapa» (eso es de la persona): solo su panel.
+  const columnaCamino = mapaMaria ?? <CaminoUsuario suscritas={suscritasCamino} />;
 
   const ultimoRecorrido = (() => { try { return localStorage.getItem("ultimoRecorrido"); } catch { return null; } })();
   const contDisc = ultimoRecorrido ? disciplinaDeRuta(ultimoRecorrido) : null;
   const ContIcon = contDisc?.Icon;
+  // Título del paso donde se quedó (lo guarda MetodoStepHeader); solo vale si es de esa misma ruta.
+  const contTitulo = (() => {
+    try {
+      const o = JSON.parse(localStorage.getItem("ultimoRecorridoTitulo") ?? "null");
+      return o && o.ruta === ultimoRecorrido && typeof o.titulo === "string" ? (o.titulo as string) : "";
+    } catch { return ""; }
+  })();
   const continuarBtn = metodoSuscrito && ultimoRecorrido && contDisc ? (
     <Box
       as="button"
@@ -946,8 +947,8 @@ const Home = () => {
           <ContIcon size={{ base: "20px", md: "22px" }} />
         </Box>
       )}
-      <Box as="span" position="relative" zIndex={1} textShadow="none">
-        {t("home.continuar")}
+      <Box as="span" position="relative" zIndex={1} textShadow="none" minW={0} maxW={{ base: "62vw", md: "420px" }} overflow="hidden" textOverflow="ellipsis">
+        {t("home.continuar")} {contTitulo || contDisc.nom}
       </Box>
     </Box>
   ) : null;
@@ -974,13 +975,6 @@ const Home = () => {
         </Box>
       )}
 
-      {/* El pin de «Mis notas», abajo a la
-          derecha — SOLO en escritorio (en móvil no flota nada: van estáticos
-          debajo de «Tu mapa», más abajo). Van a este nivel, FUERA de cualquier
-          box con transform: un position:fixed dentro de un elemento
-          transformado se ancla a él y no a la ventana. */}
-      <PinesDiario />
-
       {/* Tu camino — escritorio: fijo a la IZQUIERDA, a la misma altura que
           «Continuar» (que va a la derecha). Desde `lg`: por debajo de ese ancho
           la columna se comería el sitio del mandala, así que ahí baja y se pinta
@@ -996,7 +990,7 @@ const Home = () => {
            // pantalla baja se queda con su propio scroll en vez de salirse por
            // debajo del pie. El `pr` deja aire entre los boxes y la barra de
            // scroll, que pegada a ellos parecía parte del diseño.
-           maxH="calc(100vh - 150px)" overflowY="auto" pr={3}
+           maxH="calc(100vh - 235px)" overflowY="auto" pr={3}
            sx={{ "&::-webkit-scrollbar": { width: "6px" },
                  "&::-webkit-scrollbar-track": { background: "transparent" },
                  "&::-webkit-scrollbar-thumb": { background: "rgba(255,255,255,0.35)", borderRadius: "3px" } }}>
@@ -1353,14 +1347,11 @@ const Home = () => {
 
             {/* Tu camino — en pantallas estrechas no cabe a la izquierda del
                 mandala sin pisarlo, así que ahí se pone debajo, con aire por
-                los dos lados: ni pegado al mandala ni al footer. Debajo van
-                el pin de «Mis notas», estático (en móvil nada flota): al
-                desplegarse «Tu mapa», los pines bajan con el flujo. */}
+                los dos lados: ni pegado al mandala ni al footer. */}
             <Flex display={{ base: "flex", lg: "none" }} direction="column" align="center" gap={4} mt={14} mb={10} w="100%">
               <Reveal inView amount={0.2} direction="up" distance={22} w="100%" display="flex" justifyContent="center">
                 {columnaCamino}
               </Reveal>
-              <PinesDiario estatico />
             </Flex>
           </Flex>
         ) : (

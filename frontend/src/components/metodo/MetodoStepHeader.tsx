@@ -8,6 +8,8 @@ import { LetrasVivas } from "../global/LetrasVivas";
 import { cuandoSinComic } from "../../hooks/cuandoSinComic";
 import { CursosPsicologiaModal } from "./CursosPsicologiaModal";
 import { useT } from "../../i18n";
+import { useLocation, useNavigate } from "react-router-dom";
+import { claveDeSlug, rutaCamino } from "../../data/camino";
 
 interface StepButton {
   label: React.ReactNode;
@@ -248,8 +250,8 @@ export function MetodoStepHeader({
   mb = { base: 10, md: 12 },
   nom,
   space = false,
-  prev,
-  next,
+  prev: prevProp,
+  next: nextProp,
   extra,
   extra2,
   compact = false,
@@ -261,9 +263,24 @@ export function MetodoStepHeader({
   fitTitle = false,
   titleScale = 1,
   multiline = false,
-  dense = false,
+  dense = true,
 }: MetodoStepHeaderProps) {
   const t = useT();
+  // Un header SIEMPRE tiene sus dos botones, el de la izquierda y el de la derecha. Si la
+  // página no pone el suyo (la primera de un recorrido no tiene anterior; la última, siguiente),
+  // el que falta lleva al CAMINO de la disciplina.
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const claveCamino = claveDeSlug(pathname.match(/^\/metodo\/([a-z]+)/i)?.[1]?.toLowerCase());
+  const alCamino = claveCamino ? () => navigate(rutaCamino(claveCamino)) : null;
+  // Recordamos el título del paso en que se quedó, para el botón «Continuar: …» de /home.
+  const { search } = useLocation();
+  React.useEffect(() => {
+    if (typeof title !== "string" || !title.trim()) return;
+    try { localStorage.setItem("ultimoRecorridoTitulo", JSON.stringify({ ruta: pathname + search, titulo: title.trim() })); } catch { /* noop */ }
+  }, [title, pathname, search]);
+  const prev = prevProp ?? (alCamino ? { label: `← ${t("metodo.header.alCamino")}`, onClick: alCamino } : undefined);
+  const next = nextProp ?? (alCamino ? { label: `${t("metodo.header.alCamino")} →`, onClick: alCamino } : undefined);
   // Tamaño natural del título de `fitTitle`, en px y ya escalado.
   const pxTitulo = (n: number) => `${Math.round(n * titleScale)}px`;
   // Si pasas `nom` y esa disciplina tiene fondo propio, lo usamos. El antiguo

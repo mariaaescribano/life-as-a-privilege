@@ -1255,6 +1255,7 @@ export class UserService {
       { table: 'nota_pagina', column: 'user_id' },
       { table: 'diario_sesion', column: 'user_id' },
       { table: 'recorrido_progreso', column: 'user_id' },
+      { table: 'camino_visto', column: 'user_id' },
       { table: 'actividad_recurso', column: 'user_id' },
       { table: 'astrologia', column: 'userId' },
       { table: 'ayurveda', column: 'userId' },
