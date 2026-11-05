@@ -1,12 +1,17 @@
-import React, { useRef, useState } from "react";
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import { Box, Flex, Image, Portal, SimpleGrid, Text } from "@chakra-ui/react";
+import { useReducedMotion } from "framer-motion";
 import { Reveal } from "../global/Reveal";
 import { focoBlanco } from "../global/foco";
 import { useT, type ClaveTexto } from "../../i18n";
+import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 
 /**
- * Los diplomas de María, en secciones, con visor a pantalla completa. Los usan
- * «Quién soy» y «Asesoría 1:1»: la lista vive solo aquí.
+ * Los diplomas de María. En la página, el título y un botón sobre el mármol
+ * («Ver certificados»); al pulsarlo se abre un popup inmersivo: en ordenador, a la
+ * izquierda el título y el diploma elegido en grande, y a la derecha los diplomas en
+ * miniatura (filas de tres, con scroll, agrupados por tema); en móvil, el diploma
+ * arriba y las miniaturas debajo. La lista vive solo aquí.
  */
 type Certificado = { img: string; name: string };
 
@@ -44,66 +49,63 @@ const secciones: { tituloKey: ClaveTexto; items: Certificado[] }[] = GRUPOS.map(
     .filter((c): c is Certificado => !!c),
 }));
 
-// Lista plana para el visor (mismo orden que se muestran)
+// Lista plana (mismo orden que se muestran)
 const certificados: Certificado[] = secciones.flatMap((s) => s.items);
 
-/** Diplomas de una sección en una fila que se desliza (deslizar con el dedo o con las flechas). */
-const FILA_ALTO = { base: "190px", md: "250px" };
+const TQ = "#004f4f";
+const ORO = "#b08d3f";
 
-/** Flecha a un lado de la fila de diplomas (en móvil no se pinta: se desliza con el dedo). */
-const Flecha = ({ lado, onClick }: { lado: "izq" | "dcha"; onClick: () => void }) => (
-  <Box
-    as="button"
-    type="button"
-    onClick={onClick}
-    aria-label={lado === "izq" ? "‹" : "›"}
-    display={{ base: "none", md: "flex" }}
-    flexShrink={0}
-    w="42px"
-    h="42px"
-    borderRadius="full"
-    alignItems="center"
-    justifyContent="center"
-    color="white"
-    fontSize="2xl"
-    lineHeight="1"
-    border="1px solid rgba(255,255,255,0.6)"
-    bg="rgba(255,255,255,0.08)"
-    boxShadow="0 0 14px rgba(255,255,255,0.25)"
-    transition="background 0.25s ease"
-    _hover={{ bg: "rgba(255,255,255,0.2)" }}
-    _focusVisible={focoBlanco}
-  >
-    {lado === "izq" ? "‹" : "›"}
-  </Box>
-);
+// Entrada de cada pieza del popup: sube y se aclara, con su retraso. Ya con el mármol puesto.
+const entra = (delay: number, dur = 0.8) => ({
+  "@keyframes certSube": { from: { opacity: 0, transform: "translateY(18px)" }, to: { opacity: 1, transform: "none" } },
+  animation: `certSube ${dur}s cubic-bezier(0.22,1,0.36,1) ${delay}s both`,
+  "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+});
+const MARMOL_DESKTOP = "/img/fondos/marmolfondo.webp";
+const MARMOL_MOVIL = "/img/fondos/marmolfondo-crema.webp";
 
 const Certificaciones = () => {
   const t = useT();
-  const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
-  const [activa, setActiva] = useState(0);
-  const filaRef = useRef<HTMLDivElement>(null);
+  const [abierto, setAbierto] = useState(false);
+  const [sel, setSel] = useState(0);
+  const reducir = useReducedMotion();
+  // El mármol SIEMPRE va primero: se precarga y se funde; solo después entra el contenido.
+  const [fondoListo, setFondoListo] = useState(false);
+  const [contenido, setContenido] = useState(false);
 
-  const closeLightbox = () => setLightboxIdx(null);
-  const prevCert = () => setLightboxIdx((i) => (i !== null ? (i - 1 + certificados.length) % certificados.length : null));
-  const nextCert = () => setLightboxIdx((i) => (i !== null ? (i + 1) % certificados.length : null));
+  useLockBodyScroll(abierto, { fijarFondo: true });
+
+  useEffect(() => {
+    if (!abierto) { setFondoListo(false); setContenido(false); return; }
+    let vivo = true;
+    let t2: number | undefined;
+    const img = new window.Image();
+    const listo = () => {
+      if (!vivo) return;
+      setFondoListo(true);
+      t2 = window.setTimeout(() => { if (vivo) setContenido(true); }, reducir ? 0 : 750);
+    };
+    img.onload = listo;
+    img.onerror = listo;
+    img.src = window.innerWidth >= 768 ? MARMOL_DESKTOP : MARMOL_MOVIL;
+    if (img.complete) listo();
+    return () => { vivo = false; if (t2) window.clearTimeout(t2); };
+  }, [abierto, reducir]);
+
+  // Escape cierra el popup.
+  useEffect(() => {
+    if (!abierto) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setAbierto(false); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [abierto]);
 
   const visibles = secciones.filter((s) => s.items.length > 0);
-  const seccion = visibles[Math.min(activa, visibles.length - 1)];
-
-  const elegir = (i: number) => {
-    setActiva(i);
-    filaRef.current?.scrollTo({ left: 0, behavior: "auto" });
-  };
-  const deslizar = (dir: 1 | -1) => {
-    const el = filaRef.current;
-    if (el) el.scrollBy({ left: dir * el.clientWidth * 0.8, behavior: "smooth" });
-  };
+  const actual = certificados[sel];
+  const seccionActual = visibles.find((s) => s.items.includes(actual));
 
   return (
     <>
-      {/* ── MIS CERTIFICADOS: un título, seis temas para elegir y, debajo, los diplomas del tema
-          elegido en una sola fila que se desliza (en vez de seis rejillas una debajo de otra). ── */}
       <Box px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 4, md: 6 }}>
         <Box maxW="1100px" mx="auto">
           <Reveal inView amount={0.5} direction="up" distance={18} duration={0.8}>
@@ -120,198 +122,203 @@ const Certificaciones = () => {
             </Text>
           </Reveal>
 
-          {/* Los temas, como pastillas. El activo se rellena con luz. */}
+          {/* Botón con el mármol de fondo: abre el popup de los diplomas. */}
           <Reveal inView amount={0.3} direction="up" distance={14} duration={0.8} delay={0.15}>
-            <Flex
-              wrap={{ base: "nowrap", md: "wrap" }}
-              justify={{ base: "flex-start", md: "center" }}
-              gap={{ base: 2, md: 3 }}
-              mt={{ base: 6, md: 8 }}
-              // Móvil: una sola fila que se desliza con el dedo, sin barra.
-              overflowX={{ base: "auto", md: "visible" }}
-              mx={{ base: -5, md: 0 }}
-              px={{ base: 5, md: 0 }}
-              py={{ base: 1, md: 0 }}
-              sx={{ scrollbarWidth: "none", "&::-webkit-scrollbar": { display: "none" } }}
-            >
-              {visibles.map((sec, i) => {
-                const on = i === activa;
-                return (
-                  <Box
-                    key={sec.tituloKey}
-                    as="button"
-                    type="button"
-                    onClick={() => elegir(i)}
-                    aria-pressed={on}
-                    flexShrink={0}
-                    whiteSpace="nowrap"
-                    px={{ base: 4, md: 5 }}
-                    py="8px"
-                    borderRadius="full"
-                    fontFamily="'EB Garamond', serif"
-                    fontWeight={on ? "700" : "500"}
-                    fontSize={{ base: "sm", md: "md" }}
-                    letterSpacing="0.06em"
-                    color={on ? "#004f4f" : "white"}
-                    bg={on ? "rgba(255,255,255,0.92)" : "transparent"}
-                    border={`1px solid ${on ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.45)"}`}
-                    boxShadow={on ? "0 0 16px rgba(255,255,255,0.4), 0 0 36px rgba(180,255,245,0.22)" : "none"}
-                    transition="all 0.3s ease"
-                    _focusVisible={focoBlanco}
-                  >
-                    {t(sec.tituloKey)}
-                  </Box>
-                );
-              })}
+            <Flex justify="center" mt={{ base: 6, md: 8 }}>
+              <Box
+                as="button"
+                type="button"
+                onClick={() => setAbierto(true)}
+                px={{ base: 8, md: 10 }}
+                py={{ base: "12px", md: "14px" }}
+                borderRadius="full"
+                color={TQ}
+                fontFamily="'EB Garamond', serif"
+                fontWeight="700"
+                fontSize={{ base: "md", md: "lg" }}
+                letterSpacing="0.1em"
+                textTransform="uppercase"
+                bgImage="url('/img/fondos/marmolfondo.webp')"
+                bgSize="cover"
+                bgPosition="center"
+                border={`1px solid ${TQ}88`}
+                boxShadow={`0 0 18px ${ORO}55, 0 0 40px ${ORO}2e`}
+                transition="all 0.25s ease"
+                _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 24px ${ORO}88, 0 0 54px ${ORO}44` }}
+                _focusVisible={focoBlanco}
+              >
+                {t("quienSoy.verCertificados")}
+              </Box>
             </Flex>
           </Reveal>
-
-          {/* La fila de diplomas del tema elegido. Cambia con un fundido; los diplomas se ven
-              ENTEROS (sin recortar), cada uno a su proporción. */}
-          <Flex align="center" gap={{ base: 0, md: 4 }} mt={{ base: 6, md: 8 }}>
-            {/* Flecha izquierda, FUERA de la fila: a un lado, sin tapar ningún diploma. */}
-            <Flecha lado="izq" onClick={() => deslizar(-1)} />
-            <Flex
-              flex="1"
-              minW={0}
-              key={seccion.tituloKey}
-              ref={filaRef}
-              gap={{ base: 3, md: 6 }}
-              // Móvil: rejilla de dos columnas con todos los diplomas a la vista. Ordenador: una fila que se desliza.
-              wrap={{ base: "wrap", md: "nowrap" }}
-              overflowX={{ base: "visible", md: "auto" }}
-              px={{ base: 0, md: 2 }}
-              py={4}
-              align={{ base: "flex-start", md: "center" }}
-              sx={{
-                scrollSnapType: "x proximity",
-                scrollbarWidth: "none",
-                "&::-webkit-scrollbar": { display: "none" },
-                "@keyframes diplomasEntran": { from: { opacity: 0, transform: "translateY(14px)" }, to: { opacity: 1, transform: "translateY(0)" } },
-                animation: "diplomasEntran 0.6s cubic-bezier(0.22,1,0.36,1) both",
-                "@media (prefers-reduced-motion: reduce)": { animation: "none" },
-              }}
-            >
-              {seccion.items.map((cert, i) => (
-                <Box
-                  key={cert.name}
-                  as="button"
-                  type="button"
-                  flexShrink={0}
-                  w={{ base: "calc(50% - 6px)", md: "auto" }}
-                  onClick={() => setLightboxIdx(certificados.indexOf(cert))}
-                  aria-label={`${t(seccion.tituloKey)} ${i + 1}`}
-                  borderRadius="lg"
-                  overflow="hidden"
-                  boxShadow="0 0 14px rgba(255,255,255,0.2), 0 0 32px rgba(255,255,255,0.1)"
-                  sx={{ scrollSnapAlign: "start" }}
-                  transition="transform 0.3s ease, box-shadow 0.3s ease"
-                  _hover={{ transform: "translateY(-4px)", boxShadow: "0 0 22px rgba(255,255,255,0.4), 0 0 50px rgba(180,255,245,0.25)" }}
-                  _focusVisible={focoBlanco}
-                >
-                  <Image src={cert.img} alt="" h={{ base: "auto", md: FILA_ALTO.md }} w={{ base: "100%", md: "auto" }} maxW="none" display="block" />
-                </Box>
-              ))}
-            </Flex>
-
-            <Flecha lado="dcha" onClick={() => deslizar(1)} />
-          </Flex>
         </Box>
       </Box>
 
-      {/* ── VISOR ── */}
-      {lightboxIdx !== null && (
-        <Box
-          position="fixed"
-          inset={0}
-          zIndex={200}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          bg="rgba(0, 0, 0, 0.41)"
-          sx={{ backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}
-          onClick={closeLightbox}
-        >
+      {/* ── POPUP INMERSIVO ── */}
+      {abierto && (
+        <Portal>
           <Box
-            position="absolute"
-            top={4}
-            right={5}
-            as="button"
-            onClick={closeLightbox}
-            color="white"
-            fontSize="2xl"
-            fontWeight="300"
-            cursor="pointer"
-            bg="rgba(0,0,0,0.45)"
-            borderRadius="full"
-            w="44px"
-            h="44px"
+            position="fixed"
+            inset={0}
+            zIndex={2000}
+            fontFamily="'EB Garamond', serif"
             display="flex"
-            alignItems="center"
-            justifyContent="center"
-            _hover={{ bg: "rgba(255,255,255,0.2)" }}
-            transition="background 0.2s"
-            zIndex={201}
+            flexDirection={{ base: "column", lg: "row" }}
+            gap={{ base: 4, lg: 10 }}
+            px={{ base: 4, md: 8, lg: 14 }}
+            pt={{ base: 16, lg: 14 }}
+            pb={{ base: 4, lg: 10 }}
+            role="dialog"
+            aria-modal="true"
+            aria-label={t("quienSoy.certificados")}
           >
-            ✕
-          </Box>
-
-          <Box
-            position="absolute"
-            left={4}
-            as="button"
-            onClick={(e: React.MouseEvent) => { e.stopPropagation(); prevCert(); }}
-            color="white"
-            fontSize="4xl"
-            cursor="pointer"
-            bg="rgba(0,0,0,0.45)"
-            borderRadius="full"
-            w="52px"
-            h="52px"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            _hover={{ bg: "rgba(255,255,255,0.2)" }}
-            transition="background 0.2s"
-            zIndex={201}
-          >
-            ‹
-          </Box>
-
-          <Box onClick={(e: React.MouseEvent) => e.stopPropagation()} maxW={{ base: "90vw", md: "70vw" }} maxH="85vh">
-            <Image
-              src={certificados[lightboxIdx].img}
-              alt={`Certificado ${lightboxIdx + 1}`}
-              maxW="100%"
-              maxH="85vh"
-              objectFit="contain"
-              borderRadius="xl"
-              boxShadow="0 20px 60px rgba(0,0,0,0.6)"
+            {/* El mármol: lo primero que sale, con un fundido tranquilo. */}
+            <Box
+              position="absolute"
+              inset={0}
+              zIndex={0}
+              pointerEvents="none"
+              bgImage={{ base: `url('${MARMOL_MOVIL}')`, md: `url('${MARMOL_DESKTOP}')` }}
+              bgSize="cover"
+              bgPosition="center"
+              bgRepeat="no-repeat"
+              opacity={fondoListo ? 1 : 0}
+              transition={reducir ? "none" : "opacity 0.7s ease"}
             />
-          </Box>
+            {contenido && (<>
+            {/* Cruz arriba a la derecha */}
+            <Box
+              as="button"
+              type="button"
+              onClick={() => setAbierto(false)}
+              aria-label="✕"
+              autoFocus
+              position="absolute"
+              top={{ base: 3, md: 5 }}
+              right={{ base: 3, md: 6 }}
+              zIndex={3}
+              sx={entra(0.05, 0.6)}
+              w="44px"
+              h="44px"
+              borderRadius="full"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              color={TQ}
+              bg="rgba(255,255,255,0.35)"
+              border={`1px solid ${TQ}88`}
+              boxShadow={`0 0 14px ${ORO}55`}
+              cursor="pointer"
+              transition="background 0.2s"
+              _hover={{ bg: "rgba(255,255,255,0.6)" }}
+              _focusVisible={focoBlanco}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960" width="18" fill="currentColor">
+                <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+              </svg>
+            </Box>
 
-          <Box
-            position="absolute"
-            right={4}
-            as="button"
-            onClick={(e: React.MouseEvent) => { e.stopPropagation(); nextCert(); }}
-            color="white"
-            fontSize="4xl"
-            cursor="pointer"
-            bg="rgba(0,0,0,0.45)"
-            borderRadius="full"
-            w="52px"
-            h="52px"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            _hover={{ bg: "rgba(255,255,255,0.2)" }}
-            transition="background 0.2s"
-            zIndex={201}
-          >
-            ›
+            {/* Izquierda: título + el diploma elegido */}
+            <Flex
+              direction="column"
+              flex={{ base: "0 0 auto", lg: "1.15" }}
+              minW={0}
+              minH={0}
+              gap={{ base: 2, lg: 5 }}
+              h={{ base: "42vh", lg: "auto" }}
+              position="relative"
+              zIndex={1}
+            >
+              <Text
+                color={TQ}
+                fontWeight="700"
+                fontSize={{ base: "lg", md: "2xl", lg: "4xl" }}
+                letterSpacing="0.03em"
+                lineHeight="1.25"
+                pr={{ base: 12, lg: 0 }}
+                sx={entra(0.1)}
+              >
+                {t("quienSoy.certificados")}
+              </Text>
+              {seccionActual && (
+                <Text color={`${TQ}cc`} fontStyle="italic" fontSize={{ base: "sm", md: "lg" }} display={{ base: "none", lg: "block" }} sx={entra(0.25)}>
+                  {t(seccionActual.tituloKey)}
+                </Text>
+              )}
+              <Flex flex="1" minH={0} align="center" justify="center" sx={entra(0.35, 1)}>
+                <Image
+                  key={actual?.name}
+                  src={actual?.img}
+                  alt={`${t("quienSoy.certificados")} ${sel + 1}`}
+                  maxW="100%"
+                  maxH="100%"
+                  objectFit="contain"
+                  borderRadius="lg"
+                  boxShadow={`0 0 22px ${ORO}66, 0 0 56px ${ORO}33`}
+                  sx={{
+                    "@keyframes certCambia": { from: { opacity: 0, transform: "scale(0.97)" }, to: { opacity: 1, transform: "none" } },
+                    animation: "certCambia 0.4s cubic-bezier(0.22,1,0.36,1) both",
+                    "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+                  }}
+                />
+              </Flex>
+            </Flex>
+
+            {/* Derecha: miniaturas por tema, con scroll */}
+            <Box
+              flex="1"
+              minW={0}
+              minH={0}
+              overflowY="scroll"
+              overscrollBehavior="contain"
+              pr={3}
+              position="relative"
+              zIndex={1}
+              sx={{
+                scrollbarWidth: "thin",
+                scrollbarColor: `${TQ}99 ${TQ}22`,
+                "&::-webkit-scrollbar": { width: "8px" },
+                "&::-webkit-scrollbar-track": { background: `${TQ}22`, borderRadius: "8px" },
+                "&::-webkit-scrollbar-thumb": { background: `${TQ}99`, borderRadius: "8px" },
+              }}
+            >
+              {visibles.map((sec, si) => (
+                <Box key={sec.tituloKey} mb={{ base: 5, lg: 7 }} sx={entra(0.45 + Math.min(si, 4) * 0.12)}>
+                  <Text color={TQ} fontWeight="700" fontSize={{ base: "md", md: "lg" }} letterSpacing="0.05em" mb={3}>
+                    {t(sec.tituloKey)}
+                  </Text>
+                  <SimpleGrid columns={{ base: 2, sm: 3 }} spacing={{ base: 2, md: 3 }}>
+                    {sec.items.map((cert) => {
+                      const idx = certificados.indexOf(cert);
+                      const on = idx === sel;
+                      return (
+                        <Box
+                          key={cert.name}
+                          as="button"
+                          type="button"
+                          onClick={() => setSel(idx)}
+                          aria-pressed={on}
+                          aria-label={`${t(sec.tituloKey)} ${idx + 1}`}
+                          borderRadius="md"
+                          overflow="hidden"
+                          border={`2px solid ${on ? TQ : "transparent"}`}
+                          boxShadow={`0 0 10px ${ORO}33`}
+                          opacity={on ? 1 : 0.85}
+                          transition="all 0.25s ease"
+                          _hover={{ opacity: 1, transform: "translateY(-2px)" }}
+                          _focusVisible={focoBlanco}
+                        >
+                          <Image src={cert.img} alt="" w="100%" display="block" loading="lazy" />
+                        </Box>
+                      );
+                    })}
+                  </SimpleGrid>
+                </Box>
+              ))}
+            </Box>
+            </>)}
           </Box>
-        </Box>
+        </Portal>
       )}
     </>
   );

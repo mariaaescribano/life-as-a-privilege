@@ -13,10 +13,7 @@ import { Reveal } from "../../components/global/Reveal";
 import { sombraTexto } from "../../components/global/disciplinaSombras";
 import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt } from "../../GlobalVariables";
 import { dmaAIso, fechaDMA, mascaraDMA } from "../../utils/fechas";
-import { ADMIN_DISCIPLINAS } from "../../data/adminDisciplinas";
-import { IconoDiarioTerapia } from "../../components/global/IconoDiarioTerapia";
 import { adminHeaders, useAdminGuard } from "./useAdminGuard";
-import AccesoPersona from "./AccesoPersona";
 import { BotonPildora } from "./PildorasAdmin";
 
 interface Persona {
@@ -458,62 +455,6 @@ export default function AdminDatosUsuario() {
               </Box>
             </Reveal>
           )}
-
-          {/* ── Acceso: qué disciplinas tiene abiertas (el camino de cada una se abre además entrando en su home) ── */}
-          <Reveal direction="up" distance={22} delay={0.5} mb={{ base: 5, md: 7 }}>
-            <Box {...CAJA_VIDRIO} border="1px solid rgba(255,255,255,0.4)">
-              <Text fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.12em" textTransform="uppercase" mb={4}>
-                Acceso
-              </Text>
-              <AccesoPersona
-                persona={persona}
-                onCambio={(nuevos) => setPersona((p) => (p ? { ...p, ...nuevos } : p))}
-                onAviso={setAviso}
-              />
-            </Box>
-          </Reveal>
-
-          {/* ── Lo suyo: sus lecturas por disciplina, su diario y sus intereses ── */}
-          <Reveal direction="up" distance={22} delay={0.55} mb={{ base: 5, md: 7 }}>
-            <Box {...CAJA_VIDRIO} border="1px solid rgba(255,255,255,0.4)">
-              <Text fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.12em" textTransform="uppercase" mb={4}>
-                Su contenido
-              </Text>
-              <Flex gap={3} wrap="wrap" mb={4}>
-                {ADMIN_DISCIPLINAS.map((d) => (
-                  <Box
-                    key={d.key}
-                    as="button"
-                    type="button"
-                    onClick={() => navigate(`/admin/${d.key}/${persona.id}`)}
-                    px={4}
-                    py="7px"
-                    borderRadius="full"
-                    bg={d.bg}
-                    border={`1px solid ${d.txt}`}
-                    color={d.txt}
-                    fontSize="sm"
-                    fontWeight="700"
-                    cursor="pointer"
-                    transition="all 0.18s"
-                    _hover={{ transform: "translateY(-1px)", boxShadow: `0 0 14px ${d.txt}66` }}
-                    _focusVisible={{ outline: "2px solid white", outlineOffset: "2px" }}
-                  >
-                    {d.nombre}
-                  </Box>
-                ))}
-              </Flex>
-              <Flex gap={3} wrap="wrap">
-                <BotonPildora onClick={() => navigate(`/admin/diario/${persona.id}`)}>
-                  <IconoDiarioTerapia size="16px" />
-                  Diario de terapias
-                </BotonPildora>
-                <BotonPildora onClick={() => navigate(`/admin/actividad/${persona.id}`, { state: { name: persona.name, email: persona.email } })}>
-                  Intereses
-                </BotonPildora>
-              </Flex>
-            </Box>
-          </Reveal>
 
           {/* ── Eliminar la cuenta: al final, apartado y con confirmación ── */}
           <Reveal direction="up" distance={22} delay={0.6} mt={{ base: 9, md: 12 }}>

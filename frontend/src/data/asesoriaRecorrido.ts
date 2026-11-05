@@ -29,5 +29,4 @@ export const SESIONES: Record<DisciplinaClave, ClaveTexto[]> = {
 /** Botón bajo el texto de una sesión (clave del texto del botón). Abre el reel `video` en una
  *  ventana emergente; mientras no haya enlace, el botón sale pero no abre nada. */
 export const BOTON_SESION: Partial<Record<DisciplinaClave, { sesion: number; texto: ClaveTexto; video?: string }>> = {
-  astrologia: { sesion: 0, texto: "asesoria.sesion.astrologia.1.boton", video: "" },
 };

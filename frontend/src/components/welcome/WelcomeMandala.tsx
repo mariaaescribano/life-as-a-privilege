@@ -19,6 +19,8 @@ import type { DisciplinaFila } from "./WelcomeDisciplinas";
  *    (su icono sobre su foto, con el borde de su color). El medallón crece al pasar
  *    el ratón y al pulsarlo lleva a la portada de la disciplina (`link`), el mismo
  *    sitio que su tarjeta de más abajo.
+ *  · Las ocho disciplinas orbitan despacio (140 s por vuelta) con icono y nombre siempre
+ *    derechos; se paran al pasar el ratón por encima.
  *
  * Entrada (cuando `activo`, que lo decide la banda de mármol al hacer scroll): el
  * aro se dibuja, aparece el mandala, las líneas salen del círculo hacia fuera y los
@@ -38,6 +40,7 @@ const NOMBRE_CON_FONDO = new Set<string>([astrologiaNom, tcmNom, culturaNom, cab
 
 const TAM_NODO = 3.6;        // diámetro del enganche con la foto de la disciplina
 const TAM_MANDALA = 36;      // ancho del mandala que gira
+const VUELTA = 140;          // segundos que tardan las disciplinas en dar una vuelta alrededor del círculo
 
 const punto = (grados: number, r: number) => {
   const a = (grados * Math.PI) / 180;
@@ -48,10 +51,13 @@ const Medallon = ({ d, i, angulo, activo }: { d: DisciplinaFila; i: number; angu
   const nombreDe = useNombreDisciplina();
   const conFondo = hasDisciplinaBg(d.name);
   const { x, y } = punto(angulo, RADIO_MEDALLON);
-  const arriba = Math.sin((angulo * Math.PI) / 180) < -0.1;
+  // Como la disciplina orbita, el nombre cambia de sitio (encima en la mitad de arriba, debajo en
+  // la de abajo) con una animación desfasada según el ángulo de salida de esta disciplina.
+  const fase = (((angulo % 360) + 360) % 360) / 360;
 
   return (
     <Box position="absolute" left={`${x}%`} top={`${y}%`} w={`${TAM_MEDALLON}%`} sx={{ aspectRatio: "1 / 1", transform: "translate(-50%, -50%)" }}>
+      <Box className="orbita-contra" w="100%" h="100%" position="relative" sx={{ animation: `orbitaContra ${VUELTA}s linear infinite` }}>
       <Reveal activo={activo} direction="none" scaleFrom={0.5} duration={0.7} delay={1.15 + i * 0.12} w="100%" h="100%">
         <Box
           as="a"
@@ -101,8 +107,8 @@ const Medallon = ({ d, i, angulo, activo }: { d: DisciplinaFila; i: number; angu
         left="50%"
         w="max-content"
         maxW="150px"
-        {...(arriba ? { bottom: "calc(100% + 6px)" } : { top: "calc(100% + 6px)" })}
-        sx={{ transform: "translateX(-50%)", pointerEvents: "none" }}
+        className="orbita-nombre"
+        sx={{ transform: "translateX(-50%)", pointerEvents: "none", top: "calc(100% + 6px)", animation: `orbitaNombre ${VUELTA}s step-end infinite`, animationDelay: `${-fase * VUELTA}s` }}
       >
         <Reveal activo={activo} direction="none" duration={0.9} delay={1.5 + i * 0.12}>
           <Text
@@ -120,6 +126,7 @@ const Medallon = ({ d, i, angulo, activo }: { d: DisciplinaFila; i: number; angu
             {nombreDe(d.name)}
           </Text>
         </Reveal>
+      </Box>
       </Box>
     </Box>
   );
@@ -140,7 +147,25 @@ const WelcomeMandala = ({ disciplinas, activo }: { disciplinas: DisciplinaFila[]
 
   return (
     <Flex w="100%" justify="center" px={{ base: 5, md: 10 }} py={{ base: 8, md: 10 }}>
-      <Box position="relative" w={{ base: "min(100%, 380px)", md: "520px" }} sx={{ aspectRatio: "1 / 1" }}>
+      <Box
+        position="relative"
+        w={{ base: "min(100%, 380px)", md: "520px" }}
+        sx={{
+          aspectRatio: "1 / 1",
+          // Las disciplinas orbitan despacio; cada medallón se contragira para que icono y nombre
+          // queden derechos. Al pasar el ratón por el mandala se paran, para poder pulsarlas.
+          "@keyframes orbitaGira": { to: { transform: "rotate(360deg)" } },
+          "@keyframes orbitaContra": { to: { transform: "rotate(-360deg)" } },
+          // El nombre va encima mientras la disciplina está en la mitad de arriba (ángulo 186°–354°).
+          "@keyframes orbitaNombre": {
+            "0%": { top: "calc(100% + 6px)", bottom: "auto" },
+            "51.6%": { top: "auto", bottom: "calc(100% + 6px)" },
+            "98.4%": { top: "calc(100% + 6px)", bottom: "auto" },
+          },
+          "&:hover .orbita-gira, &:hover .orbita-contra, &:hover .orbita-nombre, &:focus-within .orbita-gira, &:focus-within .orbita-contra, &:focus-within .orbita-nombre": { animationPlayState: "paused" },
+          "@media (prefers-reduced-motion: reduce)": { "& .orbita-gira, & .orbita-contra, & .orbita-nombre": { animation: "none !important" } },
+        }}
+      >
         <Box
           as="svg"
           viewBox="0 0 100 100"
@@ -185,12 +210,14 @@ const WelcomeMandala = ({ disciplinas, activo }: { disciplinas: DisciplinaFila[]
             </g>
           </motion.g>
 
-          {/* Las ocho líneas: del nodo del círculo al borde de su medallón. */}
-          {angulos.map((g, i) => {
-            const a = punto(g, RADIO_NODO + 1);
-            const b = punto(g, RADIO_MEDALLON - TAM_MEDALLON / 2 - 0.3);
-            return <motion.line key={i} x1={a.x} y1={a.y} x2={b.x} y2={b.y} stroke={TINTA} strokeWidth="0.5" strokeLinecap="round" {...trazo(0.9 + i * 0.12, 0.5)} />;
-          })}
+          {/* Las ocho líneas: del nodo del círculo al borde de su medallón (orbitan con ellos). */}
+          <g className="orbita-gira" style={{ transformOrigin: "50% 50%", transformBox: "view-box", animation: `orbitaGira ${VUELTA}s linear infinite` } as React.CSSProperties}>
+            {angulos.map((g, i) => {
+              const a = punto(g, RADIO_NODO + 1);
+              const b = punto(g, RADIO_MEDALLON - TAM_MEDALLON / 2 - 0.3);
+              return <motion.line key={i} x1={a.x} y1={a.y} x2={b.x} y2={b.y} stroke={TINTA} strokeWidth="0.5" strokeLinecap="round" {...trazo(0.9 + i * 0.12, 0.5)} />;
+            })}
+          </g>
 
         </Box>
 
@@ -219,6 +246,7 @@ const WelcomeMandala = ({ disciplinas, activo }: { disciplinas: DisciplinaFila[]
           </Reveal>
         </Box>
 
+        <Box className="orbita-gira" position="absolute" inset={0} sx={{ animation: `orbitaGira ${VUELTA}s linear infinite` }}>
         {/* El enganche de cada disciplina al círculo: un puntito con su foto, donde nace su línea. */}
         {disciplinas.map((d, i) => {
           const p = punto(angulos[i], RADIO_NODO);
@@ -236,6 +264,7 @@ const WelcomeMandala = ({ disciplinas, activo }: { disciplinas: DisciplinaFila[]
         {disciplinas.map((d, i) => (
           <Medallon key={d.name} d={d} i={i} angulo={angulos[i]} activo={activo} />
         ))}
+        </Box>
       </Box>
     </Flex>
   );

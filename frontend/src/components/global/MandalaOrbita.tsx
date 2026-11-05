@@ -11,9 +11,10 @@ import { useNombreDisciplinaEnMapa } from "../../i18n/nombreDisciplina";
  *  · En el centro, el mandala de la casa (`life.webp`, blanco) girando despacio dentro
  *    de un círculo con borde trabajado: aro principal, aro fino interior, aro de puntos
  *    que gira al revés, corona de marcas y ocho nodos dorados.
- *  · Las ocho disciplinas están alrededor, QUIETAS, en el orden en que se pasan (la primera
+ *  · Las ocho disciplinas están alrededor, en el orden en que se pasan (la primera
  *    arriba y, de ahí, en el sentido de las agujas del reloj). Cada una, unida al círculo por una
- *    línea recta. Lo único que se mueve es el mandala del centro y los aros decorativos.
+ *    línea recta. Orbitan despacio alrededor del círculo (140 s por vuelta) con el icono siempre
+ *    derecho, y se paran al pasar el ratón por encima para poder pulsarlas.
  *  · La seleccionada crece y se enciende con el color de su disciplina, y su línea se
  *    ilumina; las demás quedan en gris suave. Pulsar un medallón la elige.
  *
@@ -73,8 +74,14 @@ export default function MandalaOrbita({
           "@keyframes mandalaCentroGira": { to: { transform: "rotate(360deg)" } },
           "@keyframes aroDeGira": { to: { transform: "rotate(360deg)" } },
           "@keyframes aroDeGiraInverso": { to: { transform: "rotate(-360deg)" } },
+          // Las disciplinas orbitan despacio alrededor del círculo; cada medallón se contragira
+          // para que su icono se mantenga siempre derecho. Al pasar el ratón se paran.
+          "@keyframes orbitaGira": { to: { transform: "rotate(360deg)" } },
+          "@keyframes orbitaContraGira": { to: { transform: "rotate(-360deg)" } },
+          "& .orbita-gira, & .orbita-contra": { animationPlayState: "running" },
+          "&:hover .orbita-gira, &:hover .orbita-contra, &:focus-within .orbita-gira, &:focus-within .orbita-contra": { animationPlayState: "paused" },
           "@media (prefers-reduced-motion: reduce)": {
-            "& .aro-de-gira, & .aro-de-gira-inv, & .centro-gira": { animation: "none !important" },
+            "& .aro-de-gira, & .aro-de-gira-inv, & .centro-gira, & .orbita-gira, & .orbita-contra": { animation: "none !important" },
           },
         }}
       >
@@ -119,7 +126,9 @@ export default function MandalaOrbita({
           </motion.div>
         </Box>
 
-        {/* ── Líneas y nodos: quietos ── */}
+        {/* ── Las disciplinas (líneas, nodos y medallones) orbitan juntas alrededor del círculo ── */}
+        <Box className="orbita-gira" position="absolute" inset={0} sx={{ animation: "orbitaGira 140s linear infinite" }}>
+        {/* ── Líneas y nodos ── */}
         <Box as="svg" viewBox="0 0 100 100" position="absolute" inset={0} w="100%" h="100%" fill="none" aria-hidden="true" overflow="visible">
           {angulos.map((g, i) => {
             const on = items[i].nom === selectedNom;
@@ -156,13 +165,14 @@ export default function MandalaOrbita({
           );
         })}
 
-        {/* ── Los medallones: quietos ── */}
+        {/* ── Los medallones ── */}
         {items.map((d, i) => {
           const { x, y } = punto(angulos[i], R_MEDALLON);
           const on = d.nom === selectedNom;
           const conFondo = hasDisciplinaBg(d.nom);
           return (
             <Box key={d.nom} position="absolute" left={`${x}%`} top={`${y}%`} w={`${TAM_MEDALLON}%`} sx={{ aspectRatio: "1 / 1", transform: "translate(-50%, -50%)" }} zIndex={on ? 3 : 1}>
+              <Box className="orbita-contra" w="100%" h="100%" sx={{ animation: "orbitaContraGira 140s linear infinite" }}>
               <motion.div
                 style={{ width: "100%", height: "100%" }}
                 initial={reducir ? false : { opacity: 0, scale: 0.5 }}
@@ -211,9 +221,11 @@ export default function MandalaOrbita({
                   </Box>
                 </Box>
               </motion.div>
+              </Box>
             </Box>
           );
         })}
+        </Box>
       </Box>
     </Flex>
   );

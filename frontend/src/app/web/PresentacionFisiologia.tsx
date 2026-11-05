@@ -381,7 +381,7 @@ export default function PresentacionFisiologia({ d }: { d: PresentacionDisciplin
             `sinMargenes` porque esta página ya pone los suyos. */}
         <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
           <SeparadorSeccion maxW="1100px">{t("presentacion.sec.laCreadora")}</SeparadorSeccion>
-          <CreadoraCard sinMargenes />
+          <CreadoraCard sinMargenes fondo="marmolCaja" />
         </Flex>
 
         {/* ══ 7. LLAMADA A LA ACCIÓN ══ */}

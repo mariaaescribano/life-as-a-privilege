@@ -34,7 +34,7 @@ type CreadoraCardProps = {
    * (letra blanca sobre fondo claro). Todas las páginas que ya la usaban siguen
    * sin pasar nada y se ven exactamente igual que antes.
    */
-  fondo?: "oscuro" | "claro" | "marmol";
+  fondo?: "oscuro" | "claro" | "marmol" | "marmolCaja";
   /** Segundos que espera tras cargar la página antes de entrar, aunque ya se
    *  vea (Welcome: que no aparezca a la vez que el titular). 0 = como siempre. */
   esperaInicial?: number;
@@ -64,7 +64,10 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
   // Los dos juegos de color de la tarjeta. Todo lo que cambia entre fondo
   // oscuro y claro vive aquí, para que el markup de abajo sea uno solo.
   const claro = fondo === "claro";
-  const marmol = fondo === "marmol";
+  // "marmolCaja": la propia caja lleva el mármol de fondo (presentaciones /d/…).
+  // "marmol": sin fondo propio, va dentro de una BandaMarmol (Welcome).
+  const caja = fondo === "marmolCaja";
+  const marmol = fondo === "marmol" || caja;
   // Sobre el mármol: caja TRANSPARENTE (se ve el mármol), letra turquesa oscuro.
   const TQ = "#004f4f";
   const c = marmol
@@ -135,7 +138,8 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
     <Box
       w="100%"
       px={sinMargenes ? 0 : { base: 5, md: 10, lg: 16 }}
-      pt={sinMargenes ? 0 : { base: 10, md: 14 }}
+      // Sobre el mármol la banda ya pone su propio relleno de arriba: sin el de la tarjeta.
+      pt={sinMargenes || (marmol && !caja) ? 0 : { base: 10, md: 14 }}
     >
       {/* El panel entra al asomar: sube, crece un poco y sus dos mitades llegan
           en cascada (texto desde la izquierda, foto desde la derecha).
@@ -172,12 +176,19 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
         justifyContent="center"
         gap={{ base: 7, md: 14, lg: 20 }}
         w="100%"
-        p={{ base: marmol ? 0 : 7, md: 12, lg: 16 }}
+        px={{ base: marmol && !caja ? 0 : 7, md: 12, lg: 16 }}
+        pb={{ base: marmol && !caja ? 0 : 7, md: 12, lg: 16 }}
+        pt={{ base: marmol && !caja ? 0 : 7, md: marmol && !caja ? 2 : 12, lg: marmol && !caja ? 2 : 16 }}
         borderRadius="3xl"
         bg={c.panelBg}
         // Sobre el mármol, sin marco ni halo alrededor (móvil y ordenador).
-        border={marmol ? "none" : `1px solid ${c.panelBorde}`}
-        boxShadow={marmol ? "none" : c.panelSombra}
+        border={marmol && !caja ? "none" : `1px solid ${c.panelBorde}`}
+        boxShadow={marmol && !caja ? "none" : c.panelSombra}
+        overflow={caja ? "hidden" : undefined}
+        bgImage={caja ? { base: "url('/img/fondos/marmolfondo-crema.webp')", md: "url('/img/fondos/marmolfondo.webp')" } : undefined}
+        bgSize="cover"
+        bgPosition="center"
+        bgRepeat="no-repeat"
         // Sobre el mármol no hay cristal esmerilado: se tiene que ver el mármol.
         sx={marmol ? undefined : { backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }}
       >

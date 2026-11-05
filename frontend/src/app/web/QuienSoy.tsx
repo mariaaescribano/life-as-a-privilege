@@ -44,7 +44,7 @@ const ORO = "#b08d3f";
 /** Las tres fotos de «Mi propósito» (las de la web) y su frase. */
 const PROPOSITO: { foto: string; texto: ClaveTexto; posicion?: string }[] = [
   { foto: "/img/me/leyendocontraje.webp", texto: "quienSoy.proposito.1" },
-  { foto: "/img/me/contrajenegro.webp", texto: "quienSoy.proposito.2" },
+  { foto: "/img/me/asesora-grande.webp", texto: "quienSoy.proposito.2" },
   { foto: "/img/me/trajegrisconmapa.webp", texto: "quienSoy.proposito.3" },
 ];
 
