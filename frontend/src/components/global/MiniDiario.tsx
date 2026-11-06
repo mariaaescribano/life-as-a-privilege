@@ -21,6 +21,8 @@ import { useT } from "../../i18n";
 import { focoBlanco } from "./foco";
 import { personaActiva } from "../../api/persona";
 import { useNotaPagina, NotaPaginaContenido } from "./NotaPagina";
+import { esAdminDesbloqueado } from "../../api/sesion";
+import { VistaDiarioMaria } from "./DiarioMaria";
 
 /** Icono del diario (libro abierto). El color se adapta vía `fill`.
  *  Exportado: lo usa también el pin de «Mis notas» del /home. */
@@ -69,7 +71,7 @@ const fmtFecha = (iso: string) => {
 export function MiniDiario() {
   const t = useT();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [vista, setVista] = useState<"escribir" | "notas" | "pagina">("escribir");
+  const [vista, setVista] = useState<"escribir" | "notas" | "pagina" | "diario">("escribir");
   // La nota de María de ESTA página (vive aquí dentro, en su propia pestaña del popup).
   const np = useNotaPagina();
 
@@ -84,6 +86,8 @@ export function MiniDiario() {
   const [cargandoNotas, setCargandoNotas] = useState(false);
 
   const userId = localStorage.getItem("userId");
+  // María (sesión de admin desbloqueada): tiene además la pestaña DIARIO, lo que apunta de sí misma.
+  const esMaria = esAdminDesbloqueado();
 
   const disciplinaSel = categoria ? disciplinaByKey(categoria) : undefined;
 
@@ -277,20 +281,22 @@ export function MiniDiario() {
             flexDirection="column"
             overflow="hidden"
           >
-            {/* Dos pestañas cuando esta página tiene nota de María (siempre para ella). */}
-            {np.visible && (
-              <Flex gap={2} mb={4} justify="center" flexShrink={0}>
+            {/* Pestañas: «Notas» y, si la página tiene nota de María, su nota (siempre para ella);
+                y DIARIO, solo para María. */}
+            {(np.visible || esMaria) && (
+              <Flex gap={2} mb={4} justify="center" flexShrink={0} wrap="wrap">
                 {([
-                  ["escribir", t("diario.titulo")],
-                  ["pagina", np.maria ? "Nota" : t("metodo.notaMaria.titulo")],
-                ] as const).map(([v, etiqueta]) => {
-                  const activa = v === "pagina" ? vista === "pagina" : vista !== "pagina";
+                  ...[["escribir", t("diario.titulo")]],
+                  ...(np.visible ? [["pagina", np.maria ? "Nota" : t("metodo.notaMaria.titulo")]] : []),
+                  ...(esMaria ? [["diario", "DIARIO"]] : []),
+                ] as [("escribir" | "pagina" | "diario"), string][]).map(([v, etiqueta]) => {
+                  const activa = v === "escribir" ? vista === "escribir" || vista === "notas" : vista === v;
                   return (
                     <Box
                       key={v}
                       as="button"
                       type="button"
-                      onClick={() => { if (v === "pagina") { setVista("pagina"); np.marcarVista(); } else setVista("escribir"); }}
+                      onClick={() => { if (v === "pagina") { setVista("pagina"); np.marcarVista(); } else setVista(v); }}
                       display="inline-flex"
                       alignItems="center"
                       gap={2}
@@ -316,7 +322,9 @@ export function MiniDiario() {
                 })}
               </Flex>
             )}
-            {vista === "pagina" && np.visible ? (
+            {vista === "diario" && esMaria ? (
+              <VistaDiarioMaria />
+            ) : vista === "pagina" && np.visible ? (
               <>
                 {np.maria && np.nombre && (
                   <Text fontSize="sm" opacity={0.8} fontStyle="italic" textAlign="center" mb={3} noOfLines={1}>para {np.nombre}</Text>
@@ -382,7 +390,9 @@ function VistaEscribir({
   }, []);
 
   const nom = disciplinaSel?.nombre;
-  const txtColor = disciplinaSel?.txt ?? "white";
+  // Sin disciplina elegida, el box de escribir va sobre el mármol (horizontal) con letra turquesa oscuro.
+  const marmol = !disciplinaSel;
+  const txtColor = disciplinaSel?.txt ?? "#004f4f";
   const conFondo = !!nom && hasDisciplinaBg(nom);
 
   return (
@@ -425,8 +435,13 @@ function VistaEscribir({
         overflow="hidden"
         borderRadius="xl"
         minH={{ base: "150px", md: "170px" }}
-        bg={disciplinaSel ? disciplinaSel.bg : "rgba(255,255,255,0.06)"}
-        border="1px solid rgba(255,255,255,0.18)"
+        bg={disciplinaSel ? disciplinaSel.bg : "#f2e9d9"}
+        bgImage={marmol ? "url('/img/fondos/marmolfondo.webp')" : undefined}
+        bgSize="cover"
+        bgPosition="center"
+        bgRepeat="no-repeat"
+        border={marmol ? "1px solid #004f4f55" : "1px solid rgba(255,255,255,0.18)"}
+        boxShadow={marmol ? "0 0 18px #b08d3f33" : undefined}
         transition="background 0.4s ease"
       >
         {conFondo && nom && <DisciplinaBgLayer nom={nom} borderRadius="xl" />}
@@ -637,7 +652,7 @@ export function NotaCard({ nota, onBorrar }: { nota: Nota; onBorrar: (id: string
   // Quién la escribió: las de María llevan su nombre; si es María quien mira, las
   // de la persona llevan el suyo. Si ve la persona sus propias notas, ninguno.
   const persona = personaActiva();
-  const autor = nota.autor === "maria" ? "María" : persona ? persona.name : null;
+  const autor = nota.autor === "maria" ? "María" : persona ? persona.name : localStorage.getItem("name");
 
   return (
     <Box
@@ -691,10 +706,11 @@ export function NotaCard({ nota, onBorrar }: { nota: Nota; onBorrar: (id: string
           whiteSpace="pre-wrap"
           sx={{ textShadow: conFondo ? "0 1px 8px rgba(0,0,0,0.35)" : "none", overflowWrap: "anywhere", wordBreak: "break-word" }}
         >
+          {autor && <Text as="span" fontWeight="700">{autor} - </Text>}
           {nota.contenido}
         </Text>
         <Text color={`${txtColor}99`} fontSize="xs" mt={2} fontStyle="italic">
-          {autor ? `${autor} · ` : ""}{fmtFecha(nota.created_at)}
+          {fmtFecha(nota.created_at)}
         </Text>
       </Box>
     </Box>

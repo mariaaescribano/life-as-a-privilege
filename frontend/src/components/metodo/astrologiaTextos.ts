@@ -1,5 +1,4 @@
 import type { CuerpoKey } from "./astrologiaData";
-import { ARQUETIPOS_OVERRIDES } from "./astrologiaTextos.overrides";
 import { overridesRemotos } from "../../data/astrologiaOverridesRemotos";
 import { TEXTOS_SIGNO_EN, TEXTOS_CASA_EN } from "./astrologiaTextos.en";
 import { getIdioma } from "../../i18n";
@@ -3650,17 +3649,20 @@ export function getTextoCasaOriginal(planetaKey: string, casa: number): string |
 }
 
 /**
- * De dónde salen los overrides: si la BD tiene fila (editada desde
- * /admin/astrologia-textos, que ahora también funciona en producción), esa fila
- * MANDA sobre todo el conjunto — incluidas las celdas que se hayan borrado ahí.
- * Mientras no haya llegado (o no haya nada guardado), los del proyecto.
+ * De dónde salen los overrides: la fila PÚBLICA de la BD (editada desde
+ * /admin/astrologia-textos, caja de la derecha), que manda sobre todo el conjunto —
+ * incluidas las celdas que se hayan borrado ahí. Mientras no haya llegado (o no haya
+ * nada publicado), ninguno: salen los originales.
  *
  * Ojo: quien pinte el texto de forma síncrona tiene que llamar a
  * useOverridesRemotos() para volver a renderizar cuando lleguen.
  */
 function fuenteOverrides() {
-  return overridesRemotos() ?? ARQUETIPOS_OVERRIDES;
+  // Solo lo PÚBLICO (lo que María publica). Lo escrito en privado nunca llega al usuario: mientras
+  // no haya nada publicado, salen los textos originales del proyecto.
+  return overridesRemotos() ?? VACIOS;
 }
+const VACIOS: { signo: Record<string, Record<string, string>>; casa: Record<string, Record<string, string>> } = { signo: {}, casa: {} };
 
 /**
  * Texto efectivo, celda a celda:

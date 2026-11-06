@@ -9,7 +9,7 @@
 -- aún no estaba en la base (nota_pagina, camino_visto, notas.autor, suscriptor.nombre,
 -- user.created_at), los índices, la vista estudio_stats, el RLS y el bucket de imágenes.
 --
--- Tablas (35): user, notas, nota_pagina, diario_sesion, recorrido_progreso, camino_visto,
+-- Tablas (36): user, notas, diario_maria, nota_pagina, diario_sesion, recorrido_progreso, camino_visto,
 -- actividad_recurso, metodo_* (astrologia, psicologia, ayurveda, tcm, fisiologia, nutricion,
 -- cabala), psicologia_des, astrologia, astrologia_arquetipos, ayurveda, ayurveda_respuestas,
 -- tcm, tcm_respuestas, nutricion, cabala, fitoterapia, neuroPsicologia, curso, curso_revisado,
@@ -232,6 +232,13 @@ create table if not exists public."neuroPsicologia" (
   pregid varchar not null,
   respuesta text,
   userid varchar,
+  primary key (id)
+);
+
+create table if not exists public.diario_maria (
+  id uuid default gen_random_uuid() not null,
+  contenido text not null,
+  created_at timestamptz default now() not null,
   primary key (id)
 );
 

@@ -17,9 +17,13 @@ const OVERRIDES_PATH = path.resolve(
   'astrologiaTextos.overrides.ts',
 );
 
-/** Tabla y fila única donde vive el conjunto de overrides (ver sql/astrologia-arquetipos.sql). */
+/** Tabla donde viven los conjuntos de overrides (ver sql/astrologia-arquetipos.sql). Hay DOS filas:
+ *  · 'overrides' = el PRIVADO (lo escrito por María; solo ella lo ve en /admin/astrologia-textos);
+ *  · 'publico'   = el PÚBLICO (lo que ven los usuarios en el recorrido). Empieza sin fila: sin nada
+ *    escrito ahí, los usuarios ven los textos originales del proyecto. */
 const TABLA = 'astrologia_arquetipos';
-const FILA = 'overrides';
+export type DestinoArquetipos = 'privado' | 'publico';
+const FILA: Record<DestinoArquetipos, string> = { privado: 'overrides', publico: 'publico' };
 
 @Injectable()
 export class AstrologiaTextosService {
@@ -31,9 +35,9 @@ export class AstrologiaTextosService {
    * distingue «no hay nada guardado en BD» → usa los del proyecto, de «hay una
    * fila» → esa fila es la verdad, incluidas las celdas borradas.
    */
-  async leerOverrides(): Promise<ArquetiposOverrides | null> {
+  async leerOverrides(destino: DestinoArquetipos = 'publico'): Promise<ArquetiposOverrides | null> {
     const db = this.databaseService.getClient();
-    const { data, error } = await db.from(TABLA).select('data').eq('id', FILA);
+    const { data, error } = await db.from(TABLA).select('data').eq('id', FILA[destino]);
     if (error) {
       // Sin tabla creada todavía: el front cae a los textos del proyecto.
       console.warn('[astrologiaArquetipos.leerOverrides]', error.message);
@@ -56,6 +60,7 @@ export class AstrologiaTextosService {
    */
   async guardarOverrides(
     overrides: ArquetiposOverrides,
+    destino: DestinoArquetipos = 'publico',
   ): Promise<{ success: boolean; error?: string; archivoLocal?: boolean }> {
     // Validación de forma: { signo: {...}, casa: {...} } de strings.
     const limpio = this.sanear(overrides);
@@ -66,7 +71,7 @@ export class AstrologiaTextosService {
     const db = this.databaseService.getClient();
     const { error } = await db
       .from(TABLA)
-      .upsert({ id: FILA, data: limpio, updated_at: new Date().toISOString() }, { onConflict: 'id' });
+      .upsert({ id: FILA[destino], data: limpio, updated_at: new Date().toISOString() }, { onConflict: 'id' });
 
     if (error) {
       const falta = /relation .* does not exist|could not find the table/i.test(error.message);
@@ -78,7 +83,8 @@ export class AstrologiaTextosService {
       };
     }
 
-    return { success: true, archivoLocal: await this.escribirArchivoLocal(limpio) };
+    // El archivo del proyecto es el respaldo de lo PRIVADO (lo escrito por María).
+    return { success: true, archivoLocal: destino === 'privado' ? await this.escribirArchivoLocal(limpio) : false };
   }
 
   /**

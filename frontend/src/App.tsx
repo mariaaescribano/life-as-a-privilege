@@ -122,6 +122,7 @@ const MetodoAstrologiaSintesis = lazyConMetodo(() => import("./app/metodo/Metodo
 const MetodoAstrologiaCursos = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaCursos"));
 const AdminHome = lazy(() => import("./app/admin/AdminHome"));
 const AdminInicio = lazy(() => import("./app/admin/AdminInicio"));
+const AdminMiDiario = lazy(() => import("./app/admin/AdminMiDiario"));
 const AdminDatosUsuario = lazy(() => import("./app/admin/AdminDatosUsuario"));
 const AdminCrearCuenta = lazy(() => import("./app/admin/AdminCrearCuenta"));
 const AdminLogin = lazy(() => import("./app/admin/AdminLogin"));
@@ -481,6 +482,7 @@ export default function App()
       <Route path="/metodo/astrologia/:planetaKey/:campo" element={<PrivateRoute><MetodoAstrologiaProfundizar /></PrivateRoute>} />
       <Route path="/admin/login" element={<AdminLogin />} />
       <Route path="/admin" element={<AdminRoute><AdminInicio /></AdminRoute>} />
+      <Route path="/admin/mi-diario" element={<AdminRoute><AdminMiDiario /></AdminRoute>} />
       <Route path="/admin/asesorias" element={<AdminRoute><AdminHome /></AdminRoute>} />
       <Route path="/admin/asesorias/nueva" element={<AdminRoute><AdminCrearCuenta /></AdminRoute>} />
       <Route path="/admin/asesorias/:userId/datos" element={<AdminRoute><AdminDatosUsuario /></AdminRoute>} />

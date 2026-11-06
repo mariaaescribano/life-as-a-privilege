@@ -22,6 +22,7 @@ import { adminHeaders } from "../app/admin/useAdminGuard";
 import {
   cargarOverridesRemotos,
   overridesRemotos,
+  sanear,
   type ArquetiposOverrides,
 } from "./astrologiaOverridesRemotos";
 
@@ -83,37 +84,55 @@ const clonar = (o: ArquetiposOverrides): ArquetiposOverrides => ({
   casa: JSON.parse(JSON.stringify(o.casa ?? {})),
 });
 
-/** Los overrides del proyecto (respaldo del bundle), sin pasar por la red. */
+/** Los overrides del proyecto (respaldo del bundle): son los PRIVADOS, lo escrito por María. */
 export function cargarOverridesLocales(): ArquetiposOverrides {
   return clonar(ARQUETIPOS_OVERRIDES as ArquetiposOverrides);
 }
 
+export type DestinoArquetipos = "privado" | "publico";
+
 /**
- * Los overrides que hay que EDITAR: los de la BD si hay fila, si no los del
- * proyecto. Importa que sea el conjunto completo, porque al guardar se manda
- * entero y la fila pasa a ser la verdad: si se editara sobre un conjunto a
- * medias, lo que faltara se borraría sin querer.
+ * Los textos PRIVADOS (lo escrito por María, solo ella): los de la BD si hay fila, si no los del
+ * proyecto. Hay que editar sobre el conjunto COMPLETO, porque al guardar se manda entero.
  */
-export async function cargarOverrides(): Promise<ArquetiposOverrides> {
-  const remotos = await cargarOverridesRemotos(true);
-  return clonar(remotos ?? (ARQUETIPOS_OVERRIDES as ArquetiposOverrides));
+export async function cargarOverridesPrivados(): Promise<ArquetiposOverrides> {
+  try {
+    const { data } = await axios.get<{ overrides?: unknown }>(`${API_URL}/astrologia-arquetipos/privado`, {
+      headers: adminHeaders(),
+    });
+    const o = sanear(data?.overrides);
+    if (o) return clonar(o);
+  } catch {
+    /* sin servidor: el respaldo del proyecto */
+  }
+  return clonar(ARQUETIPOS_OVERRIDES as ArquetiposOverrides);
 }
 
 /**
- * Guarda el conjunto completo. El back lo escribe en la BD (lo que funciona en
- * producción) y, si se está en local, también en el archivo del proyecto.
+ * Los textos PÚBLICOS (lo que ven los usuarios): los de la BD, o vacío si todavía no hay nada
+ * escrito (entonces ven los textos originales del proyecto).
+ */
+export async function cargarOverridesPublicos(): Promise<ArquetiposOverrides> {
+  const remotos = await cargarOverridesRemotos(true);
+  return clonar(remotos ?? { signo: {}, casa: {} });
+}
+
+/**
+ * Guarda el conjunto completo, privado o público. El back lo escribe en la BD (lo que funciona
+ * en producción) y, para el privado en local, también en el archivo del proyecto.
  */
 export async function guardarOverrides(
   overrides: ArquetiposOverrides,
+  destino: DestinoArquetipos,
 ): Promise<{ success: boolean; error?: string; archivoLocal?: boolean }> {
   try {
     const { data } = await axios.put(
-      `${API_URL}/astrologia-arquetipos`,
+      `${API_URL}/astrologia-arquetipos/${destino}`,
       { overrides },
       { headers: adminHeaders() },
     );
-    // Que lo recién guardado sea ya lo que ve el recorrido en esta pestaña.
-    if (data?.success) await cargarOverridesRemotos(true);
+    // Que lo recién guardado como público sea ya lo que ve el recorrido en esta pestaña.
+    if (data?.success && destino === "publico") await cargarOverridesRemotos(true);
     return data ?? { success: false };
   } catch (e: unknown) {
     const error =

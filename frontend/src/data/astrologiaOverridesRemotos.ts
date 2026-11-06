@@ -1,5 +1,6 @@
 // ─────────────────────────────────────────────────────────────────────────
-// Overrides de los arquetipos GUARDADOS EN LA BASE DE DATOS.
+// Overrides de los arquetipos PÚBLICOS (lo que ven los usuarios), guardados en la BD.
+// Los PRIVADOS (lo escrito por María, solo para ella) se piden aparte desde el editor de admin.
 //
 // Antes los textos editados en /admin/astrologia-textos solo se podían guardar
 // en local (el back reescribía astrologiaTextos.overrides.ts y había que hacer
@@ -30,7 +31,7 @@ let promesa: Promise<ArquetiposOverrides | null> | null = null;
 export const overridesRemotos = (): ArquetiposOverrides | null => remotos;
 
 /** Deja el objeto en la forma { signo, casa } con solo strings no vacíos. */
-function sanear(input: unknown): ArquetiposOverrides | null {
+export function sanear(input: unknown): ArquetiposOverrides | null {
   if (!input || typeof input !== "object") return null;
   const src = input as Record<string, unknown>;
   const out: ArquetiposOverrides = { signo: {}, casa: {} };

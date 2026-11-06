@@ -1,16 +1,17 @@
 // ─────────────────────────────────────────────────────────────────────────
 // ADMIN · Editor de INTERPRETACIONES de la carta (arquetipos del RECORRIDO).
 //
+// Hay DOS conjuntos de textos: el PRIVADO (caja izquierda: lo que ya has escrito, solo lo ves tú)
+// y el PÚBLICO (caja derecha: lo que ven los usuarios; vacío = ven los textos originales).
 // Edita el texto de cada arquetipo (cuerpo × signo y cuerpo × casa) que muestra
 // el popup «Saber más» de la página "Arquetipos" del recorrido. NO tiene nada que
 // ver con los arquetipos de los cursos (LetraArquetipos.ts).
 //
-// Persistencia: HARDCODEADA en el proyecto (astrologiaTextos.overrides.ts), sin
-// base de datos. Es una herramienta de autoría LOCAL: al guardar, el back
-// reescribe ese archivo en la copia de trabajo; luego se hace commit + deploy.
+// Persistencia: la tabla astrologia_arquetipos (dos filas: privado y público); el privado además
+// reescribe en local el archivo astrologiaTextos.overrides.ts como respaldo.
 // ─────────────────────────────────────────────────────────────────────────
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Box, Flex, Text, Textarea, useToast } from "@chakra-ui/react";
+import { Box, Flex, Grid, Text, Textarea, useToast } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { AstrologiaLoading } from "../../components/metodo/comicLoaders";
@@ -20,7 +21,8 @@ import { Glifo, GlifoSigno } from "../../components/metodo/Glifo";
 import { CUERPOS, ZODIAC_SIGNS, type Cuerpo, type CuerpoKey } from "../../components/metodo/astrologiaData";
 import { getTextoSignoOriginal, getTextoCasaOriginal } from "../../components/metodo/astrologiaTextos";
 import {
-  cargarOverrides,
+  cargarOverridesPrivados,
+  cargarOverridesPublicos,
   cargarOverridesLocales,
   guardarOverrides,
   type ArquetiposOverrides,
@@ -47,23 +49,26 @@ export default function AdminAstrologiaTextos() {
   const { verificando } = useAdminGuard();
   const toast = useToast();
 
-  // Overrides en memoria + snapshot de lo guardado (para saber si hay cambios).
-  // Se arranca con los del proyecto (los del bundle, disponibles ya) y en cuanto
-  // llega la BD se sustituyen: la fila de la BD es la que manda, y hay que
+  // Los dos conjuntos en memoria + snapshot de lo guardado (para saber si hay cambios). Se arranca con
+  // los del proyecto y en cuanto llega la BD se sustituyen: la fila de la BD es la que manda, y hay que
   // editar sobre el conjunto COMPLETO porque al guardar se manda entero.
-  const [overrides, setOverrides] = useState<ArquetiposOverrides>(() => cargarOverridesLocales());
-  const guardadoRef = useRef<string>(JSON.stringify(cargarOverridesLocales()));
+  const [privados, setPrivados] = useState<ArquetiposOverrides>(() => cargarOverridesLocales());
+  const [publicos, setPublicos] = useState<ArquetiposOverrides>({ signo: {}, casa: {} });
+  const guardadoPriv = useRef<string>(JSON.stringify(cargarOverridesLocales()));
+  const guardadoPub = useRef<string>(JSON.stringify({ signo: {}, casa: {} }));
   const [guardando, setGuardando] = useState(false);
   const [cargando, setCargando] = useState(true);
 
   useEffect(() => {
     if (verificando) return;
     let vivo = true;
-    cargarOverrides()
-      .then((o) => {
+    Promise.all([cargarOverridesPrivados(), cargarOverridesPublicos()])
+      .then(([priv, pub]) => {
         if (!vivo) return;
-        setOverrides(o);
-        guardadoRef.current = JSON.stringify(o);
+        setPrivados(priv);
+        setPublicos(pub);
+        guardadoPriv.current = JSON.stringify(priv);
+        guardadoPub.current = JSON.stringify(pub);
       })
       .finally(() => {
         if (vivo) setCargando(false);
@@ -77,7 +82,8 @@ export default function AdminAstrologiaTextos() {
   const [cuerpoKey, setCuerpoKey] = useState<CuerpoKey>("sol");
   const [faceta, setFaceta] = useState<FacetaAstro>("signo");
   const [celda, setCelda] = useState<string | null>(null); // signo name o nº de casa (string)
-  const [draft, setDraft] = useState("");
+  const [draftPriv, setDraftPriv] = useState("");
+  const [draftPub, setDraftPub] = useState("");
 
   const cuerpo = useMemo<Cuerpo>(() => CUERPOS.find((c) => c.key === cuerpoKey) ?? CUERPOS[0], [cuerpoKey]);
   const color = cuerpo.color;
@@ -87,22 +93,23 @@ export default function AdminAstrologiaTextos() {
   const original = (f: FacetaAstro, ck: string, v: string): string | null =>
     f === "signo" ? getTextoSignoOriginal(ck, v) : getTextoCasaOriginal(ck, Number(v));
 
-  const override = (f: FacetaAstro, ck: string, v: string): string | undefined =>
-    overrides[f]?.[ck]?.[v];
+  const override = (set: ArquetiposOverrides, f: FacetaAstro, ck: string, v: string): string | undefined =>
+    set[f]?.[ck]?.[v];
 
-  const efectivo = (f: FacetaAstro, ck: string, v: string): string => {
-    const ov = override(f, ck, v);
+  const tieneOverride = (set: ArquetiposOverrides, f: FacetaAstro, ck: string, v: string): boolean => {
+    const ov = override(set, f, ck, v);
+    return typeof ov === "string" && ov.trim() !== "";
+  };
+
+  /** El texto del box privado: lo escrito o, si no hay nada, el original. */
+  const efectivoPriv = (f: FacetaAstro, ck: string, v: string): string => {
+    const ov = override(privados, f, ck, v);
     if (typeof ov === "string" && ov.trim() !== "") return ov;
     return original(f, ck, v) ?? "";
   };
 
-  const tieneOverride = (f: FacetaAstro, ck: string, v: string): boolean => {
-    const ov = override(f, ck, v);
-    return typeof ov === "string" && ov.trim() !== "";
-  };
-
   const estaEscrito = (f: FacetaAstro, ck: string, v: string): boolean =>
-    efectivo(f, ck, v).trim() !== "";
+    efectivoPriv(f, ck, v).trim() !== "";
 
   /** Signos escritos de un cuerpo (para el progreso del chip). */
   const progresoSigno = (ck: string): number =>
@@ -111,15 +118,16 @@ export default function AdminAstrologiaTextos() {
   // ── Edición ────────────────────────────────────────────────────────────────
   const abrirCelda = (v: string) => {
     setCelda(v);
-    setDraft(efectivo(faceta, cuerpoKey, v));
+    setDraftPriv(efectivoPriv(faceta, cuerpoKey, v));
+    setDraftPub(override(publicos, faceta, cuerpoKey, v) ?? "");
   };
 
-  /** Aplica el texto a memoria: si iguala al original o está vacío, quita el override. */
-  const aplicar = (texto: string) => {
-    setDraft(texto);
+  /** Aplica el texto a memoria en uno de los dos conjuntos: si iguala al original o está vacío, quita el override. */
+  const aplicarEn = (lado: "privado" | "publico", texto: string) => {
+    (lado === "privado" ? setDraftPriv : setDraftPub)(texto);
     if (celda == null) return;
     const orig = original(faceta, cuerpoKey, celda) ?? "";
-    setOverrides((prev) => {
+    (lado === "privado" ? setPrivados : setPublicos)((prev) => {
       const next = clonar(prev);
       const rama = next[faceta];
       const quitar = texto.trim() === "" || texto === orig;
@@ -135,11 +143,11 @@ export default function AdminAstrologiaTextos() {
     });
   };
 
-  const restaurarOriginal = () => {
+  const restaurarOriginal = (lado: "privado" | "publico") => {
     if (celda == null) return;
     const orig = original(faceta, cuerpoKey, celda) ?? "";
-    setDraft(orig);
-    setOverrides((prev) => {
+    (lado === "privado" ? setDraftPriv : setDraftPub)(lado === "privado" ? orig : "");
+    (lado === "privado" ? setPrivados : setPublicos)((prev) => {
       const next = clonar(prev);
       const rama = next[faceta];
       if (rama[cuerpoKey]) {
@@ -148,6 +156,12 @@ export default function AdminAstrologiaTextos() {
       }
       return next;
     });
+  };
+
+  /** Lleva el texto del box privado al público (para retocarlo allí). */
+  const copiarAlPublico = () => {
+    if (celda == null) return;
+    aplicarEn("publico", draftPriv);
   };
 
   const seleccionarCuerpo = (ck: CuerpoKey) => {
@@ -165,26 +179,29 @@ export default function AdminAstrologiaTextos() {
   const onGuardar = async () => {
     setGuardando(true);
     try {
-      const res = await guardarOverrides(overrides);
-      if (res.success) {
-        guardadoRef.current = JSON.stringify(overrides);
-        toast({
-          title: "Guardado",
-          description: res.archivoLocal
-            ? "En la base de datos y en el archivo del proyecto (commitéalo)."
-            : "En la base de datos: ya se ve en el recorrido.",
-          status: "success",
-          duration: 2600,
-          isClosable: true,
-        });
-      } else {
-        toast({
-          title: "No se pudo guardar",
-          description: res.error,
-          status: "error",
-          duration: 6000,
-          isClosable: true,
-        });
+      const lados = [
+        { destino: "privado" as const, datos: privados, ref: guardadoPriv },
+        { destino: "publico" as const, datos: publicos, ref: guardadoPub },
+      ].filter((l) => JSON.stringify(l.datos) !== l.ref.current);
+      for (const l of lados) {
+        const res = await guardarOverrides(l.datos, l.destino);
+        if (res.success) {
+          l.ref.current = JSON.stringify(l.datos);
+          toast({
+            title: l.destino === "publico" ? "Público guardado" : "Privado guardado",
+            description: l.destino === "publico"
+              ? "Ya lo ven los usuarios en el recorrido."
+              : res.archivoLocal
+                ? "En la base de datos y en el archivo del proyecto (commitéalo). Solo lo ves tú."
+                : "En la base de datos. Solo lo ves tú.",
+            status: "success",
+            duration: 2600,
+            isClosable: true,
+          });
+        } else {
+          toast({ title: "No se pudo guardar", description: res.error, status: "error", duration: 6000, isClosable: true });
+          break;
+        }
       }
     } finally {
       setGuardando(false);
@@ -197,8 +214,9 @@ export default function AdminAstrologiaTextos() {
     return <AstrologiaLoading />;
   }
 
-  const totalPersonalizadas = contarOverrides(overrides);
-  const hayCambios = JSON.stringify(overrides) !== guardadoRef.current;
+  const totalPrivadas = contarOverrides(privados);
+  const totalPublicas = contarOverrides(publicos);
+  const hayCambios = JSON.stringify(privados) !== guardadoPriv.current || JSON.stringify(publicos) !== guardadoPub.current;
   const escritas = valores.filter((v) => estaEscrito(faceta, cuerpoKey, v)).length;
 
   return (
@@ -206,7 +224,7 @@ export default function AdminAstrologiaTextos() {
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 4, md: 10 }} py={{ base: 8, md: 12 }}>
-        <Flex direction="column" w="100%" maxW="960px" gap={6}>
+        <Flex direction="column" w="100%" maxW="1240px" gap={6}>
 
           {/* ── Cabecera ── */}
           <Flex align="flex-start" justify="space-between" gap={4} wrap="wrap">
@@ -216,7 +234,7 @@ export default function AdminAstrologiaTextos() {
                 Interpretaciones de la carta
               </Text>
               <Text color="rgba(255,255,255,0.75)" fontSize="sm">
-                Arquetipos del mapa · {totalPersonalizadas} celda{totalPersonalizadas === 1 ? "" : "s"} personalizada{totalPersonalizadas === 1 ? "" : "s"}
+                Arquetipos del mapa · {totalPrivadas} privada{totalPrivadas === 1 ? "" : "s"} · {totalPublicas} pública{totalPublicas === 1 ? "" : "s"}
               </Text>
             </Box>
             <Box as="button" onClick={guardando || !hayCambios ? undefined : onGuardar}
@@ -295,14 +313,15 @@ export default function AdminAstrologiaTextos() {
               </Flex>
 
               <Text color="rgba(255,255,255,0.6)" fontSize="xs" mt={-2}>
-                {escritas}/{valores.length} {faceta === "signo" ? "Signos" : "Casas"} con texto · haz clic en una celda para editarla
+                {escritas}/{valores.length} {faceta === "signo" ? "Signos" : "Casas"} con texto privado · «P» = ya tiene texto público · haz clic en una celda para editarla
               </Text>
 
               {/* Rejilla de celdas */}
               <Flex gap={2.5} wrap="wrap">
                 {valores.map((v) => {
                   const escrito = estaEscrito(faceta, cuerpoKey, v);
-                  const editado = tieneOverride(faceta, cuerpoKey, v);
+                  const editado = tieneOverride(privados, faceta, cuerpoKey, v);
+                  const publicado = tieneOverride(publicos, faceta, cuerpoKey, v);
                   const abierta = celda === v;
                   const signoData = faceta === "signo" ? ZODIAC_SIGNS.find((s) => s.name === v) : null;
                   return (
@@ -321,49 +340,78 @@ export default function AdminAstrologiaTextos() {
                             title={editado ? "editado" : escrito ? "con texto" : "vacío"}>
                         {editado ? "✎" : escrito ? "●" : "○"}
                       </Text>
+                      {publicado && (
+                        <Text fontSize="2xs" fontWeight="700" color="white" title="con texto público"
+                              px={1.5} borderRadius="full" bg={`${color}55`}>P</Text>
+                      )}
                     </Flex>
                   );
                 })}
               </Flex>
 
-              {/* Editor de la celda seleccionada */}
+              {/* Editor de la celda seleccionada: a la izquierda el PRIVADO (lo ya escrito, solo tú) y a la
+                  derecha el PÚBLICO (lo que ven los usuarios; vacío = el texto original). */}
               {celda != null && (
-                <Box borderRadius="xl" bg="rgba(0,0,0,0.28)" border={`1px solid ${color}44`} p={{ base: 4, md: 5 }}>
-                  <Flex align="center" justify="space-between" mb={3} gap={3} wrap="wrap">
-                    <Text color={color} fontSize={{ base: "md", md: "lg" }} fontWeight="700">
-                      {cuerpo.label} · {faceta === "casa" ? `Casa ${celda}` : celda}
-                    </Text>
-                    <Flex align="center" gap={3}>
-                      <Text color={tieneOverride(faceta, cuerpoKey, celda) ? color : "rgba(255,255,255,0.5)"}
-                            fontSize="xs" fontStyle="italic">
-                        {tieneOverride(faceta, cuerpoKey, celda) ? "✎ texto personalizado" : "texto original"}
-                      </Text>
-                      {tieneOverride(faceta, cuerpoKey, celda) && (
-                        <Box as="button" onClick={restaurarOriginal}
-                             px={3} py={1} borderRadius="full" fontSize="xs" fontWeight="600"
-                             bg="rgba(255,255,255,0.08)" border="1px solid rgba(255,255,255,0.3)"
-                             color="rgba(255,255,255,0.85)" cursor="pointer"
-                             _hover={{ bg: "rgba(255,255,255,0.16)" }}>
-                          Restaurar original
-                        </Box>
-                      )}
-                    </Flex>
-                  </Flex>
-                  <Textarea
-                    value={draft}
-                    onChange={(e) => aplicar(e.target.value)}
-                    placeholder="Escribe la interpretación…"
-                    minH="320px"
-                    bg="rgba(0,0,0,0.35)" color="white" border={`1px solid ${color}44`}
-                    borderRadius="lg" fontFamily="'EB Garamond', serif" fontSize={{ base: "md", md: "lg" }} lineHeight="1.7"
-                    sx={{ caretColor: color }}
-                    _placeholder={{ color: "rgba(255,255,255,0.4)", fontStyle: "italic" }}
-                    _focus={{ borderColor: color, boxShadow: `0 0 0 1px ${color}66` }}
-                  />
-                  <Text color="rgba(255,255,255,0.55)" fontSize="xs" fontStyle="italic" mt={2}>
-                    Usa **negritas** con dobles asteriscos y deja una línea en blanco entre párrafos. Los cambios se aplican al momento; pulsa «Guardar cambios» arriba para escribirlos en el proyecto.
-                  </Text>
-                </Box>
+                <Grid templateColumns={{ base: "1fr", lg: "1fr 1fr" }} gap={{ base: 4, md: 5 }} alignItems="stretch">
+                  {([
+                    { lado: "privado" as const, titulo: "Privado", sub: "Solo lo ves tú", draft: draftPriv, conjunto: privados,
+                      placeholder: "Escribe la interpretación…" },
+                    { lado: "publico" as const, titulo: "Público", sub: "Lo que ven los usuarios", draft: draftPub, conjunto: publicos,
+                      placeholder: original(faceta, cuerpoKey, celda) ?? "Escribe la interpretación…" },
+                  ]).map((c) => {
+                    const hay = tieneOverride(c.conjunto, faceta, cuerpoKey, celda);
+                    return (
+                      <Flex key={c.lado} direction="column" borderRadius="xl" bg="rgba(0,0,0,0.28)" border={`1px solid ${color}44`} p={{ base: 4, md: 5 }}>
+                        <Flex align="center" justify="space-between" mb={1} gap={3} wrap="wrap">
+                          <Text color={color} fontSize={{ base: "md", md: "lg" }} fontWeight="700">
+                            {c.titulo} · {cuerpo.label} · {faceta === "casa" ? `Casa ${celda}` : celda}
+                          </Text>
+                          <Flex align="center" gap={2}>
+                            {c.lado === "publico" && (
+                              <Box as="button" onClick={copiarAlPublico}
+                                   px={3} py={1} borderRadius="full" fontSize="xs" fontWeight="600"
+                                   bg={`${color}26`} border={`1px solid ${color}`} color={color} cursor="pointer"
+                                   _hover={{ bg: `${color}40` }}
+                                   title="Copia el texto del box privado a este, para retocarlo aquí">
+                                Copiar del privado
+                              </Box>
+                            )}
+                            {hay && (
+                              <Box as="button" onClick={() => restaurarOriginal(c.lado)}
+                                   px={3} py={1} borderRadius="full" fontSize="xs" fontWeight="600"
+                                   bg="rgba(255,255,255,0.08)" border="1px solid rgba(255,255,255,0.3)"
+                                   color="rgba(255,255,255,0.85)" cursor="pointer"
+                                   _hover={{ bg: "rgba(255,255,255,0.16)" }}>
+                                {c.lado === "publico" ? "Vaciar" : "Restaurar original"}
+                              </Box>
+                            )}
+                          </Flex>
+                        </Flex>
+                        <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic" mb={3}>
+                          {c.sub}
+                          {c.lado === "publico" && !hay ? " · sin escribir: ven el texto original" : ""}
+                        </Text>
+                        <Textarea
+                          value={c.draft}
+                          onChange={(e) => aplicarEn(c.lado, e.target.value)}
+                          placeholder={c.placeholder}
+                          minH="320px"
+                          flex="1"
+                          bg="rgba(0,0,0,0.35)" color="white" border={`1px solid ${color}44`}
+                          borderRadius="lg" fontFamily="'EB Garamond', serif" fontSize={{ base: "md", md: "lg" }} lineHeight="1.7"
+                          sx={{ caretColor: color }}
+                          _placeholder={{ color: "rgba(255,255,255,0.4)", fontStyle: "italic" }}
+                          _focus={{ borderColor: color, boxShadow: `0 0 0 1px ${color}66` }}
+                        />
+                      </Flex>
+                    );
+                  })}
+                </Grid>
+              )}
+              {celda != null && (
+                <Text color="rgba(255,255,255,0.55)" fontSize="xs" fontStyle="italic" mt={-2}>
+                  Usa **negritas** con dobles asteriscos y deja una línea en blanco entre párrafos. Los cambios se aplican al momento; pulsa «Guardar cambios» arriba para guardarlos.
+                </Text>
               )}
 
             </Flex>

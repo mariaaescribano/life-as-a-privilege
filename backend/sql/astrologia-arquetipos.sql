@@ -13,6 +13,9 @@
 -- si una celda no está en `data`, cae al texto original del proyecto (y borrar
 -- un override desde el panel se propaga de verdad).
 --
+-- DOS filas (no hace falta tocar la tabla): 'overrides' = el conjunto PRIVADO (lo escrito por María,
+-- solo ella lo ve) y 'publico' = el que ven los usuarios (si no hay fila, ven los textos originales).
+--
 -- Ejecútalo una vez en el SQL editor de Supabase.
 -- El backend accede con SERVICE_ROLE_KEY (salta RLS), igual que el resto.
 
