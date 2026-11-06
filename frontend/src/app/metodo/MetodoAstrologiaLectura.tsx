@@ -243,12 +243,10 @@ export default function MetodoAstrologiaLectura() {
             <Text color="white" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center" fontStyle="italic" maxW="680px">
               {t("metodo.astro.lectura.intro", { nombre })} {t("metodo.astro.pulsaEstrella")}
             </Text>
-            {retos.length > 0 && (
-              <Text color={todosRetosLeidos ? astrologiaTxt : `${astrologiaTxt}cc`} fontSize={{ base: "sm", md: "md" }}
+            {retos.length > 0 && !todosRetosLeidos && (
+              <Text color={`${astrologiaTxt}cc`} fontSize={{ base: "sm", md: "md" }}
                     fontWeight="600" letterSpacing="0.04em" textAlign="center">
-                {todosRetosLeidos
-                  ? `Has leído todos tus puntos clave. Ya puedes continuar a ${t("metodo.astro.paso.arquetipos")}.`
-                  : `Has leído ${retos.filter((r) => retosLeidos.has(r.id)).length} de ${retos.length} puntos clave.`}
+                {`Has leído ${retos.filter((r) => retosLeidos.has(r.id)).length} de ${retos.length} puntos clave.`}
               </Text>
             )}
           </Reveal>

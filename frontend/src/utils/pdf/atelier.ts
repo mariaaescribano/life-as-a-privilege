@@ -62,6 +62,32 @@ function pintarCover(ctx: CanvasRenderingContext2D, img: HTMLImageElement, w: nu
   ctx.drawImage(img, (w - iw) / 2, (h - ih) / 2, iw, ih);
 }
 
+/** Una foto como fondo de página (JPEG): a sangre, girada 90° para que su lado largo vaya a lo
+ *  alto de la hoja y se recorte lo menos posible (el cielo no tiene «arriba»). */
+function fondoDeFoto(img: HTMLImageElement): string {
+  const W = 930;
+  const H = 1316;
+  const c = document.createElement("canvas");
+  c.width = W; c.height = H;
+  const ctx = c.getContext("2d")!;
+  ctx.fillStyle = "#04070f";
+  ctx.fillRect(0, 0, W, H);
+  ctx.imageSmoothingQuality = "high";
+  const apaisada = img.naturalWidth > img.naturalHeight;
+  ctx.save();
+  ctx.translate(W / 2, H / 2);
+  if (apaisada) {
+    ctx.rotate(-Math.PI / 2);
+    const e = Math.max(H / img.naturalWidth, W / img.naturalHeight);
+    ctx.drawImage(img, (-img.naturalWidth * e) / 2, (-img.naturalHeight * e) / 2, img.naturalWidth * e, img.naturalHeight * e);
+  } else {
+    const e = Math.max(W / img.naturalWidth, H / img.naturalHeight);
+    ctx.drawImage(img, (-img.naturalWidth * e) / 2, (-img.naturalHeight * e) / 2, img.naturalWidth * e, img.naturalHeight * e);
+  }
+  ctx.restore();
+  return c.toDataURL("image/jpeg", 0.84);
+}
+
 /**
  * Textura de papel. Se genera a 620×877 (unos 75 ppp) a propósito: lo que
  * imita es una FIBRA, no un detalle, y a esa resolución el archivo pesa poco y
@@ -200,6 +226,9 @@ export interface PortadaOpts {
 }
 
 export interface TallerOpts {
+  /** Foto que hace de fondo en TODAS las páginas interiores (en lugar del papel). Sin lavado,
+   *  sin marca de agua y sin numeral: solo la foto. */
+  fondo?: string;
   /** Lo que se lee arriba a la derecha en las páginas interiores. */
   titulo: string;
   /** Acuarela distinta a la del tema (p. ej. la del doṣha concreto). */
@@ -213,15 +242,16 @@ export class Taller {
   readonly tema: Tema;
   y = 0;
   private pagina = 0;
-  private readonly titulo: string;
+  private titulo: string;
   private readonly papel: string;
   private readonly lavado: string | null;
   private readonly portadaImg: string;
   private readonly fecha: string;
   /** Numeral fantasma del capítulo en curso (marca de agua de la página). */
   private capituloNum = 0;
+  private readonly conFondo: boolean;
 
-  private constructor(tema: Tema, opts: TallerOpts, img: HTMLImageElement | null) {
+  private constructor(tema: Tema, opts: TallerOpts, img: HTMLImageElement | null, fondoImg: HTMLImageElement | null = null) {
     this.tema = tema;
     this.titulo = opts.titulo;
     this.doc = new jsPDF({ unit: "mm", format: "a4", orientation: "portrait", compress: true });
@@ -229,15 +259,17 @@ export class Taller {
     // Antes de imprimir una sola letra: la fuente embebida es un subconjunto y
     // se come en silencio lo que no tiene (ver glifos.ts).
     blindarFuente(this.doc);
-    this.papel = texturaPapel(tema);
-    this.lavado = lavadoCabecera(tema, img);
+    this.conFondo = !!fondoImg;
+    this.papel = fondoImg ? fondoDeFoto(fondoImg) : texturaPapel(tema);
+    this.lavado = fondoImg ? null : lavadoCabecera(tema, img);
     this.portadaImg = lienzoPortada(tema, img);
     this.fecha = new Date().toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" });
   }
 
   static async abrir(tema: Tema, opts: TallerOpts): Promise<Taller> {
     const img = await cargarImagen(opts.acuarela ?? tema.acuarela);
-    return new Taller(tema, opts, img);
+    const fondoImg = opts.fondo ? await cargarImagen(opts.fondo) : null;
+    return new Taller(tema, opts, img, fondoImg);
   }
 
   /* ── Tipografía ─────────────────────────────────────────────────────── */
@@ -269,12 +301,12 @@ export class Taller {
     if (this.lavado) doc.addImage(this.lavado, "JPEG", 0, 0, A4_W, 28, "lavado", "FAST");
 
     // Marca de agua: el emblema de la disciplina, apenas insinuado.
-    conAlfa(doc, t.oscuro ? 0.07 : 0.055, () => {
+    if (!this.conFondo) conAlfa(doc, t.oscuro ? 0.07 : 0.055, () => {
       t.emblema(doc, A4_W / 2, 168, 56, t.acento, t.papel);
     });
 
     // Numeral fantasma del capítulo, mordiendo el margen exterior.
-    if (this.capituloNum > 0) {
+    if (this.capituloNum > 0 && !this.conFondo) {
       conAlfa(doc, t.oscuro ? 0.055 : 0.05, () => {
         this.fuente("bold", 88, t.acento);
         doc.text(String(this.capituloNum).padStart(2, "0"), A4_W - 3, 52, { align: "right" });
@@ -298,12 +330,59 @@ export class Taller {
     this.versalitas(t.disciplina, MARGEN, A4_H - 10, 7.2, t.apagado);
     this.fuente("normal", 9, t.apagado);
     doc.text(String(this.pagina), A4_W - MARGEN, A4_H - 10, { align: "right" });
-    doc.setFillColor(...t.acento);
-    const dx = A4_W - MARGEN - 7.5;
-    doc.triangle(dx, A4_H - 11.6, dx + 1.1, A4_H - 10.5, dx, A4_H - 9.4, "F");
-    doc.triangle(dx, A4_H - 11.6, dx - 1.1, A4_H - 10.5, dx, A4_H - 9.4, "F");
+    if (!this.conFondo) {
+      doc.setFillColor(...t.acento);
+      const dx = A4_W - MARGEN - 7.5;
+      doc.triangle(dx, A4_H - 11.6, dx + 1.1, A4_H - 10.5, dx, A4_H - 9.4, "F");
+      doc.triangle(dx, A4_H - 11.6, dx - 1.1, A4_H - 10.5, dx, A4_H - 9.4, "F");
+    }
 
     this.y = 36;
+  }
+
+  /**
+   * Prueba `fn` SIN pintar nada y dice si cabe entera en lo que queda de esta página (sin saltar a otra).
+   * Sirve para meter varios textos cortos en una misma hoja. Todo lo que `fn` toque (y, página, capítulo) se
+   * restaura; los métodos que dibujan se vuelven mudos, los que miden siguen midiendo de verdad.
+   */
+  cabe(fn: () => void): boolean {
+    const real = this.doc;
+    const y0 = this.y;
+    const p0 = this.pagina;
+    const c0 = this.capituloNum;
+    const MUDOS = new Set(["text", "addImage", "line", "rect", "roundedRect", "triangle", "circle", "ellipse", "lines", "addPage", "path"]);
+    const mudo: jsPDF = new Proxy(real, {
+      get: (t, k) => {
+        const v = (t as unknown as Record<string | symbol, unknown>)[k];
+        if (typeof v !== "function") return v;
+        if (MUDOS.has(String(k))) return () => mudo;
+        return (v as (...a: unknown[]) => unknown).bind(t);
+      },
+    });
+    (this as unknown as { doc: jsPDF }).doc = mudo;
+    let cabe = false;
+    try {
+      fn();
+      cabe = this.pagina === p0;
+    } finally {
+      (this as unknown as { doc: jsPDF }).doc = real;
+      this.y = y0;
+      this.pagina = p0;
+      this.capituloNum = c0;
+    }
+    return cabe;
+  }
+
+  /** Lo que se lee arriba a la derecha en las páginas que se abran a partir de ahora. */
+  cabecera(texto: string): void { this.titulo = texto; }
+
+  /** Raya fina a todo el ancho entre dos textos de la misma hoja. */
+  separador(): void {
+    this.y += 5;
+    this.doc.setDrawColor(...this.tema.tinta);
+    this.doc.setLineWidth(0.25);
+    this.doc.line(MARGEN, this.y, A4_W - MARGEN, this.y);
+    this.y += 11;
   }
 
   /** Si no caben `alto` mm, salta de página. */
@@ -380,15 +459,22 @@ export class Taller {
     this.pagina = 1;
   }
 
+  /** Portada que es UNA imagen a sangre, ya compuesta (foto, icono, rótulo). */
+  portadaImagen(dataUrl: string): void {
+    this.doc.addImage(dataUrl, "JPEG", 0, 0, A4_W, A4_H, "portada", "FAST");
+    this.pagina = 1;
+  }
+
   /* ── Bloques de contenido ───────────────────────────────────────────── */
 
   /**
    * Abre capítulo. Panel con tinte suave, numeral, barra de acento y filete.
    * A partir de aquí, el numeral fantasma de las páginas es el de este capítulo.
    */
-  capitulo(titulo: string, subtitulo?: string): void {
+  capitulo(titulo: string, subtitulo?: string, color?: RGB): void {
     const doc = this.doc;
     const t = this.tema;
+    const ac = color ?? t.acento;
     this.capituloNum++;
     this.reservar(subtitulo ? 46 : 36);
     this.y += 6;
@@ -396,15 +482,15 @@ export class Taller {
     const alto = 15;
     const arriba = this.y - 8.5;
     conAlfa(doc, t.oscuro ? 0.16 : 0.075, () => {
-      doc.setFillColor(...t.acento);
+      doc.setFillColor(...ac);
       doc.roundedRect(MARGEN, arriba, ANCHO, alto, 2.6, 2.6, "F");
     });
-    doc.setFillColor(...t.acento);
+    doc.setFillColor(...ac);
     doc.roundedRect(MARGEN, arriba, 2.2, alto, 1.1, 1.1, "F");
 
-    this.fuente("bold", 9.5, t.acento);
+    this.fuente("bold", 9.5, ac);
     doc.text(String(this.capituloNum).padStart(2, "0"), MARGEN + 7.5, this.y);
-    this.fuente("bold", 16, t.tinta);
+    this.fuente("bold", 16, color ?? t.tinta);
     doc.text(titulo, MARGEN + 17, this.y);
 
     this.y = arriba + alto + 7;

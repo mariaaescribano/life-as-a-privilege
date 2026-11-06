@@ -58,6 +58,8 @@ export const metodo = {
   // each discipline's `libroApuntes…` and are still in Spanish: the whole PDF
   // is composed in Spanish for now.
   "metodo.apuntes.portada": "The cover",
+  "metodo.apuntes.astro.teoria": "Astrology theory",
+  "metodo.apuntes.astro.carta": "Your birth chart",
   "metodo.apuntes.queTeLlevas": "What you're taking",
   "metodo.apuntes.todo": "All",
   "metodo.apuntes.nada": "None",

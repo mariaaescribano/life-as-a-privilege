@@ -15,7 +15,7 @@ import { presentacionPorKey } from "../../data/presentacionDisciplinas";
  * nueva que merezca su propio nombre se añade en `recursoDeRuta`; las que no están
  * dejan solo «María Escribano». Un curso o lección concretos llevan su propio nombre. Se recalcula al cambiar de ruta Y de idioma.
  */
-const MARCA = "María Escribano";
+export const MARCA = "María Escribano";
 
 export default function TituloPestana() {
   const { pathname } = useLocation();
@@ -61,6 +61,23 @@ export default function TituloPestana() {
         case "disciplina":
         case "d": return disciplina(b);
         case "elMetodo": return t("header.mapa");
+        case "home": return t("header.home");
+        case "user": return b === "account" ? t("header.miCuenta") : undefined;
+        case "camino": return disciplina(b);
+        // Dentro de /metodo/* cada paso pone su propio nombre (MetodoStepHeader), aquí solo la disciplina
+        // mientras llega: «Astrología · María Escribano».
+        case "metodo": return disciplina(b);
+        case "admin": {
+          switch (b) {
+            case "asesorias": return t("header.asesorias");
+            case "cursos": return t("header.cursos");
+            case "astrologia-textos": return t("header.arquetipos");
+            case "suscriptores": return t("header.suscriptores");
+            case "premium": return t("header.premium");
+            case "mi-diario": return "Diario";
+            default: return undefined;
+          }
+        }
         case "logIn": return t("auth.login.titulo");
         case "signIn": return t("auth.signin.titulo");
         default: return undefined;

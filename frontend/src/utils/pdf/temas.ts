@@ -145,6 +145,17 @@ export const TEMA_ASTROLOGIA: Tema = {
   veloPortada: ["rgba(4,7,20,0.66)", "rgba(4,7,20,0.30)", "rgba(4,7,20,0.74)"],
 };
 
+/* ── Astrología · apuntes: la foto del cielo de fondo y la letra BLANCA ───── */
+export const TEMA_ASTROLOGIA_APUNTES: Tema = {
+  ...TEMA_ASTROLOGIA,
+  tinta: [255, 255, 255],
+  tintaSuave: [255, 255, 255],
+  apagado: [255, 255, 255],
+  acento: [255, 255, 255],
+  acentoSuave: [255, 255, 255],
+  trama: [255, 255, 255],
+};
+
 /* ── Cultura (papel oscuro) ───────────────────────────────────────────────── */
 // La disciplina va en verde azulado muy oscuro con la tinta menta (#79dcd4 en la
 // web), subida un punto para que la letra pequeña aguante en papel.

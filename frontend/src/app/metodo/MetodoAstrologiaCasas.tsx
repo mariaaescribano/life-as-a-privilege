@@ -449,8 +449,8 @@ function CasaBox({
     <Flex align="center" gap={3} mb={4} wrap="nowrap">
       {/* Izquierda: Casa N · signo (se encoge/truncar si hace falta) */}
       <Flex align="center" gap={3} flex="1" minW={0}>
-        <Text color={astrologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.04em"
-              whiteSpace="nowrap" flexShrink={0} style={{ textShadow: `0 0 10px ${colorSigno}, 0 0 22px ${colorSigno}cc, 0 0 40px ${colorSigno}88` }}>
+        <Text color={colorSigno} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.04em"
+              whiteSpace="nowrap" flexShrink={0} style={{ textShadow: `0 0 12px ${colorSigno}66` }}>
           {n.palabraCasa()} {NUMEROS_ROMANOS[sel - 1]}
         </Text>
         {info && (
@@ -489,15 +489,7 @@ function CasaBox({
         minH={{ lg: "253px" }}
         display="flex"
         flexDirection="column"
-        borderRadius="xl"
-        border={`1px solid ${colorSigno}aa`}
-        bg={`linear-gradient(160deg, ${colorSigno}22 0%, rgba(8,13,30,0.62) 55%)`}
-        px={{ base: 5, md: 7 }}
-        py={{ base: 6, md: 7 }}
-        // Glow del color del signo (Escorpio morado, Aries rojo…): un halo
-        // cerrado y vivo para que el box se distinga del cielo, y otro amplio.
-        boxShadow={`0 0 14px ${colorSigno}99, 0 0 34px ${colorSigno}66, 0 0 64px ${colorSigno}33, inset 0 0 26px ${colorSigno}22`}
-        transition="border-color 0.6s ease, box-shadow 0.6s ease"
+        // Sin caja propia: el texto va directo en el box del cielo.
       >
         {cabecera()}
         <Box h="1px" mb={4} bgGradient={`linear(to-r, transparent, ${astrologiaTxt}44, transparent)`} />
@@ -506,10 +498,10 @@ function CasaBox({
         <Box ref={scrollRef} onScroll={comprobarLeido} h={{ base: "260px", lg: "240px" }} overflowY="scroll" pr={4}
              overscrollBehavior="contain"
              sx={{
-               scrollbarWidth: "thin", scrollbarColor: `${astrologiaTxt}99 ${astrologiaTxt}22`,
+               scrollbarWidth: "thin", scrollbarColor: `${colorSigno}99 ${colorSigno}22`,
                "&::-webkit-scrollbar": { width: "8px" },
-               "&::-webkit-scrollbar-track": { background: `${astrologiaTxt}22`, borderRadius: "8px" },
-               "&::-webkit-scrollbar-thumb": { background: `${astrologiaTxt}99`, borderRadius: "8px" },
+               "&::-webkit-scrollbar-track": { background: `${colorSigno}22`, borderRadius: "8px" },
+               "&::-webkit-scrollbar-thumb": { background: `${colorSigno}99`, borderRadius: "8px" },
              }}>
           {textoSel ? (
             <Text color={`${astrologiaTxt}e6`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" letterSpacing="0.015em"

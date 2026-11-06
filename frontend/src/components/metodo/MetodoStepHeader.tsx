@@ -11,6 +11,7 @@ import { useT } from "../../i18n";
 import { focoBlanco } from "../global/foco";
 import { useLocation, useNavigate } from "react-router-dom";
 import { claveDeSlug, rutaCamino } from "../../data/camino";
+import { MARCA as MARCA_PESTANA } from "../global/TituloPestana";
 import { disciplinaByKey } from "../../data/adminDisciplinas";
 
 interface StepButton {
@@ -359,6 +360,11 @@ export function MetodoStepHeader({
     if (typeof title !== "string" || !title.trim()) return;
     try { localStorage.setItem("ultimoRecorridoTitulo", JSON.stringify({ ruta: pathname + search, titulo: title.trim() })); } catch { /* noop */ }
   }, [title, pathname, search]);
+  // La pestaña del navegador dice en qué paso está: «Casas · María Escribano».
+  React.useEffect(() => {
+    if (typeof title !== "string" || !title.trim()) return;
+    document.title = `${title.trim()} · ${MARCA_PESTANA}`;
+  }, [title, pathname]);
   const prev = prevProp ?? (alCamino ? { label: `← ${t("metodo.header.alCamino")}`, onClick: alCamino } : undefined);
   const next = nextProp ?? (alCamino ? { label: `${t("metodo.header.alCamino")} →`, onClick: alCamino } : undefined);
   // Tamaño natural del título de `fitTitle`, en px y ya escalado.

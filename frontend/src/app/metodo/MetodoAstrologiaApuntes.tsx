@@ -1,15 +1,12 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { IndiceAstrologia } from "../../components/metodo/IndiceAstrologia";
-import { RecorridoLoading } from "../../components/metodo/RecorridoLoading";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
-import { CreaTusApuntes } from "../../components/metodo/CreaTusApuntes";
-import { libroApuntesAstrologia } from "../../components/metodo/apuntes/astrologiaApuntes";
+import { ApuntesAstrologia } from "../../components/metodo/ApuntesAstrologia";
 import { glowHeader } from "../../components/metodo/FotoBox";
-import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { useAstrologiaProgreso } from "../../hooks/useAstrologiaProgreso";
 import { esMariaMirando } from "../../api/persona";
 import { Reveal } from "../../components/global/Reveal";
@@ -21,22 +18,15 @@ import { useIdioma, useT } from "../../i18n";
  * después de descargar la carta en PDF. La persona marca los signos, casas,
  * planetas y aspectos que quiere y se los lleva en un PDF hecho para leer o
  * imprimir. La pantalla es el taller compartido de las ocho disciplinas
- * (`CreaTusApuntes`); lo único de aquí es su libro (apuntes/astrologiaApuntes.ts).
+ * (`ApuntesAstrologia`): dos cajas plegables, la teoría y la carta de la persona.
  */
 export default function MetodoAstrologiaApuntes() {
   const t = useT();
   useIdioma();
   const navigate = useNavigate();
-  const libro = useMemo(() => libroApuntesAstrologia(), []);
-  const nombre = (() => {
-    try { return (localStorage.getItem("name") ?? "").trim(); } catch { return ""; }
-  })();
-  const imagenesListas = usePrecargarImagenes(libro.portadas.map((p) => p.src));
   const { bloqueada, cargado } = useAstrologiaProgreso();
 
   useEffect(() => { window.scrollTo({ top: 0, behavior: "auto" }); }, []);
-
-  if (!imagenesListas) return <RecorridoLoading />;
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -63,12 +53,10 @@ export default function MetodoAstrologiaApuntes() {
             />
           </Reveal>
 
-          <CreaTusApuntes
-            libro={libro}
+          <ApuntesAstrologia
             nom={astrologiaNom}
             txt={astrologiaTxt}
             bg={astrologiaBg}
-            nombre={nombre}
             glow={glowHeader(astrologiaTxt)}
           />
         </Flex>

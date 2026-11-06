@@ -33,6 +33,7 @@ import { MetodoCabalaModule } from './metodoCabala/metodoCabala.module';
 import { MetodoNotasModule } from './metodoNotas/metodoNotas.module';
 import { NotasPaginaModule } from './notasPagina/notasPagina.module';
 import { DiarioMariaModule } from './diarioMaria/diarioMaria.module';
+import { CorreoSesionModule } from './correoSesion/correoSesion.module';
 import { DiarioSesionModule } from './diarioSesion/diarioSesion.module';
 import { BookingModule } from './booking/booking.module';
 import { CursosModule } from './cursos/cursos.module';
@@ -84,6 +85,7 @@ export const uploadFolder = join(process.cwd(), 'img');
     MetodoNotasModule,
     NotasPaginaModule,
     DiarioMariaModule,
+    CorreoSesionModule,
     DiarioSesionModule,
     BookingModule,
     CursosModule,

@@ -19,9 +19,8 @@ import { DisciplinaBgLayer, hasDisciplinaBg } from "./DisciplinaBgLayer";
 import { LifeLoader } from "../metodo/comicLoaders";
 import { useT } from "../../i18n";
 import { focoBlanco } from "./foco";
-import { personaActiva } from "../../api/persona";
+import { personaActiva, esMariaMirando } from "../../api/persona";
 import { useNotaPagina, NotaPaginaContenido } from "./NotaPagina";
-import { esAdminDesbloqueado } from "../../api/sesion";
 import { VistaDiarioMaria } from "./DiarioMaria";
 
 /** Icono del diario (libro abierto). El color se adapta vía `fill`.
@@ -72,6 +71,8 @@ export function MiniDiario() {
   const t = useT();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [vista, setVista] = useState<"escribir" | "notas" | "pagina" | "diario">("escribir");
+  // Abierto desde el botón «Diario» (solo María): el popup es solo su DIARIO, sin pestañas.
+  const [soloDiario, setSoloDiario] = useState(false);
   // La nota de María de ESTA página (vive aquí dentro, en su propia pestaña del popup).
   const np = useNotaPagina();
 
@@ -86,8 +87,9 @@ export function MiniDiario() {
   const [cargandoNotas, setCargandoNotas] = useState(false);
 
   const userId = localStorage.getItem("userId");
-  // María (sesión de admin desbloqueada): tiene además la pestaña DIARIO, lo que apunta de sí misma.
-  const esMaria = esAdminDesbloqueado();
+  // María, mirando: con el panel desbloqueado O dentro del camino de una persona (ahí `isAdmin` no está
+  // puesto, pero el servidor la reconoce por X-Persona). Tiene además el botón «Diario» y el del correo.
+  const esMaria = esMariaMirando();
 
   const disciplinaSel = categoria ? disciplinaByKey(categoria) : undefined;
 
@@ -104,6 +106,7 @@ export function MiniDiario() {
     // Deja el estado listo para la próxima vez
     setTimeout(() => {
       setVista("escribir");
+      setSoloDiario(false);
       resetEscritura();
     }, 200);
   };
@@ -124,6 +127,12 @@ export function MiniDiario() {
   // Quien tiene una nota nueva de María en esta página, al abrir va derecho a ella.
   const abrir = () => {
     if (np.visible && np.sinLeer) { setVista("pagina"); np.marcarVista(); }
+    onOpen();
+  };
+
+  const abrirDiario = () => {
+    setSoloDiario(true);
+    setVista("diario");
     onOpen();
   };
 
@@ -228,6 +237,80 @@ export function MiniDiario() {
         )}
       </Flex>
 
+      {/* ── «Correo»: solo María, encima de «Diario». Abre el editor del resumen de sesión en OTRA pestaña,
+          para ir preparándolo sin cerrar la página en la que está con la persona. ── */}
+      {esMaria && (
+        <Flex
+          as="button"
+          onClick={() => window.open(`/admin/asesorias/${userId}/correo`, "_blank", "noopener")}
+          position="fixed"
+          bottom={{ base: "198px", md: "246px" }}
+          right={{ base: "16px", md: "26px" }}
+          zIndex={1000}
+          align="center"
+          gap={{ base: 2, md: 3 }}
+          pl={{ base: 3, md: 4 }}
+          pr={{ base: 4, md: 6 }}
+          py={{ base: "10px", md: "13px" }}
+          borderRadius="full"
+          bg="#008080"
+          border={{ base: "1.5px solid rgba(255,255,255,0.8)", md: "2px solid rgba(255,255,255,0.9)" }}
+          boxShadow="0 0 18px rgba(255,255,255,0.28), 0 0 40px rgba(180,255,245,0.14)"
+          cursor="pointer"
+          transition="all 0.22s ease"
+          _hover={{ transform: "translateY(-2px)", boxShadow: "0 0 26px rgba(255,255,255,0.45), 0 0 54px rgba(180,255,245,0.22)" }}
+          _active={{ transform: "translateY(0)" }}
+          _focusVisible={focoBlanco}
+          aria-label="Correo"
+        >
+          <Box as="svg" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" flexShrink={0} w={{ base: "24px", md: "27px" }} h={{ base: "24px", md: "27px" }}>
+            <rect x="3" y="5" width="18" height="14" rx="2.2" />
+            <path d="M3.6 6.8 12 13l8.4-6.2" />
+          </Box>
+          <Text color="white" fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "lg" }} letterSpacing="0.06em" lineHeight="1">
+            Correo
+          </Text>
+        </Flex>
+      )}
+
+      {/* ── «Diario»: solo María, justo encima de «Notas» (y de la barra de compañía). Escribe en su DIARIO. ── */}
+      {esMaria && (
+        <Flex
+          as="button"
+          onClick={abrirDiario}
+          position="fixed"
+          bottom={{ base: "140px", md: "172px" }}
+          right={{ base: "16px", md: "26px" }}
+          zIndex={1000}
+          align="center"
+          gap={{ base: 2, md: 3 }}
+          pl={{ base: 3, md: 4 }}
+          pr={{ base: 4, md: 6 }}
+          py={{ base: "10px", md: "13px" }}
+          borderRadius="full"
+          bg="#008080"
+          border={{ base: "1.5px solid rgba(255,255,255,0.8)", md: "2px solid rgba(255,255,255,0.9)" }}
+          boxShadow="0 0 18px rgba(255,255,255,0.28), 0 0 40px rgba(180,255,245,0.14)"
+          cursor="pointer"
+          transition="all 0.22s ease"
+          _hover={{ transform: "translateY(-2px)", boxShadow: "0 0 26px rgba(255,255,255,0.45), 0 0 54px rgba(180,255,245,0.22)" }}
+          _active={{ transform: "translateY(0)" }}
+          _focusVisible={focoBlanco}
+          aria-label="Diario"
+        >
+          <Box flexShrink={0} w={{ base: "24px", md: "27px" }} h={{ base: "24px", md: "27px" }} display="flex" alignItems="center" justifyContent="center">
+            <Box as="svg" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" w="100%" h="100%">
+              <path d="M6.5 3.5h11a1.5 1.5 0 0 1 1.5 1.5v14a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 5 19V5a1.5 1.5 0 0 1 1.5-1.5Z" />
+              <path d="M9 3.5v17" />
+              <path d="M12.6 9.2c0-1 .8-1.7 1.7-1.7s1.7.7 1.7 1.7c0 1.4-1.7 2.4-1.7 2.4s-1.7-1-1.7-2.4Z" />
+            </Box>
+          </Box>
+          <Text color="white" fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "lg" }} letterSpacing="0.06em" lineHeight="1">
+            Diario
+          </Text>
+        </Flex>
+      )}
+
       {/* ── Popup ── */}
       <Modal isOpen={isOpen} onClose={cerrar} size="lg" isCentered scrollBehavior="inside">
         <ModalOverlay bg="rgba(0,0,0,0.82)" sx={{ backdropFilter: "blur(8px)" }} />
@@ -283,13 +366,12 @@ export function MiniDiario() {
           >
             {/* Pestañas: «Notas» y, si la página tiene nota de María, su nota (siempre para ella);
                 y DIARIO, solo para María. */}
-            {(np.visible || esMaria) && (
+            {np.visible && !soloDiario && (
               <Flex gap={2} mb={4} justify="center" flexShrink={0} wrap="wrap">
                 {([
                   ...[["escribir", t("diario.titulo")]],
                   ...(np.visible ? [["pagina", np.maria ? "Nota" : t("metodo.notaMaria.titulo")]] : []),
-                  ...(esMaria ? [["diario", "DIARIO"]] : []),
-                ] as [("escribir" | "pagina" | "diario"), string][]).map(([v, etiqueta]) => {
+                ] as [("escribir" | "pagina"), string][]).map(([v, etiqueta]) => {
                   const activa = v === "escribir" ? vista === "escribir" || vista === "notas" : vista === v;
                   return (
                     <Box
@@ -322,7 +404,7 @@ export function MiniDiario() {
                 })}
               </Flex>
             )}
-            {vista === "diario" && esMaria ? (
+            {soloDiario && esMaria ? (
               <VistaDiarioMaria />
             ) : vista === "pagina" && np.visible ? (
               <>

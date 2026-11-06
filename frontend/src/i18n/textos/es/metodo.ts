@@ -70,6 +70,8 @@ export const metodo = {
   // resumen) los pone cada disciplina en su `libroApuntes…`, y de momento van
   // en español —el PDF entero se compone en español—.
   "metodo.apuntes.portada": "La portada",
+  "metodo.apuntes.astro.teoria": "Teoría de Astrología",
+  "metodo.apuntes.astro.carta": "Tu carta astral",
   "metodo.apuntes.queTeLlevas": "Qué te llevas",
   "metodo.apuntes.todo": "Todo",
   "metodo.apuntes.nada": "Nada",

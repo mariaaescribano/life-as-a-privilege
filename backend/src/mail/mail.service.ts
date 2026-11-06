@@ -178,6 +178,75 @@ export class MailService {
               font-weight:600;text-decoration:none;${estilo}">${label}</a>`;
   }
 
+  // ───────────────────────────────────────────────────────────────────────────
+  // «Resumen de sesión»: el correo que María escribe a mano tras una sesión (editor en
+  // /admin/asesorias/:userId/correo). El HTML SIEMPRE se construye aquí, a partir de datos
+  // (título, texto, fondo y dos colores): del navegador nunca llega HTML, y los colores y el
+  // fondo solo valen si están en las listas de abajo.
+  // ───────────────────────────────────────────────────────────────────────────
+
+  /** Fondos a elegir: la foto de cada disciplina (teñida, ya legible), el mármol y el turquesa liso. */
+  static readonly FONDOS_SESION: Record<string, { nombre: string; velo: string; foto?: string; txt: string; titulo: string }> = {
+    marmol:     { nombre: 'Mármol',      velo: '#efe5cf', foto: 'marmol-bienvenida', txt: '#004f4f', titulo: '#004f4f' },
+    turquesa:   { nombre: 'Turquesa',    velo: '#008080', txt: '#ffffff', titulo: '#ffffff' },
+    metodo:     { nombre: 'Astrología',  velo: TRAJE.metodo.velo,     foto: 'metodo',     txt: TRAJE.metodo.txt,     titulo: TRAJE.metodo.txt },
+    psicologia: { nombre: 'Psicología',  velo: TRAJE.psicologia.velo, foto: 'psicologia', txt: TRAJE.psicologia.txt, titulo: TRAJE.psicologia.txt },
+    ayurveda:   { nombre: 'Ayurveda',    velo: TRAJE.ayurveda.velo,   foto: 'ayurveda',   txt: TRAJE.ayurveda.txt,   titulo: TRAJE.ayurveda.txt },
+    tcm:        { nombre: 'Medicina China', velo: TRAJE.tcm.velo,     foto: 'tcm',        txt: TRAJE.tcm.txt,        titulo: TRAJE.tcm.txt },
+    fisiologia: { nombre: 'Fisiología',  velo: TRAJE.fisiologia.velo, foto: 'fisiologia', txt: TRAJE.fisiologia.txt, titulo: TRAJE.fisiologia.txt },
+    nutricion:  { nombre: 'Nutrición',   velo: TRAJE.nutricion.velo,  foto: 'nutricion',  txt: TRAJE.nutricion.txt,  titulo: TRAJE.nutricion.txt },
+    cabala:     { nombre: 'Cábala',      velo: TRAJE.cabala.velo,     foto: 'cabala',     txt: TRAJE.cabala.txt,     titulo: TRAJE.cabala.txt },
+    cultura:    { nombre: 'Cultura',     velo: TRAJE.cultura.velo,    foto: 'cultura',    txt: TRAJE.cultura.txt,    titulo: TRAJE.cultura.txt },
+  };
+
+  /** Colores de letra a elegir: blanco, turquesa oscuro y la letra de cada disciplina. */
+  static readonly COLORES_SESION: string[] = Array.from(new Set([
+    '#ffffff', '#004f4f', ...Object.values(TRAJE).map((t) => t.txt),
+  ]));
+
+  /** Texto con mini-formato (**negrita**, *cursiva*, `---` raya, línea en blanco = párrafo) → HTML seguro. */
+  private textoAHtml(texto: string, color: string): string {
+    const marcas = (t: string) =>
+      this.escaparHtml(t)
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.+?)\*/g, '<em>$1</em>')
+        .replace(/\n/g, '<br>');
+    return String(texto ?? '')
+      .split(/\n\s*\n+/g)
+      .map((p) => p.trim())
+      .filter(Boolean)
+      .map((p) =>
+        /^-{3,}$/.test(p)
+          ? `<div style="height:1px;background:${color};opacity:0.4;margin:24px 0;"></div>`
+          : `<p style="margin:18px 0 0;font-family:${SERIF};font-size:17px;line-height:1.75;color:${color};">${marcas(p)}</p>`,
+      )
+      .join('');
+  }
+
+  /** El HTML del resumen de sesión (el mismo para la vista previa y para el envío). */
+  construirResumenSesion(o: { titulo: string; texto: string; fondo?: string; colorTitulo?: string; colorTexto?: string }): string {
+    const f = MailService.FONDOS_SESION[o.fondo ?? ''] ?? MailService.FONDOS_SESION.marmol;
+    const valido = (c: string | undefined, def: string) => (c && MailService.COLORES_SESION.includes(c.toLowerCase()) ? c.toLowerCase() : def);
+    const colTitulo = valido(o.colorTitulo, f.titulo);
+    const colTexto = valido(o.colorTexto, f.txt);
+    const foto = f.foto ? `${webParaImagenes(this.frontendUrl)}/img/correo/${f.foto}.jpg` : undefined;
+    const cuerpo =
+      this.textoAHtml(o.texto, colTexto) +
+      `<p style="margin:26px 0 0;font-family:${SERIF};font-size:17px;line-height:1.75;color:${colTexto};">Un abrazo,<br>María</p>`;
+    return this.sobre({
+      titulo: this.escaparHtml(o.titulo),
+      cuerpo,
+      fondo: f.velo,
+      tinta: colTitulo,
+      foto,
+    });
+  }
+
+  /** Manda el resumen. `copiaAdmin`: una copia oculta a NOTIFY_EMAIL, para que quede en tu correo. */
+  async enviarResumenSesion(email: string, asunto: string, html: string): Promise<boolean> {
+    return await this.enviar(email, asunto, html, 'resumen de sesión', { copiaAdmin: true });
+  }
+
   /** La web, para los enlaces de los correos. */
   private get frontendUrl(): string {
     const url = (process.env.FRONTEND_URL ?? '').trim();
