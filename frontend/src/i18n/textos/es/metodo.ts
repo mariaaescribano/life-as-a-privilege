@@ -378,6 +378,8 @@ export const metodo = {
     "Tu carta astral de nacimiento completa.",
   "metodo.astro.arquetiposQueEs2":
     "Lee cada Planeta sin prisa. Cada uno de ellos es un conjunto de características, capacidades, dones y conflictos que habitan en ti.",
+  "metodo.astro.leidoBoton": "Leído",
+  "metodo.astro.leeTodosArquetipos": "Para continuar, primero lee todos tus arquetipos",
   "metodo.astro.leeTodosLosPlanetas": "Lee todos los planetas antes de continuar",
   "metodo.astro.cartaEnLectura":
     "Estoy leyendo tu carta. Cuando esté lista se te hará saber a través de un email y podrás acceder a tu lectura especializada.",

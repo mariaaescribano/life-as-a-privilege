@@ -32,6 +32,9 @@ const DATA_KEY: Record<"retos" | "casas" | "aspectos", string> = {
 // Caché en memoria compartida entre instancias del hook (persiste mientras no
 // se recargue la página; una recarga completa la repuebla desde la BD).
 const cache: Record<string, Set<string>> = {};
+// De qué cuenta es la caché: si cambia (otra persona, otra sesión en la misma pestaña) se vacía, para que
+// lo leído por una no se vea en la otra.
+let cacheDe: string | null = null;
 
 export function useAstroLeidos(tipo: "retos" | "casas" | "aspectos") {
   const dataKey = DATA_KEY[tipo];
@@ -47,6 +50,11 @@ export function useAstroLeidos(tipo: "retos" | "casas" | "aspectos") {
     const userId = localStorage.getItem("userId");
     const token = localStorage.getItem("token");
     if (!userId || !token) { setCargado(true); return; }
+    if (cacheDe !== userId) {
+      for (const k of Object.keys(cache)) delete cache[k];
+      cacheDe = userId;
+      setLeidos(new Set());
+    }
 
     axios
       .get(`${API_URL}/metodo-astrologia/${userId}`, { headers: { Authorization: `Bearer ${token}` } })

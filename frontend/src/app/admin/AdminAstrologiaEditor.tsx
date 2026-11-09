@@ -179,6 +179,7 @@ export default function AdminAstrologiaEditor() {
   const [carta, setCarta] = useState<CartaNatal | null>(null);
   const [casas, setCasas] = useState<Record<string, string>>({});
   const [aspectos, setAspectos] = useState<Record<string, string>>({});
+  const [sintesis, setSintesis] = useState("");
   const [retos, setRetos] = useState<Reto[]>([]);
   const [guardando, setGuardando] = useState(false);
   const [guardado, setGuardado] = useState(false);
@@ -204,6 +205,7 @@ export default function AdminAstrologiaEditor() {
   const [retosOpen, setRetosOpen] = useState(false);
   const [casasOpen, setCasasOpen] = useState(false);
   const [aspectosOpen, setAspectosOpen] = useState(false);
+  const [sintesisOpen, setSintesisOpen] = useState(false);
   // Box de consulta: la carta del usuario (rueda + planetas + casas). Abierto
   // por defecto para poder mirarla mientras se escribe la lectura.
   const [cartaOpen, setCartaOpen] = useState(true);
@@ -223,7 +225,7 @@ export default function AdminAstrologiaEditor() {
             casas_texto?: Record<string, string>;
             aspectos_texto?: Record<string, string>;
             retos?: Reto[];
-            data?: { aviso_proceso_at?: string; aviso_leida_at?: string };
+            data?: { aviso_proceso_at?: string; aviso_leida_at?: string; sintesis?: string };
             fecha_nacimiento?: string | null;
             hora_nacimiento?: string | null;
             pais?: string | null;
@@ -239,6 +241,7 @@ export default function AdminAstrologiaEditor() {
         setCasas((rowRes.data?.casas_texto ?? {}) as Record<string, string>);
         setAspectos((rowRes.data?.aspectos_texto ?? {}) as Record<string, string>);
         setRetos(Array.isArray(rowRes.data?.retos) ? rowRes.data!.retos! : []);
+        setSintesis(typeof rowRes.data?.data?.sintesis === "string" ? rowRes.data.data.sintesis : "");
         setAvisadoAt({
           proceso: rowRes.data?.data?.aviso_proceso_at,
           leida: rowRes.data?.data?.aviso_leida_at,
@@ -351,6 +354,7 @@ export default function AdminAstrologiaEditor() {
         {
           casas_texto: casas,
           aspectos_texto: aspectos,
+          sintesis,
           retos: conContenido.map((r) => ({ ...r, titulo: r.titulo.trim(), texto: r.texto.trim() })),
         },
         { headers: adminHeaders() },
@@ -889,6 +893,25 @@ export default function AdminAstrologiaEditor() {
                       </Trozo>
                     )}
                   </Flex>
+                </Desplegable>
+
+                {/* ── SÍNTESIS (desplegable) ── lo que no debe olvidar de su carta. Sale solo, tal cual, en el
+                    paso «Síntesis» de su camino de Astrología: no hay que escribirlo allí. */}
+                <Desplegable titulo="La Síntesis" open={sintesisOpen} onToggle={() => setSintesisOpen((o) => !o)}>
+                  <Trozo>
+                    <Textarea
+                      value={sintesis}
+                      onChange={(e) => setSintesis(e.target.value)}
+                      placeholder="Lo que no debe olvidar de su carta…"
+                      rows={9}
+                      bg="rgba(0,0,0,0.3)" border="1px solid rgba(255,255,255,0.22)" color="white" borderRadius="lg"
+                      fontFamily="'EB Garamond', serif" _placeholder={{ color: "rgba(255,255,255,0.35)" }}
+                      _focus={{ borderColor: turquesa, boxShadow: `0 0 0 1px ${turquesa}55` }}
+                    />
+                    <Text color="rgba(255,255,255,0.55)" fontSize="xs" fontStyle="italic" mt={2}>
+                      **negrita** · *cursiva* · --- una raya. Se guarda con «Guardar» y ella lo ve directamente en su camino.
+                    </Text>
+                  </Trozo>
                 </Desplegable>
               </>
             )}

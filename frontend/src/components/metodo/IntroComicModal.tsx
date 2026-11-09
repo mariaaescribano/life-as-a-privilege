@@ -100,6 +100,8 @@ interface IntroComicModalProps {
   luzFoto?: string;
   /** Entrada «mágica» de la foto y texto que espera a la foto (ver ComicViewer). */
   fotoMagica?: boolean;
+  /** Contenido extra bajo el texto de cada viñeta (p.ej. el botón «Leído» de la última). Se pasa tal cual a ComicViewer. */
+  pageExtra?: (index: number, api: { goNext: () => void; isLast: boolean }) => React.ReactNode;
 }
 
 export function IntroComicModal({
@@ -128,6 +130,7 @@ export function IntroComicModal({
   esperarFondo,
   luzFoto,
   fotoMagica,
+  pageExtra,
 }: IntroComicModalProps) {
   return (
     // motionPreset none + transform none: el fondo del ComicViewer va en
@@ -154,6 +157,7 @@ export function IntroComicModal({
           initialIndex={initialIndex}
           onClose={onClose}
           onComplete={onComplete}
+          pageExtra={pageExtra}
           onBack={onBack}
           themeColor={themeColor}
           luzFoto={luzFoto}

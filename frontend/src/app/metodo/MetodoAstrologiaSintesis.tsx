@@ -1,25 +1,25 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
+import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { IndiceAstrologia } from "../../components/metodo/IndiceAstrologia";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
-import { CajaDeMaria } from "../../components/metodo/CajaDeMaria";
+import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { TextoMarcado } from "../../components/global/TextoMarcado";
+import { glowHeader } from "../../components/metodo/FotoBox";
 import { Reveal } from "../../components/global/Reveal";
 import { useAstrologiaProgreso } from "../../hooks/useAstrologiaProgreso";
 import { esMariaMirando } from "../../api/persona";
-import { astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
+import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
 import { useT } from "../../i18n";
-
-/** La clave de la nota de esta página: una ruta que no existe (no choca con la pestaña lateral). */
-const CLAVE_CAJA = "/metodo/astrologia/sintesis/caja";
 
 /**
  * Paso 11 del recorrido de Astrología: la Síntesis. Debajo del header, una frase
- * para la persona y, debajo, una caja con la foto de Astrología donde escribe
- * María (desde su camino) lo que no debe olvidar de su carta. La persona solo ve
- * lo que María publica.
+ * para la persona y, debajo, una caja con la foto de Astrología con lo que María
+ * escribió en el editor de su carta (/admin/astrologia/:userId, «La Síntesis»).
+ * Aquí no se escribe nada: sale sola. Sin texto escrito, la caja no sale.
  */
 export default function MetodoAstrologiaSintesis() {
   const t = useT();
@@ -30,6 +30,18 @@ export default function MetodoAstrologiaSintesis() {
   })();
 
   useEffect(() => { window.scrollTo({ top: 0, behavior: "auto" }); }, []);
+
+  // La Síntesis de su carta (escrita en el editor de la carta, guardada en `data.sintesis`).
+  const [sintesis, setSintesis] = useState("");
+  useEffect(() => {
+    const userId = localStorage.getItem("userId");
+    if (!userId) return;
+    let vivo = true;
+    axios.get<{ data?: { sintesis?: string } } | null>(`${API_URL}/metodo-astrologia/${userId}`)
+      .then((r) => { if (vivo) setSintesis(typeof r.data?.data?.sintesis === "string" ? r.data.data.sintesis.trim() : ""); })
+      .catch(() => { /* sin datos, sin caja */ });
+    return () => { vivo = false; };
+  }, []);
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -62,7 +74,22 @@ export default function MetodoAstrologiaSintesis() {
             </Text>
           </Reveal>
 
-          <CajaDeMaria clave={CLAVE_CAJA} nom={astrologiaNom} tinta={astrologiaTxt} />
+          {sintesis && (
+            <Reveal direction="up" distance={24} delay={0.25} duration={0.8} w="100%">
+              <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={glowHeader(astrologiaTxt)}>
+                <DisciplinaBgLayer nom={astrologiaNom} borderRadius="2xl" />
+                <Box position="relative" zIndex={1} px={{ base: 5, md: 9 }} py={{ base: 7, md: 9 }}>
+                  <TextoMarcado
+                    texto={sintesis}
+                    colorRaya={`${astrologiaTxt}66`}
+                    color={astrologiaTxt}
+                    fontSize={{ base: "lg", md: "xl" }}
+                    lineHeight="1.85"
+                  />
+                </Box>
+              </Box>
+            </Reveal>
+          )}
         </Flex>
       </Flex>
 

@@ -322,6 +322,8 @@ export const metodo = {
     "You already know which Planets live in your chart. Here you go through them one by one, going deeper into what each one means in you.",
   "metodo.astro.arquetiposQueEs2":
     "Read them without rushing: while you move forward, I'm finishing writing your chart.",
+  "metodo.astro.leidoBoton": "Read",
+  "metodo.astro.leeTodosArquetipos": "To continue, first read all your archetypes",
   "metodo.astro.leeTodosLosPlanetas": "Read every planet before continuing",
   "metodo.astro.cartaEnLectura":
     "I'm reading your chart right now. When it's ready you'll get an email and you'll be able to open your personalized reading.",

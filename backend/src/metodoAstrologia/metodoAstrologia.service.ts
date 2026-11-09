@@ -47,6 +47,7 @@ export interface TextosCarta {
   aspectos_texto?: Record<string, string>;
   link_carta?: string | null; // link del PDF (Google Drive)
   retos?: Reto[];             // lista de retos (estrellas del cielo)
+  sintesis?: string;          // la Síntesis (paso 11): vive en `data.sintesis`, sin columna nueva
 }
 
 @Injectable()
@@ -131,6 +132,14 @@ export class MetodoAstrologiaService {
     if (textos.retos !== undefined) {
       // El array de retos se reemplaza por completo (no se hace merge como las casas).
       update.retos = Array.isArray(textos.retos) ? textos.retos : [];
+    }
+
+    if (textos.sintesis !== undefined) {
+      // Dentro de `data` (JSONB), fusionada con lo que ya hay (leídos, planetas, avisos…).
+      const texto = typeof textos.sintesis === 'string' ? textos.sintesis.trim() : '';
+      const datos = { ...((row.data ?? {}) as Record<string, any>) };
+      if (texto) datos.sintesis = texto; else delete datos.sintesis;
+      update.data = datos;
     }
 
     const { error } = await this.databaseService.getClient()

@@ -15,6 +15,7 @@ import { SpaceBg, SPACE_IMG } from "../../components/metodo/SpaceBg";
 import { useImagesReady } from "../../hooks/useImagesReady";
 import { useAstroLeidos } from "../../hooks/useAstroLeidos";
 import { BotonCompania } from "../../components/global/BotonCompania";
+import { focoBlanco } from "../../components/global/foco";
 import { Reveal } from "../../components/global/Reveal";
 import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
 import { useT } from "../../i18n";
@@ -174,7 +175,9 @@ export default function MetodoAstrologiaLectura() {
   const fotosListas = useImagesReady([SPACE_IMG]);
 
   // Abre un punto clave y lo marca como leído (persistente en BD).
-  const abrirReto = (r: Reto) => { setRetoAbierto(r); marcarReto(r.id); };
+  // Abrirlo NO lo marca: se marca al pulsar «Leído», abajo del todo del texto.
+  const abrirReto = (r: Reto) => { setRetoAbierto(r); };
+  const marcarRetoLeido = () => { if (retoAbierto) marcarReto(retoAbierto.id); setRetoAbierto(null); };
 
   // Para pasar a Casas hay que haber leído TODOS los puntos clave.
   const todosRetosLeidos = retos.length === 0 || retos.every((r) => retosLeidos.has(r.id));
@@ -243,12 +246,6 @@ export default function MetodoAstrologiaLectura() {
             <Text color="white" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center" fontStyle="italic" maxW="680px">
               {t("metodo.astro.lectura.intro", { nombre })} {t("metodo.astro.pulsaEstrella")}
             </Text>
-            {retos.length > 0 && !todosRetosLeidos && (
-              <Text color={`${astrologiaTxt}cc`} fontSize={{ base: "sm", md: "md" }}
-                    fontWeight="600" letterSpacing="0.04em" textAlign="center">
-                {`Has leído ${retos.filter((r) => retosLeidos.has(r.id)).length} de ${retos.length} puntos clave.`}
-              </Text>
-            )}
           </Reveal>
 
           <Reveal
@@ -350,6 +347,14 @@ export default function MetodoAstrologiaLectura() {
                       style={{ textShadow: `0 0 10px rgba(255,255,255,0.35)` }}>
                   <PalabrasVivas key={retoAbierto.id} texto={retoAbierto.texto} retraso={0.6} total={1.1} />
                 </Text>
+                <Flex justify="center" mt={2}>
+                  <Box as="button" type="button" onClick={marcarRetoLeido} px={9} py="10px" borderRadius="full"
+                       bg={astrologiaTxt} color="#0a1024" fontWeight="700" fontSize={{ base: "md", md: "lg" }}
+                       letterSpacing="0.04em" cursor="pointer" boxShadow={`0 0 20px ${astrologiaTxt}55`}
+                       transition="transform 0.2s ease" _hover={{ transform: "translateY(-2px)" }} _focusVisible={focoBlanco}>
+                    {t("metodo.astro.leidoBoton")}
+                  </Box>
+                </Flex>
               </Flex>
             )}
           </ModalBody>

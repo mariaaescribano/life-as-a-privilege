@@ -55,12 +55,12 @@ export default function MetodoAstrologiaCartaAstral() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [carta, setCarta] = useState<CartaNatal | null>(null);
-  const { carta: cartaPlanetas, loading: cargandoProgreso, actualizar, todoCompletado } = useCartaPlanetas();
+  const { carta: cartaPlanetas, loading: cargandoProgreso, actualizar } = useCartaPlanetas();
   const fotosListas = useImagesReady([SPACE_IMG]);
   const { bloqueada, cargado } = useAstrologiaProgreso();
 
   // El visor: las cajas del planeta pulsado, ya en la que se ha pulsado.
-  const [visor, setVisor] = useState<{ vinetas: Vineta[]; inicial: number; color: string } | null>(null);
+  const [visor, setVisor] = useState<{ vinetas: Vineta[]; inicial: number; color: string; planeta: PlanetaConCajas } | null>(null);
   const [abriendo, setAbriendo] = useState(false);
 
   useEffect(() => {
@@ -181,17 +181,28 @@ export default function MetodoAstrologiaCartaAstral() {
       };
     });
     const inicial = f.tipo === "signo" ? 0 : 1 + indiceCasa;
-    setVisor({ vinetas, inicial, color: p.cuerpo.color });
-    // Lo abierto cuenta como leído.
-    if (f.tipo === "signo") actualizar(k, "profundizadoSigno", true);
-    else actualizar(k, indiceCasa === 0 ? "profundizadoCasa" : "profundizadoCasa2", true);
+    setVisor({ vinetas, inicial, color: p.cuerpo.color, planeta: p });
+    // Abrirlo ya NO lo marca como leído: se marca al pulsar «Leído», abajo del todo de la última viñeta
+    // (así hay que llegar al final y no se adivina qué ha leído).
     setAbriendo(false);
+  };
+
+  // «Leído»: marca como leído TODO lo de ese planeta (el signo y cada casa) y cierra el visor.
+  const marcarPlanetaLeido = () => {
+    if (!visor) return;
+    const p = visor.planeta;
+    actualizar(p.cuerpo.key, "profundizadoSigno", true);
+    p.casas.forEach((_, ci) => actualizar(p.cuerpo.key, ci === 0 ? "profundizadoCasa" : "profundizadoCasa2", true));
+    setVisor(null);
   };
 
   if (loading || !fotosListas) return <RecorridoLoading />;
 
   const maria = esMariaMirando();
-  const faltaLeer = !maria && !todoCompletado;
+  // «Casas» se abre cuando TODAS las cajas de TODOS sus planetas están leídas (el signo y cada casa, también la
+  // segunda cuando el planeta está sobre una cúspide). Antes se miraba solo el signo y la primera casa.
+  const todoLeido = planetas.length > 0 && planetas.every(planetaLeido);
+  const faltaLeer = !maria && !todoLeido;
   const cerradoPorMaria = !maria && cargado && bloqueada(7);
 
   return (
@@ -214,7 +225,7 @@ export default function MetodoAstrologiaCartaAstral() {
                 label: `${t("metodo.astro.paso.casas")} →`,
                 onClick: () => navigate("/metodo/astrologia/casas"),
                 disabled: faltaLeer || cerradoPorMaria,
-                disabledTooltip: faltaLeer ? t("metodo.astro.leeTodosLosPlanetas") : undefined,
+                disabledTooltip: faltaLeer ? t("metodo.astro.leeTodosArquetipos") : undefined,
               }}
             />
           </Reveal>
@@ -355,6 +366,17 @@ export default function MetodoAstrologiaCartaAstral() {
         // Título y texto del mismo color (el del planeta); mientras carga cada ilustración, el loader de Astrología.
         textColor={visor?.color}
         loader={<AstrologiaLoader color={visor?.color ?? astrologiaTxt} />}
+        // «Leído», abajo del todo de la ÚLTIMA viñeta del planeta: marca y cierra.
+        pageExtra={(_, { isLast }) => isLast ? (
+          <Flex justify="center">
+            <Box as="button" type="button" onClick={marcarPlanetaLeido} px={9} py="10px" borderRadius="full"
+                 bg={visor?.color ?? astrologiaTxt} color="#0a1024" fontWeight="700" fontSize={{ base: "md", md: "lg" }}
+                 letterSpacing="0.04em" cursor="pointer" boxShadow={`0 0 20px ${visor?.color ?? astrologiaTxt}55`}
+                 transition="transform 0.2s ease" _hover={{ transform: "translateY(-2px)" }} _focusVisible={focoBlanco}>
+              {t("metodo.astro.leidoBoton")}
+            </Box>
+          </Flex>
+        ) : null}
         onClose={() => setVisor(null)}
         onComplete={() => setVisor(null)}
       />

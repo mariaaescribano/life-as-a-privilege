@@ -118,12 +118,15 @@ export function useCartaPlanetas() {
 
       pendingData.current = next;
       if (saveTimer.current) clearTimeout(saveTimer.current);
+      // Marcar algo como LEÍDO se guarda al momento (es lo que desbloquea «Casas» y lo que pinta el tick de
+      // cada caja): con espera, una recarga o cerrar la pestaña justo después lo perdían.
+      const esLeido = String(campo).startsWith("profundizado");
       saveTimer.current = setTimeout(() => {
         if (pendingData.current) {
           void guardarEnBd(pendingData.current);
           pendingData.current = null;
         }
-      }, 1500);
+      }, esLeido ? 0 : 1500);
 
       return next;
     });
