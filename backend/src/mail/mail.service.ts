@@ -268,9 +268,9 @@ export class MailService {
     etiqueta: string,
     opciones?: {
       /**
-       * Manda una copia OCULTA (bcc) a NOTIFY_EMAIL, para tener el correo
-       * exacto que ha recibido la persona. Va en bcc y no en cc a propósito:
-       * quien lo recibe no tiene por qué ver una dirección interna.
+       * Copia OCULTA (bcc) a NOTIFY_EMAIL con el correo exacto que recibe la persona. Va en bcc y no
+       * en cc a propósito: quien lo recibe no tiene por qué ver una dirección interna. Por defecto
+       * SÍ se manda en todos los correos; `false` la quita.
        */
       copiaAdmin?: boolean;
       /**
@@ -290,11 +290,12 @@ export class MailService {
       return false;
     }
     try {
-      // Si la copia fuese a la MISMA cuenta que envía, se omite: Gmail no se
-      // manda un correo a sí mismo a la bandeja de entrada (queda en Enviados).
+      // TODOS los correos llevan una copia oculta (bcc) a NOTIFY_EMAIL, para que a María le llegue exactamente
+      // lo que recibe cada persona. Solo se omite si el correo ya va dirigido a esa misma dirección (un aviso
+      // para ella): así no le llegaría dos veces. `copiaAdmin: false` la desactiva expresamente.
       const copia =
-        opciones?.copiaAdmin &&
-        this.copiaAdmin.toLowerCase() !== (process.env.EMAIL_USER ?? '').trim().toLowerCase()
+        opciones?.copiaAdmin !== false &&
+        to.trim().toLowerCase() !== this.copiaAdmin.trim().toLowerCase()
           ? this.copiaAdmin
           : undefined;
 
