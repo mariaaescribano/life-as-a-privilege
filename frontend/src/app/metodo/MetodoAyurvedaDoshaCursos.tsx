@@ -73,7 +73,7 @@ export default function MetodoAyurvedaDoshaCursos() {
   // se va a /metodo/tcm, que hace la comprobación de verdad y enseña su pago
   // si hace falta. Así nunca se le dice «no lo tienes» a quien sí lo tiene.
   const onMedChina = () => {
-    if (tcmSuscrito === false) { setPagoTcmError(null); setPagoTcmOpen(true); }
+    if (tcmSuscrito === false) { /* pago desactivado */ }
     else navigate("/metodo/tcm");
   };
 

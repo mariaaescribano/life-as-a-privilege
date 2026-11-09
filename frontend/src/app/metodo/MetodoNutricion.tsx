@@ -67,7 +67,7 @@ export default function MetodoNutricion() {
         // falta es tener esta disciplina desbloqueada (si no, sale su pago).
         const nutriSuscrito = !!me.data?.nutricion_suscrito;
         setSuscrito(nutriSuscrito);
-        if (!nutriSuscrito) { setPagoOpen(true); return; }
+        if (!nutriSuscrito) { /* pago desactivado */ return; }
 
         // Ya tiene acceso: si es la 1ª vez, muestra el cómic de intro.
         void intro.checkAndOpen();
@@ -96,7 +96,7 @@ export default function MetodoNutricion() {
   };
 
   const comenzar = () => {
-    if (!suscrito) { setPagoOpen(true); return; }
+    if (!suscrito) { /* pago desactivado */ return; }
     setCaloriasOpen(true); // cómic de transición «Las calorías no existen»
   };
   const caloriasContinuar = () => { setCaloriasOpen(false); navigate("/metodo/nutricion/macronutrientes"); };

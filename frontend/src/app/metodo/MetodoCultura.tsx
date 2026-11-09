@@ -42,7 +42,7 @@ export default function MetodoCultura() {
         // falta es tener esta disciplina desbloqueada (si no, sale su pago).
         const culturaSuscrito = !!me.data?.cultura_suscrito;
         setSuscrito(culturaSuscrito);
-        if (!culturaSuscrito) { setPagoOpen(true); return; }
+        if (!culturaSuscrito) { /* pago desactivado */ return; }
       } catch {
         navigate("/home");
         return;
@@ -88,7 +88,7 @@ export default function MetodoCultura() {
               mb={0}
               prev={{ label: `← ${t("disciplina.cabala")}`, onClick: () => navigate("/metodo/cabala/cursos") }}
               next={{ label: `${t("metodo.cultura.paso.historias")} →`, onClick: () => {
-                if (!suscrito) { setPagoError(null); setPagoOpen(true); return; }
+                if (!suscrito) { /* pago desactivado */ return; }
                 navigate("/metodo/cultura/historias");
               } }}
             />

@@ -14,6 +14,7 @@ import type { CartaNatal } from "../../components/metodo/CartaAstral3D/types";
 import { useImagesReady } from "../../hooks/useImagesReady";
 import { Reveal } from "../../components/global/Reveal";
 import { esMariaMirando } from "../../api/persona";
+import { rutaHome } from "../../api/sesion";
 import { useAstrologiaProgreso } from "../../hooks/useAstrologiaProgreso";
 import { API_URL, astrologiaBg, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
 import { useT } from "../../i18n";
@@ -67,6 +68,9 @@ export default function MetodoAstrologiaIntroduccion() {
   // Si no se pudo LEER lo guardado (red, servidor), no se decide nada: ni formulario ni carta.
   // Enseñar el formulario a quien ya dio sus datos, o la carta a quien no, sería un error.
   const [fallo, setFallo] = useState(false);
+  // ¿Tiene abierta la disciplina de Astrología? (`metodo_suscrito`). Sin ella y sin datos, no hay nada que
+  // enseñar ni formulario que rellenar: sale un aviso en vez de fallar.
+  const [disciplinaAbierta, setDisciplinaAbierta] = useState<boolean | null>(null);
 
   const cargar = React.useCallback(() => {
     const userId = localStorage.getItem("userId");
@@ -75,13 +79,22 @@ export default function MetodoAstrologiaIntroduccion() {
     setFallo(false);
     setCargando(true);
     // Primero se mira si ya dio sus datos (y hay carta calculada) y SOLO entonces se pinta nada.
+    // Sin la disciplina abierta el servidor puede negar (403) o no encontrar (404) estos datos: eso es «no hay
+    // datos», no un fallo.
+    const sinDatos = (err: any) => {
+      const s = err?.response?.status;
+      if (s === 403 || s === 404) return null;
+      throw err;
+    };
     Promise.all([
-      axios.get<EstadoNacimiento | null>(`${API_URL}/metodo-astrologia/${userId}`).then((r) => r.data ?? null),
-      axios.get<CartaNatal | null>(`${API_URL}/metodo-astrologia/carta-natal/${userId}`).then((r) => r.data ?? null),
-    ]).then(([e, c]) => {
+      axios.get<EstadoNacimiento | null>(`${API_URL}/metodo-astrologia/${userId}`).then((r) => r.data ?? null).catch(sinDatos),
+      axios.get<CartaNatal | null>(`${API_URL}/metodo-astrologia/carta-natal/${userId}`).then((r) => r.data ?? null).catch(sinDatos),
+      axios.get<{ metodo_suscrito?: boolean }>(`${API_URL}/user/me`).then((r) => !!r.data?.metodo_suscrito).catch(() => null),
+    ]).then(([e, c, abierta]) => {
       if (cancel) return;
       setEstado(e);
       setCarta(c);
+      setDisciplinaAbierta(abierta);
     }).catch(() => {
       if (!cancel) setFallo(true);
     }).finally(() => { if (!cancel) setCargando(false); });
@@ -118,6 +131,34 @@ export default function MetodoAstrologiaIntroduccion() {
 
   if (cargando || !fotosListas) return <RecorridoLoading />;
 
+  // Sin datos y sin la disciplina abierta: un aviso, no un error ni un formulario.
+  const sinDatosNiDisciplina = !carta && !estado?.fecha_nacimiento && disciplinaAbierta === false;
+  if (sinDatosNiDisciplina) {
+    return (
+      <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+        <SiteHeader variant="private" />
+        <Flex flex="1" align="center" justify="center" px={6} py={10}>
+          <Box role="alertdialog" aria-labelledby="aviso-sin-disciplina" position="relative" overflow="hidden" w="100%" maxW="460px"
+               borderRadius="2xl" boxShadow={`0 0 24px ${astrologiaTxt}55, 0 0 60px ${astrologiaTxt}22`}>
+            <SpaceBg overlay="rgba(8,13,30,0.3)" />
+            <Flex position="relative" zIndex={1} direction="column" align="center" gap={6} px={{ base: 6, md: 9 }} py={{ base: 8, md: 10 }}>
+              <Text id="aviso-sin-disciplina" color={astrologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.4"
+                    textAlign="center" style={{ textShadow: `0 0 12px ${astrologiaTxt}55` }}>
+                {t("metodo.astro.sinDisciplina")}
+              </Text>
+              <Box as="button" type="button" autoFocus onClick={() => navigate(rutaHome())} px={8} py="10px" borderRadius="full"
+                   bg="white" color="#008080" fontWeight="700" letterSpacing="0.04em" cursor="pointer"
+                   boxShadow="0 0 22px rgba(255,255,255,0.3)" _focusVisible={focoBlanco}>
+                {t("comun.cerrar")}
+              </Box>
+            </Flex>
+          </Box>
+        </Flex>
+        <SiteFooter />
+      </Box>
+    );
+  }
+
   if (fallo) {
     return (
       <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -148,13 +189,14 @@ export default function MetodoAstrologiaIntroduccion() {
               color={astrologiaTxt}
               space
               dense
-              step={{ current: 1, total: 12 }}
+              step={{ current: 3, total: 12 }}
               mb={0}
+              prev={{ label: `← ${t("metodo.astro.paso.explicacion")}`, onClick: () => navigate("/metodo/astrologia/explicacion") }}
               next={{
-                label: `${t("metodo.astro.paso.historia")} →`,
-                onClick: () => navigate("/metodo/astrologia/historia"),
-                // Cerrado hasta que María abra el paso 2 (ella entra siempre).
-                disabled: !mariaMirando && ((cargadoPasos && bloqueada(2)) || verFormulario),
+                label: `${t("metodo.astro.paso.trio")} →`,
+                onClick: () => navigate("/metodo/astrologia/trio"),
+                // Cerrado hasta que María abra el paso 4 (ella entra siempre).
+                disabled: !mariaMirando && ((cargadoPasos && bloqueada(4)) || verFormulario),
               }}
             />
           </Reveal>

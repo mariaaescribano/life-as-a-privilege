@@ -72,7 +72,7 @@ export default function MetodoAstrologiaCursos() {
   // El botón "Psicología →" del header se desbloquea al pagar Psicología.
   // Mientras no esté pagada, el clic abre el pago (en vez de quedar inerte).
   const onPsicologia = () => {
-    if (psicologiaSuscrito === false) { setPagoPsicoError(null); setPagoPsicoOpen(true); }
+    if (psicologiaSuscrito === false) { /* pago desactivado */ }
     else navigate("/metodo/psicologia");
   };
 

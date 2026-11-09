@@ -18,7 +18,10 @@ import { bdFalsa } from '../test-utils/bd-falsa';
 async function montar(filas: Record<string, any>[]) {
   for (const f of filas) if (f.passwordPlano) { f.password = await bcrypt.hash(f.passwordPlano, 4); delete f.passwordPlano; }
   const bd = bdFalsa(filas);
-  const mail: any = { enviarRecuperacionPassword: jest.fn().mockResolvedValue(undefined) };
+  const mail: any = {
+    enviarRecuperacionPassword: jest.fn().mockResolvedValue(undefined),
+    enviarCuentaActivada: jest.fn().mockResolvedValue(undefined),
+  };
   const auth: any = { generateToken: jest.fn().mockReturnValue('jwt') };
   return { service: new UserService(auth, bd.databaseService, mail), mail, filas: bd.filas };
 }
@@ -141,7 +144,16 @@ describe('3-4 · Elegir la nueva y entrar', () => {
     await service.solicitarRecuperacion('ana@x.com');
     await service.restablecerPassword(tokenDelCorreo(mail), 'nueva456');
     expect(filas[0].email_confirmado).toBe(true);
+    // Recién activada: le llega la bienvenida oficial.
+    expect(mail.enviarCuentaActivada).toHaveBeenCalledTimes(1);
     await expect(service.logIn({ name: 'ana@x.com', password: 'nueva456' })).resolves.toMatchObject({ token: 'jwt' });
+  });
+
+  it('cuenta ya activa: recuperar la contraseña NO manda la bienvenida', async () => {
+    const { service, mail } = await montar([{ ...ana(), email_confirmado: true }]);
+    await service.solicitarRecuperacion('ana@x.com');
+    await service.restablecerPassword(tokenDelCorreo(mail), 'nueva456');
+    expect(mail.enviarCuentaActivada).not.toHaveBeenCalled();
   });
 });
 

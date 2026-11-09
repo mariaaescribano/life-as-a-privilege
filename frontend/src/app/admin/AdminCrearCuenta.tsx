@@ -19,7 +19,7 @@ import { adminHeaders, useAdminGuard } from "./useAdminGuard";
 /** Teléfono con prefijo de país: «+34 600 11 22 33» (el + y entre 6 y 15 cifras). */
 const telefonoConPrefijo = (t: string) => /^\+\d{6,15}$/.test(t.replace(/[\s().-]/g, ""));
 
-type Campo = "name" | "email" | "telefono" | "fecha_nacimiento";
+type Campo = "name" | "email" | "telefono" | "fecha_nacimiento" | "hora" | "lugar" | "region" | "pais";
 
 const CAMPOS: { k: Campo; etiqueta: string; tipo: string; auto: string; ayuda?: string }[] = [
   { k: "name", etiqueta: "Nombre", tipo: "text", auto: "off" },
@@ -28,7 +28,16 @@ const CAMPOS: { k: Campo; etiqueta: string; tipo: string; auto: string; ayuda?: 
   { k: "fecha_nacimiento", etiqueta: "Fecha de nacimiento (opcional)", tipo: "text", auto: "off", ayuda: "dd/mm/aaaa" },
 ];
 
-const VACIO: Record<Campo, string> = { name: "", email: "", telefono: "", fecha_nacimiento: "" };
+// Los datos de su carta astral (opcionales): la fecha es la de arriba. Si los pones aquí, luego le salen ya
+// rellenados en Astrología, sin tener que abrirle la disciplina antes ni teclearlos otra vez.
+const CAMPOS_CARTA: { k: Campo; etiqueta: string; ayuda?: string }[] = [
+  { k: "hora", etiqueta: "Hora de nacimiento", ayuda: "hh:mm, por ejemplo 18:45" },
+  { k: "lugar", etiqueta: "Lugar de nacimiento", ayuda: "Ciudad o pueblo" },
+  { k: "region", etiqueta: "Región" },
+  { k: "pais", etiqueta: "País" },
+];
+
+const VACIO: Record<Campo, string> = { name: "", email: "", telefono: "", fecha_nacimiento: "", hora: "", lugar: "", region: "", pais: "" };
 
 export default function AdminCrearCuenta() {
   const navigate = useNavigate();
@@ -58,17 +67,51 @@ export default function AdminCrearCuenta() {
       setError("La fecha de nacimiento tiene que ser día/mes/año, por ejemplo 17/05/1990.");
       return;
     }
+    // Datos de la carta: o ninguno, o todos (y entonces hace falta la fecha de arriba).
+    const hora = nuevo.hora.trim();
+    const lugar = nuevo.lugar.trim();
+    const region = nuevo.region.trim();
+    const pais = nuevo.pais.trim();
+    const hayCarta = !!(hora || lugar || region || pais);
+    if (hayCarta) {
+      if (!nacimiento || !hora || !lugar || !region || !pais) {
+        setError("Para guardar la carta astral hacen falta la fecha, la hora, el lugar, la región y el país (o déjalos todos vacíos).");
+        return;
+      }
+      if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(hora)) {
+        setError("La hora tiene que ser hh:mm, por ejemplo 18:45.");
+        return;
+      }
+    }
     setEnviando(true);
     setError(null);
     try {
-      const { data } = await axios.post<{ email: string; correoEnviado: boolean }>(
+      const { data } = await axios.post<{ id: string; email: string; correoEnviado: boolean }>(
         `${API_URL}/user/admin/crear`,
         { name: nuevo.name, email: nuevo.email, telefono: nuevo.telefono, fecha_nacimiento: nacimiento },
         { headers: adminHeaders() },
       );
-      const aviso = data.correoEnviado
+      // Los datos de la carta, por la vía de admin: no manda ningún correo ni abre nada.
+      let cartaTexto = "";
+      if (hayCarta && nacimiento) {
+        try {
+          const r = await axios.patch(
+            `${API_URL}/metodo-astrologia/admin/${data.id}/nacimiento`,
+            { fecha_nacimiento: nacimiento, hora_nacimiento: hora, lugar, region, pais },
+            { headers: adminHeaders() },
+          );
+          cartaTexto = r.data?.success === false
+            ? ` Los datos de la carta NO se han guardado: ${r.data?.message ?? "inténtalo desde su ficha"}.`
+            : r.data?.recalculada === false
+              ? ` Datos de la carta guardados, pero no he encontrado ese lugar: revísalo en su ficha.`
+              : " Datos de la carta guardados: le saldrán rellenados en Astrología.";
+        } catch {
+          cartaTexto = " Los datos de la carta NO se han guardado: inténtalo desde su ficha.";
+        }
+      }
+      const aviso = (data.correoEnviado
         ? `Cuenta creada. Le he mandado a ${data.email} el correo para que elija su contraseña.`
-        : `Cuenta creada, pero el correo a ${data.email} NO ha salido. Ábrele «Datos personales» y pulsa «Reenviar correo de activación».`;
+        : `Cuenta creada, pero el correo a ${data.email} NO ha salido. Ábrele «Datos personales» y pulsa «Reenviar correo de activación».`) + cartaTexto;
       // La confirmación sale AQUÍ, a la vista, y no se va hasta que se ha podido leer: antes
       // saltaba directo a la lista y el aviso (una línea pequeña) pasaba sin verse.
       setCreada({ texto: aviso, ok: data.correoEnviado });
@@ -173,6 +216,41 @@ export default function AdminCrearCuenta() {
                     _placeholder={{ color: "rgba(255,255,255,0.4)" }}
                     _hover={{ borderColor: "rgba(255,255,255,0.55)" }}
                     // El campo con el foco se ve claro con el tabulador: borde blanco y halo.
+                    _focus={{ borderColor: "white", boxShadow: "0 0 0 2px rgba(255,255,255,0.55), 0 0 18px rgba(255,255,255,0.3)", bg: "rgba(255,255,255,0.13)", outline: "none" }}
+                    _focusVisible={{ borderColor: "white", boxShadow: "0 0 0 2px rgba(255,255,255,0.55), 0 0 18px rgba(255,255,255,0.3)", outline: "none" }}
+                  />
+                </Box>
+              ))}
+
+              <Text color="rgba(255,255,255,0.8)" fontSize="sm" letterSpacing="0.14em" textTransform="uppercase" fontWeight="700" mt={7} mb={1}>
+                Carta astral (opcional)
+              </Text>
+              <Text color="rgba(255,255,255,0.7)" fontSize="sm" fontStyle="italic" mb={5}>
+                Con la fecha de arriba. Aunque no tenga Astrología abierta, le saldrá todo rellenado.
+              </Text>
+              {CAMPOS_CARTA.map((c) => (
+                <Box key={c.k} mb={5}>
+                  <Text as="label" htmlFor={`crear-${c.k}`} display="block" color="rgba(255,255,255,0.8)"
+                        fontSize="sm" letterSpacing="0.14em" textTransform="uppercase" fontWeight="600" mb={2}>
+                    {c.etiqueta}
+                  </Text>
+                  <Input
+                    id={`crear-${c.k}`}
+                    type="text"
+                    value={nuevo[c.k]}
+                    onChange={(e) => { setNuevo((n) => ({ ...n, [c.k]: e.target.value })); setError(null); }}
+                    autoComplete="off"
+                    placeholder={c.ayuda}
+                    h="52px"
+                    fontSize="lg"
+                    bg="rgba(255,255,255,0.09)"
+                    border="1px solid rgba(255,255,255,0.34)"
+                    color="white"
+                    borderRadius="full"
+                    px={6}
+                    fontFamily="'EB Garamond', serif"
+                    _placeholder={{ color: "rgba(255,255,255,0.4)" }}
+                    _hover={{ borderColor: "rgba(255,255,255,0.55)" }}
                     _focus={{ borderColor: "white", boxShadow: "0 0 0 2px rgba(255,255,255,0.55), 0 0 18px rgba(255,255,255,0.3)", bg: "rgba(255,255,255,0.13)", outline: "none" }}
                     _focusVisible={{ borderColor: "white", boxShadow: "0 0 0 2px rgba(255,255,255,0.55), 0 0 18px rgba(255,255,255,0.3)", outline: "none" }}
                   />

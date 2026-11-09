@@ -185,24 +185,17 @@ export class MailService {
   // fondo solo valen si están en las listas de abajo.
   // ───────────────────────────────────────────────────────────────────────────
 
-  /** Fondos a elegir: la foto de cada disciplina (teñida, ya legible), el mármol y el turquesa liso. */
-  static readonly FONDOS_SESION: Record<string, { nombre: string; velo: string; foto?: string; txt: string; titulo: string }> = {
-    marmol:     { nombre: 'Mármol',      velo: '#efe5cf', foto: 'marmol-bienvenida', txt: '#004f4f', titulo: '#004f4f' },
-    turquesa:   { nombre: 'Turquesa',    velo: '#008080', txt: '#ffffff', titulo: '#ffffff' },
-    metodo:     { nombre: 'Astrología',  velo: TRAJE.metodo.velo,     foto: 'metodo',     txt: TRAJE.metodo.txt,     titulo: TRAJE.metodo.txt },
-    psicologia: { nombre: 'Psicología',  velo: TRAJE.psicologia.velo, foto: 'psicologia', txt: TRAJE.psicologia.txt, titulo: TRAJE.psicologia.txt },
-    ayurveda:   { nombre: 'Ayurveda',    velo: TRAJE.ayurveda.velo,   foto: 'ayurveda',   txt: TRAJE.ayurveda.txt,   titulo: TRAJE.ayurveda.txt },
-    tcm:        { nombre: 'Medicina China', velo: TRAJE.tcm.velo,     foto: 'tcm',        txt: TRAJE.tcm.txt,        titulo: TRAJE.tcm.txt },
-    fisiologia: { nombre: 'Fisiología',  velo: TRAJE.fisiologia.velo, foto: 'fisiologia', txt: TRAJE.fisiologia.txt, titulo: TRAJE.fisiologia.txt },
-    nutricion:  { nombre: 'Nutrición',   velo: TRAJE.nutricion.velo,  foto: 'nutricion',  txt: TRAJE.nutricion.txt,  titulo: TRAJE.nutricion.txt },
-    cabala:     { nombre: 'Cábala',      velo: TRAJE.cabala.velo,     foto: 'cabala',     txt: TRAJE.cabala.txt,     titulo: TRAJE.cabala.txt },
-    cultura:    { nombre: 'Cultura',     velo: TRAJE.cultura.velo,    foto: 'cultura',    txt: TRAJE.cultura.txt,    titulo: TRAJE.cultura.txt },
+  /** Las disciplinas a elegir para un bloque: su foto teñida y su color de letra (el mismo TRAJE de los demás correos). */
+  static readonly DISCIPLINAS_SESION: Record<string, { nombre: string; velo: string; foto: string; txt: string }> = {
+    metodo:     { nombre: 'Astrología',     velo: TRAJE.metodo.velo,     foto: 'metodo',     txt: TRAJE.metodo.txt },
+    psicologia: { nombre: 'Psicología',     velo: TRAJE.psicologia.velo, foto: 'psicologia', txt: TRAJE.psicologia.txt },
+    ayurveda:   { nombre: 'Ayurveda',       velo: TRAJE.ayurveda.velo,   foto: 'ayurveda',   txt: TRAJE.ayurveda.txt },
+    tcm:        { nombre: 'Medicina China', velo: TRAJE.tcm.velo,        foto: 'tcm',        txt: TRAJE.tcm.txt },
+    fisiologia: { nombre: 'Fisiología',     velo: TRAJE.fisiologia.velo, foto: 'fisiologia', txt: TRAJE.fisiologia.txt },
+    nutricion:  { nombre: 'Nutrición',      velo: TRAJE.nutricion.velo,  foto: 'nutricion',  txt: TRAJE.nutricion.txt },
+    cabala:     { nombre: 'Cábala',         velo: TRAJE.cabala.velo,     foto: 'cabala',     txt: TRAJE.cabala.txt },
+    cultura:    { nombre: 'Cultura',        velo: TRAJE.cultura.velo,    foto: 'cultura',    txt: TRAJE.cultura.txt },
   };
-
-  /** Colores de letra a elegir: blanco, turquesa oscuro y la letra de cada disciplina. */
-  static readonly COLORES_SESION: string[] = Array.from(new Set([
-    '#ffffff', '#004f4f', ...Object.values(TRAJE).map((t) => t.txt),
-  ]));
 
   /** Texto con mini-formato (**negrita**, *cursiva*, `---` raya, línea en blanco = párrafo) → HTML seguro. */
   private textoAHtml(texto: string, color: string): string {
@@ -223,23 +216,31 @@ export class MailService {
       .join('');
   }
 
-  /** El HTML del resumen de sesión (el mismo para la vista previa y para el envío). */
-  construirResumenSesion(o: { titulo: string; texto: string; fondo?: string; colorTitulo?: string; colorTexto?: string }): string {
-    const f = MailService.FONDOS_SESION[o.fondo ?? ''] ?? MailService.FONDOS_SESION.marmol;
-    const valido = (c: string | undefined, def: string) => (c && MailService.COLORES_SESION.includes(c.toLowerCase()) ? c.toLowerCase() : def);
-    const colTitulo = valido(o.colorTitulo, f.titulo);
-    const colTexto = valido(o.colorTexto, f.txt);
-    const foto = f.foto ? `${webParaImagenes(this.frontendUrl)}/img/correo/${f.foto}.jpg` : undefined;
+  /**
+   * El HTML del resumen de sesión (el mismo para la vista previa y para el envío): el mármol de la casa
+   * de base, el título en turquesa oscuro y, debajo, los bloques que María quiera, cada uno de SU
+   * disciplina (su foto y su color de letra). Un bloque sin disciplina va directo sobre el mármol.
+   */
+  construirResumenSesion(o: { titulo: string; bloques: { disciplina?: string; texto: string }[] }): string {
+    const imagenes = webParaImagenes(this.frontendUrl);
+    const partes = (o.bloques ?? [])
+      .filter((b) => (b?.texto ?? '').trim())
+      .map((b) => {
+        const d = MailService.DISCIPLINAS_SESION[b.disciplina ?? ''];
+        if (!d) return this.textoAHtml(b.texto, TINTA_MARMOL);
+        const foto = `${imagenes}/img/correo/${d.foto}.jpg`;
+        return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="${d.velo}" background="${foto}"
+                       style="margin:24px 0 0;border-radius:14px;background-color:${d.velo};background-image:url('${foto}');background-size:cover;background-position:center;">
+          <tr><td style="padding:10px 26px 28px;font-family:${SERIF};color:${d.txt};">
+            <div style="padding-top:18px;font-family:${SERIF};font-size:12px;letter-spacing:0.22em;text-transform:uppercase;color:${d.txt};">${this.escaparHtml(d.nombre)}</div>
+            ${this.textoAHtml(b.texto, d.txt)}
+          </td></tr></table>`;
+      })
+      .join('');
     const cuerpo =
-      this.textoAHtml(o.texto, colTexto) +
-      `<p style="margin:26px 0 0;font-family:${SERIF};font-size:17px;line-height:1.75;color:${colTexto};">Un abrazo,<br>María</p>`;
-    return this.sobre({
-      titulo: this.escaparHtml(o.titulo),
-      cuerpo,
-      fondo: f.velo,
-      tinta: colTitulo,
-      foto,
-    });
+      partes +
+      `<p style="margin:28px 0 0;font-family:${SERIF};font-size:17px;line-height:1.75;text-align:right;color:${TINTA_MARMOL};">Un abrazo,<br>María</p>`;
+    return marcoMarmol({ web: this.frontendUrl, titulo: this.escaparHtml(o.titulo), cuerpo });
   }
 
   /** Manda el resumen. `copiaAdmin`: una copia oculta a NOTIFY_EMAIL, para que quede en tu correo. */
@@ -405,7 +406,7 @@ export class MailService {
             Y si prefieres curiosear tú primero, también me parece muy bien. La
             llamada seguirá aquí el día que te apetezca.
           </p>
-          <p style="margin: 22px 0 0; font-size: 16px; line-height: 1.75; opacity: 0.92;">
+          <p style="margin: 22px 0 0; font-size: 16px; line-height: 1.75; opacity: 0.92; text-align: right;">
             Un abrazo,<br />María
           </p>
         </div>
@@ -427,32 +428,23 @@ export class MailService {
   async enviarCuentaActivada(email: string, nombre: string): Promise<void> {
     const frontendUrl = this.frontendUrl;
     const nombreSeguro = this.escaparHtml(nombre).trim();
-    const saludo = nombreSeguro ? `Muy buenas, <strong>${nombreSeguro}</strong>.` : 'Muy buenas.';
+    const saludo = nombreSeguro ? `Hola, <strong>${nombreSeguro}</strong>.` : 'Hola.';
     const parrafo = (texto: string) =>
       `<p style="font-size: 16px; line-height: 1.75; opacity: 0.92;">${texto}</p>`;
     const html = this.plantilla(
-      'Tu cuenta ya está activa',
+      'Te doy la bienvenida',
       `
         ${parrafo(saludo)}
-        ${parrafo('Has confirmado tu correo, así que tu cuenta ya está activa.')}
-        ${parrafo(
-          'El siguiente paso es elegir tu primera disciplina. Cuando entres verás tu Mapa con las ocho: ' +
-          'pulsa la que más te llame y la desbloqueas desde ahí.',
-        )}
-        ${parrafo('No hay un orden obligatorio. El Mapa te propone uno, pero puedes empezar por la que te apetezca.')}
+        ${parrafo('Te doy la bienvenida oficialmente a este nuevo camino. Vamos a empezar. Ya puedes entrar en tu cuenta.')}
         <p style="margin: 28px 0;">
-          ${this.pildora(`${frontendUrl}/logIn`, 'Entrar y elegir mi disciplina')}
+          ${this.pildora(`${frontendUrl}/logIn`, 'Iniciar sesión')}
         </p>
-        <p style="margin-top: 24px; font-size: 14px; line-height: 1.7; opacity: 0.78;">
-          Si dudas entre una y otra, lo hablamos: son veinte minutos, sin coste y sin compromiso.
-          <a href="${frontendUrl}/contacto?conocernos=1" style="color:${TINTA_MARMOL};text-decoration:underline;">Buscamos un hueco</a>.
-        </p>
-        <p style="margin: 22px 0 0; font-size: 16px; line-height: 1.75; opacity: 0.92;">
+        <p style="margin: 22px 0 0; font-size: 16px; line-height: 1.75; opacity: 0.92; text-align: right;">
           Un abrazo,<br />María
         </p>
       `,
     );
-    await this.enviar(email, 'Tu cuenta ya está activa', html, 'email de cuenta activada');
+    await this.enviar(email, 'Te doy la bienvenida', html, 'email de cuenta activada');
   }
 
   // ───────────────────────────────────────────────────────────────────────────
@@ -470,7 +462,7 @@ export class MailService {
       'Tu cuenta está lista',
       `
         ${parrafo(saludo)}
-        ${parrafo('He creado tu cuenta. Para activarla, solo tienes que elegir tu contraseña con el botón de abajo.')}
+        ${parrafo('Tu cuenta ya ha sido creada. Para activarla, solo tienes que elegir tu contraseña con el botón de abajo.')}
         <p style="margin: 28px 0;">
           ${this.pildora(enlace, 'Elegir mi contraseña')}
         </p>
@@ -478,8 +470,7 @@ export class MailService {
           Si el botón no te funciona, copia esta dirección en tu navegador:<br />
           <a href="${enlace}" style="color:${TINTA_MARMOL};text-decoration:underline;word-break:break-all;">${enlace}</a>
         </p>
-        ${parrafo('Al entrar no verás nada abierto: iré abriéndote cada parte a medida que avancemos en las sesiones.')}
-        <p style="margin: 22px 0 0; font-size: 16px; line-height: 1.75; opacity: 0.92;">
+        <p style="margin: 22px 0 0; font-size: 16px; line-height: 1.75; opacity: 0.92; text-align: right;">
           Un abrazo,<br />María
         </p>
         <p style="margin-top: 24px; font-size: 13px; line-height: 1.6; opacity: 0.7;">
@@ -649,7 +640,7 @@ export class MailService {
           ${this.botonDisciplina(clave, `${frontendUrl}/home`, 'Entrar en mi Mapa')}
           ${this.botonDisciplina(clave, `${frontendUrl}/contacto`, 'Hablamos cuando quieras', false)}
         </p>
-        ${parrafo('Un abrazo,<br />María', 28)}
+        <div style="text-align:right;">${parrafo('Un abrazo,<br />María', 28)}</div>
       `,
     );
     await this.enviar(email, `${disciplina} ya te espera en tu Mapa`, html, 'email de disciplina');

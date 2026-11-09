@@ -20,13 +20,13 @@ import type { PasoRecorrido } from "./psicologiaRecorrido";
 // página para dar los datos y leer lo primero de la carta; la intro (los
 // cómics) vuelve a verse cada vez que se entra a ese paso 1.
 export const astrologiaIndice = (): PasoRecorrido[] => [
-  // 1 · la Introducción con la carta (a ella se llega al saltar el cómic de la
-  //     historia espiritual, que sale en /metodo/astrologia al pulsar START).
-  { n: 1, titulo: traducir("metodo.astro.paso.introduccion"), ruta: () => "/metodo/astrologia/introduccion" },
-  // 2 · la Historia: el cómic (y su reel) en UNA caja.
-  { n: 2, titulo: traducir("metodo.astro.paso.historia"), ruta: () => "/metodo/astrologia/historia" },
-  // 3 · la Introducción que lo explica todo: signos, casas, planetas y aspectos.
-  { n: 3, titulo: traducir("metodo.astro.paso.explicacion"), ruta: () => "/metodo/astrologia/explicacion" },
+  // 1 · la Historia: el cómic (y su reel) en UNA caja. A ella se llega al saltar el cómic de la
+  //     historia espiritual, que sale en /metodo/astrologia al pulsar START.
+  { n: 1, titulo: traducir("metodo.astro.paso.historia"), ruta: () => "/metodo/astrologia/historia" },
+  // 2 · la Introducción que lo explica todo: signos, casas, planetas y aspectos.
+  { n: 2, titulo: traducir("metodo.astro.paso.explicacion"), ruta: () => "/metodo/astrologia/explicacion" },
+  // 3 · Tu Carta Astral: los datos de nacimiento y la carta con lo primero de ella. María entra siempre.
+  { n: 3, titulo: traducir("metodo.astro.paso.introduccion"), ruta: () => "/metodo/astrologia/introduccion" },
   // 4 · Ascendente, Sol y Luna: lo que la mayoría conoce de la astrología.
   { n: 4, titulo: traducir("metodo.astro.paso.trio"), ruta: () => "/metodo/astrologia/trio" },
   // 5 · los puntos clave de SU carta, según María.

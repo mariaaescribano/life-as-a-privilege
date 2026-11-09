@@ -80,7 +80,7 @@ export default function MetodoTcm() {
         // falta es tener esta disciplina desbloqueada (si no, sale su pago).
         const tcmSuscrito = !!me.data?.tcm_suscrito;
         setSuscrito(tcmSuscrito);
-        if (!tcmSuscrito) { setPagoOpen(true); return; }
+        if (!tcmSuscrito) { /* pago desactivado */ return; }
 
         // Ya tiene acceso: si es la 1ª vez, muestra el cómic del Origen (taoísmo).
         void intro.checkAndOpen();
@@ -109,7 +109,7 @@ export default function MetodoTcm() {
   };
 
   const comenzar = () => {
-    if (!suscrito) { setPagoOpen(true); return; }
+    if (!suscrito) { /* pago desactivado */ return; }
     // Antes de pasar a «Los 5 elementos» intercalamos el cómic de los elementos.
     setComicElementosOpen(true);
   };

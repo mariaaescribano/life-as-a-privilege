@@ -419,6 +419,12 @@ export class UserService {
       throw new BadRequestException('El enlace ha caducado o ya se ha usado');
     }
 
+    // ¿Era una cuenta SIN activar? (las de asesoría se activan justo aquí, al elegir contraseña con el enlace
+    // de la invitación). Se mira antes de tocar nada, y aparte: si la columna no existe, no rompe la recuperación.
+    const { data: antes } = await this.databaseService.getClient()
+      .from('user').select('email, name, email_confirmado').eq('id', user.id).limit(1);
+    const eraSinActivar = (antes?.[0] as { email_confirmado?: boolean } | undefined)?.email_confirmado === false;
+
     const { error } = await this.databaseService.getClient()
       .from('user')
       .update({ password: await hashPassword(pass) })
@@ -430,6 +436,15 @@ export class UserService {
     const { error: errConfirmar } = await this.databaseService.getClient()
       .from('user').update({ email_confirmado: true }).eq('id', user.id);
     if (errConfirmar) console.warn('[restablecerPassword] no se pudo confirmar el email:', errConfirmar.message);
+
+    // Recién activada: le llega la bienvenida oficial, con el enlace para iniciar sesión. Una recuperación
+    // de contraseña de una cuenta que ya estaba activa no manda nada.
+    if (eraSinActivar) {
+      const { email, name } = antes![0] as { email: string; name: string };
+      void this.mailService
+        .enviarCuentaActivada(email, name ?? '')
+        .catch((err) => console.error('[restablecerPassword] no se pudo enviar la bienvenida:', err));
+    }
 
     return { ok: true as const };
   }

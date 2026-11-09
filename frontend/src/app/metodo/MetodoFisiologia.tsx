@@ -54,7 +54,7 @@ export default function MetodoFisiologia() {
         // falta es tener esta disciplina desbloqueada (si no, sale su pago).
         const fisioSuscrito = !!me.data?.fisiologia_suscrito;
         setSuscrito(fisioSuscrito);
-        if (!fisioSuscrito) { setPagoOpen(true); return; }
+        if (!fisioSuscrito) { /* pago desactivado */ return; }
 
         // Ya tiene acceso: si es la 1ª vez, muestra el cómic del Origen (ciencia).
         void intro.checkAndOpen();
@@ -83,7 +83,7 @@ export default function MetodoFisiologia() {
   };
 
   const comenzar = () => {
-    if (!suscrito) { setPagoOpen(true); return; }
+    if (!suscrito) { /* pago desactivado */ return; }
     navigate("/metodo/fisiologia/niveles");
   };
 

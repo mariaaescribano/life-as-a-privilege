@@ -137,6 +137,10 @@ export default function MetodoAstrologia() {
   // carta»: es la puerta de entrada a la lectura, no un extra de la página.
   const [comicCartaOpen, setComicCartaOpen] = useState(false);
   const intro = useIntroComic("metodo-astrologia"); // cómic del Origen (espiritualidad), 1ª vez
+  // Al acabar el cómic se va a Historia SIN cerrar antes el cómic: si se cerrara primero, la página de
+  // debajo (la del formulario de la carta) se vería un instante hasta que cargara Historia. Con el cómic
+  // todavía encima, pasa directamente del cómic a Historia; el cómic desaparece solo al cambiar de página.
+  const irAHistoria = () => navigate("/metodo/astrologia/historia", { replace: true });
   // Segundo cómic de intro: «La Historia de la Astrología». Va SEGUIDO del cómic
   // del Origen (son distintos). Solo se encadena si tiene viñetas cargadas.
   const [historiaOpen, setHistoriaOpen] = useState(false);
@@ -373,8 +377,8 @@ export default function MetodoAstrologia() {
   // de Arquetipos van los dos cómics encadenados (signos → planetas).
   const headerNext = (yaConPdf || yaSolicitado) && !editando
     ? {
-        label: `${t("metodo.astro.paso.trio")} →`,
-        onClick: () => navigate("/metodo/astrologia/trio"),
+        label: `${t("metodo.astro.paso.historia")} →`,
+        onClick: () => navigate("/metodo/astrologia/historia"),
       }
     : { label: "Leer carta →", onClick: abrirConfirmacion, disabled: !camposCompletos };
 
@@ -753,13 +757,13 @@ export default function MetodoAstrologia() {
         vinetas={origenVinetas}
         onFinish={intro.finish}
         // Saltar la historia espiritual (la X) lleva a la Introducción, el paso 1.
-        onClose={() => { intro.close(); navigate("/metodo/astrologia/introduccion"); }}
-        continueLabel={t("metodo.astro.paso.introduccion")}
+        onClose={() => { irAHistoria(); }}
+        continueLabel={t("metodo.astro.paso.historia")}
         continueBgImage={SPACE_IMG}
         // Al acabar la historia espiritual se pasa directo a la Introducción (paso 1): el cómic
         // de la Historia ya no sale aquí, sale en el paso 2 (con la opción de cómic o reel).
-        onContinue={() => { intro.close(); navigate("/metodo/astrologia/introduccion"); }}
-        onComplete={() => { intro.close(); navigate("/metodo/astrologia/introduccion"); }}
+        onContinue={() => { irAHistoria(); }}
+        onComplete={() => { irAHistoria(); }}
       />
 
       {/* Segundo cómic de intro: «La Historia de la Astrología» (va seguido del
@@ -767,7 +771,7 @@ export default function MetodoAstrologia() {
       <IntroComicModal
         isOpen={historiaOpen}
         vinetas={historiaVinetas}
-        onClose={() => { setHistoriaOpen(false); navigate("/metodo/astrologia/introduccion"); }}
+        onClose={() => { irAHistoria(); }}
         continueLabel={yaSolicitado ? t("metodo.astro.queEsCarta") : t("disciplina.astrologia")}
         continueBgImage={SPACE_IMG}
         // Con los datos ya dados, la entrada son los TRES cómics seguidos: aquí

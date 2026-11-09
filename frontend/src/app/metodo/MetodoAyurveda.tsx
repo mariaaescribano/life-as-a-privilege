@@ -64,7 +64,7 @@ export default function MetodoAyurveda() {
         // falta es tener esta disciplina desbloqueada (si no, sale su pago).
         const ayurSuscrito = !!me.data?.ayurveda_suscrito;
         setSuscrito(ayurSuscrito);
-        if (!ayurSuscrito) { setPagoOpen(true); return; }
+        if (!ayurSuscrito) { /* pago desactivado */ return; }
 
         // Ya tiene acceso: si es la 1ª vez, muestra el cómic del Origen (hinduismo).
         void intro.checkAndOpen();

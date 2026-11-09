@@ -62,7 +62,7 @@ export default function MetodoCabala() {
         // falta es tener esta disciplina desbloqueada (si no, sale su pago).
         const cabalaSuscrito = !!me.data?.cabala_suscrito;
         setSuscrito(cabalaSuscrito);
-        if (!cabalaSuscrito) { setPagoOpen(true); return; }
+        if (!cabalaSuscrito) { /* pago desactivado */ return; }
 
         // Ya tiene acceso: si es la 1ª vez, muestra el cómic del Origen.
         void intro.checkAndOpen();
@@ -92,7 +92,7 @@ export default function MetodoCabala() {
 
   // Antes del Árbol de la Vida se pasa por el cómic de la historia de la Cábala.
   const comenzar = () => {
-    if (!suscrito) { setPagoOpen(true); return; }
+    if (!suscrito) { /* pago desactivado */ return; }
     setComicHistoriaOpen(true);
   };
 

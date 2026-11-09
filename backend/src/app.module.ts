@@ -1,6 +1,7 @@
 // app.module.ts
 import { Module } from '@nestjs/common';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { PersonaSoloLecturaInterceptor } from './auth/persona-solo-lectura.interceptor';
 import { ConfigModule } from '@nestjs/config';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { LIMITE_GENERAL } from './rate-limit';
@@ -103,6 +104,8 @@ export const uploadFolder = join(process.cwd(), 'img');
     // Guard GLOBAL: el límite se aplica a todas las rutas sin tener que
     // acordarse de ponerlo en cada controlador (que es como se olvida).
     { provide: APP_GUARD, useClass: ThrottlerGuard },
+    // Interceptor GLOBAL: María recorriendo la cuenta de una persona no deja rastro en su progreso.
+    { provide: APP_INTERCEPTOR, useClass: PersonaSoloLecturaInterceptor },
   ],
   exports: [DatabaseService],
 })

@@ -417,13 +417,14 @@ describe('Textos de los dos correos', () => {
     expect(enviar.mock.calls[0][2]).not.toContain('<script>');
   });
 
-  it('cuenta activada: asunto, siguiente paso = elegir disciplina, botón a entrar', async () => {
+  it('cuenta activada: la bienvenida oficial, con su nombre y botón para iniciar sesión', async () => {
     await mail.enviarCuentaActivada('ana@x.com', 'Ana');
     const [para, asunto, html] = enviar.mock.calls[0];
     expect(para).toBe('ana@x.com');
-    expect(asunto).toBe('Tu cuenta ya está activa');
-    expect(html).toContain('Muy buenas, <strong>Ana</strong>.');
-    expect(html).toContain('El siguiente paso es elegir tu primera disciplina');
+    expect(asunto).toBe('Te doy la bienvenida');
+    expect(html).toContain('Hola, <strong>Ana</strong>.');
+    expect(html).toContain('Te doy la bienvenida oficialmente a este nuevo camino. Vamos a empezar. Ya puedes entrar en tu cuenta.');
+    expect(html).toContain('Iniciar sesión');
     expect(html).toContain(`href="${frontend}/logIn"`);
   });
 });

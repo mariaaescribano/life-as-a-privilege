@@ -35,7 +35,8 @@ import CaminoUsuario from "./CaminoUsuario";
 import MapaDePersona from "./MapaDePersona";
 import { rutaCamino } from "../../data/camino";
 import { personaActiva } from "../../api/persona";
-import { ComunidadPrimeraVez } from "../../components/global/ComunidadPrimeraVez";
+// Aparcado: el aviso «Únete a la comunidad» no sale por ahora.
+// import { ComunidadPrimeraVez } from "../../components/global/ComunidadPrimeraVez";
 import { useT, type ClaveTexto } from "../../i18n";
 import { encogerFoto } from "../../utils/encogerFoto";
 import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
@@ -229,10 +230,9 @@ const Home = () => {
         suscrito = false;
       }
     }
-    if (!suscrito) {
-      setPagoOpen(true);
-      return;
-    }
+    // Astrología siempre lleva a su camino: Historia y Explicación están abiertas para todo el mundo y el
+    // resto lo abre María (cada paso, con su candado).
+    void suscrito;
     await continuarAstrologia();
   };
 
@@ -267,7 +267,7 @@ const Home = () => {
       navigate(rutaCamino("psicologia"));
     } else {
       setPagoPsicoError(null);
-      setPagoPsicoOpen(true);
+      // Pago desactivado: una disciplina cerrada solo se abre cuando María la desbloquea.
     }
   };
 
@@ -292,7 +292,7 @@ const Home = () => {
       navigate(rutaCamino("ayurveda"));
     } else {
       setPagoAyurError(null);
-      setPagoAyurOpen(true);
+      // Pago desactivado: una disciplina cerrada solo se abre cuando María la desbloquea.
     }
   };
 
@@ -317,7 +317,7 @@ const Home = () => {
       navigate(rutaCamino("tcm"));
     } else {
       setPagoTcmError(null);
-      setPagoTcmOpen(true);
+      // Pago desactivado: una disciplina cerrada solo se abre cuando María la desbloquea.
     }
   };
 
@@ -342,7 +342,7 @@ const Home = () => {
       navigate(rutaCamino("fisiologia"));
     } else {
       setPagoFisioError(null);
-      setPagoFisioOpen(true);
+      // Pago desactivado: una disciplina cerrada solo se abre cuando María la desbloquea.
     }
   };
 
@@ -367,7 +367,7 @@ const Home = () => {
       navigate(rutaCamino("nutricion"));
     } else {
       setPagoNutriError(null);
-      setPagoNutriOpen(true);
+      // Pago desactivado: una disciplina cerrada solo se abre cuando María la desbloquea.
     }
   };
 
@@ -392,7 +392,7 @@ const Home = () => {
       navigate(rutaCamino("cabala"));
     } else {
       setPagoCabalaError(null);
-      setPagoCabalaOpen(true);
+      // Pago desactivado: una disciplina cerrada solo se abre cuando María la desbloquea.
     }
   };
 
@@ -417,7 +417,7 @@ const Home = () => {
       navigate(rutaCamino("cultura"));
     } else {
       setPagoCulturaError(null);
-      setPagoCulturaOpen(true);
+      // Pago desactivado: una disciplina cerrada solo se abre cuando María la desbloquea.
     }
   };
 
@@ -962,7 +962,9 @@ const Home = () => {
       fontFamily="'EB Garamond', serif"
     >
       <SiteHeader variant="private" userImg={img ?? undefined} />
+      {/* Aparcado por ahora: aviso «Únete a la comunidad» (ComunidadPrimeraVez).
       <ComunidadPrimeraVez />
+      */}
 
       {/* Continuar por dónde lo dejé — escritorio: fijo arriba a la derecha,
           bajo el header. En móvil se pinta debajo del mandala (más abajo). */}

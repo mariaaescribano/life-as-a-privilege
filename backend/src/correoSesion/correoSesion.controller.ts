@@ -7,13 +7,17 @@ import { MailService } from '../mail/mail.service';
 interface CuerpoCorreo {
   asunto?: string;
   titulo?: string;
-  texto?: string;
-  fondo?: string;
-  colorTitulo?: string;
-  colorTexto?: string;
+  /** Los bloques de texto, cada uno de su disciplina (vacía = directo sobre el mármol). */
+  bloques?: { disciplina?: string; texto?: string }[];
   /** true = se manda a María (NOTIFY_EMAIL) en vez de a la persona, para ver cómo llega. */
   prueba?: boolean;
 }
+
+const limpiarBloques = (bs: CuerpoCorreo['bloques']) =>
+  (Array.isArray(bs) ? bs : []).slice(0, 40).map((b) => ({
+    disciplina: typeof b?.disciplina === 'string' ? b.disciplina : '',
+    texto: typeof b?.texto === 'string' ? b.texto : '',
+  }));
 
 // «Resumen de sesión»: el correo que María escribe tras una sesión y manda al email de la cuenta de
 // la persona. No se guarda nada en la base de datos: queda en el correo (copia oculta a NOTIFY_EMAIL).
@@ -26,18 +30,17 @@ export class CorreoSesionController {
     private readonly mail: MailService,
   ) {}
 
-  /** Los fondos y colores que se pueden elegir (el servidor solo acepta estos). */
+  /** Las disciplinas que se pueden elegir para un bloque (el servidor solo acepta estas). */
   @Get('opciones')
   opciones() {
     return {
-      fondos: Object.entries(MailService.FONDOS_SESION).map(([clave, f]) => ({
+      disciplinas: Object.entries(MailService.DISCIPLINAS_SESION).map(([clave, d]) => ({
         clave,
-        nombre: f.nombre,
-        foto: f.foto ? `/img/correo/${f.foto}.jpg` : null,
-        velo: f.velo,
-        txt: f.txt,
+        nombre: d.nombre,
+        foto: `/img/correo/${d.foto}.jpg`,
+        velo: d.velo,
+        txt: d.txt,
       })),
-      colores: MailService.COLORES_SESION,
     };
   }
 
@@ -52,23 +55,23 @@ export class CorreoSesionController {
   /** La vista previa: el HTML exacto que se enviaría. */
   @Post('vista')
   vista(@Body() b: CuerpoCorreo) {
-    return { html: this.mail.construirResumenSesion({ titulo: b.titulo ?? '', texto: b.texto ?? '', fondo: b.fondo, colorTitulo: b.colorTitulo, colorTexto: b.colorTexto }) };
+    return { html: this.mail.construirResumenSesion({ titulo: b.titulo ?? '', bloques: limpiarBloques(b.bloques) }) };
   }
 
   @Post(':userId/enviar')
   async enviar(@Param('userId') userId: string, @Body() b: CuerpoCorreo) {
     const asunto = (b.asunto ?? '').trim();
     const titulo = (b.titulo ?? '').trim();
-    const texto = (b.texto ?? '').trim();
+    const bloques = limpiarBloques(b.bloques);
     if (!asunto) return { success: false, error: 'Falta el asunto' };
-    if (!titulo && !texto) return { success: false, error: 'El correo está vacío' };
+    if (!titulo && !bloques.some((x) => x.texto.trim())) return { success: false, error: 'El correo está vacío' };
 
     const { data } = await this.db.getClient().from('user').select('name, email').eq('id', userId).limit(1);
     const u = data?.[0];
     if (!u?.email) return { success: false, error: 'Esta cuenta no tiene email' };
 
     const destino = b.prueba ? (process.env.NOTIFY_EMAIL || u.email) : u.email;
-    const html = this.mail.construirResumenSesion({ titulo, texto, fondo: b.fondo, colorTitulo: b.colorTitulo, colorTexto: b.colorTexto });
+    const html = this.mail.construirResumenSesion({ titulo, bloques });
     const ok = await this.mail.enviarResumenSesion(destino, b.prueba ? `[Prueba] ${asunto}` : asunto, html);
     return ok ? { success: true, a: destino } : { success: false, error: 'No se pudo enviar el correo' };
   }

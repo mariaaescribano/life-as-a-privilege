@@ -1,4 +1,7 @@
-// GuardiaPagoRecorrido.tsx — nadie entra en una disciplina sin haberla pagado.
+// GuardiaPagoRecorrido.tsx — nadie entra en una disciplina que no esté abierta.
+//
+// OJO: YA NO HAY PAGO. Una disciplina se abre cuando María la desbloquea (`<scope>_suscrito`); si no
+// está abierta, esto devuelve a /home sin ningún box de pago. El texto de abajo es el de cuando sí lo había.
 //
 // El pago tiene que salir en /home, ANTES de meterse, nunca dentro de la
 // disciplina. En /home los círculos ya lo hacen así, pero a una disciplina se
@@ -38,8 +41,18 @@ const SCOPE_POR_RUTA: [string, string][] = [
   ["/camino/cultura", "cultura"],
 ];
 
+// Astrología, aunque no esté abierta: su camino, la entrada y los dos primeros pasos (Historia y Explicación)
+// son para todo el mundo. Lo demás lo abre María.
+const SIEMPRE_ABIERTAS = [
+  "/camino/astrologia",
+  "/metodo/astrologia",
+  "/metodo/astrologia/historia",
+  "/metodo/astrologia/explicacion",
+];
+
 function scopeDeRuta(pathname: string): string | null {
-  const p = pathname.toLowerCase();
+  const p = pathname.toLowerCase().replace(/\/+$/, "");
+  if (SIEMPRE_ABIERTAS.includes(p)) return null;
   const hit = SCOPE_POR_RUTA.find(([pre]) => p === pre || p.startsWith(`${pre}/`));
   return hit ? hit[1] : null;
 }
@@ -77,7 +90,7 @@ export function GuardiaPagoRecorrido() {
         }
         if (!vivo) return;
         if (pagadas.scopes.has(scope)) setComprobando(false);
-        else navigate(`/home?entrar=${scope}`, { replace: true });
+        else navigate("/home", { replace: true });
       })
       // Sin red o servidor caído: no se bloquea. Las páginas siguen teniendo
       // su propia comprobación detrás.

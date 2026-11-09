@@ -21,6 +21,7 @@ import { Box, Flex, Text, useBreakpointValue } from "@chakra-ui/react";
 import { motion, useReducedMotion } from "framer-motion";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
 import { sombraSoloContraste } from "../global/disciplinaSombras";
+import { astrologiaNom } from "../../GlobalVariables";
 import { Reveal } from "../global/Reveal";
 import { focoBlanco } from "../global/foco";
 import { useT } from "../../i18n";
@@ -186,7 +187,8 @@ function Caja({
         </Box>
       )}
       {/* La casilla en la que vas: un aro de luz que late despacio. */}
-      {actual && !cerrado && (
+      {/* (En Astrología este aro no late: se quedó quieto a petición de María.) */}
+      {actual && !cerrado && nom !== astrologiaNom && (
         <Box
           position="absolute" inset={0} borderRadius="24px" zIndex={1} pointerEvents="none"
           sx={{

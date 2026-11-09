@@ -23,6 +23,24 @@ import { personaActiva, esMariaMirando } from "../../api/persona";
 import { useNotaPagina, NotaPaginaContenido } from "./NotaPagina";
 import { VistaDiarioMaria } from "./DiarioMaria";
 
+const MARMOL_ESCRIBIR = "/img/fondos/marmolfondo.webp";
+let marmolListo: Promise<void> | null = null;
+/** Carga el mármol de la caja donde se escribe. El popup NO se abre hasta que está cargado (con un tope de
+ *  5 s por si la red falla: mejor abrir sin él que no abrir). Se guarda la promesa: solo se pide una vez. */
+function precargarMarmol(): Promise<void> {
+  if (!marmolListo) {
+    marmolListo = new Promise<void>((ok) => {
+      const img = new window.Image();
+      const fin = () => ok();
+      img.onload = fin;
+      img.onerror = fin;
+      img.src = MARMOL_ESCRIBIR;
+      window.setTimeout(fin, 5000);
+    });
+  }
+  return marmolListo;
+}
+
 /** Icono del diario (libro abierto). El color se adapta vía `fill`.
  *  Exportado: lo usa también el pin de «Mis notas» del /home. */
 export function DiarioIcon({ fill = "currentColor", size = "24px" }: { fill?: string; size?: string }) {
@@ -95,6 +113,9 @@ export function MiniDiario() {
 
   const { pathname } = useLocation();
 
+  // El mármol se pide en cuanto aparece el botón, para que al pulsar ya esté (y el popup salga al momento).
+  useEffect(() => { void precargarMarmol(); }, []);
+
   const resetEscritura = () => {
     setTexto("");
     setCategoria(null);
@@ -125,14 +146,16 @@ export function MiniDiario() {
   };
 
   // Quien tiene una nota nueva de María en esta página, al abrir va derecho a ella.
-  const abrir = () => {
+  const abrir = async () => {
     if (np.visible && np.sinLeer) { setVista("pagina"); np.marcarVista(); }
+    await precargarMarmol();
     onOpen();
   };
 
-  const abrirDiario = () => {
+  const abrirDiario = async () => {
     setSoloDiario(true);
     setVista("diario");
+    await precargarMarmol();
     onOpen();
   };
 
@@ -730,7 +753,8 @@ export function NotaCard({ nota, onBorrar }: { nota: Nota; onBorrar: (id: string
   const disc = nota.categoria ? disciplinaByKey(nota.categoria) : undefined;
   const nom = disc?.nombre;
   const conFondo = !!nom && hasDisciplinaBg(nom);
-  const txtColor = disc?.txt ?? "white";
+  // Sin disciplina: mármol de fondo y letra turquesa oscuro (sin etiqueta).
+  const txtColor = disc?.txt ?? "#004f4f";
   // Quién la escribió: las de María llevan su nombre; si es María quien mira, las
   // de la persona llevan el suyo. Si ve la persona sus propias notas, ninguno.
   const persona = personaActiva();
@@ -742,25 +766,30 @@ export function NotaCard({ nota, onBorrar }: { nota: Nota; onBorrar: (id: string
       flexShrink={0}
       overflow="hidden"
       borderRadius="xl"
-      bg={disc ? disc.bg : "rgba(255,255,255,0.06)"}
-      border="1px solid rgba(255,255,255,0.15)"
+      bg={disc ? disc.bg : "#efe5cf"}
+      bgImage={disc ? undefined : "url('/img/fondos/marmolfondo.webp')"}
+      bgSize="cover"
+      bgPosition="center"
+      border={disc ? "1px solid rgba(255,255,255,0.15)" : "1px solid #004f4f55"}
     >
       {conFondo && nom && <DisciplinaBgLayer nom={nom} borderRadius="xl" />}
       <Box position="relative" zIndex={1} px={4} py={3}>
-        <Flex justify="space-between" align="center" mb={1.5} gap={2}>
-          <Flex align="center" gap={2}>
-            {disc && <disc.Icon size={{ base: "18px", md: "18px" }} />}
-            <Text
-              color={txtColor}
-              fontSize="xs"
-              fontWeight="700"
-              letterSpacing="0.05em"
-              textTransform="uppercase"
-              opacity={0.9}
-            >
-              {disc?.nombre ?? "Sin clasificar"}
-            </Text>
-          </Flex>
+        <Flex justify={disc ? "space-between" : "flex-end"} align="center" mb={1.5} gap={2}>
+          {disc && (
+            <Flex align="center" gap={2}>
+              <disc.Icon size={{ base: "18px", md: "18px" }} />
+              <Text
+                color={txtColor}
+                fontSize="xs"
+                fontWeight="700"
+                letterSpacing="0.05em"
+                textTransform="uppercase"
+                opacity={0.9}
+              >
+                {disc.nombre}
+              </Text>
+            </Flex>
+          )}
           <Box
             as="button"
             onClick={() => onBorrar(nota.id)}
@@ -775,7 +804,7 @@ export function NotaCard({ nota, onBorrar }: { nota: Nota; onBorrar: (id: string
             fontSize="sm"
             lineHeight="1"
             transition="all 0.18s"
-            _hover={{ color: "#ffb4b4", bg: `${txtColor}1a` }}
+            _hover={{ color: disc ? "#ffb4b4" : "#9b2c2c", bg: `${txtColor}1a` }}
             aria-label={t("diario.borrarNota")}
           >
             ✕

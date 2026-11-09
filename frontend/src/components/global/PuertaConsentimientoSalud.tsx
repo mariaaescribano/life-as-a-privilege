@@ -9,14 +9,12 @@
 // Solo se monta en /metodo/* (ver PrivateRoute en App.tsx). Sin disciplinas
 // abiertas no pregunta nada: en ese caso la casilla la verá al pagar.
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { Box, Flex, Modal, ModalBody, ModalContent, ModalOverlay, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import { API_URL } from "../../GlobalVariables";
 import { useT } from "../../i18n";
 import { Casilla } from "../metodo/PagoDisciplinaModal";
 import { darConsentimientoSalud, tieneConsentimientoSalud } from "../../api/consentimientoSalud";
-import { personaActiva } from "../../api/persona";
+import { personaActiva, esMariaMirando } from "../../api/persona";
 
 const BG = "#004a4a";
 const TXT = "#ffffff";
@@ -33,20 +31,16 @@ export function PuertaConsentimientoSalud() {
     // En el camino de María no se pregunta: el consentimiento solo puede darlo la
     // propia persona (el servidor también lo rechaza).
     if (personaActiva()) return;
+    // María con el panel desbloqueado tampoco: el consentimiento es de las personas, no suyo.
+    if (esMariaMirando()) return;
     let vivo = true;
     (async () => {
       const ya = await tieneConsentimientoSalud();
       // `null` = no se ha podido saber: mejor no bloquear a nadie por un fallo de red.
       if (ya !== false || !vivo) return;
-      try {
-        const { data } = await axios.get(`${API_URL}/user/me`);
-        const abierta = Object.entries(data ?? {}).some(
-          ([k, v]) => k.endsWith("_suscrito") && v === true,
-        );
-        if (vivo && abierta) setPedir(true);
-      } catch {
-        /* sin datos de la cuenta, no se bloquea */
-      }
+      // Ya no hay pago (donde antes se daba la casilla): se pide aquí, al entrar al recorrido, aunque la
+      // persona todavía no tenga ninguna disciplina abierta (Historia y Explicación son para todos).
+      if (vivo) setPedir(true);
     })();
     return () => { vivo = false; };
   }, []);

@@ -11,51 +11,57 @@ import { adminHeaders, useAdminGuard } from "./useAdminGuard";
 
 // «Resumen de sesión»: el correo que María escribe tras (o durante) una sesión y manda al email de la
 // cuenta de la persona. Se abre en OTRA pestaña desde el recorrido, para ir preparándolo sin cerrar la
-// página en la que está con la persona. No se guarda nada en la web: queda en el correo. El borrador
-// solo se recuerda en este navegador (por si se cierra la pestaña a media sesión).
+// página en la que está con la persona.
+//
+// El correo es el mármol de la casa de base: arriba el título (siempre turquesa oscuro) y debajo los
+// bloques que haga falta, cada uno de SU disciplina (su foto y su color de letra). No se guarda nada
+// en la web: queda en el correo. El borrador solo se recuerda en este navegador.
 //
 // La vista previa es el HTML exacto que construye el servidor: lo que se ve es lo que llega.
 
-interface Fondo { clave: string; nombre: string; foto: string | null; velo: string; txt: string }
-interface Borrador { asunto: string; titulo: string; texto: string; fondo: string; colorTitulo: string; colorTexto: string }
+interface Disciplina { clave: string; nombre: string; foto: string; velo: string; txt: string }
+interface Bloque { id: string; disciplina: string; texto: string }
+interface Borrador { asunto: string; titulo: string; bloques: Bloque[] }
 
 const TQ = "#004f4f";
 const ORO = "#b08d3f";
 const MARMOL = "url('/img/fondos/marmolfondo.webp')";
-const VACIO: Borrador = { asunto: "", titulo: "", texto: "", fondo: "marmol", colorTitulo: TQ, colorTexto: TQ };
 
-const claveBorrador = (userId: string) => `correoSesion:${userId}`;
+const nuevoId = () => Math.random().toString(36).slice(2, 9);
+const bloqueVacio = (disciplina = "metodo"): Bloque => ({ id: nuevoId(), disciplina, texto: "" });
+const VACIO: Borrador = { asunto: "", titulo: "", bloques: [bloqueVacio()] };
+
+const claveBorrador = (userId: string) => `correoSesion:v2:${userId}`;
 
 export default function AdminCorreoSesion() {
   const { verificando } = useAdminGuard();
   const { userId = "" } = useParams();
 
-  const [fondos, setFondos] = useState<Fondo[]>([]);
-  const [colores, setColores] = useState<string[]>([]);
+  const [disciplinas, setDisciplinas] = useState<Disciplina[]>([]);
   const [dest, setDest] = useState<{ nombre: string; email: string } | null>(null);
   const [b, setB] = useState<Borrador>(() => {
     try {
       const crudo = localStorage.getItem(claveBorrador(userId));
-      return crudo ? { ...VACIO, ...JSON.parse(crudo) } : VACIO;
-    } catch { return VACIO; }
+      const g = crudo ? JSON.parse(crudo) : null;
+      if (g && Array.isArray(g.bloques) && g.bloques.length) return { ...VACIO, ...g };
+    } catch { /* borrador corrupto: se empieza de cero */ }
+    return VACIO;
   });
   const [html, setHtml] = useState("");
   const [estado, setEstado] = useState<{ tipo: "ok" | "error"; texto: string } | null>(null);
   const [enviando, setEnviando] = useState(false);
   const [confirmar, setConfirmar] = useState(false);
 
-  // Las opciones y a quién le llegaría.
   useEffect(() => {
     if (verificando) return;
     axios.get(`${API_URL}/correo-sesion/opciones`, { headers: adminHeaders() })
-      .then((r) => { setFondos(r.data?.fondos ?? []); setColores(r.data?.colores ?? []); })
+      .then((r) => setDisciplinas(r.data?.disciplinas ?? []))
       .catch(() => { /* sin opciones no se puede elegir, pero se puede escribir */ });
     axios.get(`${API_URL}/correo-sesion/${encodeURIComponent(userId)}/destinatario`, { headers: adminHeaders() })
       .then((r) => setDest(r.data?.success ? { nombre: r.data.nombre, email: r.data.email } : null))
       .catch(() => setDest(null));
   }, [verificando, userId]);
 
-  // El borrador se recuerda en este navegador.
   useEffect(() => {
     try { localStorage.setItem(claveBorrador(userId), JSON.stringify(b)); } catch { /* modo privado */ }
   }, [b, userId]);
@@ -66,22 +72,40 @@ export default function AdminCorreoSesion() {
     if (verificando) return;
     const n = ++peticion.current;
     const id = window.setTimeout(() => {
-      axios.post(`${API_URL}/correo-sesion/vista`, b, { headers: adminHeaders() })
+      axios.post(`${API_URL}/correo-sesion/vista`, { titulo: b.titulo, bloques: b.bloques }, { headers: adminHeaders() })
         .then((r) => { if (n === peticion.current) setHtml(r.data?.html ?? ""); })
         .catch(() => { /* se queda con la anterior */ });
     }, 350);
     return () => window.clearTimeout(id);
-  }, [b.titulo, b.texto, b.fondo, b.colorTitulo, b.colorTexto, verificando]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [b.titulo, b.bloques, verificando]);
 
   const cambiar = (parcial: Partial<Borrador>) => { setB((x) => ({ ...x, ...parcial })); setConfirmar(false); setEstado(null); };
-  const elegirFondo = (f: Fondo) => cambiar({ fondo: f.clave, colorTitulo: f.txt, colorTexto: f.txt });
+  const cambiarBloque = (id: string, parcial: Partial<Bloque>) =>
+    cambiar({ bloques: b.bloques.map((x) => (x.id === id ? { ...x, ...parcial } : x)) });
+  const quitarBloque = (id: string) => {
+    const resto = b.bloques.filter((x) => x.id !== id);
+    cambiar({ bloques: resto.length ? resto : [bloqueVacio()] });
+  };
+  const moverBloque = (id: string, d: -1 | 1) => {
+    const i = b.bloques.findIndex((x) => x.id === id);
+    const j = i + d;
+    if (i < 0 || j < 0 || j >= b.bloques.length) return;
+    const copia = [...b.bloques];
+    [copia[i], copia[j]] = [copia[j], copia[i]];
+    cambiar({ bloques: copia });
+  };
+  const añadirBloque = () => cambiar({ bloques: [...b.bloques, bloqueVacio(b.bloques[b.bloques.length - 1]?.disciplina)] });
 
   const enviar = async (prueba: boolean) => {
     if (enviando) return;
     setEnviando(true);
     setEstado(null);
     try {
-      const { data } = await axios.post(`${API_URL}/correo-sesion/${encodeURIComponent(userId)}/enviar`, { ...b, prueba }, { headers: adminHeaders() });
+      const { data } = await axios.post(
+        `${API_URL}/correo-sesion/${encodeURIComponent(userId)}/enviar`,
+        { asunto: b.asunto, titulo: b.titulo, bloques: b.bloques, prueba },
+        { headers: adminHeaders() },
+      );
       if (data?.success) {
         setEstado({ tipo: "ok", texto: prueba ? `Prueba enviada a ${data.a}.` : `Enviado a ${data.a}.` });
         setConfirmar(false);
@@ -97,7 +121,8 @@ export default function AdminCorreoSesion() {
 
   if (verificando) return <LifeLoading variant="private" />;
 
-  const puede = !!b.asunto.trim() && (!!b.titulo.trim() || !!b.texto.trim()) && !enviando;
+  const hayTexto = !!b.titulo.trim() || b.bloques.some((x) => x.texto.trim());
+  const puede = !!b.asunto.trim() && hayTexto && !enviando;
 
   const etiqueta = (t: string) => (
     <Text color={TQ} fontSize="xs" fontWeight={700} letterSpacing="0.1em" textTransform="uppercase" mb={1.5}>{t}</Text>
@@ -113,16 +138,13 @@ export default function AdminCorreoSesion() {
     _placeholder: { color: `${TQ}88`, fontStyle: "italic" },
     _focus: { borderColor: TQ },
   };
-  const fila = (valor: string, onElegir: (c: string) => void, nombre: string) => (
-    <Flex gap={2} wrap="wrap" role="group" aria-label={nombre}>
-      {colores.map((c) => (
-        <Box key={c} as="button" type="button" onClick={() => onElegir(c)} aria-label={c} aria-pressed={valor === c}
-             w="30px" h="30px" borderRadius="full" bg={c}
-             border={`2px solid ${valor === c ? TQ : `${TQ}44`}`}
-             boxShadow={valor === c ? `0 0 10px ${ORO}88` : "none"}
-             _focusVisible={focoBlanco} />
-      ))}
-    </Flex>
+  const botonMini = (texto: string, onClick: () => void, off = false, label?: string) => (
+    <Box as="button" type="button" onClick={onClick} disabled={off} aria-label={label ?? texto}
+         w="30px" h="30px" borderRadius="full" display="flex" alignItems="center" justifyContent="center"
+         color={TQ} fontSize="sm" border={`1px solid ${TQ}55`} opacity={off ? 0.35 : 1}
+         cursor={off ? "default" : "pointer"} _hover={off ? undefined : { bg: `${TQ}14` }} _focusVisible={focoBlanco}>
+      {texto}
+    </Box>
   );
 
   return (
@@ -149,47 +171,61 @@ export default function AdminCorreoSesion() {
                   <Input {...campo} value={b.asunto} onChange={(e) => cambiar({ asunto: e.target.value })} placeholder="Lo que se lee en la bandeja de entrada" />
                 </Box>
                 <Box>
-                  {etiqueta("Título")}
-                  <Input {...campo} value={b.titulo} onChange={(e) => cambiar({ titulo: e.target.value })} fontSize="lg" />
-                </Box>
-                <Box>
-                  {etiqueta("Texto")}
-                  <Textarea {...campo} value={b.texto} onChange={(e) => cambiar({ texto: e.target.value })}
-                            minH="260px" fontSize="lg" lineHeight="1.7" resize="vertical" />
-                  <Text color={`${TQ}aa`} fontSize="xs" fontStyle="italic" mt={1.5}>
-                    **negrita** · *cursiva* · una línea en blanco separa párrafos · --- entre dos párrafos pone una raya
-                  </Text>
+                  {etiqueta("Primera línea")}
+                  <Input {...campo} value={b.titulo} onChange={(e) => cambiar({ titulo: e.target.value })} fontSize="lg" fontWeight={700} />
                 </Box>
 
-                <Box>
-                  {etiqueta("Fondo")}
-                  <Flex gap={2.5} wrap="wrap">
-                    {fondos.map((f) => {
-                      const sel = b.fondo === f.clave;
-                      return (
-                        <Box key={f.clave} as="button" type="button" onClick={() => elegirFondo(f)} aria-pressed={sel}
-                             w={{ base: "72px", md: "84px" }} borderRadius="lg" overflow="hidden"
-                             border={`2px solid ${sel ? TQ : `${TQ}44`}`} opacity={sel ? 1 : 0.8}
-                             boxShadow={sel ? `0 0 10px ${ORO}88` : "none"} transition="all 0.2s"
-                             _hover={{ opacity: 1 }} _focusVisible={focoBlanco}>
-                          <Box h="48px" bg={f.velo} bgImage={f.foto ? `url('${f.foto}')` : undefined} bgSize="cover" bgPosition="center" />
-                          <Text color={TQ} fontSize="2xs" textAlign="center" py={1} noOfLines={1} bg="rgba(255,255,255,0.6)">{f.nombre}</Text>
+                {b.bloques.map((bl, i) => {
+                  const d = disciplinas.find((x) => x.clave === bl.disciplina);
+                  return (
+                    <Box key={bl.id} borderRadius="xl" p={4} border={`1px solid ${d ? d.velo : `${TQ}44`}`}
+                         bg="rgba(255,255,255,0.35)" boxShadow={d ? `0 0 12px ${d.velo}55` : "none"}>
+                      <Flex justify="space-between" align="center" gap={3} mb={3} wrap="wrap">
+                        <Text color={TQ} fontSize="xs" fontWeight={700} letterSpacing="0.1em" textTransform="uppercase">
+                          Bloque {i + 1}
+                        </Text>
+                        <Flex gap={1.5}>
+                          {botonMini("↑", () => moverBloque(bl.id, -1), i === 0, "Subir bloque")}
+                          {botonMini("↓", () => moverBloque(bl.id, 1), i === b.bloques.length - 1, "Bajar bloque")}
+                          {botonMini("✕", () => quitarBloque(bl.id), false, "Quitar bloque")}
+                        </Flex>
+                      </Flex>
+
+                      <Flex gap={2} wrap="wrap" mb={3}>
+                        <Box as="button" type="button" onClick={() => cambiarBloque(bl.id, { disciplina: "" })} aria-pressed={bl.disciplina === ""}
+                             px={3} py={1} borderRadius="full" fontSize="xs" fontWeight={700} color={TQ}
+                             border={`2px solid ${bl.disciplina === "" ? TQ : `${TQ}44`}`} bg="rgba(255,255,255,0.5)"
+                             _focusVisible={focoBlanco}>
+                          Sin fondo
                         </Box>
-                      );
-                    })}
-                  </Flex>
-                </Box>
+                        {disciplinas.map((x) => {
+                          const sel = bl.disciplina === x.clave;
+                          return (
+                            <Box key={x.clave} as="button" type="button" onClick={() => cambiarBloque(bl.id, { disciplina: x.clave })} aria-pressed={sel}
+                                 px={3} py={1} borderRadius="full" fontSize="xs" fontWeight={700} color={x.txt}
+                                 bg={x.velo} bgImage={`url('${x.foto}')`} bgSize="cover" bgPosition="center"
+                                 border={`2px solid ${sel ? TQ : "transparent"}`} boxShadow={sel ? `0 0 10px ${ORO}88` : "none"}
+                                 opacity={sel ? 1 : 0.85} _hover={{ opacity: 1 }} _focusVisible={focoBlanco}>
+                              {x.nombre}
+                            </Box>
+                          );
+                        })}
+                      </Flex>
 
-                <Flex gap={6} wrap="wrap">
-                  <Box>
-                    {etiqueta("Color del título")}
-                    {fila(b.colorTitulo, (c) => cambiar({ colorTitulo: c }), "Color del título")}
-                  </Box>
-                  <Box>
-                    {etiqueta("Color del texto")}
-                    {fila(b.colorTexto, (c) => cambiar({ colorTexto: c }), "Color del texto")}
-                  </Box>
-                </Flex>
+                      <Textarea {...campo} value={bl.texto} onChange={(e) => cambiarBloque(bl.id, { texto: e.target.value })}
+                                minH="170px" fontSize="lg" lineHeight="1.7" resize="vertical" />
+                    </Box>
+                  );
+                })}
+
+                <Box as="button" type="button" onClick={añadirBloque} alignSelf="flex-start"
+                     px={5} py={2} borderRadius="full" border={`1.5px solid ${TQ}`} color={TQ} fontWeight={700} fontSize="md"
+                     _hover={{ bg: `${TQ}14` }} _focusVisible={focoBlanco}>
+                  + Añadir bloque
+                </Box>
+                <Text color={`${TQ}aa`} fontSize="xs" fontStyle="italic" mt={-2}>
+                  **negrita** · *cursiva* · una línea en blanco separa párrafos · --- entre dos párrafos pone una raya
+                </Text>
               </Flex>
             </Box>
 
@@ -197,7 +233,7 @@ export default function AdminCorreoSesion() {
             <Box flex="1" minW={0} w="100%" position={{ lg: "sticky" }} top={{ lg: "16px" }}>
               <Box borderRadius="2xl" overflow="hidden" bg="#e9ecec" border="1px solid rgba(255,255,255,0.65)"
                    boxShadow="0 0 30px rgba(255,255,255,0.28), 0 0 70px rgba(180,255,245,0.14)">
-                <Box as="iframe" title="Vista previa del correo" w="100%" h={{ base: "520px", lg: "640px" }} border="none" bg="#e9ecec"
+                <Box as="iframe" title="Vista previa del correo" w="100%" h={{ base: "560px", lg: "700px" }} border="none" bg="#e9ecec"
                      srcDoc={`<!doctype html><html><body style="margin:0;padding:18px;background:#e9ecec;">${html}</body></html>`} />
               </Box>
 

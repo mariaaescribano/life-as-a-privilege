@@ -136,7 +136,7 @@ export default function MetodoAstrologiaTrio() {
               space
               step={{ current: 4, total: 12 }}
               mb={0}
-              prev={{ label: `← ${t("metodo.astro.paso.explicacion")}`, onClick: () => navigate("/metodo/astrologia/explicacion") }}
+              prev={{ label: `← ${t("metodo.astro.paso.introduccion")}`, onClick: () => navigate("/metodo/astrologia/introduccion") }}
               next={{
                 label: `${t("metodo.astro.paso.puntosClave")} →`,
                 onClick: () => navigate("/metodo/astrologia/lectura"),

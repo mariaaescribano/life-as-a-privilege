@@ -62,7 +62,7 @@ export default function MetodoPsicologia() {
         // falta es tener esta disciplina desbloqueada (si no, sale su pago).
         const psicoSuscrito = !!me.data?.psicologia_suscrito;
         setSuscrito(psicoSuscrito);
-        if (!psicoSuscrito) { setPagoOpen(true); return; }
+        if (!psicoSuscrito) { /* pago desactivado */ return; }
 
         // Ya tiene acceso: si es la 1ª vez, muestra el cómic de intro.
         void intro.checkAndOpen();
@@ -92,7 +92,7 @@ export default function MetodoPsicologia() {
 
   // Continuar a la página de Problema.
   const irAProblema = () => {
-    if (!suscrito) { setPagoOpen(true); return; }
+    if (!suscrito) { /* pago desactivado */ return; }
     navigate(`/metodo/psicologia/${experiencia.id}/problema`);
   };
 
