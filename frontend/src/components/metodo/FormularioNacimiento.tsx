@@ -118,8 +118,8 @@ export function FormularioNacimiento({
       };
       // María corrige por la vía de admin: sin correos de acuse y sin tocar la solicitud.
       const r = modoAdmin
-        ? await axios.patch(`${API_URL}/metodo-astrologia/admin/${userId}/nacimiento`, cuerpo, { headers: adminHeaders() })
-        : await axios.post(`${API_URL}/metodo-astrologia/solicitud/${userId}`, cuerpo);
+        ? await axios.patch(`${API_URL}/metodo-astrologia/admin/${userId}/nacimiento`, cuerpo, { headers: adminHeaders(), timeout: 30000 })
+        : await axios.post(`${API_URL}/metodo-astrologia/solicitud/${userId}`, cuerpo, { timeout: 30000 });
       if (r.data?.success === false) {
         setPopupError(modoAdmin && r.data?.message ? r.data.message : "No se pudo guardar. Inténtalo de nuevo.");
         return;

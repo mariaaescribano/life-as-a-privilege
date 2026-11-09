@@ -200,13 +200,16 @@ describe('3b · Cuenta de asesoría creada por la admin, sin activar', () => {
     await expect(service.enlaceActivacion('no-existe')).rejects.toBeInstanceOf(NotFoundException);
   });
 
-  it('la persona asesorada no puede cambiar sus datos personales, la admin sí; la contraseña es suya', async () => {
+  it('la persona asesorada cambia su nombre, email, teléfono y contraseña, pero no los datos de su carta', async () => {
     const { service } = montar();
     const { id } = await service.crearCuentaAsesorada(alta);
-    await expect(service.updateUser(id, { telefono: '+34 611 11 11 11' })).rejects.toBeInstanceOf(ForbiddenException);
-    await expect(service.updateUser(id, { name: 'otra' })).rejects.toBeInstanceOf(ForbiddenException);
+    await expect(service.updateUser(id, { telefono: '+34 611 11 11 11' })).resolves.toBeDefined();
+    await expect(service.updateUser(id, { name: 'otra' })).resolves.toBeDefined();
+    await expect(service.updateUser(id, { email: 'nuevo@x.com' })).resolves.toBeDefined();
     await expect(service.updateUser(id, { password: 'nueva-clave-1' })).resolves.toBeDefined();
-    await expect(service.updateUser(id, { telefono: '+34 611 11 11 11' }, true)).resolves.toBeDefined();
+    // La fecha de nacimiento es de su carta astral: la fija María.
+    await expect(service.updateUser(id, { fecha_nacimiento: '1990-05-17' })).rejects.toBeInstanceOf(ForbiddenException);
+    await expect(service.updateUser(id, { fecha_nacimiento: '1990-05-17' }, true)).resolves.toBeDefined();
   });
 
   it('sin teléfono no se crea', async () => {

@@ -30,6 +30,7 @@ export function MarcaLeido({
   size = "24px",
   iconSize = "14px",
   title,
+  transparente = false,
 }: {
   /** Color del tick y del borde (el <disc>Txt). */
   tinta: string;
@@ -43,6 +44,8 @@ export function MarcaLeido({
   iconSize?: string;
   /** Texto del tooltip («Leído», «Leída», «Superado»…). */
   title?: string;
+  /** Sin fondo: solo el aro y el tick, para que se vea la tarjeta de debajo (las cajitas del camino). */
+  transparente?: boolean;
 }) {
   const t = useT();
   return (
@@ -54,12 +57,12 @@ export function MarcaLeido({
       w={size}
       h={size}
       borderRadius="full"
-      bg={bg}
-      backgroundImage={fondoDeDisciplina(bg) ? `url('${fondoDeDisciplina(bg)}')` : undefined}
+      bg={transparente ? "transparent" : bg}
+      backgroundImage={!transparente && fondoDeDisciplina(bg) ? `url('${fondoDeDisciplina(bg)}')` : undefined}
       backgroundSize="cover"
       backgroundPosition="center"
       border={`1px solid ${tinta}`}
-      boxShadow={`0 0 10px ${tinta}66, 0 1px 4px rgba(0,0,0,0.5)`}
+      boxShadow={transparente ? `0 0 8px ${tinta}55` : `0 0 10px ${tinta}66, 0 1px 4px rgba(0,0,0,0.5)`}
       position={inline ? "relative" : "absolute"}
       top={inline ? undefined : "9px"}
       right={inline ? undefined : "9px"}

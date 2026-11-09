@@ -129,7 +129,8 @@ export class CartaNatalService {
 
     for (let intento = 1; intento <= INTENTOS; intento++) {
       try {
-        const res = await fetch(url, { headers: { 'User-Agent': USER_AGENT, 'Accept-Language': 'es,en' } });
+        // Con límite de tiempo: si el servicio de mapas no contesta, no se deja a la persona esperando.
+        const res = await fetch(url, { headers: { 'User-Agent': USER_AGENT, 'Accept-Language': 'es,en' }, signal: AbortSignal.timeout(6000) });
         if (!res.ok) {
           this.logger.warn(`Nominatim ${res.status}: ${q}`);
           return null;

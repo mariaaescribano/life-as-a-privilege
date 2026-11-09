@@ -252,7 +252,7 @@ function Caja({
       {/* Visto: el tick va en el mismo sitio que el candado. */}
       {!cerrado && paso.visto && !paso.inicio && (
         <Box position="absolute" top="10px" right="10px" zIndex={2}>
-          <MarcaLeido tinta={txt} bg={bg} inline />
+          <MarcaLeido tinta={txt} bg={bg} inline transparente />
         </Box>
       )}
     </Box>

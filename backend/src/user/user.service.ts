@@ -395,7 +395,10 @@ export class UserService {
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
     const enlace = `${frontendUrl}/recuperar?token=${encodeURIComponent(token)}`;
 
-    await this.mailService.enviarRecuperacionPassword(user.email, user.name ?? '', enlace);
+    // Sin esperarlo: quien pide el enlace no tiene que esperar a que salga el correo.
+    void this.mailService
+      .enviarRecuperacionPassword(user.email, user.name ?? '', enlace)
+      .catch((err) => console.error('[recuperacion] no se pudo enviar el correo:', err));
   }
 
   /** Cambia la contraseña si el token es válido. El token queda inservible al hacerlo. */
@@ -790,14 +793,14 @@ export class UserService {
 
   // --------- Actualizar usuario ---------
   async updateUser(id: string, body: UpdateUser, esAdmin = false) {
-    // En una cuenta de asesoría (`en_sesiones`) los datos personales los escribe y
-    // los cambia María: la persona los ve en «Mi cuenta» pero no puede modificarlos.
-    // La contraseña sí es suya.
-    if (!esAdmin && ['name', 'email', 'telefono', 'fecha_nacimiento'].some((k) => k in body)) {
+    // En una cuenta de asesoría (`en_sesiones`) la persona cambia ella misma su nombre, su email, su
+    // teléfono y su contraseña. Lo que NO puede tocar son los datos de su carta astral (aquí, la fecha de
+    // nacimiento): esos los fija María.
+    if (!esAdmin && ['fecha_nacimiento'].some((k) => k in body)) {
       const { data } = await this.databaseService.getClient()
         .from('user').select('en_sesiones').eq('id', id).maybeSingle();
       if ((data as { en_sesiones?: boolean } | null)?.en_sesiones === true) {
-        throw new ForbiddenException('Tus datos personales los modifica María. Escríbele si hay que cambiar alguno.');
+        throw new ForbiddenException('Los datos de tu carta astral los modifica María. Escríbele si hay que cambiar alguno.');
       }
     }
     const updates: Record<string, string | null> = {};

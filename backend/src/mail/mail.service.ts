@@ -75,18 +75,30 @@ export class MailService {
   //   EMAIL_HOST=smtp-relay.brevo.com  EMAIL_PORT=587
   //   EMAIL_USER=<login SMTP de Brevo>  EMAIL_PASS=<clave SMTP de Brevo>
   //   EMAIL_FROM=<el remitente verificado en Brevo>
+  //
+  // Un solo transporte para todos los envíos (con conexiones reutilizadas): abrir una conexión nueva con
+  // el servidor de correo en cada correo costaba varios segundos. Y con límites de tiempo, para que un
+  // servidor de correo que no contesta no deje la pantalla esperando para siempre.
+  private transporte: nodemailer.Transporter | null = null;
   private getTransporter() {
+    if (this.transporte) return this.transporte;
     const pass = (process.env.EMAIL_PASS ?? '').replace(/\s/g, '');
     const port = Number(process.env.EMAIL_PORT) || 465;
-    return nodemailer.createTransport({
+    this.transporte = nodemailer.createTransport({
       host: process.env.EMAIL_HOST || 'smtp.gmail.com',
       port,
       secure: port === 465,
+      pool: true,
+      maxConnections: 3,
+      connectionTimeout: 10_000,
+      greetingTimeout: 10_000,
+      socketTimeout: 20_000,
       auth: {
         user: process.env.EMAIL_USER,
         pass,
       },
     });
+    return this.transporte;
   }
 
   /**

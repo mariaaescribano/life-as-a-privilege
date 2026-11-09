@@ -420,8 +420,14 @@ export class MetodoAstrologiaService {
     // (con los datos para escribir la carta) y otro al usuario, como acuse de
     // recibo: así sabe que su carta está en marcha y no se queda esperando sin
     // noticias hasta que la lectura esté escrita.
-    await this.mailService.enviarSolicitudCarta(user.email, user.name, datos, esCorreccion);
-    await this.mailService.enviarCartaRegistrada(user.email, user.name, datos, esCorreccion);
+    // SIN esperarlos: la persona no tiene que quedarse mirando «Enviando…» mientras salen los correos (a
+    // veces tardan varios segundos). Los datos ya están guardados; si un correo falla, queda en el log.
+    void this.mailService
+      .enviarSolicitudCarta(user.email, user.name, datos, esCorreccion)
+      .catch((err) => console.error('[solicitarCarta] no se pudo enviar el aviso a María:', err));
+    void this.mailService
+      .enviarCartaRegistrada(user.email, user.name, datos, esCorreccion)
+      .catch((err) => console.error('[solicitarCarta] no se pudo enviar el acuse a la persona:', err));
 
     // `cartaCalculada` false = no se encontró el lugar: la página no puede pintar la carta.
     return { success: true, cartaCalculada: !!carta_natal_json };

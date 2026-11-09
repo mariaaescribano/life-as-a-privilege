@@ -400,8 +400,6 @@ export default function UserAccount() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 {...inputStyles}
-                isReadOnly={soloLectura}
-                {...(soloLectura ? SOLO_LECTURA : {})}
               />
             </Box>
 
@@ -414,8 +412,6 @@ export default function UserAccount() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 {...inputStyles}
-                isReadOnly={soloLectura}
-                {...(soloLectura ? SOLO_LECTURA : {})}
               />
             </Box>
 
@@ -427,7 +423,11 @@ export default function UserAccount() {
                 type="password"
                 value={contra}
                 onChange={(e) => setContra(e.target.value)}
-                placeholder={t("cuenta.nuevaContrasena")}
+                // La contraseña real no se puede mostrar (en el servidor solo se guarda cifrada): aparece puesta
+                // con puntos y, al escribir, se cambia por la nueva.
+                placeholder="••••••••••"
+                aria-label={t("cuenta.nuevaContrasena")}
+                autoComplete="new-password"
                 {...inputStyles}
               />
             </Box>
@@ -443,8 +443,6 @@ export default function UserAccount() {
                 value={telefono}
                 onChange={(e) => setTelefono(e.target.value)}
                 {...inputStyles}
-                isReadOnly={soloLectura}
-                {...(soloLectura ? SOLO_LECTURA : {})}
               />
             </Box>
 
