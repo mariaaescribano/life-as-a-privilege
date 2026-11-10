@@ -109,12 +109,13 @@ export default function MetodoAstrologiaIntroduccion() {
   // Con la carta calculada (y sin estar corrigiendo) se enseña la carta; si no, el formulario.
   // María mirando el camino de otra persona no rellena nada por ella: ve siempre la carta.
   // Para María basta con que haya carta: sus correcciones (vía admin) no tocan la solicitud.
-  const hayCarta = mariaMirando ? !!carta : !!estado?.solicitud_enviada_at && !!carta;
+  // Si ya hay carta calculada, los datos ya están (da igual si se pusieron desde la ficha y no hay «solicitud enviada»).
+  const hayCarta = !!carta;
   // La persona solo rellena sus datos la primera vez; después, el lápiz es solo de María.
   const verFormulario = !hayCarta || editando;
   // Ya mandó sus datos pero no hay carta (no se encontró el lugar): se le enseña el formulario
   // PARA CORREGIR (con sus datos puestos), no el de la primera vez.
-  const sinCartaConDatos = !mariaMirando && !!estado?.solicitud_enviada_at && !carta;
+  const sinCartaConDatos = !mariaMirando && (!!estado?.solicitud_enviada_at || !!estado?.fecha_nacimiento) && !carta;
   const corrigiendo = editando || sinCartaConDatos;
 
   // Tras enviar los datos: se trae la carta recién calculada y la página cambia sola.

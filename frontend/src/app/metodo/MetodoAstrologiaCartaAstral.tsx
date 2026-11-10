@@ -78,7 +78,7 @@ export default function MetodoAstrologiaCartaAstral() {
         ]);
         // Sin sus datos no hay carta: se vuelve a «Tu Carta Astral» a darlos. María, mirando, no se
         // echa: entra siempre (los datos pueden estar puestos desde el panel, sin solicitud enviada).
-        if (!estadoRes.data?.solicitud_enviada_at && !esMariaMirando()) { navigate("/metodo/astrologia/introduccion"); return; }
+        if (!estadoRes.data?.solicitud_enviada_at && !res.data && !esMariaMirando()) { navigate("/metodo/astrologia/introduccion"); return; }
 
         let cartaCargada = res.data;
 

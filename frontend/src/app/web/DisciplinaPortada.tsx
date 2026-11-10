@@ -24,8 +24,8 @@ import { useIdioma, useT } from "../../i18n";
 // nombre de la disciplina de titular y tres puertas en fila —Reels · El
 // Recorrido · Teoría—, cada una con el color y el fondo de su disciplina.
 //   · Reels: aún no existen; la puerta se ve apagada («Próximamente»).
-//   · El Recorrido: el recorrido de siempre (/metodo/<disciplina>). Si no se ha
-//     pagado, la guardia de pago lo devuelve al Mapa con su box de pago.
+//   · El Recorrido: la página escaparate del recorrido (/d/<disciplina>), no el
+//     recorrido por dentro.
 //   · Teoría: /disciplina/<slug>/teoria, la misma cabecera con dos puertas
 //     —Ilustraciones y Cursos— y un botón para volver.
 //
@@ -71,18 +71,6 @@ const IconoTeoria = (color: string) => (
     <path d="M480-160q-48-38-104-59t-116-21q-42 0-82.500 11T100-198q-21 11-40.500-1T40-236v-488q0-11 5.500-21T62-760q46-24 96-36t102-12q58 0 113.500 15T480-760q51-30 106.500-45T700-820q52 0 102 12t96 36q11 5 16.500 15t5.500 21v488q0 23-19.500 35t-40.500 1q-37-20-77.500-31T700-240q-60 0-116 21t-104 59Zm0-80q42-26 87-40t93-14q36 0 70.500 7t69.500 20v-398q-33-14-68.500-21t-71.500-7q-48 0-93 14t-87 40v399Zm-40 0v-399q-42-26-87-40t-93-14q-36 0-71.500 7T120-682v398q35-13 69.500-20t70.500-7q48 0 93 14t87 40Z" />
   </Box>
 );
-
-/** A dónde lleva «El Recorrido» de cada disciplina: su camino, con todas sus páginas. */
-const RECORRIDO_RUTA: Record<string, string> = {
-  astrologia: "/camino/astrologia",
-  psicologia: "/camino/psicologia",
-  ayurveda: "/camino/ayurveda",
-  medicinachina: "/camino/tcm",
-  fisiologia: "/camino/fisiologia",
-  nutricion: "/camino/nutricion",
-  cabala: "/camino/cabala",
-  cultura: "/camino/cultura",
-};
 
 /** Clave de la portada → scope de pago (el de `<scope>_suscrito` en /user/me). */
 const SCOPE_PAGO: Record<string, string> = {
@@ -151,7 +139,8 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
     {
       clave: "recorrido",
       titulo: t("portada.recorrido"),
-      link: RECORRIDO_RUTA[d.key] ?? `/d/${d.key}`,
+      // La página «escaparate» del recorrido (/d/<slug>), no el recorrido por dentro.
+      link: `/d/${d.key}`,
       delay: 0.15,
       // El Recorrido lleva el icono de SU disciplina (ya viene pintado con su
       // color), en vez de un icono genérico de camino.

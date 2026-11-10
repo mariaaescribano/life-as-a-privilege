@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { cerrarSesionLocal, esAdminDesbloqueado, esSoloPremium, recordarSoloPremium, rutaHome } from "../../api/sesion";
-import { salirDeLaPersona, personaActiva } from "../../api/persona";
+import { salirDeLaPersona, personaActiva, esMariaMirando } from "../../api/persona";
 import { getUserMe } from "../../api/userMe";
 import { useT } from "../../i18n";
 import SelectorIdioma from "./SelectorIdioma";
@@ -42,11 +42,55 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
     const esPuertaDelComic = location.pathname.toLowerCase().replace(/\/+$/, "") === "/metodo/astrologia";
     if (location.pathname.toLowerCase().startsWith("/metodo/") && !esPuertaDelComic) {
       try { localStorage.setItem("ultimoRecorrido", location.pathname + location.search); } catch { /* noop */ }
-      // También queda apuntada como «vista» (tick del camino), salvo si es María mirando a otra persona.
-      const clave = claveDeRutaMetodo(location.pathname);
-      if (clave && !personaActiva() && localStorage.getItem("userId")) marcarVisto(clave, location.pathname);
     }
   }, [location.pathname, location.search]);
+
+  // El tick del camino lo pone la PERSONA, no María, y solo cuando ha visto el contenido de la
+  // página (no al abrirla): al llegar al final de la página, o de lo que scrollea dentro. Una
+  // página que cabe entera en pantalla cuenta como vista tras unos segundos con la persona
+  // interactuando (tocar, teclear o scrollear). María (en su sesión o mirando a alguien) nunca marca.
+  useEffect(() => {
+    const ruta = location.pathname;
+    const esPuertaDelComic = ruta.toLowerCase().replace(/\/+$/, "") === "/metodo/astrologia";
+    const clave = claveDeRutaMetodo(ruta);
+    if (!ruta.toLowerCase().startsWith("/metodo/") || esPuertaDelComic || !clave) return;
+    if (esMariaMirando() || !localStorage.getItem("userId")) return;
+
+    let hecho = false;
+    let interactuo = false;
+    const visto = () => {
+      if (hecho) return;
+      hecho = true;
+      limpiar();
+      marcarVisto(clave, ruta);
+    };
+    const alFinal = (el: Element | Document | null) => {
+      const e = (el instanceof Document ? el.scrollingElement : el) as HTMLElement | null;
+      if (!e) return false;
+      return e.scrollHeight - e.scrollTop - e.clientHeight <= 80 && e.scrollHeight > e.clientHeight + 40;
+    };
+    const alScroll = (ev: Event) => {
+      interactuo = true;
+      if (alFinal(ev.target as Element | Document)) visto();
+    };
+    const alToque = () => { interactuo = true; };
+    // Página que cabe entera: sin scroll posible, vale con haber estado ahí e interactuado.
+    const temporizador = window.setInterval(() => {
+      const raiz = document.scrollingElement;
+      const cabe = !raiz || raiz.scrollHeight <= raiz.clientHeight + 40;
+      if (cabe && interactuo && document.visibilityState === "visible") visto();
+    }, 4000);
+    function limpiar() {
+      window.clearInterval(temporizador);
+      document.removeEventListener("scroll", alScroll, true);
+      document.removeEventListener("pointerdown", alToque, true);
+      document.removeEventListener("keydown", alToque, true);
+    }
+    document.addEventListener("scroll", alScroll, true);
+    document.addEventListener("pointerdown", alToque, true);
+    document.addEventListener("keydown", alToque, true);
+    return limpiar;
+  }, [location.pathname]);
 
   const hasSession = !!localStorage.getItem("userId");
   // Cuenta solo de Premium: el menú se reduce a Podcasts y Reels. Se recuerda en el
