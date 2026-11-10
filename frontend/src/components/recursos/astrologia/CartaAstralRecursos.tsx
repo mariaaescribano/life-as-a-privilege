@@ -476,21 +476,6 @@ const ObtenerCartaCard = () => {
                 ¡Ya lo tienes!
               </Text>
             </Flex>
-
-            {/* Imagen centrada */}
-            <Flex justify="center">
-              <Box
-                as="img"
-                src="/img/astrologia/curso0.webp"
-                alt="Carta Astral"
-                maxH={{ base: "200px", md: "280px" }}
-                maxW="100%"
-                borderRadius="xl"
-                border={`1px solid ${astrologiaTxt}22`}
-                boxShadow={`0 4px 24px rgba(0,0,0,0.55), 0 0 24px ${astrologiaTxt}18`}
-                style={{ objectFit: "contain" }}
-              />
-            </Flex>
           </Box>
         </Box>
       </Collapse>
