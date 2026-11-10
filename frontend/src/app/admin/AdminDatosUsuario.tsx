@@ -170,6 +170,13 @@ export default function AdminDatosUsuario() {
   const [telefono, setTelefono] = useState("");
   const [nacimiento, setNacimiento] = useState("");
   const [guardando, setGuardando] = useState(false);
+  // Los de nacimiento de la carta astral (se guardan aparte, con su propio botón).
+  const [cFecha, setCFecha] = useState("");
+  const [cHora, setCHora] = useState("");
+  const [cLugar, setCLugar] = useState("");
+  const [cRegion, setCRegion] = useState("");
+  const [cPais, setCPais] = useState("");
+  const [guardandoCarta, setGuardandoCarta] = useState(false);
   // Eliminar: primero se abre el bloque, luego hay que teclear el email de la cuenta.
   const [eliminando, setEliminando] = useState(false);
   const [emailConfirma, setEmailConfirma] = useState("");
@@ -187,6 +194,12 @@ export default function AdminDatosUsuario() {
       setNombre(p?.name ?? "");
       setTelefono(p?.telefono ?? "");
       setNacimiento(fechaDMA(p?.fecha_nacimiento) ?? "");
+      const c = cartaRes.data;
+      setCFecha(fechaDMA(c?.fecha_nacimiento) ?? "");
+      setCHora(c?.hora_nacimiento ? c.hora_nacimiento.slice(0, 5) : "");
+      setCLugar(c?.lugar ?? "");
+      setCRegion(c?.region ?? "");
+      setCPais(c?.pais ?? "");
     } catch {
       setPersona(null);
       setAviso("No se pudo cargar la cuenta.");
@@ -231,6 +244,58 @@ export default function AdminDatosUsuario() {
       setAviso(e?.response?.data?.message ?? "No se pudo guardar.");
     } finally {
       setGuardando(false);
+    }
+  };
+
+  const sinCambiosCarta =
+    cFecha.trim() === (fechaDMA(carta?.fecha_nacimiento) ?? "")
+    && cHora.trim() === (carta?.hora_nacimiento ? carta.hora_nacimiento.slice(0, 5) : "")
+    && cLugar.trim() === (carta?.lugar ?? "")
+    && cRegion.trim() === (carta?.region ?? "")
+    && cPais.trim() === (carta?.pais ?? "");
+
+  const guardarCarta = async () => {
+    if (!persona || guardandoCarta || sinCambiosCarta) return;
+    const iso = dmaAIso(cFecha);
+    if (!cFecha.trim() || iso === null) {
+      setAviso("La fecha de la carta tiene que ser día/mes/año, por ejemplo 17/05/1990.");
+      return;
+    }
+    const hm = /^(\d{1,2}):(\d{2})$/.exec(cHora.trim());
+    if (!hm || Number(hm[1]) > 23 || Number(hm[2]) > 59) {
+      setAviso("La hora de la carta tiene que ser HH:MM, por ejemplo 08:30.");
+      return;
+    }
+    if (!cLugar.trim() || !cPais.trim()) {
+      setAviso("Hacen falta al menos el lugar y el país de nacimiento.");
+      return;
+    }
+    setGuardandoCarta(true);
+    setAviso(null);
+    try {
+      const { data } = await axios.patch(
+        `${API_URL}/metodo-astrologia/admin/${persona.id}/nacimiento`,
+        {
+          fecha_nacimiento: iso,
+          hora_nacimiento: hm[1].padStart(2, "0") + ":" + hm[2],
+          lugar: cLugar.trim(),
+          region: cRegion.trim(),
+          pais: cPais.trim(),
+        },
+        { headers: adminHeaders(), timeout: 30000 },
+      );
+      if (data?.success === false) {
+        setAviso(data?.message ?? "No se pudieron guardar los datos de la carta.");
+        return;
+      }
+      await cargar();
+      setAviso(data?.recalculada === false
+        ? (data?.message ?? "Datos guardados, pero no he encontrado ese lugar: revísalo.")
+        : "Datos de la carta guardados.");
+    } catch (e: any) {
+      setAviso(e?.response?.data?.message ?? "No se pudieron guardar los datos de la carta.");
+    } finally {
+      setGuardandoCarta(false);
     }
   };
 
@@ -346,19 +411,16 @@ export default function AdminDatosUsuario() {
     </Text>
   );
 
-  const lugarCarta = [carta?.lugar, carta?.region, carta?.pais].filter(Boolean).join(", ");
-
-  /** Un dato de la carta astral, sobre el cielo. */
-  const datoCielo = (texto: string, valor?: string | null) => (
-    <Box textAlign="center" flex="1" minW={0}>
-      <Text fontSize="xs" letterSpacing="0.22em" textTransform="uppercase" fontWeight="700" color={astrologiaTxt}
+  /** Un dato de la carta astral que se escribe, sobre el cielo. */
+  const campoCielo = (id: string, texto: string, valor: string, cambiar: (v: string) => void, ayuda?: string, extra?: object) => (
+    <Box>
+      <Text as="label" htmlFor={id} display="block" fontSize="xs" letterSpacing="0.22em" textTransform="uppercase"
+            fontWeight="700" color={astrologiaTxt} mb={2} ml={2}
             style={{ textShadow: sombraTexto(astrologiaNom, astrologiaBg) }}>
         {texto}
       </Text>
-      <Text mt={2} fontSize={{ base: "xl", md: "2xl" }} fontWeight="600" lineHeight="1.25" color={valor ? "white" : "rgba(255,255,255,0.4)"}
-            style={{ textShadow: "0 0 14px rgba(0,0,40,0.8)" }} wordBreak="break-word">
-        {valor || "—"}
-      </Text>
+      <Input id={id} value={valor} onChange={(e) => { cambiar(e.target.value); setAviso(null); }}
+             placeholder={ayuda} autoComplete="off" {...ESTILO_CAMPO_VIDRIO} fontSize="lg" {...extra} />
     </Box>
   );
 
@@ -428,12 +490,17 @@ export default function AdminDatosUsuario() {
                     mb={7} style={{ textShadow: sombraTexto(astrologiaNom, astrologiaBg) }}>
                 Carta astral
               </Text>
-              <Flex direction={{ base: "column", md: "row" }} gap={{ base: 6, md: 8 }} align="stretch">
-                {datoCielo("Fecha", fechaDMA(carta?.fecha_nacimiento))}
-                {datoCielo("Hora", carta?.hora_nacimiento ? carta.hora_nacimiento.slice(0, 5) : null)}
-                {datoCielo("Lugar", lugarCarta)}
-              </Flex>
-              <Flex justify="flex-end" mt={8}>
+              <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={{ base: 4, md: 5 }}>
+                {campoCielo("carta-fecha", "Fecha", cFecha, (v) => setCFecha(mascaraDMA(v)), "dd/mm/aaaa", { inputMode: "numeric" })}
+                {campoCielo("carta-hora", "Hora", cHora, setCHora, "HH:MM", { inputMode: "numeric" })}
+                {campoCielo("carta-lugar", "Lugar", cLugar, setCLugar)}
+                {campoCielo("carta-region", "Región", cRegion, setCRegion)}
+                {campoCielo("carta-pais", "País", cPais, setCPais)}
+              </Grid>
+              <Flex justify="flex-end" gap={3} wrap="wrap" mt={8}>
+                <BotonPildora ocupado={guardandoCarta || sinCambiosCarta} onClick={guardarCarta}>
+                  {guardandoCarta ? "Guardando…" : "Guardar datos de la carta"}
+                </BotonPildora>
                 <BotonPildora solido onClick={() => navigate(`/admin/astrologia/${persona.id}`)}>Abrir su carta astral</BotonPildora>
               </Flex>
             </Box>
