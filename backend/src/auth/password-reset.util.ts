@@ -3,8 +3,8 @@ import * as crypto from 'crypto';
 // ─────────────────────────────────────────────────────────────────────────────
 // TOKENS DE RECUPERACIÓN DE CONTRASEÑA
 //
-// El token NO se guarda en base de datos: va firmado con una clave derivada de
-// JWT_SECRET **y del hash actual de la contraseña del usuario**. Eso nos da
+// El token NO se guarda en base de datos: va firmado con una clave derivada del
+// hash actual de la contraseña del usuario. Eso nos da
 // gratis dos propiedades que normalmente exigirían una tabla:
 //
 //   · Un solo uso — al restablecer la contraseña cambia su hash, así que la
@@ -30,11 +30,15 @@ interface PayloadRecuperacion {
 
 const b64url = (buf: Buffer): string => buf.toString('base64url');
 
-/** Clave de firma propia de cada usuario: cambia en cuanto cambia su contraseña. */
+/**
+ * Clave de firma propia de cada usuario: cambia en cuanto cambia su contraseña.
+ * NO depende de JWT_SECRET a propósito: la admin manda las invitaciones también desde su
+ * local, y el enlace lo comprueba el backend de producción; con secretos distintos el
+ * enlace salía «caducado». El hash vive solo en la base de datos, así que sin acceso a
+ * ella no se puede fabricar un token (que es lo que protegía el secreto).
+ */
 function claveDe(passwordHash: string): Buffer {
-  const secret = process.env.JWT_SECRET;
-  if (!secret) throw new Error('JWT_SECRET no está configurado en el entorno');
-  return crypto.createHmac('sha256', secret).update(`pwd-reset|${passwordHash}`).digest();
+  return crypto.createHmac('sha256', 'pwd-reset-v2').update(passwordHash).digest();
 }
 
 function firmar(payloadB64: string, passwordHash: string): string {
