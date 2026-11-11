@@ -501,7 +501,7 @@ export default function AdminDatosUsuario() {
                 <BotonPildora ocupado={guardandoCarta || sinCambiosCarta} onClick={guardarCarta}>
                   {guardandoCarta ? "Guardando…" : "Guardar datos de la carta"}
                 </BotonPildora>
-                <BotonPildora solido onClick={() => navigate(`/admin/astrologia/${persona.id}`)}>Abrir su carta astral</BotonPildora>
+                <BotonPildora solido desactivado={!carta?.fecha_nacimiento} onClick={() => navigate(`/admin/astrologia/${persona.id}`)}>Abrir su carta astral</BotonPildora>
               </Flex>
             </Box>
           </Reveal>

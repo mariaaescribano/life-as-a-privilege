@@ -1,3 +1,4 @@
+import { webParaCorreos } from '../mail/enlaces-web';
 import { BadRequestException, ConflictException, ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
 import { DatabaseService } from 'src/database.service';
@@ -392,7 +393,7 @@ export class UserService {
     if (!user?.password) return; // cuenta inexistente o sin contraseña utilizable
 
     const token = crearTokenRecuperacion(user.id, user.password);
-    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    const frontendUrl = webParaCorreos();
     const enlace = `${frontendUrl}/recuperar?token=${encodeURIComponent(token)}`;
 
     // Sin esperarlo: quien pide el enlace no tiene que esperar a que salga el correo.
@@ -527,7 +528,7 @@ export class UserService {
   /** El enlace para elegir contraseña (el del correo de invitación): 14 días y un solo uso. */
   private enlaceInvitacion(userId: string, passwordHash: string): string {
     const token = crearTokenRecuperacion(userId, passwordHash, INVITACION_TTL_MS);
-    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    const frontendUrl = webParaCorreos();
     return `${frontendUrl}/recuperar?token=${encodeURIComponent(token)}`;
   }
 

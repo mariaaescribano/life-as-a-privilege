@@ -74,6 +74,19 @@ export class MetodoAstrologiaService {
     return data ?? null;
   }
 
+  /** Los user_id que tienen fecha de nacimiento guardada en su carta. */
+  async idsConFechaNacimiento(): Promise<string[]> {
+    const { data, error } = await this.databaseService.getClient()
+      .from('metodo_astrologia')
+      .select('user_id')
+      .not('fecha_nacimiento', 'is', null);
+    if (error) {
+      console.warn('[metodoAstrologia.idsConFechaNacimiento] error:', error.message);
+      return [];
+    }
+    return (data ?? []).map((r: any) => r.user_id);
+  }
+
   // ── ADMIN: lista de usuarios que han enviado solicitud de carta ──
   // Devuelve nombre/email + estado de la lectura (PDF y si ya hay textos escritos).
   async listarSolicitudes() {

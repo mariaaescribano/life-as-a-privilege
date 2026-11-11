@@ -19,6 +19,14 @@ export class MetodoAstrologiaController {
     return await this.service.listarSolicitudes();
   }
 
+  // ── ADMIN: ids de quienes tienen fecha de nacimiento en la carta (la lista de Asesorías
+  //    desactiva «Carta astral» a quien no la tiene) ──
+  @Get('admin/con-fecha')
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  async conFecha() {
+    return await this.service.idsConFechaNacimiento();
+  }
+
   // ── ADMIN: guardar los textos de casas/aspectos escritos a mano ──
   @Patch('admin/:userId/textos')
   @UseGuards(JwtAuthGuard, AdminGuard)

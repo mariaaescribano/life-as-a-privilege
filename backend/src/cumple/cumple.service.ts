@@ -1,3 +1,4 @@
+import { webParaCorreos } from '../mail/enlaces-web';
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '../database.service';
 import { MailService } from '../mail/mail.service';
@@ -44,7 +45,7 @@ export class CumpleService {
     }
 
     const [ha, hm, hd] = hoyEnEspana();
-    const frontendUrl = (process.env.FRONTEND_URL || 'http://localhost:5173').replace(/\/+$/, '');
+    const frontendUrl = webParaCorreos();
     let felicitados = 0;
 
     for (const u of users ?? []) {

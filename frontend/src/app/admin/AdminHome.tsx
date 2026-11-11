@@ -39,11 +39,16 @@ export default function AdminHome() {
   const [aviso, setAviso] = useState<string | null>((location.state as { aviso?: string } | null)?.aviso ?? null);
   // La persona a cuya cuenta se está entrando ahora mismo (el botón del mandala).
   const [entrando, setEntrando] = useState<string | null>(null);
+  // Quiénes tienen la fecha de nacimiento de la carta: sin ella, «Carta astral» no se puede abrir.
+  const [conFecha, setConFecha] = useState<Set<string>>(new Set());
 
   const cargar = useCallback(async () => {
     try {
       const res = await axios.get<Persona[]>(`${API_URL}/user/admin/todos`, { headers: adminHeaders() });
       setPersonas((res.data ?? []).filter((u) => u.en_sesiones === true));
+      const ids = await axios.get<string[]>(`${API_URL}/metodo-astrologia/admin/con-fecha`, { headers: adminHeaders() })
+        .then((r) => r.data ?? []).catch(() => [] as string[]);
+      setConFecha(new Set(ids));
     } catch {
       setPersonas([]);
       setAviso("No se pudo cargar la lista.");
@@ -140,7 +145,7 @@ export default function AdminHome() {
                   </Box>
                   <Flex gap={3} flexShrink={0}>
                     <BotonPildora marmol titulo={`Datos de ${p.name}`} onClick={() => navigate(`/admin/asesorias/${p.id}/datos`)}>Datos</BotonPildora>
-                    <BotonPildora marmol titulo={`Escribir la carta astral de ${p.name}`} onClick={() => navigate(`/admin/astrologia/${p.id}`)}>Carta astral</BotonPildora>
+                    <BotonPildora marmol desactivado={!conFecha.has(p.id)} titulo={conFecha.has(p.id) ? `Escribir la carta astral de ${p.name}` : `${p.name} aún no tiene fecha de carta astral`} onClick={() => navigate(`/admin/astrologia/${p.id}`)}>Carta astral</BotonPildora>
                     <BotonPildora marmol solido ocupado={entrando === p.id} titulo={`Abrir el camino de ${p.name}`} onClick={() => entrar(p)}>
                       <MandalaTurquesa tam="22px" color="white" />
                       <Text as="span" fontSize="lg" lineHeight="1" aria-hidden>→</Text>

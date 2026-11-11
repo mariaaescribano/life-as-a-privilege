@@ -262,7 +262,7 @@ export class MailService {
 
   /** La web, para los enlaces de los correos. */
   private get frontendUrl(): string {
-    const url = (process.env.FRONTEND_URL ?? '').trim();
+    const url = (process.env.EMAIL_LINKS_URL || process.env.FRONTEND_URL || '').trim();
     if (url) return url.replace(/\/+$/, '');
     console.warn(`[MailService] FRONTEND_URL no configurado — los enlaces de los correos van a ${WEB}.`);
     return WEB;

@@ -27,7 +27,7 @@ export const MandalaTurquesa = ({ tam, color = "#008080" }: { tam: string; color
 
 export const HALO = "0 0 22px rgba(255,255,255,0.3)";
 
-export function BotonPildora({ children, onClick, solido, peligro, titulo, ocupado, marmol }: {
+export function BotonPildora({ children, onClick, solido, peligro, titulo, ocupado, marmol, desactivado }: {
   children: React.ReactNode;
   onClick: () => void;
   /** Relleno blanco (el botón principal de la fila). */
@@ -36,6 +36,8 @@ export function BotonPildora({ children, onClick, solido, peligro, titulo, ocupa
   peligro?: boolean;
   titulo?: string;
   ocupado?: boolean;
+  /** No se puede pulsar (apagado y sin acción). */
+  desactivado?: boolean;
   /** Para ir sobre una caja de mármol: turquesa oscuro (relleno si es `solido`, contorno si no). */
   marmol?: boolean;
 }) {
@@ -43,7 +45,9 @@ export function BotonPildora({ children, onClick, solido, peligro, titulo, ocupa
     <Box
       as="button"
       type="button"
-      onClick={ocupado ? undefined : onClick}
+      onClick={ocupado || desactivado ? undefined : onClick}
+      disabled={desactivado}
+      aria-disabled={desactivado || undefined}
       title={titulo}
       display="inline-flex"
       alignItems="center"
@@ -58,11 +62,11 @@ export function BotonPildora({ children, onClick, solido, peligro, titulo, ocupa
       fontSize="sm"
       letterSpacing="0.04em"
       whiteSpace="nowrap"
-      cursor={ocupado ? "wait" : "pointer"}
-      opacity={ocupado ? 0.6 : 1}
+      cursor={desactivado ? "not-allowed" : ocupado ? "wait" : "pointer"}
+      opacity={desactivado ? 0.4 : ocupado ? 0.6 : 1}
       boxShadow={marmol ? "none" : HALO}
       transition="all 0.2s ease"
-      _hover={marmol ? { transform: "translateY(-1px)", boxShadow: "0 0 18px #004f4f55" } : { transform: "translateY(-1px)", bg: solido ? "#e8fffc" : "rgba(255,255,255,0.26)" }}
+      _hover={desactivado ? {} : marmol ? { transform: "translateY(-1px)", boxShadow: "0 0 18px #004f4f55" } : { transform: "translateY(-1px)", bg: solido ? "#e8fffc" : "rgba(255,255,255,0.26)" }}
       _focusVisible={marmol ? { outline: "2px solid #004f4f", outlineOffset: "2px" } : focoBlanco}
     >
       {children}

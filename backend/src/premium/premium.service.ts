@@ -1,3 +1,4 @@
+import { webParaCorreos } from '../mail/enlaces-web';
 import { BadRequestException, ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import Stripe from 'stripe';
 import { DatabaseService } from '../database.service';
@@ -40,7 +41,7 @@ export class PremiumService {
   }
 
   private get frontendUrl(): string {
-    return (process.env.FRONTEND_URL || 'http://localhost:5173').replace(/\/+$/, '');
+    return webParaCorreos();
   }
 
   // ═════════════════════════════════════════════════════════════════════════
