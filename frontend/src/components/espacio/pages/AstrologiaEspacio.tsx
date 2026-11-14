@@ -61,16 +61,16 @@ interface Planet {
 }
 
 const PLANETS: Planet[] = [
-  { key: "sol",        label: "Sol",        symbol: "\u2609", img: null,                         color: "#FFD97D", interactive: true  },
-  { key: "luna",       label: "Luna",       symbol: "\u263D", img: null,                         color: "#C8C8E8", interactive: true  },
-  { key: "mercurio",   label: "Mercurio",   symbol: "\u263F", img: null,                         color: "#A8B8C8", interactive: false },
-  { key: "venus",      label: "Venus",      symbol: "\u2640", img: null,                         color: "#FFB8D0", interactive: false },
-  { key: "marte",      label: "Marte",      symbol: "\u2642", img: null,                         color: "#FF7055", interactive: false },
-  { key: "jupiter",    label: "Júpiter",    symbol: "\u2643", img: null,                         color: "#FFBA60", interactive: false },
-  { key: "saturno",    label: "Saturno",    symbol: "\u2644", img: null,                         color: "#E0CC80", interactive: false },
+  { key: "sol",        label: "Sol",        symbol: "\u2609", img: null,                         color: "#e6a817", interactive: true  },
+  { key: "luna",       label: "Luna",       symbol: "\u263D", img: null,                         color: "#d4d9e2", interactive: true  },
+  { key: "mercurio",   label: "Mercurio",   symbol: "\u263F", img: null,                         color: "#fff04d", interactive: false },
+  { key: "venus",      label: "Venus",      symbol: "\u2640", img: null,                         color: "#9cc7f5", interactive: false },
+  { key: "marte",      label: "Marte",      symbol: "\u2642", img: null,                         color: "#ff4a2e", interactive: false },
+  { key: "jupiter",    label: "Júpiter",    symbol: "\u2643", img: null,                         color: "#5b3a99", interactive: false },
+  { key: "saturno",    label: "Saturno",    symbol: "\u2644", img: null,                         color: "#b07a4c", interactive: false },
   { key: "urano",      label: "Urano",      symbol: "\u2645", img: null,                         color: "#80EFD8", interactive: false },
-  { key: "neptuno",    label: "Neptuno",    symbol: "\u2646", img: null,                         color: "#6090FF", interactive: false },
-  { key: "pluton",     label: "Plutón",     symbol: "\u2647", img: null,                         color: "#B080E0", interactive: false },
+  { key: "neptuno",    label: "Neptuno",    symbol: "\u2646", img: null,                         color: "#ffc4dd", interactive: false },
+  { key: "pluton",     label: "Plutón",     symbol: "\u2647", img: null,                         color: "#7d1230", interactive: false },
   { key: "ascendente", label: "Ascendente", symbol: "\u2191", img: null,                         color: astrologiaTxt, interactive: true  },
 ];
 

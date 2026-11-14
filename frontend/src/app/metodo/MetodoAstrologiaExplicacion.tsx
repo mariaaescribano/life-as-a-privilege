@@ -5,6 +5,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { IndiceAstrologia } from "../../components/metodo/IndiceAstrologia";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
+import { RuedaCasasSignos } from "../../components/metodo/RuedaCasasSignos";
 import { FotoBox } from "../../components/metodo/FotoBox";
 import { IntroComicModal } from "../../components/metodo/IntroComicModal";
 import { seccionesAstro, type SeccionAstro } from "../../components/metodo/astrologiaIntroData";
@@ -69,6 +70,11 @@ export default function MetodoAstrologiaExplicacion() {
             <Text color="white" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center" fontStyle="italic">
               {t("metodo.astro.explica.intro")}
             </Text>
+          </Reveal>
+
+          {/* La rueda de las doce casas, antes de empezar con los signos. */}
+          <Reveal inView direction="up" distance={22} scaleFrom={0.97} duration={0.7} w="100%" maxW="680px">
+            <RuedaCasasSignos />
           </Reveal>
 
           {secciones.map((sec) => (

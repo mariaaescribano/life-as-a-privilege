@@ -29,16 +29,16 @@ interface Planet {
 }
 
 const PLANETS: Planet[] = [
-  { key: "sol",        label: "Sol",        symbol: "\u2609", color: "#FFD97D" },
-  { key: "luna",       label: "Luna",       symbol: "\u263D", color: "#C8C8E8" },
-  { key: "mercurio",   label: "Mercurio",   symbol: "\u263F", color: "#A8B8C8" },
-  { key: "venus",      label: "Venus",      symbol: "\u2640", color: "#FFB8D0" },
-  { key: "marte",      label: "Marte",      symbol: "\u2642", color: "#FF7055" },
-  { key: "jupiter",    label: "Júpiter",    symbol: "\u2643", color: "#FFBA60" },
-  { key: "saturno",    label: "Saturno",    symbol: "\u2644", color: "#E0CC80" },
+  { key: "sol",        label: "Sol",        symbol: "\u2609", color: "#e6a817" },
+  { key: "luna",       label: "Luna",       symbol: "\u263D", color: "#d4d9e2" },
+  { key: "mercurio",   label: "Mercurio",   symbol: "\u263F", color: "#fff04d" },
+  { key: "venus",      label: "Venus",      symbol: "\u2640", color: "#9cc7f5" },
+  { key: "marte",      label: "Marte",      symbol: "\u2642", color: "#ff4a2e" },
+  { key: "jupiter",    label: "Júpiter",    symbol: "\u2643", color: "#5b3a99" },
+  { key: "saturno",    label: "Saturno",    symbol: "\u2644", color: "#b07a4c" },
   { key: "urano",      label: "Urano",      symbol: "\u2645", color: "#80EFD8" },
-  { key: "neptuno",    label: "Neptuno",    symbol: "\u2646", color: "#6090FF" },
-  { key: "pluton",     label: "Plutón",     symbol: "\u2647", color: "#B080E0" },
+  { key: "neptuno",    label: "Neptuno",    symbol: "\u2646", color: "#ffc4dd" },
+  { key: "pluton",     label: "Plutón",     symbol: "\u2647", color: "#7d1230" },
   { key: "ascendente", label: "Ascendente", symbol: "\u2191", color: astrologiaTxt },
 ];
 

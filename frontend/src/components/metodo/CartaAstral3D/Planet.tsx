@@ -52,12 +52,12 @@ function buildGlyphTexture(symbol: string, color: string): THREE.CanvasTexture {
 
   // Resplandor exterior, suave.
   ctx.shadowBlur = 14;
-  ctx.globalAlpha = 0.26;
+  ctx.globalAlpha = 0.13;
   ctx.fillText(text, cx, cy);
 
   // Resplandor cercano, para despegarlo del cielo sin lavarlo.
   ctx.shadowBlur = 6;
-  ctx.globalAlpha = 0.45;
+  ctx.globalAlpha = 0.24;
   ctx.fillText(text, cx, cy);
 
   // El glifo, limpio y a plena opacidad: es lo que se tiene que leer.

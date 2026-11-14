@@ -93,17 +93,17 @@ export function separarAngulos(items: { key: string; ang: number }[], minSep: nu
 }
 
 export const COLOR_SIGNOS: string[] = [
-  "#e0625c",
-  "#a8634c",
-  "#b8d4c0",
-  "#9bbd80",
-  "#e89858",
-  "#9eaa72",
-  "#7fa470",
-  "#a04848",
-  "#5a8fbf",
-  "#3a6e5c",
-  "#e89048",
-  "#7a5fa0",
+  "#ff4a2e", // Aries
+  "#3a9d5d", // Tauro
+  "#fff04d", // Géminis
+  "#d4d9e2", // Cáncer
+  "#e6a817", // Leo
+  "#9aa13a", // Virgo
+  "#9cc7f5", // Libra
+  "#7d1230", // Escorpio
+  "#5b3a99", // Sagitario
+  "#b07a4c", // Capricornio
+  "#3fe0ff", // Acuario
+  "#ffc4dd", // Piscis
 ];
 

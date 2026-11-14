@@ -397,8 +397,8 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
               de cada cuerpo desprenda un poco de luz. */}
           <EffectComposer>
             <Bloom
-              intensity={0.6}
-              luminanceThreshold={0.35}
+              intensity={0.3}
+              luminanceThreshold={0.5}
               luminanceSmoothing={0.4}
               mipmapBlur
             />
