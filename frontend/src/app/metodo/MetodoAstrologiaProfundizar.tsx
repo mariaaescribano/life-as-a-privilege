@@ -45,28 +45,43 @@ const SpaceBg = ({ overlay = "rgba(8,13,30,0.25)" }: { overlay?: string }) => (
   </Box>
 );
 
-// Renderiza un texto con markdown ligero: **texto** se convierte en negrita
-// con el color del planeta. Conserva los saltos de línea originales (gracias
-// al whiteSpace: "pre-wrap" del Text contenedor).
+// Renderiza el mini-formato de los arquetipos: **negrita** (con el color del planeta), *cursiva* y una
+// línea con --- que dibuja una raya fina. Conserva los saltos de línea originales (gracias al
+// whiteSpace: "pre-wrap" del Text contenedor).
+const esRaya = (linea: string) => /^(-\s*){3,}$/.test(linea.trim());
+
 function renderConNegritas(texto: string, color: string): React.ReactNode {
-  const partes = texto.split(/(\*\*[^*]+\*\*)/g);
-  return partes.map((parte, i) => {
-    if (parte.startsWith("**") && parte.endsWith("**")) {
-      return (
+  const lineas = texto.split("\n");
+  const salida: React.ReactNode[] = [];
+  lineas.forEach((linea, n) => {
+    if (esRaya(linea)) {
+      salida.push(
         <span
-          key={i}
-          style={{
-            fontWeight: 700,
-            color,
-            textShadow: `0 0 8px ${color}55`,
-          }}
-        >
-          {parte.slice(2, -2)}
-        </span>
+          key={`r${n}`}
+          aria-hidden
+          style={{ display: "block", width: "42%", height: 1, margin: "1.1em auto", background: `${color}88`, boxShadow: `0 0 8px ${color}55` }}
+        />,
       );
+      return;
     }
-    return <React.Fragment key={i}>{parte}</React.Fragment>;
+    const partes = linea.split(/(\*\*[^*]+\*\*|\*[^*\n]+\*)/g);
+    partes.forEach((parte, i) => {
+      if (/^\*\*[^*]+\*\*$/.test(parte)) {
+        salida.push(
+          <span key={`${n}-${i}`} style={{ fontWeight: 700, color, textShadow: `0 0 8px ${color}55` }}>
+            {parte.slice(2, -2)}
+          </span>,
+        );
+      } else if (/^\*[^*\n]+\*$/.test(parte)) {
+        salida.push(<em key={`${n}-${i}`} style={{ fontStyle: "italic" }}>{parte.slice(1, -1)}</em>);
+      } else if (parte) {
+        salida.push(<React.Fragment key={`${n}-${i}`}>{parte}</React.Fragment>);
+      }
+    });
+    // El salto de línea de después, salvo si lo que sigue es una raya (que ya es un bloque) o es la última.
+    if (n < lineas.length - 1 && !esRaya(lineas[n + 1])) salida.push("\n");
   });
+  return salida;
 }
 
 export default function MetodoAstrologiaProfundizar() {

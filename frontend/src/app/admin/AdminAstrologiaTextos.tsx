@@ -143,6 +143,48 @@ export default function AdminAstrologiaTextos() {
     });
   };
 
+  // ── Formato: **negrita**, *cursiva* y --- (raya). Se aplica sobre lo seleccionado del cuadro de texto. ──
+  const areaRefs = useRef<{ privado: HTMLTextAreaElement | null; publico: HTMLTextAreaElement | null }>({ privado: null, publico: null });
+  const formatear = (lado: "privado" | "publico", tipo: "negrita" | "cursiva" | "raya") => {
+    const el = areaRefs.current[lado];
+    if (!el) return;
+    const valor = el.value;
+    const ini = el.selectionStart ?? valor.length;
+    const fin = el.selectionEnd ?? ini;
+    let nuevo: string;
+    let cursorIni: number;
+    let cursorFin: number;
+    if (tipo === "raya") {
+      // En su propia línea: con un salto antes y otro después si hace falta.
+      const antes = valor.slice(0, ini);
+      const despues = valor.slice(fin);
+      const pre = antes === "" || antes.endsWith("\n") ? "" : "\n";
+      const post = despues.startsWith("\n") ? "" : "\n";
+      nuevo = `${antes}${pre}---${post}${despues}`;
+      cursorIni = cursorFin = (antes + pre + "---" + post).length;
+    } else {
+      const m = tipo === "negrita" ? "**" : "*";
+      const sel = valor.slice(ini, fin);
+      const yaMarcado = ini >= m.length && valor.slice(ini - m.length, ini) === m && valor.slice(fin, fin + m.length) === m
+        && !(m === "*" && (valor[ini - 2] === "*" || valor[fin + 1] === "*"));
+      if (yaMarcado) {
+        // Quitar la marca (segunda pulsación sobre lo mismo).
+        nuevo = valor.slice(0, ini - m.length) + sel + valor.slice(fin + m.length);
+        cursorIni = ini - m.length;
+        cursorFin = fin - m.length;
+      } else {
+        nuevo = valor.slice(0, ini) + m + sel + m + valor.slice(fin);
+        cursorIni = ini + m.length;
+        cursorFin = fin + m.length;
+      }
+    }
+    aplicarEn(lado, nuevo);
+    requestAnimationFrame(() => {
+      el.focus();
+      el.setSelectionRange(cursorIni, cursorFin);
+    });
+  };
+
   const restaurarOriginal = (lado: "privado" | "publico") => {
     if (celda == null) return;
     const orig = original(faceta, cuerpoKey, celda) ?? "";
@@ -391,9 +433,37 @@ export default function AdminAstrologiaTextos() {
                           {c.sub}
                           {c.lado === "publico" && !hay ? " · sin escribir: ven el texto original" : ""}
                         </Text>
+                        <Flex gap={2} mb={2} role="toolbar" aria-label="Formato del texto">
+                          {([
+                            { tipo: "negrita" as const, rotulo: "Negrita", muestra: <b>N</b>, atajo: "Ctrl+B" },
+                            { tipo: "cursiva" as const, rotulo: "Cursiva", muestra: <i>C</i>, atajo: "Ctrl+I" },
+                            { tipo: "raya" as const, rotulo: "Raya horizontal", muestra: <span>&mdash;</span>, atajo: "" },
+                          ]).map((bt) => (
+                            <Box key={bt.tipo} as="button" type="button" title={bt.atajo ? `${bt.rotulo} (${bt.atajo})` : bt.rotulo}
+                                 aria-label={bt.rotulo}
+                                 onMouseDown={(e: React.MouseEvent) => e.preventDefault()}
+                                 onClick={() => formatear(c.lado, bt.tipo)}
+                                 minW="36px" h="32px" px={3} borderRadius="full" fontSize="md" fontFamily="'EB Garamond', serif"
+                                 color="white" bg="rgba(255,255,255,0.08)" border={`1px solid ${color}66`} cursor="pointer"
+                                 transition="all 0.15s"
+                                 _hover={{ bg: `${color}33`, borderColor: color }}
+                                 _active={{ transform: "scale(0.96)" }}
+                                 _focusVisible={{ outline: "2px solid white", outlineOffset: "2px" }}>
+                              {bt.muestra}
+                            </Box>
+                          ))}
+                        </Flex>
                         <Textarea
+                          ref={(el: HTMLTextAreaElement | null) => { areaRefs.current[c.lado] = el; }}
                           value={c.draft}
                           onChange={(e) => aplicarEn(c.lado, e.target.value)}
+                          onKeyDown={(e) => {
+                            if ((e.ctrlKey || e.metaKey) && !e.shiftKey && !e.altKey) {
+                              const k = e.key.toLowerCase();
+                              if (k === "b") { e.preventDefault(); formatear(c.lado, "negrita"); }
+                              else if (k === "i") { e.preventDefault(); formatear(c.lado, "cursiva"); }
+                            }
+                          }}
                           placeholder={c.placeholder}
                           minH="320px"
                           flex="1"
@@ -410,7 +480,7 @@ export default function AdminAstrologiaTextos() {
               )}
               {celda != null && (
                 <Text color="rgba(255,255,255,0.55)" fontSize="xs" fontStyle="italic" mt={-2}>
-                  Usa **negritas** con dobles asteriscos y deja una línea en blanco entre párrafos. Los cambios se aplican al momento; pulsa «Guardar cambios» arriba para guardarlos.
+                  Negrita, cursiva y raya con los botones de arriba (o **así**, *así* y --- en su propia línea). Deja una línea en blanco entre párrafos. Los cambios se aplican al momento; pulsa «Guardar cambios» arriba para guardarlos.
                 </Text>
               )}
 
