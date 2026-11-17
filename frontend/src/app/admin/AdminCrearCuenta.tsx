@@ -53,11 +53,11 @@ export default function AdminCrearCuenta() {
   const crear = async (e?: React.FormEvent) => {
     e?.preventDefault();
     if (enviando) return;
-    if (!nuevo.name.trim() || !nuevo.email.trim() || !nuevo.telefono.trim()) {
-      setError("Faltan el nombre, el email o el teléfono.");
+    if (!nuevo.name.trim() || !nuevo.email.trim()) {
+      setError("Faltan el nombre o el email.");
       return;
     }
-    if (!telefonoConPrefijo(nuevo.telefono)) {
+    if (nuevo.telefono.trim() && !telefonoConPrefijo(nuevo.telefono)) {
       setError("El teléfono tiene que llevar el prefijo del país, por ejemplo +34 600 11 22 33.");
       return;
     }

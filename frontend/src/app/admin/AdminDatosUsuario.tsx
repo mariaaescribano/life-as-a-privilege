@@ -221,8 +221,8 @@ export default function AdminDatosUsuario() {
   const guardar = async () => {
     if (!persona || guardando || sinCambios) return;
     if (!nombre.trim()) { setAviso("El nombre no puede quedar vacío."); return; }
-    if (!telefono.trim() || !telefonoConPrefijo(telefono)) {
-      setAviso("El teléfono es obligatorio y tiene que llevar el prefijo del país, por ejemplo +34 600 11 22 33.");
+    if (telefono.trim() && !telefonoConPrefijo(telefono)) {
+      setAviso("El teléfono tiene que llevar el prefijo del país, por ejemplo +34 600 11 22 33.");
       return;
     }
     const iso = nacimiento.trim() ? dmaAIso(nacimiento) : null;

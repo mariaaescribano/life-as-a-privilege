@@ -212,11 +212,12 @@ describe('3b · Cuenta de asesoría creada por la admin, sin activar', () => {
     await expect(service.updateUser(id, { fecha_nacimiento: '1990-05-17' }, true)).resolves.toBeDefined();
   });
 
-  it('sin teléfono no se crea', async () => {
+  it('el teléfono es opcional: sin él se crea igual', async () => {
     const { service, filas } = montar();
-    const err: any = await service.crearCuentaAsesorada({ name: 'eva', email: 'eva@x.com' }).catch((e) => e);
-    expect(err).toBeInstanceOf(BadRequestException);
-    expect(filas).toHaveLength(0);
+    const res: any = await service.crearCuentaAsesorada({ name: 'eva', email: 'eva@x.com' });
+    expect(res.id).toBeTruthy();
+    expect(filas).toHaveLength(1);
+    expect(filas[0]).toMatchObject({ telefono: null });
   });
 
   it('el teléfono tiene que llevar el prefijo del país', async () => {

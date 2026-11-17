@@ -470,10 +470,12 @@ export class UserService {
     const email = normalizaEmail(data?.email);
     if (!name || !email) throw new BadRequestException('Faltan el nombre o el email');
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new BadRequestException('El email no es válido');
-    // El teléfono es obligatorio al dar de alta una cuenta de asesoría, y con prefijo de país (+34…).
-    const telefono = saneaTelefono(data?.telefono);
-    if (!telefono) throw new BadRequestException('Falta el teléfono, o no es válido');
-    if (!telefono.startsWith('+')) throw new BadRequestException('El teléfono tiene que llevar el prefijo del país, por ejemplo +34');
+    // El teléfono es opcional; si se pone, tiene que ser válido y con prefijo de país (+34…).
+    if (typeof data?.telefono === 'string' && data.telefono.trim() !== '') {
+      const telefono = saneaTelefono(data.telefono);
+      if (!telefono) throw new BadRequestException('El teléfono no es válido');
+      if (!telefono.startsWith('+')) throw new BadRequestException('El teléfono tiene que llevar el prefijo del país, por ejemplo +34');
+    }
     // Los nombres se pueden repetir; el email no.
     const { emailExists } = await this.getNomEmailExist(name, email);
     if (emailExists) throw new ConflictException('Ya hay una cuenta con ese email');
