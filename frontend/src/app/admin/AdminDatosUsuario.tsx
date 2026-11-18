@@ -469,8 +469,8 @@ export default function AdminDatosUsuario() {
               </Flex>
 
               <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={{ base: 4, md: 5 }}>
-                {campo("datos-nombre", "Nombre", nombre, setNombre)}
-                {campo("datos-telefono", "Teléfono", telefono, setTelefono, "+34 600 11 22 33", { type: "tel" })}
+                {campo("datos-nombre", "Nombre", nombre, setNombre, undefined, { maxLength: 20 })}
+                {campo("datos-telefono", "Teléfono (opcional)", telefono, setTelefono, "+34 600 11 22 33", { type: "tel" })}
                 {campo("datos-nacimiento", "Fecha de nacimiento", nacimiento, (v) => setNacimiento(mascaraDMA(v)), "dd/mm/aaaa", { inputMode: "numeric" })}
                 {dato("Alta", fechaDMA(persona.created_at))}
               </Grid>

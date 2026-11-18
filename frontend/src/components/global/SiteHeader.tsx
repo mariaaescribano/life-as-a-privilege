@@ -203,6 +203,10 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   // opciones de la web pública. María con el panel de admin sin entrar en el
   // espacio de nadie no cuenta: tiene el suyo.
   const dentro = isPrivate && !isAdminPage && !premiumSolo && !esAdminDesbloqueado();
+  // El nombre que María asignó a la cuenta, para la marca de dentro (nunca en el panel ni con el panel desbloqueado).
+  const nombrePersona = isPrivate && !isAdminPage && !esAdminDesbloqueado()
+    ? (localStorage.getItem("name") ?? "").trim().replace(/\s+/g, " ")
+    : "";
 
   const items: ItemMenu[] = dentro
     ? [
@@ -278,8 +282,42 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
           objectFit="contain"
           style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.35)) drop-shadow(0 0 20px rgba(255,255,255,0.17)) drop-shadow(0 0 42px rgba(180,255,245,0.13))" }}
         />
-        {/* La marca es «MARÍA ESCRIBANO»: el nombre arriba y el apellido debajo,
-            los dos empezando en el mismo borde izquierdo. */}
+        {/* Con la sesión dentro de un espacio (la persona, o María en su camino) el nombre que María le puso al crear
+            la cuenta va arriba, y debajo, más pequeña y en cursiva, la firma. Fuera de eso (web pública, panel) la marca de
+            siempre: «MARÍA ESCRIBANO», el nombre arriba y el apellido debajo, empezando en el mismo borde izquierdo. */}
+        {nombrePersona ? (
+          <Flex direction="column" align="flex-start" lineHeight="1.15" minW={0}>
+            <Text
+              color="white"
+              fontFamily="'EB Garamond', serif"
+              fontWeight="600"
+              fontSize={{ base: "12px", md: "20px" }}
+              letterSpacing="0.18em"
+              textTransform="uppercase"
+              // El mismo halo que lleva el mandala de al lado.
+              textShadow="0 0 9px rgba(255,255,255,0.35), 0 0 20px rgba(255,255,255,0.17)"
+              whiteSpace="nowrap"
+              overflow="hidden"
+              textOverflow="ellipsis"
+              maxW={{ base: "140px", md: "340px" }}
+            >
+              {nombrePersona}
+            </Text>
+            <Text
+              color="rgba(255,255,255,0.85)"
+              fontFamily="'EB Garamond', serif"
+              fontStyle="italic"
+              fontWeight="500"
+              fontSize={{ base: "10px", md: "14px" }}
+              letterSpacing="0.08em"
+              textShadow="0 0 9px rgba(255,255,255,0.3), 0 0 20px rgba(255,255,255,0.14)"
+              whiteSpace="nowrap"
+            >
+              {t("header.con")}{" "}
+              <Box as="span" textTransform="capitalize">{t("header.marca").toLowerCase()}</Box>
+            </Text>
+          </Flex>
+        ) : (
         <Flex direction="column" align="flex-start" lineHeight="1.15">
           {t("header.marca").split(" ").map((palabra) => (
             <Text
@@ -297,6 +335,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
             </Text>
           ))}
         </Flex>
+        )}
       </Flex>
 
       {/* ── CENTRO ──

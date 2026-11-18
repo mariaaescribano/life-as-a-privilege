@@ -124,7 +124,14 @@ export async function cargarOverridesPublicos(): Promise<ArquetiposOverrides> {
 export async function guardarOverrides(
   overrides: ArquetiposOverrides,
   destino: DestinoArquetipos,
-): Promise<{ success: boolean; error?: string; archivoLocal?: boolean }> {
+): Promise<{
+  success: boolean;
+  error?: string;
+  archivoLocal?: boolean;
+  traducidas?: number;
+  fallidas?: number;
+  errorTraduccion?: string;
+}> {
   try {
     const { data } = await axios.put(
       `${API_URL}/astrologia-arquetipos/${destino}`,

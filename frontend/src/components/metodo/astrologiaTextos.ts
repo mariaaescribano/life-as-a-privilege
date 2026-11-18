@@ -1,5 +1,7 @@
 import type { CuerpoKey } from "./astrologiaData";
-import { overridesRemotos } from "../../data/astrologiaOverridesRemotos";
+import { overridesRemotos, overridesRemotosEn } from "../../data/astrologiaOverridesRemotos";
+import { ARQUETIPOS_PUBLICOS_RESPALDO } from "./astrologiaTextos.publicos";
+import { ARQUETIPOS_PUBLICOS_EN } from "./astrologiaTextos.publicos.en";
 import { TEXTOS_SIGNO_EN, TEXTOS_CASA_EN } from "./astrologiaTextos.en";
 import { getIdioma } from "../../i18n";
 
@@ -3660,13 +3662,19 @@ export function getTextoCasaOriginal(planetaKey: string, casa: number): string |
 function fuenteOverrides() {
   // Solo lo PÚBLICO (lo que María publica). Lo escrito en privado nunca llega al usuario: mientras
   // no haya nada publicado, salen los textos originales del proyecto.
-  return overridesRemotos() ?? VACIOS;
+  // Sin respuesta de la BD (o sin fila), la copia commiteada en el proyecto: así lo que María ha publicado
+  // también viaja con el código y no se pierde si la BD falla.
+  return overridesRemotos() ?? ARQUETIPOS_PUBLICOS_RESPALDO;
 }
-const VACIOS: { signo: Record<string, Record<string, string>>; casa: Record<string, Record<string, string>> } = { signo: {}, casa: {} };
+/** La traducción automática al inglés de lo público: la de la BD o, si no responde, la del proyecto. */
+function fuenteOverridesEn() {
+  return overridesRemotosEn() ?? ARQUETIPOS_PUBLICOS_EN;
+}
 
 /**
  * Texto efectivo, celda a celda:
- *   1. Si el idioma activo es el inglés y esa celda está traducida, la inglesa.
+ *   0. En inglés, si María ha publicado esa celda: su traducción automática (se hace sola al guardar).
+ *   1. Si el idioma activo es el inglés y esa celda está traducida a mano, la inglesa.
  *   2. Si no, el override del editor de admin (si existe y no está vacío).
  *   3. Si no, el original hardcodeado en español.
  *
@@ -3680,6 +3688,8 @@ const VACIOS: { signo: Record<string, Record<string, string>>; casa: Record<stri
  */
 export function getTextoSigno(planetaKey: string, signo: string): string | null {
   if (getIdioma() === "en") {
+    const auto = fuenteOverridesEn().signo?.[planetaKey]?.[signo];
+    if (typeof auto === "string" && auto.trim() !== "") return auto;
     const en = TEXTOS_SIGNO_EN[planetaKey as CuerpoKey]?.[signo];
     if (typeof en === "string" && en.trim() !== "") return en;
   }
@@ -3690,6 +3700,8 @@ export function getTextoSigno(planetaKey: string, signo: string): string | null 
 
 export function getTextoCasa(planetaKey: string, casa: number): string | null {
   if (getIdioma() === "en") {
+    const auto = fuenteOverridesEn().casa?.[planetaKey]?.[String(casa)];
+    if (typeof auto === "string" && auto.trim() !== "") return auto;
     const en = TEXTOS_CASA_EN[planetaKey as CuerpoKey]?.[casa];
     if (typeof en === "string" && en.trim() !== "") return en;
   }

@@ -4,6 +4,8 @@ export const header = {
    *  el rótulo bajo el mandala del header y el titular de la portada. NO se
    *  traduce: es un nombre propio y se escribe igual en los dos idiomas. */
   "header.marca": "MARÍA ESCRIBANO",
+  /** Bajo el nombre de la persona: «con María Escribano». */
+  "header.con": "con",
   "header.mapa": "El Mapa",
   "header.asesoria": "Asesorías 1:1",
   /** Menú de administración: la lista de personas asesoradas. */

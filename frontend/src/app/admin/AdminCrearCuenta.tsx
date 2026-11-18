@@ -24,7 +24,7 @@ type Campo = "name" | "email" | "telefono" | "fecha_nacimiento" | "hora" | "luga
 const CAMPOS: { k: Campo; etiqueta: string; tipo: string; auto: string; ayuda?: string }[] = [
   { k: "name", etiqueta: "Nombre", tipo: "text", auto: "off" },
   { k: "email", etiqueta: "Email", tipo: "email", auto: "off" },
-  { k: "telefono", etiqueta: "Teléfono", tipo: "tel", auto: "off", ayuda: "Con prefijo, por ejemplo +34 600 11 22 33" },
+  { k: "telefono", etiqueta: "Teléfono (opcional)", tipo: "tel", auto: "off", ayuda: "Con prefijo, por ejemplo +34 600 11 22 33" },
   { k: "fecha_nacimiento", etiqueta: "Fecha de nacimiento (opcional)", tipo: "text", auto: "off", ayuda: "dd/mm/aaaa" },
 ];
 
@@ -202,6 +202,7 @@ export default function AdminCrearCuenta() {
                       setError(null);
                     }}
                     inputMode={c.k === "fecha_nacimiento" ? "numeric" : undefined}
+                    maxLength={c.k === "name" ? 20 : undefined}
                     autoComplete={c.auto}
                     autoFocus={i === 0}
                     placeholder={c.ayuda}

@@ -16,7 +16,11 @@ export class AstrologiaTextosController {
    */
   @Get()
   async leer() {
-    return { overrides: await this.service.leerOverrides('publico') };
+    return {
+      overrides: await this.service.leerOverrides('publico'),
+      // La traducción automática al inglés de esos mismos textos (null = aún no hay).
+      overridesEn: await this.service.leerOverrides('publico_en'),
+    };
   }
 
   // ── Admin: los textos PRIVADOS (lo escrito por María). Los usuarios nunca los ven. ──

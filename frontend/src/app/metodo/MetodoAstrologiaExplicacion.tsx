@@ -11,6 +11,8 @@ import { IntroComicModal } from "../../components/metodo/IntroComicModal";
 import { seccionesAstro, type SeccionAstro } from "../../components/metodo/astrologiaIntroData";
 import { Reveal } from "../../components/global/Reveal";
 import { useAstrologiaProgreso } from "../../hooks/useAstrologiaProgreso";
+import { useAstroLeidos } from "../../hooks/useAstroLeidos";
+import { focoBlanco } from "../../components/global/foco";
 import { esMariaMirando } from "../../api/persona";
 import { astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
 import { useIdioma, useT } from "../../i18n";
@@ -35,6 +37,9 @@ export default function MetodoAstrologiaExplicacion() {
   const secciones = useMemo(() => seccionesAstro(), []);
   const [abierto, setAbierto] = useState<{ sec: SeccionAstro; i: number } | null>(null);
   const { bloqueada, cargado } = useAstrologiaProgreso();
+  // Lo que la persona ya ha terminado de leer: una entrada por mini ilustración («signos:aries»).
+  const { leidos, marcarLeido } = useAstroLeidos("explicacion");
+  const idLeido = (sec: SeccionAstro, clave: string) => `${sec.clave}:${clave}`;
 
   useEffect(() => { window.scrollTo({ top: 0, behavior: "auto" }); }, []);
 
@@ -90,6 +95,12 @@ export default function MetodoAstrologiaExplicacion() {
                 </Flex>
               </Reveal>
 
+              <BarraAvance
+                nombre={t(`metodo.astro.explica.${sec.clave}` as ClaveTexto)}
+                hechas={sec.tarjetas.filter((c) => leidos.has(idLeido(sec, c.clave))).length}
+                total={sec.tarjetas.length}
+              />
+
               <Flex wrap="wrap" justify="center" gap={`${HUECO}px`} w="100%">
                 {sec.tarjetas.map((c, i) => (
                   <Reveal key={c.clave} inView amount={0.15} direction="up" distance={26} scaleFrom={0.95}
@@ -104,6 +115,7 @@ export default function MetodoAstrologiaExplicacion() {
                         bg={astrologiaBg}
                         aspect={1}
                         onClick={() => setAbierto({ sec, i })}
+                        visto={leidos.has(idLeido(sec, c.clave))}
                         vivo
                       />
                     </Box>
@@ -120,6 +132,33 @@ export default function MetodoAstrologiaExplicacion() {
         isOpen={!!abierto}
         vinetas={abierto?.sec.vinetas ?? []}
         initialIndex={abierto?.i ?? 0}
+        // «Leído», abajo de cada viñeta: marca esa mini ilustración y su tick sale en la tarjeta de fuera.
+        pageExtra={(index) => {
+          const tarjeta = abierto?.sec.tarjetas[index];
+          if (!abierto || !tarjeta) return null;
+          const id = idLeido(abierto.sec, tarjeta.clave);
+          const hecho = leidos.has(id);
+          return (
+            <Flex justify="center" mt={{ base: 3, md: 4 }}>
+              <Box as="button" type="button" onClick={() => marcarLeido(id)} disabled={hecho} aria-pressed={hecho}
+                   display="inline-flex" alignItems="center" gap={2}
+                   px={8} py="9px" borderRadius="full" fontWeight="600" fontSize={{ base: "md", md: "lg" }} letterSpacing="0.05em"
+                   color={astrologiaTxt} bg={hecho ? `${astrologiaTxt}1f` : "transparent"}
+                   border={`1.5px solid ${astrologiaTxt}${hecho ? "55" : "99"}`}
+                   opacity={hecho ? 0.85 : 1} cursor={hecho ? "default" : "pointer"}
+                   transition="all 0.3s ease"
+                   _hover={hecho ? {} : { bg: `${astrologiaTxt}1f`, borderColor: astrologiaTxt, transform: "translateY(-1px)" }}
+                   _active={hecho ? {} : { transform: "scale(0.97)" }} _focusVisible={focoBlanco}>
+                {hecho && (
+                  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px" fill="currentColor" flexShrink={0} aria-hidden>
+                    <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
+                  </Box>
+                )}
+                {t("metodo.astro.leidoBoton")}
+              </Box>
+            </Flex>
+          );
+        }}
         onClose={() => setAbierto(null)}
         onComplete={() => setAbierto(null)}
       />
@@ -127,5 +166,27 @@ export default function MetodoAstrologiaExplicacion() {
       <IndiceAstrologia />
       <SiteFooter />
     </Box>
+  );
+}
+
+/**
+ * La barra de avance de una sección: cuánto lleva leído («3/12»). Fuera de las cajas, así que en blanco y sin
+ * sombra; fina y con la parte hecha rellenándose con suavidad al ir leyendo.
+ */
+function BarraAvance({ nombre, hechas, total }: { nombre: string; hechas: number; total: number }) {
+  const pct = total > 0 ? Math.round((hechas / total) * 100) : 0;
+  return (
+    <Flex align="center" gap={4} w="100%" maxW="360px" mt={{ base: -3, md: -4 }}>
+      <Box
+        role="progressbar" aria-label={nombre} aria-valuemin={0} aria-valuemax={total} aria-valuenow={hechas}
+        flex="1" h="6px" borderRadius="full" bg="rgba(255,255,255,0.22)" overflow="hidden"
+      >
+        <Box h="100%" borderRadius="full" bg="white" w={`${pct}%`} transition="width 0.7s cubic-bezier(0.22,1,0.36,1)" />
+      </Box>
+      <Text color="white" fontSize={{ base: "sm", md: "md" }} fontWeight="600" letterSpacing="0.06em"
+            minW="3.2em" textAlign="right" sx={{ fontVariantNumeric: "tabular-nums" }}>
+        {hechas}/{total}
+      </Text>
+    </Flex>
   );
 }

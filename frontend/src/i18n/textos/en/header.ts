@@ -1,5 +1,6 @@
 export const header = {
   "header.marca": "MARÍA ESCRIBANO",
+  "header.con": "with",
   "header.mapa": "The Map",
   "header.asesoria": "1:1 Coaching",
   "header.asesorias": "Coaching",

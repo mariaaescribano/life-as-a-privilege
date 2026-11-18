@@ -7,12 +7,15 @@ import { API_URL } from "../GlobalVariables";
  * usuario (abierto su lectura). Sirve para cambiar el diseño de lo ya visto y
  * para el desbloqueo secuencial del recorrido de astrología:
  *   Puntos clave → Casas → Aspectos (cada página exige leer la anterior).
+ * Y para la página Explicación: cada mini ilustración (signo, casa, planeta,
+ * aspecto) que la persona termina de leer en su popup.
  *
  * PERSISTE EN LA BASE DE DATOS (no en localStorage), en la columna JSONB
  * `metodo_astrologia.data`, bajo su propia clave de primer nivel:
  *   · retos    → data.retosLeidos:    string[]  (ids de punto clave)
  *   · casas    → data.casasLeidos:    string[]  (números de casa "1".."12")
  *   · aspectos → data.aspectosLeidos: string[]  (claves de aspecto)
+ *   · explicacion → data.explicacionLeidos: string[]  («signos:aries», «casas:casa-3»…)
  * El backend fusiona `data` al hacer PATCH, así que cada clave convive con las
  * demás (planetas elegidos, los otros tipos de leídos, etc.).
  *
@@ -23,10 +26,11 @@ import { API_URL } from "../GlobalVariables";
  * persistente entre sesiones/dispositivos; la caché solo evita la carrera
  * dentro de la misma sesión de navegación.
  * ──────────────────────────────────────────────────────────────────────── */
-const DATA_KEY: Record<"retos" | "casas" | "aspectos", string> = {
+const DATA_KEY: Record<"retos" | "casas" | "aspectos" | "explicacion", string> = {
   retos: "retosLeidos",
   casas: "casasLeidos",
   aspectos: "aspectosLeidos",
+  explicacion: "explicacionLeidos",
 };
 
 // Caché en memoria compartida entre instancias del hook (persiste mientras no
@@ -36,7 +40,7 @@ const cache: Record<string, Set<string>> = {};
 // lo leído por una no se vea en la otra.
 let cacheDe: string | null = null;
 
-export function useAstroLeidos(tipo: "retos" | "casas" | "aspectos") {
+export function useAstroLeidos(tipo: "retos" | "casas" | "aspectos" | "explicacion") {
   const dataKey = DATA_KEY[tipo];
 
   const [leidos, setLeidos] = useState<Set<string>>(() => new Set(cache[dataKey] ?? []));

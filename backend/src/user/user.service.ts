@@ -48,6 +48,9 @@ function saneaTelefono(valor: unknown): string | null {
   return /^\+?\d{6,15}$/.test(limpio) ? limpio : null;
 }
 
+/** Máximo de letras del nombre que María pone a una cuenta de asesoría: sale en la marca del header. */
+export const NOMBRE_ASESORIA_MAX = 20;
+
 /** Fecha de nacimiento 'YYYY-MM-DD' real, entre 1900 y hoy. Si no, null. */
 function saneaFechaNacimiento(valor: unknown): string | null {
   if (typeof valor !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(valor)) return null;
@@ -469,6 +472,7 @@ export class UserService {
     const name = (data?.name ?? '').trim();
     const email = normalizaEmail(data?.email);
     if (!name || !email) throw new BadRequestException('Faltan el nombre o el email');
+    if (name.length > NOMBRE_ASESORIA_MAX) throw new BadRequestException(`El nombre es demasiado largo (máximo ${NOMBRE_ASESORIA_MAX} caracteres)`);
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new BadRequestException('El email no es válido');
     // El teléfono es opcional; si se pone, tiene que ser válido y con prefijo de país (+34…).
     if (typeof data?.telefono === 'string' && data.telefono.trim() !== '') {
@@ -810,7 +814,14 @@ export class UserService {
     // Opcionales: vacío = quitarlo (quitar la fecha apaga la felicitación).
     if ('telefono' in body) updates.telefono = saneaTelefono(body.telefono);
     if ('fecha_nacimiento' in body) updates.fecha_nacimiento = saneaFechaNacimiento(body.fecha_nacimiento);
-    if (body.name) updates.name = body.name;
+    if (body.name) {
+      // Los nombres de las cuentas de asesoría salen en el header: los que pone María llevan tope. Lo que la persona
+      // cambia desde «Mi cuenta» no se corta (el header lo recorta con puntos suspensivos si no cabe).
+      if (esAdmin && body.name.trim().length > NOMBRE_ASESORIA_MAX) {
+        throw new BadRequestException(`El nombre es demasiado largo (máximo ${NOMBRE_ASESORIA_MAX} caracteres)`);
+      }
+      updates.name = body.name;
+    }
     if (body.email) updates.email = normalizaEmail(body.email);
 
     // El nombre puede coincidir con el de otra cuenta (el login prueba la

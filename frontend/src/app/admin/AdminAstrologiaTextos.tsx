@@ -232,7 +232,13 @@ export default function AdminAstrologiaTextos() {
           toast({
             title: l.destino === "publico" ? "Público guardado" : "Privado guardado",
             description: l.destino === "publico"
-              ? "Ya lo ven los usuarios en el recorrido."
+              ? `Ya lo ven los usuarios en el recorrido.${res.archivoLocal ? " Copia en el archivo del proyecto (commitéalo)." : ""}${
+                  res.errorTraduccion
+                    ? ` Traducción al inglés: no se pudo (${res.errorTraduccion}).`
+                    : res.traducidas
+                      ? ` Traducidos al inglés: ${res.traducidas}.`
+                      : ""
+                }`
               : res.archivoLocal
                 ? "En la base de datos y en el archivo del proyecto (commitéalo). Solo lo ves tú."
                 : "En la base de datos. Solo lo ves tú.",

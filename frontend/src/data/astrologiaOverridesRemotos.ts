@@ -25,10 +25,13 @@ export interface ArquetiposOverrides {
 }
 
 let remotos: ArquetiposOverrides | null = null;
+/** La traducción automática al inglés de lo público (la genera el back al guardar). */
+let remotosEn: ArquetiposOverrides | null = null;
 let promesa: Promise<ArquetiposOverrides | null> | null = null;
 
 /** Los overrides de la BD ya cargados, o null si no hay / aún no han llegado. */
 export const overridesRemotos = (): ArquetiposOverrides | null => remotos;
+export const overridesRemotosEn = (): ArquetiposOverrides | null => remotosEn;
 
 /** Deja el objeto en la forma { signo, casa } con solo strings no vacíos. */
 export function sanear(input: unknown): ArquetiposOverrides | null {
@@ -58,15 +61,18 @@ export function cargarOverridesRemotos(recargar = false): Promise<ArquetiposOver
   if (recargar) {
     promesa = null;
     remotos = null;
+    remotosEn = null;
   }
   promesa ??= axios
-    .get<{ overrides?: unknown }>(`${API_URL}/astrologia-arquetipos`)
+    .get<{ overrides?: unknown; overridesEn?: unknown }>(`${API_URL}/astrologia-arquetipos`)
     .then((r) => {
       remotos = sanear(r.data?.overrides);
+      remotosEn = sanear(r.data?.overridesEn);
       return remotos;
     })
     .catch(() => {
       remotos = null;
+      remotosEn = null;
       return null;
     });
   return promesa;
