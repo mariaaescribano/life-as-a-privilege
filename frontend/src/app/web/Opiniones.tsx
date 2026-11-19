@@ -26,8 +26,23 @@ function rutaInterna(valor: string | null): string | null {
   return limpio;
 }
 
+// El mármol VERTICAL de la casa (crema, 760×1230, a resolución completa) de fondo de cada opinión y del
+// formulario. Sobre mármol la letra no es blanca: turquesa oscuro (#004f4f) y oro (#b08d3f) en los filos.
+const TQ = "#004f4f";
+const ORO = "#b08d3f";
+const cajaMarmol = {
+  bgColor: "#efe5cf",
+  bgImage: "url('/img/fondos/marmolfondo-crema.webp')",
+  bgSize: "cover",
+  bgPosition: "center",
+  border: "1px solid rgba(255,255,255,0.7)",
+  borderRadius: "2xl",
+  // Luz, no sombra: un halo claro y otro dorado muy suave.
+  boxShadow: "0 0 18px rgba(255,255,255,0.4), 0 0 44px rgba(180,255,245,0.18), 0 0 30px rgba(176,141,63,0.18)",
+};
+
 /** Botón de vuelta: el mismo arriba y en la pantalla de gracias. */
-function BotonVolver({ a, texto, onIr }: { a: string; texto: string; onIr: (a: string) => void }) {
+function BotonVolver({ a, texto, onIr, sobreMarmol }: { a: string; texto: string; onIr: (a: string) => void; sobreMarmol?: boolean }) {
   return (
     <Flex
       as="button"
@@ -37,9 +52,9 @@ function BotonVolver({ a, texto, onIr }: { a: string; texto: string; onIr: (a: s
       px={{ base: 6, md: 8 }}
       py={{ base: "10px", md: "12px" }}
       borderRadius="full"
-      border="1px solid rgba(255,255,255,0.55)"
-      bg="rgba(255,255,255,0.08)"
-      color="white"
+      border={sobreMarmol ? `1.5px solid ${TQ}` : "1px solid rgba(255,255,255,0.55)"}
+      bg={sobreMarmol ? "rgba(255,255,255,0.35)" : "rgba(255,255,255,0.08)"}
+      color={sobreMarmol ? TQ : "white"}
       fontFamily="'EB Garamond', serif"
       fontWeight="600"
       fontSize={{ base: "sm", md: "md" }}
@@ -47,7 +62,7 @@ function BotonVolver({ a, texto, onIr }: { a: string; texto: string; onIr: (a: s
       cursor="pointer"
       whiteSpace="nowrap"
       transition="all 0.25s ease"
-      _hover={{ bg: "rgba(255,255,255,0.18)", borderColor: "white" }}
+      _hover={sobreMarmol ? { bg: "rgba(255,255,255,0.6)" } : { bg: "rgba(255,255,255,0.18)", borderColor: "white" }}
     >
       {texto}
     </Flex>
@@ -71,21 +86,20 @@ const useReveal = (threshold = 0.1) => {
 };
 
 const inputStyles = {
-  bg: "rgba(255,255,255,0.06)",
-  border: "1px solid rgba(255,255,255,0.28)",
-  color: "white",
+  bg: "rgba(255,255,255,0.55)",
+  border: `1px solid ${TQ}55`,
+  color: TQ,
   borderRadius: "full",
   size: "lg" as const,
   textAlign: "center" as const,
   fontFamily: "'EB Garamond', serif",
   letterSpacing: "0.04em",
-  boxShadow: "0 0 10px rgba(255,255,255,0.12)",
-  _placeholder: { color: "rgba(255,255,255,0.4)" },
-  _hover: { border: "1px solid rgba(255,255,255,0.55)" },
+  _placeholder: { color: `${TQ}88` },
+  _hover: { border: `1px solid ${TQ}99` },
   _focus: {
-    border: "1px solid rgba(255,255,255,0.85)",
-    boxShadow: "0 0 0 1px rgba(255,255,255,0.25), 0 0 18px rgba(255,255,255,0.3)",
-    bg: "rgba(255,255,255,0.12)",
+    border: `1px solid ${TQ}`,
+    boxShadow: `0 0 0 1px ${TQ}33, 0 0 14px rgba(176,141,63,0.35)`,
+    bg: "rgba(255,255,255,0.75)",
     outline: "none",
   },
 };
@@ -129,34 +143,30 @@ function OpinionesList({ opiniones, loading, listReveal }: { opiniones: Opinion[
               key={op.id}
               direction="column"
               gap={3}
-              bg="rgba(255,255,255,0.10)"
-              border="1px solid rgba(255,255,255,0.28)"
-              borderRadius="2xl"
-              boxShadow="0 0 14px rgba(255,255,255,0.18), 0 0 32px rgba(255,255,255,0.08)"
-              sx={{ backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)" }}
+              {...cajaMarmol}
               p={{ base: 5, md: 6 }}
               opacity={listReveal.visible ? 1 : 0}
               transform={listReveal.visible ? "translateY(0)" : "translateY(20px)"}
               transition={`opacity 0.6s ease ${(i % 6) * 0.08}s, transform 0.6s ease ${(i % 6) * 0.08}s`}
             >
               <Text
-                color="rgba(255,255,255,0.95)"
+                color={TQ}
                 fontSize={{ base: "md", md: "lg" }}
                 lineHeight="1.75"
                 fontFamily="'EB Garamond', serif"
-                textShadow="0 0 8px rgba(255,255,255,0.19)"
                 flex="1"
               >
                 {op.texto}
               </Text>
               <Text
-                color="white"
+                color={TQ}
                 fontSize={{ base: "md", md: "lg" }}
                 fontWeight="700"
                 letterSpacing="0.06em"
                 fontFamily="'EB Garamond', serif"
-                textShadow="0 0 10px rgba(255,255,255,0.41), 0 0 22px rgba(255,255,255,0.22)"
                 mt="auto"
+                pt={3}
+                borderTop={`1px solid ${ORO}88`}
               >
                 — {op.nombre}
               </Text>
@@ -220,9 +230,11 @@ function DejarOpinion({
     <Flex
       ref={formReveal.ref}
       direction="column"
-      w={{ base: "100%", sm: "520px" }}
+      w={{ base: "100%", sm: "560px" }}
       mx="auto"
       gap={5}
+      {...cajaMarmol}
+      p={{ base: 6, md: 9 }}
       opacity={formReveal.visible ? 1 : 0}
       transform={formReveal.visible ? "translateY(0)" : "translateY(28px)"}
       transition="opacity 0.8s ease, transform 0.8s ease"
@@ -244,25 +256,23 @@ function DejarOpinion({
             ♥
           </Box>
           <Text
-            color="white"
+            color={TQ}
             fontSize={{ base: "2xl", md: "3xl" }}
             fontWeight="700"
             letterSpacing="0.05em"
-            textShadow="0 0 14px rgba(255,255,255,0.45), 0 0 30px rgba(255,255,255,0.22)"
           >
             {t("opiniones.gracias")}
           </Text>
           <Text
-            color="rgba(255,255,255,0.85)"
+            color={TQ}
             fontSize={{ base: "md", md: "lg" }}
-            textShadow="0 0 10px rgba(255,255,255,0.26)"
           >
             {t("opiniones.graciasTexto")}
           </Text>
           {/* Si vino del final de un recorrido, lo primero es devolverlo allí:
               acaba de escribir su reseña, no ha venido a quedarse aquí. */}
           {volver && (
-            <BotonVolver a={volver} texto={t("opiniones.volverRecorrido")} onIr={onVolver} />
+            <BotonVolver a={volver} texto={t("opiniones.volverRecorrido")} onIr={onVolver} sobreMarmol />
           )}
 
           <Flex
@@ -274,21 +284,19 @@ function DejarOpinion({
             px={{ base: 6, md: 8 }}
             py={{ base: "10px", md: "12px" }}
             borderRadius="full"
-            border="1px solid rgba(255,255,255,0.55)"
-            bg="rgba(255,255,255,0.08)"
+            border={`1.5px solid ${TQ}`}
+            bg="rgba(255,255,255,0.35)"
             cursor="pointer"
-            color="white"
+            color={TQ}
             fontFamily="'EB Garamond', serif"
             fontWeight="600"
             fontSize={{ base: "sm", md: "md" }}
             letterSpacing="0.16em"
             textTransform="uppercase"
-            boxShadow="0 0 14px rgba(255,255,255,0.3), 0 0 30px rgba(255,255,255,0.15)"
-            textShadow="0 0 10px rgba(255,255,255,0.41), 0 0 22px rgba(255,255,255,0.22)"
+            boxShadow="0 0 14px rgba(176,141,63,0.3)"
             _hover={{
-              bg: "rgba(255,255,255,0.18)",
-              borderColor: "rgba(255,255,255,0.9)",
-              boxShadow: "0 0 24px rgba(255,255,255,0.5), 0 0 48px rgba(180,255,245,0.3)",
+              bg: "rgba(255,255,255,0.65)",
+              boxShadow: "0 0 24px rgba(176,141,63,0.5)",
             }}
             transition="all 0.25s ease"
             mt={2}
@@ -299,7 +307,7 @@ function DejarOpinion({
       ) : (
         <Flex as="form" onSubmit={handleSubmit} direction="column" gap={5}>
           <Box>
-            <Text color="rgba(255,255,255,0.78)" fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.26)">
+            <Text color={TQ} fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="700" textAlign="center">
               {t("opiniones.campo.nombre")}
             </Text>
             <Input
@@ -313,7 +321,7 @@ function DejarOpinion({
           </Box>
 
           <Box>
-            <Text color="rgba(255,255,255,0.78)" fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.26)">
+            <Text color={TQ} fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="700" textAlign="center">
               {t("opiniones.campo.email")}
             </Text>
             <Input
@@ -327,7 +335,7 @@ function DejarOpinion({
           </Box>
 
           <Box>
-            <Text color="rgba(255,255,255,0.78)" fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.26)">
+            <Text color={TQ} fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="700" textAlign="center">
               {t("opiniones.campo.texto")}
             </Text>
             <Textarea
@@ -343,13 +351,13 @@ function DejarOpinion({
           </Box>
 
           {status === "error" && (
-            <Text color="#ff8a8a" fontSize="sm" textAlign="center" fontStyle="italic" textShadow="0 0 8px rgba(255,140,140,0.4)">
+            <Text color="#9b1c1c" fontSize="sm" textAlign="center" fontStyle="italic" fontWeight="600">
               {t("opiniones.error")}
             </Text>
           )}
 
           {/* Qué se publica y qué no, antes de enviar (art. 13 RGPD). */}
-          <InfoPrivacidad tipo="opinion" mt={0} />
+          <InfoPrivacidad tipo="opinion" mt={0} tono="oscuro" />
 
           {/* Botón Enviar */}
           <Flex justify="center" pt={{ base: 8, md: 10 }}>
@@ -362,35 +370,32 @@ function DejarOpinion({
               px={{ base: 10, md: 14 }}
               py={{ base: "14px", md: "16px" }}
               borderRadius="full"
-              border="1.5px solid rgba(255,255,255,0.6)"
-              bg="rgba(255,255,255,0.10)"
+              border={`1.5px solid ${TQ}`}
+              bg="rgba(255,255,255,0.4)"
               cursor={status === "sending" ? "not-allowed" : "pointer"}
               opacity={status === "sending" ? 0.55 : 1}
-              boxShadow="0 0 18px rgba(255,255,255,0.36), 0 0 40px rgba(255,255,255,0.18), 0 0 70px rgba(180,255,245,0.18), 0 4px 14px rgba(0,0,0,0.18)"
+              boxShadow="0 0 18px rgba(176,141,63,0.35), 0 0 40px rgba(255,255,255,0.3)"
               _hover={status === "sending" ? {} : {
-                bg: "rgba(255,255,255,0.2)",
-                borderColor: "white",
-                boxShadow: "0 0 28px rgba(255,255,255,0.55), 0 0 58px rgba(180,255,245,0.35), 0 6px 18px rgba(0,0,0,0.22)",
+                bg: "rgba(255,255,255,0.7)",
+                boxShadow: "0 0 28px rgba(176,141,63,0.55), 0 0 58px rgba(255,255,255,0.45)",
               }}
               transition="all 0.25s ease"
               pointerEvents={status === "sending" ? "none" : "auto"}
             >
               <Image
-                src="/img/icono/life.webp"
+                src="/img/correo/mandala-turquesa.png"
                 alt=""
                 h={{ base: "26px", md: "32px" }}
                 objectFit="contain"
                 flexShrink={0}
-                style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.52)) drop-shadow(0 0 20px rgba(255,255,255,0.26))" }}
               />
               <Text
-                color="white"
+                color={TQ}
                 fontFamily="'EB Garamond', serif"
                 fontWeight="700"
                 fontSize={{ base: "md", md: "xl" }}
                 letterSpacing="0.2em"
                 textTransform="uppercase"
-                textShadow="0 0 12px rgba(255,255,255,0.49), 0 0 26px rgba(255,255,255,0.3)"
               >
                 {status === "sending" ? t("comun.enviando") : t("opiniones.enviar")}
               </Text>
@@ -458,7 +463,7 @@ export default function Opiniones() {
       )}
 
       {/* ── FLOR DE LA VIDA sobre el título ── */}
-      <FlorTitulo activo={mounted} />
+      <FlorTitulo activo={mounted} mandala />
 
       {/* ── TÍTULO ── */}
       <Flex
@@ -482,20 +487,6 @@ export default function Opiniones() {
           transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
         >
           {t("opiniones.titulo")}
-        </Text>
-        <Text
-          color="rgba(255,255,255,0.88)"
-          fontSize={{ base: "sm", md: "lg" }}
-          fontStyle="italic"
-          letterSpacing="0.05em"
-          lineHeight="1.5"
-          textShadow="0 0 8px rgba(255,255,255,0.38), 0 0 18px rgba(255,255,255,0.21)"
-          maxW={{ base: "100%", md: "512px" }}
-          opacity={mounted ? 1 : 0}
-          transform={mounted ? "translateY(0)" : "translateY(13px)"}
-          transition="opacity 0.85s ease 0.5s, transform 0.85s ease 0.5s"
-        >
-          {t("opiniones.subtitulo")}
         </Text>
       </Flex>
 
@@ -540,20 +531,6 @@ export default function Opiniones() {
           transition="opacity 0.8s ease, transform 0.8s ease"
         >
           {t("opiniones.dejar.titulo")}
-        </Text>
-        <Text
-          color="rgba(255,255,255,0.85)"
-          fontSize={{ base: "sm", md: "md" }}
-          fontStyle="italic"
-          letterSpacing="0.04em"
-          lineHeight="1.5"
-          textShadow="0 0 8px rgba(255,255,255,0.3)"
-          maxW={{ base: "100%", md: "480px" }}
-          opacity={dejarTitleReveal.visible ? 1 : 0}
-          transform={dejarTitleReveal.visible ? "translateY(0)" : "translateY(13px)"}
-          transition="opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s"
-        >
-          {t("opiniones.dejar.subtitulo")}
         </Text>
       </Flex>
 

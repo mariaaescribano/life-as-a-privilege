@@ -18,7 +18,8 @@ const SITIOS = [
   { clave: "header.cursos",       ruta: "/admin/cursos" },
   { clave: "header.arquetipos",   ruta: "/admin/astrologia-textos" },
   { clave: "header.suscriptores", ruta: "/admin/suscriptores" },
-  { clave: "header.premium",      ruta: "/admin/premium" },
+  // { clave: "header.premium",      ruta: "/admin/premium" }, // Premium (admin) aparcado
+  { clave: "header.informes",     ruta: "/admin/informes" },
 ] as const;
 
 

@@ -175,6 +175,24 @@ export const TEMA_CULTURA: Tema = {
   veloPortada: ["rgba(4,22,22,0.72)", "rgba(4,22,22,0.42)", "rgba(4,22,22,0.86)"],
 };
 
+/* ── Fisiología (papel oscuro) ────────────────────────────────────────────── */
+// Ciruela muy oscura con la tinta lila de la web (#c8b5d1), subida un punto para el papel.
+export const TEMA_FISIOLOGIA: Tema = {
+  disciplina: "Fisiología",
+  oscuro: true,
+  papel: [30, 14, 32],
+  papelVeta: [52, 28, 54],
+  tinta: [240, 230, 244],
+  tintaSuave: [212, 192, 222],
+  apagado: [150, 124, 160],
+  acento: [200, 181, 209],
+  acentoSuave: [226, 212, 232],
+  trama: [58, 34, 60],
+  acuarela: "/img/fondos/fisio.webp",
+  emblema: emblemaMandala,
+  veloPortada: ["rgba(20,8,22,0.72)", "rgba(20,8,22,0.42)", "rgba(20,8,22,0.86)"],
+};
+
 /* ── Colores de los tres doṣhas (comunes a todos los PDF de Ayurveda) ─────── */
 export const COLOR_DOSHA: Record<string, RGB> = {
   vata: [108, 78, 176],

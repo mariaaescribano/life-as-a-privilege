@@ -5,6 +5,7 @@ export const header = {
   "header.asesoria": "1:1 Coaching",
   "header.asesorias": "Coaching",
   "header.premium": "Premium",
+  "header.informes": "Reports",
   "header.disciplinas": "Disciplines",
   "header.material": "Material",
   "header.sobreMi": "About me",

@@ -2441,3 +2441,9 @@ El pago se comprueba siempre. Lo que no se comprueba al entrar en cada página e
 - **Tests:** `backend/src/premium/*.spec.ts` (servicio, guards y cron) y el caso premium en `payment.service.spec.ts`. Frontend sin runner de tests.
 - **WhatsApp desde el móvil de María (sin Twilio):** si `TWILIO_*` no está configurado, `POST /premium/admin/contenido` devuelve `avisos.manual` (nombre + teléfono internacional) y `avisos.textoWhatsapp`; `/admin/premium` pinta un botón por persona con `https://wa.me/<tel>?text=…`, que abre el WhatsApp de María con el mensaje escrito. Con Twilio configurado, `manual` va vacío y se manda solo.
 - **Lista permanente de WhatsApp:** `GET /premium/admin/whatsapp` (admin) devuelve quien tiene el acceso al día y teléfono (primero quien eligió WhatsApp). `/admin/premium` la pinta siempre, con un enlace `wa.me` por persona que lleva el mensaje escrito en la caja (o el del último publicado).
+
+## Informes · lo técnico
+
+- Página: `frontend/src/app/admin/AdminInformes.tsx` (ruta `/admin/informes`, menú «Informes»). Borrador en `localStorage` (`informes:borrador:v1`); nada se guarda en la BD.
+- PDF: `utils/generateInformePdf.ts` sobre el mismo taller de las disciplinas (`utils/pdf/atelier.ts`) en «modo informe» (`TallerOpts.informe`): `marcoInforme()` pinta la píldora de cabecera (mandala `/img/correo/mandala-turquesa.png` teñido con el acento + icono = `tema.emblema`) y la caja de papel sobre la foto de `fondo`. Nombre de la disciplina alineado a mano (jsPDF no cuenta el espaciado al alinear a la derecha). `TEMA_FISIOLOGIA` se creó para esto.
+- Correo: `POST /informes/enviar` (`correoSesion/informes.controller.ts`, JwtAuthGuard + MariaGuard). Multipart (`pdf` + `para`, `asunto`, `mensaje`, `prueba`); PDF ≤ 12 MB y debe empezar por `%PDF`; máx. 10 destinatarios, un correo por persona; `MailService.enviarInforme` + adjuntos en `enviar()`. El servidor no guarda el PDF ni los destinatarios.

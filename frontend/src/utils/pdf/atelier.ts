@@ -233,6 +233,27 @@ export interface TallerOpts {
   titulo: string;
   /** Acuarela distinta a la del tema (p. ej. la del doṣha concreto). */
   acuarela?: string;
+  /**
+   * MODO INFORME (los documentos que María escribe en /admin/informes para sus clientes): la foto de
+   * `fondo` llena toda la hoja, sin cajas encima; la cabecera lleva el mandala y «MARÍA ESCRIBANO» a la
+   * izquierda y el icono con el nombre de la disciplina a la derecha. El color de la letra es el del
+   * tema que se pase (en los informes, el Txt de la disciplina). `disciplina` es el nombre de la derecha.
+   */
+  informe?: { disciplina: string; /** El icono de siempre de la disciplina (PNG en base64); sin él, el emblema del taller. */ icono?: string };
+}
+
+/** El mandala de la marca (PNG con fondo transparente) repintado de un solo color. */
+function mandalaTeñido(img: HTMLImageElement, color: RGB): string {
+  const L = 240;
+  const c = document.createElement("canvas");
+  c.width = L; c.height = L;
+  const ctx = c.getContext("2d")!;
+  ctx.imageSmoothingQuality = "high";
+  ctx.drawImage(img, 0, 0, L, L);
+  ctx.globalCompositeOperation = "source-in";
+  ctx.fillStyle = rgbCss(color);
+  ctx.fillRect(0, 0, L, L);
+  return c.toDataURL("image/png");
 }
 
 /* ── El taller ────────────────────────────────────────────────────────────── */
@@ -250,8 +271,20 @@ export class Taller {
   /** Numeral fantasma del capítulo en curso (marca de agua de la página). */
   private capituloNum = 0;
   private readonly conFondo: boolean;
+  /** Nombre de la disciplina de la cabecera del informe; null = no es un informe. */
+  private readonly informe: string | null;
+  /** El icono de la disciplina para la cabecera del informe (PNG en base64), si lo hay. */
+  private readonly informeIcono: string | null;
+  /** El mandala de la marca teñido con el acento de la disciplina (PNG en base64). */
+  private readonly mandalaTenido: string | null;
 
-  private constructor(tema: Tema, opts: TallerOpts, img: HTMLImageElement | null, fondoImg: HTMLImageElement | null = null) {
+  private constructor(
+    tema: Tema,
+    opts: TallerOpts,
+    img: HTMLImageElement | null,
+    fondoImg: HTMLImageElement | null = null,
+    mandala: HTMLImageElement | null = null,
+  ) {
     this.tema = tema;
     this.titulo = opts.titulo;
     this.doc = new jsPDF({ unit: "mm", format: "a4", orientation: "portrait", compress: true });
@@ -260,6 +293,9 @@ export class Taller {
     // se come en silencio lo que no tiene (ver glifos.ts).
     blindarFuente(this.doc);
     this.conFondo = !!fondoImg;
+    this.informe = opts.informe ? opts.informe.disciplina : null;
+    this.informeIcono = opts.informe?.icono ?? null;
+    this.mandalaTenido = opts.informe && mandala ? mandalaTeñido(mandala, tema.acento) : null;
     this.papel = fondoImg ? fondoDeFoto(fondoImg) : texturaPapel(tema);
     this.lavado = fondoImg ? null : lavadoCabecera(tema, img);
     this.portadaImg = lienzoPortada(tema, img);
@@ -269,7 +305,8 @@ export class Taller {
   static async abrir(tema: Tema, opts: TallerOpts): Promise<Taller> {
     const img = await cargarImagen(opts.acuarela ?? tema.acuarela);
     const fondoImg = opts.fondo ? await cargarImagen(opts.fondo) : null;
-    return new Taller(tema, opts, img, fondoImg);
+    const mandala = opts.informe ? await cargarImagen("/img/correo/mandala-turquesa.png") : null;
+    return new Taller(tema, opts, img, fondoImg, mandala);
   }
 
   /* ── Tipografía ─────────────────────────────────────────────────────── */
@@ -299,6 +336,13 @@ export class Taller {
 
     doc.addImage(this.papel, "JPEG", 0, 0, A4_W, A4_H, "papel", "FAST");
     if (this.lavado) doc.addImage(this.lavado, "JPEG", 0, 0, A4_W, 28, "lavado", "FAST");
+
+    // Informe: el marco propio (foto alrededor, píldora de cabecera y caja de papel). Nada más.
+    if (this.informe) {
+      this.marcoInforme();
+      this.y = 40;
+      return;
+    }
 
     // Marca de agua: el emblema de la disciplina, apenas insinuado.
     if (!this.conFondo) conAlfa(doc, t.oscuro ? 0.07 : 0.055, () => {
@@ -371,6 +415,67 @@ export class Taller {
       this.capituloNum = c0;
     }
     return cabe;
+  }
+
+  /**
+   * El marco de cada página de un informe. La foto de la disciplina llena TODA la hoja (nada de cajas
+   * encima) y la letra es la de la disciplina. Arriba, a la izquierda, el mandala con «MARÍA ESCRIBANO»
+   * y, a la derecha, el icono de la disciplina con su nombre; debajo, un filete fino.
+   */
+  private marcoInforme(): void {
+    const doc = this.doc;
+    const t = this.tema;
+
+    // Izquierda: el mandala y el nombre.
+    if (this.mandalaTenido) doc.addImage(this.mandalaTenido, "PNG", MARGEN, 9, 13, 13, "mandala", "FAST");
+    this.versalitas("María Escribano", MARGEN + 17.5, 17.2, 9.4, t.tinta);
+
+    // Derecha: el nombre de la disciplina y, a su izquierda, su icono. jsPDF no cuenta el espaciado
+    // entre letras al alinear a la derecha, así que se mide a mano y se escribe alineado a la izquierda.
+    const nombre = (this.informe ?? "").toUpperCase();
+    const tam = 8.8;
+    const espaciado = tam * 0.16;
+    this.fuente("normal", tam, t.tinta);
+    doc.setCharSpace(0);
+    const ancho = doc.getTextWidth(nombre) + Math.max(0, nombre.length - 1) * espaciado;
+    const xDerecha = A4_W - MARGEN;
+    this.versalitas(nombre, xDerecha - ancho, 17.2, tam, t.tinta);
+    if (this.informeIcono) doc.addImage(this.informeIcono, "PNG", xDerecha - ancho - 12.5, 10.4, 9.2, 9.2, "icono", "FAST");
+    else t.emblema(doc, xDerecha - ancho - 7.5, 15.4, 4.8, t.acento, t.papel);
+
+    // Filete bajo la cabecera y número de página abajo.
+    doc.setDrawColor(...t.acento);
+    doc.setLineWidth(0.3);
+    doc.line(MARGEN, 26, A4_W - MARGEN, 26);
+    this.fuente("normal", 9, t.tinta);
+    doc.text(String(this.pagina), A4_W - MARGEN, A4_H - 12, { align: "right" });
+  }
+
+  /** Título de un informe: grande, con su filete y, debajo, para quién es y la fecha. */
+  tituloInforme(titulo: string, para?: string): void {
+    const doc = this.doc;
+    const t = this.tema;
+    this.fuente("bold", 22, t.tinta);
+    const lineas = doc.splitTextToSize((titulo || "").trim(), ANCHO) as string[];
+    for (const l of lineas) { doc.text(l, MARGEN, this.y); this.y += 9.5; }
+    this.y += 1;
+    doc.setDrawColor(...t.acento);
+    doc.setLineWidth(0.5);
+    doc.line(MARGEN, this.y, MARGEN + 26, this.y);
+    this.y += 7;
+    const quien = (para || "").trim();
+    this.versalitas(quien ? `Para ${quien} · ${this.fecha}` : this.fecha, MARGEN, this.y, 8, t.apagado);
+    this.y += 11;
+  }
+
+  /** Encabezado de sección dentro de un texto largo (más pequeño que un capítulo, sin número). */
+  encabezado(texto: string): void {
+    this.reservar(22);
+    this.y += 4;
+    this.fuente("bold", 14, this.tema.tinta);
+    const l = this.doc.splitTextToSize(texto, ANCHO) as string[];
+    l.forEach((x) => { this.doc.text(x, MARGEN, this.y); this.y += 6.4; });
+    this.y += 1.6;
   }
 
   /** Lo que se lee arriba a la derecha en las páginas que se abran a partir de ahora. */

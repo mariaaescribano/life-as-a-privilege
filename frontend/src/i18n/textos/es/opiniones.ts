@@ -1,11 +1,9 @@
 /** Experiencias reales (/opiniones): listado y formulario para dejar la tuya. */
 export const opiniones = {
   "opiniones.titulo": "Experiencias reales",
-  "opiniones.subtitulo": "Experiencias de quienes ya han participado en El Mapa",
   "opiniones.vacio": "Todavía no hay opiniones publicadas. ¡Sé la primera persona en compartir la tuya!",
 
   "opiniones.dejar.titulo": "Deja tu opinión",
-  "opiniones.dejar.subtitulo": "Comparte tu experiencia con El Mapa",
 
   "opiniones.campo.nombre": "NOMBRE",
   "opiniones.campo.email": "EMAIL (OPCIONAL)",

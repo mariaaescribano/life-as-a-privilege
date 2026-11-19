@@ -260,6 +260,69 @@ export class MailService {
     return await this.enviar(email, asunto, html, 'resumen de sesión', { copiaAdmin: true });
   }
 
+  /** Las disciplinas de los informes: nombre, color de fondo (por si el correo no pinta la foto) y color de letra (Txt de la web). */
+  static readonly DISCIPLINAS_INFORME: Record<string, { nombre: string; bg: string; txt: string }> = {
+    astrologia: { nombre: 'Astrología', bg: '#1e296b', txt: '#feffe4' },
+    psicologia: { nombre: 'Psicología', bg: '#daa889', txt: '#5e2d10' },
+    ayurveda: { nombre: 'Ayurveda', bg: '#ffffff', txt: '#853e0b' },
+    tcm: { nombre: 'Medicina China', bg: '#6b0404', txt: '#ffa2a2' },
+    fisiologia: { nombre: 'Fisiología', bg: '#331c35', txt: '#c8b5d1' },
+    nutricion: { nombre: 'Nutrición', bg: '#e4f8e1', txt: '#2b362a' },
+    cabala: { nombre: 'Cábala', bg: '#3b2612', txt: '#bd814d' },
+    cultura: { nombre: 'Cultura', bg: '#0c3c3c', txt: '#79dcd4' },
+  };
+
+  /**
+   * El correo de un INFORME (el PDF que María escribe en /admin/informes): un mensaje breve y el PDF
+   * adjunto. Con `disciplina`, TODO el correo es la foto de esa disciplina (vertical: si la original era
+   * horizontal está girada, ver scripts/informes/fondos-correo.mjs) y TODA la letra es su Txt, sin cajas
+   * encima. Sin disciplina (o desconocida), el mármol de la casa. `mensaje` es texto plano (se escapa).
+   */
+  async enviarInforme(
+    email: string,
+    asunto: string,
+    mensaje: string,
+    pdf: { nombre: string; contenido: Buffer },
+    disciplina?: string,
+  ): Promise<boolean> {
+    const d = MailService.DISCIPLINAS_INFORME[disciplina ?? ''];
+    const tinta = d ? d.txt : TINTA_MARMOL;
+    const texto = (mensaje ?? '').trim();
+    const cuerpo =
+      (texto ? this.textoAHtml(texto, tinta) : '') +
+      `<p style="margin:20px 0 0;font-family:${SERIF};font-size:16px;line-height:1.7;color:${tinta};font-style:italic;">Te adjunto el informe en PDF.</p>` +
+      `<p style="margin:28px 0 0;font-family:${SERIF};font-size:17px;line-height:1.75;text-align:right;color:${tinta};">Un abrazo,<br>María</p>`;
+
+    let html: string;
+    if (d) {
+      const imagenes = webParaImagenes(this.frontendUrl);
+      const foto = `${imagenes}/img/correo/informe-${disciplina}.jpg`;
+      const mandala = `${imagenes}/img/correo/informe-mandala-${disciplina}.png`;
+      // El icono de siempre de la disciplina (el de GlobalVariables), en su color de letra.
+      const icono = `${imagenes}/img/correo/informe-icono-${disciplina}.png`;
+      html = `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="${d.bg}" background="${foto}"
+                     style="max-width:600px;margin:0 auto;border-radius:16px;background-color:${d.bg};background-image:url('${foto}');background-size:cover;background-position:center;">
+        <tr><td style="padding:34px 38px 14px;font-family:${SERIF};color:${tinta};">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+            <td width="46" valign="middle"><img src="${mandala}" width="38" height="38" alt="" style="display:block;border:0;"></td>
+            <td valign="middle" style="font-family:${SERIF};font-size:13px;letter-spacing:0.26em;text-transform:uppercase;color:${tinta};">María Escribano</td>
+            <td valign="middle" align="right" style="font-family:${SERIF};font-size:12px;letter-spacing:0.22em;text-transform:uppercase;color:${tinta};"><img src="${icono}" width="24" height="24" alt="" style="vertical-align:middle;border:0;margin-right:10px;">${this.escaparHtml(d.nombre)}</td>
+          </tr></table>
+          <div style="margin:22px 0 0;border-top:1px solid ${tinta};font-size:0;line-height:0;">&nbsp;</div>
+        </td></tr>
+        <tr><td style="padding:18px 38px 44px;font-family:${SERIF};color:${tinta};">
+          <h1 style="margin:0 0 18px;font-family:${SERIF};font-size:28px;line-height:1.2;font-weight:700;color:${tinta};">${this.escaparHtml(asunto)}</h1>
+          ${cuerpo}
+        </td></tr></table>`;
+    } else {
+      html = marcoMarmol({ web: this.frontendUrl, titulo: this.escaparHtml(asunto), cuerpo });
+    }
+    return await this.enviar(email, asunto, html, 'informe', {
+      copiaAdmin: true,
+      adjuntos: [{ nombre: pdf.nombre, contenido: pdf.contenido, tipo: 'application/pdf' }],
+    });
+  }
+
   /** La web, para los enlaces de los correos. */
   private get frontendUrl(): string {
     const url = (process.env.EMAIL_LINKS_URL || process.env.FRONTEND_URL || '').trim();
@@ -292,6 +355,8 @@ export class MailService {
        * referencian con `src="cid:<cid>"`.
        */
       imagenes?: { cid: string; nombre: string; contenido: Buffer }[];
+      /** Archivos adjuntos (p. ej. el PDF de un informe). */
+      adjuntos?: { nombre: string; contenido: Buffer; tipo: string }[];
     },
     // Devuelve si el correo ha salido de verdad. Casi todos los envíos lo
     // ignoran (son avisos: si uno se pierde, no se cae nada), pero el del
@@ -317,12 +382,19 @@ export class MailService {
         bcc: copia,
         subject,
         html,
-        attachments: opciones?.imagenes?.map((img) => ({
-          filename: img.nombre,
-          content: img.contenido,
-          cid: img.cid,
-          contentType: 'image/png',
-        })),
+        attachments: [
+          ...(opciones?.imagenes ?? []).map((img) => ({
+            filename: img.nombre,
+            content: img.contenido,
+            cid: img.cid,
+            contentType: 'image/png',
+          })),
+          ...(opciones?.adjuntos ?? []).map((a) => ({
+            filename: a.nombre,
+            content: a.contenido,
+            contentType: a.tipo,
+          })),
+        ],
       });
       return true;
     } catch (err) {

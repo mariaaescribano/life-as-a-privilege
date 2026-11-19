@@ -11,6 +11,8 @@ export const header = {
   /** Menú de administración: la lista de personas asesoradas. */
   "header.asesorias": "Asesorías",
   "header.premium": "Premium",
+  /** Menú de administración: los documentos que se escriben para mandar a clientes. */
+  "header.informes": "Informes",
   "header.disciplinas": "Disciplinas",
   "header.material": "Material",
   "header.sobreMi": "Sobre mí",

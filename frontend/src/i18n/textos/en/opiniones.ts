@@ -1,10 +1,8 @@
 export const opiniones = {
   "opiniones.titulo": "Real experiences",
-  "opiniones.subtitulo": "Experiences from people who have already taken part in The Map",
   "opiniones.vacio": "No reviews published yet. Be the first to share yours!",
 
   "opiniones.dejar.titulo": "Leave your review",
-  "opiniones.dejar.subtitulo": "Share your experience with The Map",
 
   "opiniones.campo.nombre": "NAME",
   "opiniones.campo.email": "EMAIL (OPTIONAL)",

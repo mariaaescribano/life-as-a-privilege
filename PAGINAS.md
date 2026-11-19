@@ -285,3 +285,18 @@ Casos que están cubiertos:
 **Para María** — `/admin/premium`: elige Reel o Podcast, pega el **enlace de YouTube**, escribe el título y el mensaje que recibirá la gente. Si deja el mensaje vacío sale uno de respaldo («Hay un reel nuevo: «título». Ya puedes verlo.»). Al publicar, el email sale solo a quien tiene el mes al día; los WhatsApp los manda ella con los botones de la lista (cada uno abre su WhatsApp con el mensaje escrito).
 
 ---
+
+## Informes (solo María, en /admin/informes)
+
+Los documentos que María escribe para mandar a sus clientes.
+
+1. Elige la disciplina con los botones (Astrología, Psicología, Ayurveda, Medicina China, Fisiología,
+   Nutrición, Cábala, Cultura). Cambia la foto de fondo, los colores del papel y el icono de la cabecera.
+2. Escribe el título, para quién es (opcional) y el texto. A la derecha ve el PDF tal cual saldrá.
+3. Cada página lleva arriba, a la izquierda, el mandala con «MARÍA ESCRIBANO» y, a la derecha, el icono y el
+   nombre de la disciplina. El texto va sobre una caja de papel y la foto se ve alrededor.
+4. «Descargar PDF», «Enviarme prueba» (solo a su correo) o «Enviar»: escribe uno o varios correos, el asunto y,
+   si quiere, un mensaje. Cada persona recibe su correo con el PDF adjunto y a María le llega una copia oculta.
+
+Marcas del texto: línea en blanco = párrafo nuevo; «# » sección; «## » antetítulo; «- » lista; «---» raya;
+«> » frase de cierre. La negrita y la cursiva dentro de un párrafo no se ven en el PDF.

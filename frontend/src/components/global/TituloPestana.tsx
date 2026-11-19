@@ -74,6 +74,7 @@ export default function TituloPestana() {
             case "astrologia-textos": return t("header.arquetipos");
             case "suscriptores": return t("header.suscriptores");
             case "premium": return t("header.premium");
+            case "informes": return t("header.informes");
             case "mi-diario": return "Diario";
             default: return undefined;
           }

@@ -150,7 +150,8 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   const adminCursosActive = path.startsWith("/admin/cursos");
   const adminArquetiposActive = path.startsWith("/admin/astrologia-textos");
   const adminSuscriptoresActive = path.startsWith("/admin/suscriptores");
-  const adminPremiumActive = path.startsWith("/admin/premium");
+  // const adminPremiumActive = path.startsWith("/admin/premium"); // Premium (admin) aparcado
+  const adminInformesActive = path.startsWith("/admin/informes");
 
   // Cambiar de página cierra el menú: si no, al volver navegando el panel
   // seguiría abierto encima de la página nueva.
@@ -225,8 +226,10 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
           { etiqueta: t("header.arquetipos"),   onSelect: () => navigate("/admin/astrologia-textos"), activo: adminArquetiposActive },
           // Los correos apuntados en el formulario de la portada.
           { etiqueta: t("header.suscriptores"), onSelect: () => navigate("/admin/suscriptores"),      activo: adminSuscriptoresActive },
-          // Subir podcasts y reels del contenido premium (desde el móvil).
-          { etiqueta: t("header.premium"),      onSelect: () => navigate("/admin/premium"),            activo: adminPremiumActive },
+          // Subir podcasts y reels del contenido premium (desde el móvil). APARCADO.
+          // { etiqueta: t("header.premium"),      onSelect: () => navigate("/admin/premium"),            activo: adminPremiumActive },
+          // Documentos para clientes: se escriben, se descargan en PDF y se mandan por correo.
+          { etiqueta: t("header.informes"),     onSelect: () => navigate("/admin/informes"),            activo: adminInformesActive },
           itemSalir,
         ]
       : [

@@ -83,7 +83,8 @@ const PremiumRegistro = lazy(() => import("./app/web/PremiumRegistro"));
 const BajaLista = lazy(() => import("./app/web/BajaLista"));
 const PremiumAvisos = lazy(() => import("./app/web/PremiumAvisos"));
 const PremiumContenido = lazy(() => import("./app/web/PremiumContenido"));
-const AdminPremium = lazy(() => import("./app/admin/AdminPremium"));
+// Premium (admin): apartado aparcado, el panel sigue en el repo. Para revivirlo: descomentar esto, la ruta y el menú.
+// const AdminPremium = lazy(() => import("./app/admin/AdminPremium"));
 const Disciplinas = lazy(() => import("./app/web/Disciplinas"));
 const LibrosPage = lazy(() => import("./app/web/LibrosPage"));
 const DescargarLibroPage = lazy(() => import("./app/web/DescargarLibroPage"));
@@ -141,6 +142,7 @@ const AdminAstrologiaTextos = lazy(() => import("./app/admin/AdminAstrologiaText
 const AdminSuscriptores = lazy(() => import("./app/admin/AdminSuscriptores"));
 const AdminDiario = lazy(() => import("./app/admin/AdminDiario"));
 const AdminActividad = lazy(() => import("./app/admin/AdminActividad"));
+const AdminInformes = lazy(() => import("./app/admin/AdminInformes"));
 const NoEncontrada = lazy(() => import("./app/web/NoEncontrada"));
 const MetodoPsicologia = lazyConMetodo(() => import("./app/metodo/MetodoPsicologia"));
 const MetodoPsicologiaProblema = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaProblema"));
@@ -493,6 +495,7 @@ export default function App()
       <Route path="/admin/cursos" element={<AdminRoute><AdminCursos /></AdminRoute>} />
       <Route path="/admin/cursos/:id" element={<AdminRoute><AdminCursoEditor /></AdminRoute>} />
       <Route path="/admin/astrologia-textos" element={<AdminRoute><AdminAstrologiaTextos /></AdminRoute>} />
+      <Route path="/admin/informes" element={<AdminRoute><AdminInformes /></AdminRoute>} />
       {/* /admin/accesos está aparcado: regalar, revocar y borrar cuentas viven
           ahora en la página de cada persona (/admin/asesorias/:userId). */}
       {/* <Route path="/admin/accesos" element={<AdminRoute><AdminAccesos /></AdminRoute>} /> */}
@@ -506,8 +509,8 @@ export default function App()
       {/* <Route path="/admin/videos" element={<AdminRoute><AdminVideos /></AdminRoute>} /> */}
       {/* Antes de /admin/:disciplina, que si no se lo tragaría como disciplina. */}
       <Route path="/admin/suscriptores" element={<AdminRoute><AdminSuscriptores /></AdminRoute>} />
-      {/* Subir podcasts y reels (desde el móvil) del contenido premium. */}
-      <Route path="/admin/premium" element={<AdminRoute><AdminPremium /></AdminRoute>} />
+      {/* Subir podcasts y reels (desde el móvil) del contenido premium. APARCADO (ver el import arriba). */}
+      {/* <Route path="/admin/premium" element={<AdminRoute><AdminPremium /></AdminRoute>} /> */}
       {/* Antes de /admin/:disciplina/:userId, que si no se tragaria «diario» como disciplina. */}
       <Route path="/admin/diario/:userId" element={<AdminRoute><AdminDiario /></AdminRoute>} />
       <Route path="/admin/actividad/:userId" element={<AdminRoute><AdminActividad /></AdminRoute>} />
