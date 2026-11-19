@@ -10,8 +10,8 @@
 // Mini-formato del texto (una marca por línea, párrafos separados por una línea en blanco):
 //   # Título de sección      ## Antetítulo en versalitas      - elemento de lista
 //   --- raya                 > frase de cierre (centrada, en cursiva)
-// El **negrita** y la *cursiva* en mitad de un párrafo no se pintan en el PDF (el taller escribe
-// cada párrafo con un solo estilo): se quitan las marcas y queda el texto limpio.
+// Dentro de un párrafo valen **negrita** y *cursiva*, y se respetan los saltos de línea. Los símbolos
+// de los planetas (☉ ☽ ☿ ♀ ♆ ♅…) y los emoji se pintan como imagen en su sitio (ver pdf/glifosTexto.ts).
 //
 // OJO al importarlo: arrastra jsPDF y la tipografía. La pantalla lo carga con `await import(...)`.
 // ─────────────────────────────────────────────────────────────────────────
@@ -61,6 +61,8 @@ export interface InformeDatos {
   para?: string;
   /** El texto, con el mini-formato de arriba. */
   cuerpo: string;
+  /** Una imagen (PNG en base64) justo bajo el título, sobre una tarjeta blanca (p. ej. la rueda de una carta). */
+  imagen?: { data: string; w: number; h: number };
 }
 
 /** Quita las marcas de negrita y cursiva en mitad de la línea. */
@@ -80,7 +82,8 @@ export function bloquesDeTexto(cuerpo: string): Bloque[] {
   let lista: string[] = [];
   // Los saltos de línea de María se respetan: una línea escrita debajo de otra queda debajo en el PDF.
   const cerrarParrafo = () => {
-    if (parrafo.length) out.push({ tipo: "p", texto: parrafo.map(sinMarcas).join("\n") });
+    // El párrafo conserva sus **negritas** y *cursivas*: las pinta `parrafoRico`.
+    if (parrafo.length) out.push({ tipo: "p", texto: parrafo.join("\n") });
     parrafo = [];
   };
   let enBlanco = 0;
@@ -160,12 +163,13 @@ export async function generarInforme(d: InformeDatos): Promise<{ blob: Blob; nom
 
   taller.nuevaPagina();
   taller.tituloInforme(titulo, d.para);
+  if (d.imagen) taller.imagenTarjeta(d.imagen.data, d.imagen.w, d.imagen.h, 118);
 
   for (const b of bloquesDeTexto(d.cuerpo)) {
     switch (b.tipo) {
       case "h1": taller.encabezado(b.texto); break;
       case "h2": taller.antetitulo(b.texto); break;
-      case "p": taller.parrafo(b.texto); break;
+      case "p": taller.parrafoRico(b.texto); break;
       case "lista": taller.lista(b.items); break;
       case "raya": taller.separador(); break;
       case "espacio": taller.espacio(5.5 * b.lineas); break;

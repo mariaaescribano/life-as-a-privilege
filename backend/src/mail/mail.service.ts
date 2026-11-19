@@ -190,25 +190,6 @@ export class MailService {
               font-weight:600;text-decoration:none;${estilo}">${label}</a>`;
   }
 
-  // ───────────────────────────────────────────────────────────────────────────
-  // «Resumen de sesión»: el correo que María escribe a mano tras una sesión (editor en
-  // /admin/asesorias/:userId/correo). El HTML SIEMPRE se construye aquí, a partir de datos
-  // (título, texto, fondo y dos colores): del navegador nunca llega HTML, y los colores y el
-  // fondo solo valen si están en las listas de abajo.
-  // ───────────────────────────────────────────────────────────────────────────
-
-  /** Las disciplinas a elegir para un bloque: su foto teñida y su color de letra (el mismo TRAJE de los demás correos). */
-  static readonly DISCIPLINAS_SESION: Record<string, { nombre: string; velo: string; foto: string; txt: string }> = {
-    metodo:     { nombre: 'Astrología',     velo: TRAJE.metodo.velo,     foto: 'metodo',     txt: TRAJE.metodo.txt },
-    psicologia: { nombre: 'Psicología',     velo: TRAJE.psicologia.velo, foto: 'psicologia', txt: TRAJE.psicologia.txt },
-    ayurveda:   { nombre: 'Ayurveda',       velo: TRAJE.ayurveda.velo,   foto: 'ayurveda',   txt: TRAJE.ayurveda.txt },
-    tcm:        { nombre: 'Medicina China', velo: TRAJE.tcm.velo,        foto: 'tcm',        txt: TRAJE.tcm.txt },
-    fisiologia: { nombre: 'Fisiología',     velo: TRAJE.fisiologia.velo, foto: 'fisiologia', txt: TRAJE.fisiologia.txt },
-    nutricion:  { nombre: 'Nutrición',      velo: TRAJE.nutricion.velo,  foto: 'nutricion',  txt: TRAJE.nutricion.txt },
-    cabala:     { nombre: 'Cábala',         velo: TRAJE.cabala.velo,     foto: 'cabala',     txt: TRAJE.cabala.txt },
-    cultura:    { nombre: 'Cultura',        velo: TRAJE.cultura.velo,    foto: 'cultura',    txt: TRAJE.cultura.txt },
-  };
-
   /** Texto con mini-formato (**negrita**, *cursiva*, `---` raya, línea en blanco = párrafo) → HTML seguro. */
   private textoAHtml(texto: string, color: string): string {
     const marcas = (t: string) =>
@@ -228,38 +209,6 @@ export class MailService {
       .join('');
   }
 
-  /**
-   * El HTML del resumen de sesión (el mismo para la vista previa y para el envío): el mármol de la casa
-   * de base, el título en turquesa oscuro y, debajo, los bloques que María quiera, cada uno de SU
-   * disciplina (su foto y su color de letra). Un bloque sin disciplina va directo sobre el mármol.
-   */
-  construirResumenSesion(o: { titulo: string; bloques: { disciplina?: string; texto: string }[] }): string {
-    const imagenes = webParaImagenes(this.frontendUrl);
-    const partes = (o.bloques ?? [])
-      .filter((b) => (b?.texto ?? '').trim())
-      .map((b) => {
-        const d = MailService.DISCIPLINAS_SESION[b.disciplina ?? ''];
-        if (!d) return this.textoAHtml(b.texto, TINTA_MARMOL);
-        const foto = `${imagenes}/img/correo/${d.foto}.jpg`;
-        return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="${d.velo}" background="${foto}"
-                       style="margin:24px 0 0;border-radius:14px;background-color:${d.velo};background-image:url('${foto}');background-size:cover;background-position:center;">
-          <tr><td style="padding:10px 26px 28px;font-family:${SERIF};color:${d.txt};">
-            <div style="padding-top:18px;font-family:${SERIF};font-size:12px;letter-spacing:0.22em;text-transform:uppercase;color:${d.txt};">${this.escaparHtml(d.nombre)}</div>
-            ${this.textoAHtml(b.texto, d.txt)}
-          </td></tr></table>`;
-      })
-      .join('');
-    const cuerpo =
-      partes +
-      `<p style="margin:28px 0 0;font-family:${SERIF};font-size:17px;line-height:1.75;text-align:right;color:${TINTA_MARMOL};">Un abrazo,<br>María</p>`;
-    return marcoMarmol({ web: this.frontendUrl, titulo: this.escaparHtml(o.titulo), cuerpo });
-  }
-
-  /** Manda el resumen. `copiaAdmin`: una copia oculta a NOTIFY_EMAIL, para que quede en tu correo. */
-  async enviarResumenSesion(email: string, asunto: string, html: string): Promise<boolean> {
-    return await this.enviar(email, asunto, html, 'resumen de sesión', { copiaAdmin: true });
-  }
-
   /** Las disciplinas de los informes: nombre, color de fondo (por si el correo no pinta la foto) y color de letra (Txt de la web). */
   static readonly DISCIPLINAS_INFORME: Record<string, { nombre: string; bg: string; txt: string }> = {
     astrologia: { nombre: 'Astrología', bg: '#1e296b', txt: '#feffe4' },
@@ -273,33 +222,62 @@ export class MailService {
   };
 
   /**
-   * El correo de un INFORME (el PDF que María escribe en /admin/informes): un mensaje breve y el PDF
-   * adjunto. Con `disciplina`, TODO el correo es la foto de esa disciplina (vertical: si la original era
-   * horizontal está girada, ver scripts/informes/fondos-correo.mjs) y TODA la letra es su Txt, sin cajas
-   * encima. Sin disciplina (o desconocida), el mármol de la casa. `mensaje` es texto plano (se escapa).
+   * El correo de un INFORME (el PDF que María escribe en /admin/informes) con lo que ella quiera añadir.
+   *  · `fondo`: 'disciplina' (la foto vertical de la disciplina, toda la letra en su Txt) o 'marmol' (el
+   *    mármol de la casa, con el mandala a la izquierda de MARÍA ESCRIBANO). Sin disciplina, mármol.
+   *  · `mensaje`: texto con **negrita**, *cursiva*, `---`, emojis y `[icono:<clave>]` (el icono de siempre de
+   *    esa disciplina, en el color de letra del correo).
+   *  · `fotos`: incrustadas (cid), una debajo de otra, tras el mensaje.
+   *  · `pdf`: el informe compuesto en el navegador (puede faltar) y `adjuntos`: otros PDF que ella sube.
    */
   async enviarInforme(
     email: string,
     asunto: string,
     mensaje: string,
-    pdf: { nombre: string; contenido: Buffer },
-    disciplina?: string,
+    o: {
+      pdf?: { nombre: string; contenido: Buffer };
+      disciplina?: string;
+      fondo?: string;
+      fotos?: { nombre: string; contenido: Buffer; tipo: string }[];
+      adjuntos?: { nombre: string; contenido: Buffer }[];
+    },
   ): Promise<boolean> {
-    const d = MailService.DISCIPLINAS_INFORME[disciplina ?? ''];
-    const tinta = d ? d.txt : TINTA_MARMOL;
+    const fotos = o.fotos ?? [];
+    const d = MailService.DISCIPLINAS_INFORME[o.disciplina ?? ''];
+    const conDisciplina = !!d && o.fondo !== 'marmol';
+    const tinta = conDisciplina ? d.txt : TINTA_MARMOL;
+    const imagenes = webParaImagenes(this.frontendUrl);
     const texto = (mensaje ?? '').trim();
+
+    // [icono:tcm] → el icono de siempre de esa disciplina, del color de letra del correo.
+    const sufijo = conDisciplina ? '' : '-tq';
+    const conIconos = (html: string) =>
+      html.replace(
+        /\[icono:(astrologia|psicologia|ayurveda|tcm|fisiologia|nutricion|cabala|cultura)\]/g,
+        (_m, k: string) =>
+          `<img src="${imagenes}/img/correo/informe-icono-${k}${sufijo}.png" width="22" height="22" alt="" style="display:inline-block;vertical-align:middle;border:0;margin:0 3px;">`,
+      );
+
+    const bloqueFotos = fotos
+      .map(
+        (_f, i) =>
+          `<img src="cid:informe-foto-${i}" alt="" width="100%" style="display:block;width:100%;max-width:524px;height:auto;margin:22px 0 0;border:0;border-radius:12px;">`,
+      )
+      .join('');
     const cuerpo =
-      (texto ? this.textoAHtml(texto, tinta) : '') +
-      `<p style="margin:20px 0 0;font-family:${SERIF};font-size:16px;line-height:1.7;color:${tinta};font-style:italic;">Te adjunto el informe en PDF.</p>` +
+      (texto ? conIconos(this.textoAHtml(texto, tinta)) : '') +
+      bloqueFotos +
+      (o.pdf
+        ? `<p style="margin:20px 0 0;font-family:${SERIF};font-size:16px;line-height:1.7;color:${tinta};font-style:italic;">Te adjunto el informe en PDF.</p>`
+        : '') +
       `<p style="margin:28px 0 0;font-family:${SERIF};font-size:17px;line-height:1.75;text-align:right;color:${tinta};">Un abrazo,<br>María</p>`;
 
     let html: string;
-    if (d) {
-      const imagenes = webParaImagenes(this.frontendUrl);
-      const foto = `${imagenes}/img/correo/informe-${disciplina}.jpg`;
-      const mandala = `${imagenes}/img/correo/informe-mandala-${disciplina}.png`;
+    if (conDisciplina) {
+      const foto = `${imagenes}/img/correo/informe-${o.disciplina}.jpg`;
+      const mandala = `${imagenes}/img/correo/informe-mandala-${o.disciplina}.png`;
       // El icono de siempre de la disciplina (el de GlobalVariables), en su color de letra.
-      const icono = `${imagenes}/img/correo/informe-icono-${disciplina}.png`;
+      const icono = `${imagenes}/img/correo/informe-icono-${o.disciplina}.png`;
       html = `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="${d.bg}" background="${foto}"
                      style="max-width:600px;margin:0 auto;border-radius:16px;background-color:${d.bg};background-image:url('${foto}');background-size:cover;background-position:center;">
         <tr><td style="padding:34px 38px 14px;font-family:${SERIF};color:${tinta};">
@@ -315,11 +293,18 @@ export class MailService {
           ${cuerpo}
         </td></tr></table>`;
     } else {
+      // El marco de la casa: el mármol, con el mandala a la izquierda de MARÍA ESCRIBANO.
       html = marcoMarmol({ web: this.frontendUrl, titulo: this.escaparHtml(asunto), cuerpo });
     }
+
+    const adjuntos = [
+      ...(o.pdf ? [{ nombre: o.pdf.nombre, contenido: o.pdf.contenido, tipo: 'application/pdf' }] : []),
+      ...(o.adjuntos ?? []).map((x) => ({ nombre: x.nombre, contenido: x.contenido, tipo: 'application/pdf' })),
+    ];
     return await this.enviar(email, asunto, html, 'informe', {
       copiaAdmin: true,
-      adjuntos: [{ nombre: pdf.nombre, contenido: pdf.contenido, tipo: 'application/pdf' }],
+      imagenes: fotos.map((f, i) => ({ cid: `informe-foto-${i}`, nombre: f.nombre, contenido: f.contenido, tipo: f.tipo })),
+      adjuntos,
     });
   }
 
@@ -354,7 +339,7 @@ export class MailService {
        * las imágenes remotas y siguen ahí dentro de un año. En el HTML se
        * referencian con `src="cid:<cid>"`.
        */
-      imagenes?: { cid: string; nombre: string; contenido: Buffer }[];
+      imagenes?: { cid: string; nombre: string; contenido: Buffer; /** por defecto image/png */ tipo?: string }[];
       /** Archivos adjuntos (p. ej. el PDF de un informe). */
       adjuntos?: { nombre: string; contenido: Buffer; tipo: string }[];
     },
@@ -387,7 +372,7 @@ export class MailService {
             filename: img.nombre,
             content: img.contenido,
             cid: img.cid,
-            contentType: 'image/png',
+            contentType: img.tipo ?? 'image/png',
           })),
           ...(opciones?.adjuntos ?? []).map((a) => ({
             filename: a.nombre,

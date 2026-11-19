@@ -259,43 +259,6 @@ export function MiniDiario() {
           <Box as="span" w="9px" h="9px" borderRadius="full" bg="#ffe7bd" boxShadow="0 0 10px #ffe7bd" aria-hidden />
         )}
       </Flex>
-
-      {/* ── «Correo»: solo María, encima de «Diario». Abre el editor del resumen de sesión en OTRA pestaña,
-          para ir preparándolo sin cerrar la página en la que está con la persona. ── */}
-      {esMaria && (
-        <Flex
-          as="button"
-          onClick={() => window.open(`/admin/asesorias/${userId}/correo`, "_blank", "noopener")}
-          position="fixed"
-          bottom={{ base: "198px", md: "246px" }}
-          right={{ base: "16px", md: "26px" }}
-          zIndex={1000}
-          align="center"
-          gap={{ base: 2, md: 3 }}
-          pl={{ base: 3, md: 4 }}
-          pr={{ base: 4, md: 6 }}
-          py={{ base: "10px", md: "13px" }}
-          borderRadius="full"
-          bg="#008080"
-          border={{ base: "1.5px solid rgba(255,255,255,0.8)", md: "2px solid rgba(255,255,255,0.9)" }}
-          boxShadow="0 0 18px rgba(255,255,255,0.28), 0 0 40px rgba(180,255,245,0.14)"
-          cursor="pointer"
-          transition="all 0.22s ease"
-          _hover={{ transform: "translateY(-2px)", boxShadow: "0 0 26px rgba(255,255,255,0.45), 0 0 54px rgba(180,255,245,0.22)" }}
-          _active={{ transform: "translateY(0)" }}
-          _focusVisible={focoBlanco}
-          aria-label="Correo"
-        >
-          <Box as="svg" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" flexShrink={0} w={{ base: "24px", md: "27px" }} h={{ base: "24px", md: "27px" }}>
-            <rect x="3" y="5" width="18" height="14" rx="2.2" />
-            <path d="M3.6 6.8 12 13l8.4-6.2" />
-          </Box>
-          <Text color="white" fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "lg" }} letterSpacing="0.06em" lineHeight="1">
-            Correo
-          </Text>
-        </Flex>
-      )}
-
       {/* ── «Diario»: solo María, justo encima de «Notas» (y de la barra de compañía). Escribe en su DIARIO. ── */}
       {esMaria && (
         <Flex

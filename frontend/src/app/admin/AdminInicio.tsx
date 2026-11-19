@@ -20,6 +20,7 @@ const SITIOS = [
   { clave: "header.suscriptores", ruta: "/admin/suscriptores" },
   // { clave: "header.premium",      ruta: "/admin/premium" }, // Premium (admin) aparcado
   { clave: "header.informes",     ruta: "/admin/informes" },
+  { clave: "header.correos",      ruta: "/admin/correos" },
 ] as const;
 
 

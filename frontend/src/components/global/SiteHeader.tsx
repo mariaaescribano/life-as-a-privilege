@@ -152,6 +152,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   const adminSuscriptoresActive = path.startsWith("/admin/suscriptores");
   // const adminPremiumActive = path.startsWith("/admin/premium"); // Premium (admin) aparcado
   const adminInformesActive = path.startsWith("/admin/informes");
+  const adminCorreosActive = path.startsWith("/admin/correos");
 
   // Cambiar de página cierra el menú: si no, al volver navegando el panel
   // seguiría abierto encima de la página nueva.
@@ -228,8 +229,9 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
           { etiqueta: t("header.suscriptores"), onSelect: () => navigate("/admin/suscriptores"),      activo: adminSuscriptoresActive },
           // Subir podcasts y reels del contenido premium (desde el móvil). APARCADO.
           // { etiqueta: t("header.premium"),      onSelect: () => navigate("/admin/premium"),            activo: adminPremiumActive },
-          // Documentos para clientes: se escriben, se descargan en PDF y se mandan por correo.
+          // Informes: documentos para clientes en PDF. Correos: los correos que se mandan (con o sin informe).
           { etiqueta: t("header.informes"),     onSelect: () => navigate("/admin/informes"),            activo: adminInformesActive },
+          { etiqueta: t("header.correos"),      onSelect: () => navigate("/admin/correos"),             activo: adminCorreosActive },
           itemSalir,
         ]
       : [

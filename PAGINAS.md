@@ -295,8 +295,21 @@ Los documentos que María escribe para mandar a sus clientes.
 2. Escribe el título, para quién es (opcional) y el texto. A la derecha ve el PDF tal cual saldrá.
 3. Cada página lleva arriba, a la izquierda, el mandala con «MARÍA ESCRIBANO» y, a la derecha, el icono y el
    nombre de la disciplina. El texto va sobre una caja de papel y la foto se ve alrededor.
-4. «Descargar PDF», «Enviarme prueba» (solo a su correo) o «Enviar»: escribe uno o varios correos, el asunto y,
-   si quiere, un mensaje. Cada persona recibe su correo con el PDF adjunto y a María le llega una copia oculta.
+4. «Descargar PDF». Mandarlo por correo se hace en «Correos».
 
 Marcas del texto: línea en blanco = párrafo nuevo; «# » sección; «## » antetítulo; «- » lista; «---» raya;
 «> » frase de cierre. La negrita y la cursiva dentro de un párrafo no se ven en el PDF.
+
+## Correos (solo María, en /admin/correos)
+
+Los correos que María manda a quien quiera. (El correo suelto a la persona de una asesoría, que salía desde
+Asesorías, ya no existe: todo va por aquí.)
+
+1. Escribe uno o varios correos (separados por coma o salto de línea) y el asunto.
+2. Elige el fondo: la foto de la disciplina (y entonces la disciplina) o el mármol de la casa.
+3. Escribe el mensaje. Los emojis los escribe o pega ella desde fuera; no hay selector. Negrita, cursiva y
+   raya como en Informes.
+4. Si quiere, añade hasta 6 fotos, hasta 5 PDF y marca «Adjuntar el informe de Informes» para llevar el que
+   tenga escrito en esa página.
+5. «Enviarme prueba» (solo a su correo) o «Enviar» (pide confirmar). Cada persona recibe su propio correo y a
+   María le llega una copia oculta.

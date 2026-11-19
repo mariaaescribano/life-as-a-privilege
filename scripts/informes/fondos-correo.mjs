@@ -34,3 +34,15 @@ for (const [k, d] of Object.entries(D)) {
     .joinChannel(alfa).png().toFile(`${PUB}correo/informe-mandala-${k}.png`);
   console.log(k, `${m.width}x${m.height}`, fs.statSync(`${PUB}correo/informe-${k}.jpg`).size >> 10, "KB");
 }
+
+// Los iconos de siempre (informe-icono-<clave>.png, del color Txt de la disciplina) también en turquesa
+// oscuro (#004f4f), para el correo con fondo de mármol y para la pantalla de /admin/informes.
+for (const k of Object.keys(D)) {
+  const f = `${PUB}correo/informe-icono-${k}.png`;
+  if (!fs.existsSync(f)) { console.log("falta", f); continue; }
+  const alfa = await sharp(f).ensureAlpha().extractChannel(3).toBuffer();
+  const { width, height } = await sharp(f).metadata();
+  await sharp({ create: { width, height, channels: 3, background: { r: 0, g: 79, b: 79 } } })
+    .joinChannel(alfa).png().toFile(`${PUB}correo/informe-icono-${k}-tq.png`);
+  console.log(k, "icono turquesa");
+}

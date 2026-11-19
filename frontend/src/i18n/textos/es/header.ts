@@ -13,6 +13,7 @@ export const header = {
   "header.premium": "Premium",
   /** Menú de administración: los documentos que se escriben para mandar a clientes. */
   "header.informes": "Informes",
+  "header.correos": "Correos",
   "header.disciplinas": "Disciplinas",
   "header.material": "Material",
   "header.sobreMi": "Sobre mí",

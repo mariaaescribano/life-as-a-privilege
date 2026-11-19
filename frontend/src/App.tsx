@@ -124,7 +124,6 @@ const MetodoAstrologiaCursos = lazyConMetodo(() => import("./app/metodo/MetodoAs
 const AdminHome = lazy(() => import("./app/admin/AdminHome"));
 const AdminInicio = lazy(() => import("./app/admin/AdminInicio"));
 const AdminMiDiario = lazy(() => import("./app/admin/AdminMiDiario"));
-const AdminCorreoSesion = lazy(() => import("./app/admin/AdminCorreoSesion"));
 const AdminDatosUsuario = lazy(() => import("./app/admin/AdminDatosUsuario"));
 const AdminCrearCuenta = lazy(() => import("./app/admin/AdminCrearCuenta"));
 const AdminLogin = lazy(() => import("./app/admin/AdminLogin"));
@@ -143,6 +142,7 @@ const AdminSuscriptores = lazy(() => import("./app/admin/AdminSuscriptores"));
 const AdminDiario = lazy(() => import("./app/admin/AdminDiario"));
 const AdminActividad = lazy(() => import("./app/admin/AdminActividad"));
 const AdminInformes = lazy(() => import("./app/admin/AdminInformes"));
+const AdminCorreos = lazy(() => import("./app/admin/AdminCorreos"));
 const NoEncontrada = lazy(() => import("./app/web/NoEncontrada"));
 const MetodoPsicologia = lazyConMetodo(() => import("./app/metodo/MetodoPsicologia"));
 const MetodoPsicologiaProblema = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaProblema"));
@@ -487,7 +487,6 @@ export default function App()
       <Route path="/admin" element={<AdminRoute><AdminInicio /></AdminRoute>} />
       <Route path="/admin/mi-diario" element={<AdminRoute><AdminMiDiario /></AdminRoute>} />
       <Route path="/admin/asesorias" element={<AdminRoute><AdminHome /></AdminRoute>} />
-      <Route path="/admin/asesorias/:userId/correo" element={<AdminRoute><AdminCorreoSesion /></AdminRoute>} />
       <Route path="/admin/asesorias/nueva" element={<AdminRoute><AdminCrearCuenta /></AdminRoute>} />
       <Route path="/admin/asesorias/:userId/datos" element={<AdminRoute><AdminDatosUsuario /></AdminRoute>} />
       {/* La página de «una persona» se fue: el mandala te mete en su home y todo lo suyo está en «Datos». */}
@@ -496,6 +495,7 @@ export default function App()
       <Route path="/admin/cursos/:id" element={<AdminRoute><AdminCursoEditor /></AdminRoute>} />
       <Route path="/admin/astrologia-textos" element={<AdminRoute><AdminAstrologiaTextos /></AdminRoute>} />
       <Route path="/admin/informes" element={<AdminRoute><AdminInformes /></AdminRoute>} />
+      <Route path="/admin/correos" element={<AdminRoute><AdminCorreos /></AdminRoute>} />
       {/* /admin/accesos está aparcado: regalar, revocar y borrar cuentas viven
           ahora en la página de cada persona (/admin/asesorias/:userId). */}
       {/* <Route path="/admin/accesos" element={<AdminRoute><AdminAccesos /></AdminRoute>} /> */}

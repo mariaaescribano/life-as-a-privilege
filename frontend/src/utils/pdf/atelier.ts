@@ -26,6 +26,7 @@ import { registerEbGaramond, GARAMOND } from "../fonts/ebGaramond";
 import type { Tema, RGB } from "./temas";
 import type { FotoPdf } from "./fotos";
 import { blindarFuente } from "./glifos";
+import { esGlifo, rasterGlifo, grafemas } from "./glifosTexto";
 import {
   conAlfa,
   divisorRombo,
@@ -675,6 +676,115 @@ export class Taller {
       this.y += salto;
     }
     this.y += 2.4;
+  }
+
+  /**
+   * Párrafo «rico»: respeta los saltos de línea del texto, admite **negrita** y *cursiva* en mitad de
+   * una frase y pinta como imagen, en su sitio, lo que la fuente no tiene (☉ ☽ ☿ ♀ ♆ ♅… y emoji).
+   * Lo usan los informes (generateInformePdf.ts).
+   *
+   * Cuida la página como un libro: varios espacios seguidos se quedan en uno y un párrafo nunca deja
+   * UNA sola línea suelta ni al pie de una página (huérfana) ni al principio de la siguiente (viuda).
+   */
+  parrafoRico(texto: string, o?: { tam?: number; color?: RGB }): void {
+    const doc = this.doc;
+    const tam = o?.tam ?? 11;
+    const salto = tam * 0.5;
+    const color = o?.color ?? this.tema.tinta;
+    const lado = tam * 0.3528 * 1.12; // mm: el cuerpo del texto, un poco más
+    type Estilo = "normal" | "bold" | "italic";
+    type Atomo = { t: "txt"; s: string; est: Estilo; w: number } | { t: "glifo"; g: string; w: number } | { t: "esp"; w: number };
+    const anchoDe = (s: string, est: Estilo) => { this.fuente(est, tam, color); return doc.getTextWidth(s); };
+
+    // 1) Todos los renglones del párrafo (cada línea escrita por María empieza renglón nuevo).
+    const todos: Atomo[][] = [];
+    for (const lineaFuente of (texto || "").replace(/\r/g, "").split("\n")) {
+      const atomos: Atomo[] = [];
+      const poner = (a: Atomo) => {
+        // Nada de dos espacios seguidos ni de espacio al principio de la línea.
+        if (a.t === "esp" && (!atomos.length || atomos[atomos.length - 1].t === "esp")) return;
+        atomos.push(a);
+      };
+      for (const parte of lineaFuente.split(/(\*\*[^*]+\*\*|\*[^*\n]+\*)/g)) {
+        if (!parte) continue;
+        let est: Estilo = "normal";
+        let s = parte;
+        if (parte.length > 4 && parte.startsWith("**") && parte.endsWith("**")) { est = "bold"; s = parte.slice(2, -2); }
+        else if (parte.length > 2 && parte.startsWith("*") && parte.endsWith("*")) { est = "italic"; s = parte.slice(1, -1); }
+        let palabra = "";
+        const cerrar = () => { if (palabra) { poner({ t: "txt", s: palabra, est, w: anchoDe(palabra, est) }); palabra = ""; } };
+        for (const g of grafemas(s)) {
+          if (g === " ") { cerrar(); poner({ t: "esp", w: anchoDe(" ", est) }); }
+          else if (esGlifo(g)) { cerrar(); poner({ t: "glifo", g, w: lado }); }
+          else palabra += g;
+        }
+        cerrar();
+      }
+      while (atomos.length && atomos[atomos.length - 1].t === "esp") atomos.pop();
+
+      // Se reparte en renglones sin partir palabras.
+      let renglon: Atomo[] = [];
+      let x = 0;
+      for (const a of atomos) {
+        if (x + a.w > ANCHO + 0.01 && a.t !== "esp" && renglon.some((z) => z.t !== "esp")) {
+          while (renglon.length && renglon[renglon.length - 1].t === "esp") x -= (renglon.pop() as Atomo).w;
+          todos.push(renglon);
+          renglon = [];
+          x = 0;
+        }
+        if (a.t === "esp" && !renglon.length) continue;
+        renglon.push(a);
+        x += a.w;
+      }
+      if (renglon.length) todos.push(renglon);
+    }
+
+    // 2) Se pinta página a página.
+    const limite = A4_H - 22;
+    const caben = () => { let n = 0; for (let y = this.y; y + salto + 1 <= limite; y += salto) n++; return n; };
+    const pintar = (r: Atomo[]) => {
+      let px = MARGEN;
+      for (const a of r) {
+        if (a.t === "txt") { this.fuente(a.est, tam, color); doc.text(a.s, px, this.y); }
+        else if (a.t === "glifo") {
+          doc.addImage(rasterGlifo(a.g, color), "PNG", px + lado * 0.02, this.y - lado * 0.84, lado * 0.96, lado * 0.96, `g|${a.g}|${color.join(",")}`, "FAST");
+        }
+        px += a.w;
+      }
+      this.y += salto;
+    };
+    let i = 0;
+    while (i < todos.length) {
+      const resto = todos.length - i;
+      const n = caben();
+      let tomar = Math.min(n, resto);
+      if (tomar === 0) { this.nuevaPagina(); continue; }
+      if (resto > tomar) {
+        if (tomar === 1) { this.nuevaPagina(); continue; } // huérfana
+        if (resto - tomar === 1) { // viuda
+          if (tomar >= 3) tomar -= 1;
+          else { this.nuevaPagina(); continue; }
+        }
+      }
+      for (let k = 0; k < tomar; k++) pintar(todos[i + k]);
+      i += tomar;
+      if (i < todos.length) this.nuevaPagina();
+    }
+    this.y += 2.4;
+  }
+
+  /** Una imagen (p. ej. la rueda de una carta) sobre una tarjeta blanca de esquinas redondas, centrada. */
+  imagenTarjeta(data: string, w: number, h: number, ancho = 120): void {
+    const doc = this.doc;
+    const alto = ancho * (h / w);
+    const pad = 3;
+    this.reservar(alto + pad * 2 + 4);
+    const x = MARGEN + (ANCHO - ancho) / 2 - pad;
+    const y = this.y - 2;
+    doc.setFillColor(255, 255, 255);
+    doc.roundedRect(x, y, ancho + pad * 2, alto + pad * 2, 3, 3, "F");
+    doc.addImage(data, "PNG", x + pad, y + pad, ancho, alto, undefined, "FAST");
+    this.y = y + alto + pad * 2 + 7;
   }
 
   /** Lista con viñeta de rombo. */
