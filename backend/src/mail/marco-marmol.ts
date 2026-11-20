@@ -27,7 +27,7 @@ export function webParaImagenes(web: string): string {
 
 /**
  * `web` es la dirección pública de la web (de ahí salen las dos imágenes);
- * `titulo` va grande bajo la cabecera y `cuerpo` es el HTML de debajo. Debajo
+ * `titulo` va grande bajo la cabecera (si va vacío, no se pinta) y `cuerpo` es el HTML de debajo. Debajo
  * del mármol va un `bgcolor` beige por si el cliente de correo no pinta imágenes.
  */
 export function marcoMarmol({ web, titulo, cuerpo }: { web: string; titulo: string; cuerpo: string }): string {
@@ -44,7 +44,7 @@ export function marcoMarmol({ web, titulo, cuerpo }: { web: string; titulo: stri
   <div style="height:1px;background:${T};opacity:0.45;margin:26px 0 0;"></div>
 </td></tr>
 <tr><td style="padding:22px 40px 40px;font-family:${SERIF};color:${T};">
-<h1 style="margin:0 0 20px;font-size:30px;line-height:1.25;letter-spacing:0.03em;font-weight:700;color:${T};">${titulo}</h1>
-${cuerpo}
+${titulo ? `<h1 style="margin:0 0 20px;font-size:30px;line-height:1.25;letter-spacing:0.03em;font-weight:700;color:${T};">${titulo}</h1>
+` : ''}${cuerpo}
 </td></tr></table>`;
 }

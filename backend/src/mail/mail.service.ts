@@ -289,12 +289,11 @@ export class MailService {
           <div style="margin:22px 0 0;border-top:1px solid ${tinta};font-size:0;line-height:0;">&nbsp;</div>
         </td></tr>
         <tr><td style="padding:18px 38px 44px;font-family:${SERIF};color:${tinta};">
-          <h1 style="margin:0 0 18px;font-family:${SERIF};font-size:28px;line-height:1.2;font-weight:700;color:${tinta};">${this.escaparHtml(asunto)}</h1>
           ${cuerpo}
         </td></tr></table>`;
     } else {
       // El marco de la casa: el mármol, con el mandala a la izquierda de MARÍA ESCRIBANO.
-      html = marcoMarmol({ web: this.frontendUrl, titulo: this.escaparHtml(asunto), cuerpo });
+      html = marcoMarmol({ web: this.frontendUrl, titulo: '', cuerpo });
     }
 
     const adjuntos = [

@@ -59,6 +59,8 @@ export interface InformeDatos {
   titulo: string;
   /** Nombre de la persona a quien va dirigido (opcional). */
   para?: string;
+  /** true = sin título ni «Para X · fecha»: el texto arranca directamente bajo la cabecera. */
+  sinTitulo?: boolean;
   /** El texto, con el mini-formato de arriba. */
   cuerpo: string;
   /** Una imagen (PNG en base64) justo bajo el título, sobre una tarjeta blanca (p. ej. la rueda de una carta). */
@@ -162,7 +164,7 @@ export async function generarInforme(d: InformeDatos): Promise<{ blob: Blob; nom
   });
 
   taller.nuevaPagina();
-  taller.tituloInforme(titulo, d.para);
+  if (!d.sinTitulo) taller.tituloInforme(titulo, d.para);
   if (d.imagen) taller.imagenTarjeta(d.imagen.data, d.imagen.w, d.imagen.h, 118);
 
   for (const b of bloquesDeTexto(d.cuerpo)) {
