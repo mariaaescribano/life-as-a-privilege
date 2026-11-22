@@ -28,6 +28,7 @@ export const header = {
   /** Solo en el menú de administración. */
   "header.arquetipos": "Arquetipos",
   "header.suscriptores": "Suscriptores",
+  "header.lecturas": "Lecturas",
   "header.programas": "Programas",
   "header.contacto": "Contáctame",
   "header.miCuenta": "Mi cuenta",

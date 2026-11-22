@@ -2,6 +2,8 @@ import { BadRequestException, ConflictException, ForbiddenException, Injectable,
 import Stripe from 'stripe';
 import { UserService } from '../user/user.service';
 import { BookingService } from '../booking/booking.service';
+import { LecturaService } from '../lectura/lectura.service';
+import { findLectura } from '../lectura/lectura.data';
 import { findLibroPago } from './libros-pago.data';
 import { findLlamadaPago } from './llamadas-pago.data';
 import { MailService } from '../mail/mail.service';
@@ -52,6 +54,7 @@ export class PaymentService {
     private readonly bookingService: BookingService,
     private readonly mailService: MailService,
     private readonly premiumService: PremiumService,
+    private readonly lecturaService: LecturaService,
   ) {
     const key = process.env.STRIPE_SECRET_KEY;
     if (!key) {
@@ -163,6 +166,13 @@ export class PaymentService {
     if (session.metadata?.scope === 'llamada') {
       const res = await this.guardarReservaDeSesion(session);
       console.log(`[${origen}] llamada → ${res}`);
+      return;
+    }
+
+    // 1a. Carta de la lectura (Astrología → Adquirir): crea el pedido y la cuenta «solo carta», sin acceso.
+    if (session.metadata?.scope === 'lectura') {
+      const res = await this.lecturaService.confirmarPago(session);
+      console.log(`[${origen}] lectura → ${res.ok ? (res.creado ? 'creada' : 'ya estaba') : 'FALLO'} (${session.id})`);
       return;
     }
 
@@ -1066,6 +1076,62 @@ export class PaymentService {
       return { ok: false as const, reason: 'error' };
     }
     return { ok: true as const, fecha: dto.fecha, slot: dto.slot, nombre: dto.nombre };
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Carta de la lectura (Astrología): pago REAL de Stripe sin sesión. Los datos de nacimiento viajan en la
+  // metadata del checkout y el pedido solo se crea cuando el pago está confirmado (verify o webhook, el que
+  // llegue primero; el segundo no hace nada). El importe lo fija el servidor (lectura.data.ts).
+  // ─────────────────────────────────────────────────────────────────────────
+  async createLecturaCheckout(body: Record<string, unknown>) {
+    const datos = this.lecturaService.validar(body ?? {});
+    const tarifa = findLectura(datos.servicio)!;
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+
+    const session = await this.stripe.checkout.sessions.create({
+      mode: 'payment',
+      ...this.metodosDePago(),
+      customer_email: datos.email,
+      line_items: [
+        {
+          price_data: {
+            currency: 'eur',
+            product_data: { name: tarifa.nombre },
+            unit_amount: tarifa.precioCentimos,
+          },
+          quantity: 1,
+        },
+      ],
+      metadata: {
+        scope: 'lectura',
+        servicio: datos.servicio,
+        nombre: datos.nombre,
+        email: datos.email,
+        fecha: datos.fecha,
+        hora: datos.hora,
+        lugar: datos.lugar,
+      },
+      success_url: `${frontendUrl}/astrologia/pedir?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${frontendUrl}/astrologia/pedir?servicio=${datos.servicio}&cancelado=1`,
+    });
+
+    if (!session.url) throw new BadRequestException('Stripe no devolvió URL de checkout');
+    return { url: session.url };
+  }
+
+  async verifyLecturaCheckout(sessionId: string) {
+    if (!sessionId) throw new BadRequestException('session_id requerido');
+    let session: Stripe.Checkout.Session;
+    try {
+      session = await this.stripe.checkout.sessions.retrieve(sessionId);
+    } catch {
+      return { ok: false as const, reason: 'invalid-session' };
+    }
+    if (session.payment_status !== 'paid') return { ok: false as const, reason: 'unpaid' };
+    if (session.metadata?.scope !== 'lectura') return { ok: false as const, reason: 'wrong-scope' };
+    const res = await this.lecturaService.confirmarPago(session);
+    if (!res.ok) return { ok: false as const, reason: 'error' };
+    return { ok: true as const, nombre: res.nombre };
   }
 
   async createLibroCheckout(libroId: string) {

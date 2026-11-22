@@ -1,7 +1,8 @@
 import { BadRequestException, Body, Controller, Get, Headers, HttpCode, HttpStatus, Post, Query, Req, UseGuards } from '@nestjs/common';
 import type { RawBodyRequest } from '@nestjs/common';
 import type { Request } from 'express';
-import { SkipThrottle } from '@nestjs/throttler';
+import { SkipThrottle, Throttle } from '@nestjs/throttler';
+import { LIMITE_RESERVA } from '../rate-limit';
 import { PaymentService } from './payment.service';
 import { JwtAuthGuard } from '../auth/jwt.guard';
 
@@ -178,6 +179,18 @@ export class PaymentController {
   @Get('llamada/verify')
   async verifyLlamadaCheckout(@Query('session_id') sessionId: string) {
     return await this.paymentService.verifyLlamadaCheckout(sessionId);
+  }
+
+  // ── Carta de la lectura (Astrología → Adquirir; pago REAL de Stripe, sin login) ──
+  @Post('lectura/checkout')
+  @Throttle(LIMITE_RESERVA)
+  async createLecturaCheckout(@Body() body: Record<string, unknown>) {
+    return await this.paymentService.createLecturaCheckout(body ?? {});
+  }
+
+  @Get('lectura/verify')
+  async verifyLecturaCheckout(@Query('session_id') sessionId: string) {
+    return await this.paymentService.verifyLecturaCheckout(sessionId);
   }
 
   @Post('libros/checkout')

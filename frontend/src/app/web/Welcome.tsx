@@ -4,6 +4,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { SubscribeBox } from "../../components/global/SubscribeBox";
 import WelcomeHero from "../../components/welcome/WelcomeHero";
+import BandaFoto from "../../components/global/BandaFoto";
 import WelcomePerspectivas from "../../components/welcome/WelcomePerspectivas";
 import WelcomeOpiniones from "../../components/welcome/WelcomeOpiniones";
 // (botón flotante «Contáctame» quitado) import BotonContactame from "../../components/global/BotonContactame";
@@ -64,7 +65,9 @@ const Welcome = () => {
 
       <Box flex="1">
         {/* ── La apertura: foto de María a la izquierda; titular, frase y «Pedir cita» a la derecha ── */}
-        <WelcomeHero activo={mounted} marmol compacto />
+        <BandaFoto pt={{ base: "8px", md: "16px" }}>
+          <WelcomeHero activo={mounted} marmol compacto />
+        </BandaFoto>
 
         {/* ── Segundo apartado: «Lo importante eres tú…» y las cuatro fotos ── */}
         <WelcomePerspectivas />

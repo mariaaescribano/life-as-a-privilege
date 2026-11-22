@@ -76,6 +76,8 @@ const EspacioHome = lazy(() => import("./app/espacio/main/EspacioHome"));
 const ExpandablePage = lazyConMetodo(() => import("./app/espacio/main/ThemePreguntas"));
 const QuienSoy = lazy(() => import("./app/web/QuienSoy"));
 const ReservarCita = lazy(() => import("./app/web/ReservarCita"));
+const PedirLectura = lazy(() => import("./app/web/PedirLectura"));
+const AdminLecturas = lazy(() => import("./app/admin/AdminLecturas"));
 const Productos = lazy(() => import("./app/web/Productos"));
 const Asesoria = lazy(() => import("./app/web/Asesoria"));
 // Premium (público): apartado APARCADO, el código sigue en el repo. Para revivirlo: descomentar estos imports y las rutas /premium/*.
@@ -420,6 +422,7 @@ export default function App()
       <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
       <Route path="/quienSoy" element={<QuienSoy />} />
       <Route path="/reservar-cita" element={<ReservarCita />} />
+      <Route path="/astrologia/pedir" element={<PedirLectura />} />
       <Route path="/asesoria" element={<Asesoria />} />
       <Route path="/baja" element={<BajaLista />} />
       {/* Premium (público) APARCADO: rutas comentadas, el código sigue en el repo.
@@ -514,6 +517,7 @@ export default function App()
       {/* <Route path="/admin/videos" element={<AdminRoute><AdminVideos /></AdminRoute>} /> */}
       {/* Antes de /admin/:disciplina, que si no se lo tragaría como disciplina. */}
       <Route path="/admin/suscriptores" element={<AdminRoute><AdminSuscriptores /></AdminRoute>} />
+      <Route path="/admin/lecturas" element={<AdminRoute><AdminLecturas /></AdminRoute>} />
       {/* Subir podcasts y reels (desde el móvil) del contenido premium. APARCADO (ver el import arriba). */}
       {/* <Route path="/admin/premium" element={<AdminRoute><AdminPremium /></AdminRoute>} /> */}
       {/* Antes de /admin/:disciplina/:userId, que si no se tragaria «diario» como disciplina. */}

@@ -153,6 +153,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   const adminCursosActive = path.startsWith("/admin/cursos");
   const adminArquetiposActive = path.startsWith("/admin/astrologia-textos");
   const adminSuscriptoresActive = path.startsWith("/admin/suscriptores");
+  const adminLecturasActive = path.startsWith("/admin/lecturas");
   // const adminPremiumActive = path.startsWith("/admin/premium"); // Premium (admin) aparcado
   const adminInformesActive = path.startsWith("/admin/informes");
   const adminCorreosActive = path.startsWith("/admin/correos");
@@ -234,6 +235,8 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
           { etiqueta: t("header.arquetipos"),   onSelect: () => navigate("/admin/astrologia-textos"), activo: adminArquetiposActive },
           // Los correos apuntados en el formulario de la portada.
           { etiqueta: t("header.suscriptores"), onSelect: () => navigate("/admin/suscriptores"),      activo: adminSuscriptoresActive },
+          // Los pedidos de la carta de la lectura (Astrología → Adquirir): datos de nacimiento y acceso a la cuenta.
+          { etiqueta: t("header.lecturas"),     onSelect: () => navigate("/admin/lecturas"),             activo: adminLecturasActive },
           // Subir podcasts y reels del contenido premium (desde el móvil). APARCADO.
           // { etiqueta: t("header.premium"),      onSelect: () => navigate("/admin/premium"),            activo: adminPremiumActive },
           // Informes: documentos para clientes en PDF. Correos: los correos que se mandan (con o sin informe).

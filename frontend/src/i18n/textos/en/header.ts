@@ -20,6 +20,7 @@ export const header = {
   "header.usuarios": "Users",
   "header.arquetipos": "Archetypes",
   "header.suscriptores": "Subscribers",
+  "header.lecturas": "Readings",
   "header.programas": "Programs",
   "header.contacto": "Contact me",
   "header.miCuenta": "My account",

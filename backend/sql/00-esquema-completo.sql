@@ -464,6 +464,26 @@ select
 from public.estudio_respuesta
 group by planeta, eje, posicion, pregunta_id;
 
+-- ── Cartas de la lectura (Astrología → Adquirir): ver también sql/lectura-pedido.sql ──
+alter table public."user" add column if not exists solo_lectura boolean not null default false;
+create table if not exists public.lectura_pedido (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  nombre text not null,
+  email text not null,
+  servicio text not null,
+  precio_centimos integer not null,
+  fecha_nacimiento date not null,
+  hora_nacimiento text not null,
+  lugar_nacimiento text not null,
+  stripe_session_id text unique,
+  pagado boolean not null default true,
+  user_id text,
+  estado text not null default 'recibido',
+  acceso_enviado_at timestamptz
+);
+create index if not exists lectura_pedido_created_at_idx on public.lectura_pedido (created_at desc);
+
 -- ── RLS: activado en TODAS las tablas, sin políticas (solo entra el backend) ──
 do $$
 declare t record;

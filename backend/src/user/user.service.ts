@@ -520,6 +520,41 @@ export class UserService {
     throw new ConflictException('No se pudo generar un id de usuario único');
   }
 
+  /**
+   * La cuenta «SOLO CARTA»: la de quien únicamente ha pedido la carta de su lectura (Astrología → Adquirir).
+   * Se crea al pagar y SIN acceso: no se le manda el correo para elegir contraseña (la contraseña inicial es
+   * aleatoria y nadie la conoce) hasta que la admin se lo envíe desde /admin/lecturas, cuando la carta esté
+   * escrita (`reenviarInvitacion`). Si ya hay una cuenta con ese email, se reutiliza tal cual: no se toca.
+   */
+  async crearCuentaLectura(data: { name: string; email: string }): Promise<{ id: string; existente: boolean }> {
+    const name = (data?.name ?? '').trim().slice(0, NOMBRE_ASESORIA_MAX);
+    const email = normalizaEmail(data?.email);
+    if (!name || !email) throw new BadRequestException('Faltan el nombre o el email');
+    const db = this.databaseService.getClient();
+
+    const { data: ya } = await db.from('user').select('id').ilike('email', email).limit(1);
+    if (ya?.[0]) return { id: (ya[0] as { id: string }).id, existente: true };
+
+    const passwordHash = await hashPassword(`${randomString()}${randomString()}${randomString()}`);
+    let conColumna = true;
+    let id = randomString();
+    for (let intento = 0; intento < 6; intento++) {
+      const fila: Record<string, unknown> = { id, name, email, password: passwordHash, email_confirmado: false, comunidad_popup_visto: false };
+      if (conColumna) fila.solo_lectura = true;
+      const { data: rows, error } = await db.from('user').insert(fila).select('id');
+      if (!error && rows?.length === 1) return { id: (rows[0] as { id: string }).id, existente: false };
+      if (error?.code === '23505') { id = randomString(); continue; }
+      if (conColumna && String(error?.message ?? '').includes('solo_lectura')) {
+        console.warn('[crearCuentaLectura] falta la columna user.solo_lectura (corre backend/sql/user-solo-lectura.sql). Creo la cuenta sin ella.');
+        conColumna = false;
+        intento--;
+        continue;
+      }
+      throw error ?? new Error('El insert de usuario no devolvió la fila esperada');
+    }
+    throw new ConflictException('No se pudo generar un id de usuario único');
+  }
+
   /** Vuelve a mandar el correo para elegir contraseña (por si caducó o no llegó). Solo si aún no la ha activado. */
   async reenviarInvitacion(userId: string) {
     const { data: rows } = await this.databaseService.getClient()
@@ -1299,6 +1334,7 @@ export class UserService {
       { table: 'cabala', column: 'idUser' },
       { table: 'fitoterapia', column: 'idUser' },
       { table: 'neuroPsicologia', column: 'userid' },
+      { table: 'lectura_pedido', column: 'user_id' },
     ];
 
     // Borrar de verdad o no borrar: si falla CUALQUIER tabla (salvo que la tabla

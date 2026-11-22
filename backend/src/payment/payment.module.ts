@@ -5,9 +5,10 @@ import { UsersModule } from '../user/user.module';
 import { BookingModule } from '../booking/booking.module';
 import { MailModule } from '../mail/mail.module';
 import { PremiumModule } from '../premium/premium.module';
+import { LecturaModule } from '../lectura/lectura.module';
 
 @Module({
-  imports: [UsersModule, BookingModule, MailModule, PremiumModule],
+  imports: [UsersModule, BookingModule, MailModule, PremiumModule, LecturaModule],
   controllers: [PaymentController],
   providers: [PaymentService],
 })

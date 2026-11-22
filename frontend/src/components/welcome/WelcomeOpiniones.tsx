@@ -6,6 +6,7 @@ import { API_URL, FONDO_PAGINA_TURQUESA as T } from "../../GlobalVariables";
 import type { Opinion } from "../../dtos/opinion.type";
 import { useT } from "../../i18n";
 import { focoBlanco } from "../global/foco";
+import BandaFoto from "../global/BandaFoto";
 
 /**
  * Las experiencias de las personas (TODAS las opiniones publicadas), debajo de las cuatro fotos de la portada.
@@ -63,7 +64,9 @@ const WelcomeOpiniones = () => {
     <Box w="100%">
       <SeparadorFlor />
 
-      <Flex direction="column" align="center" maxW="1180px" mx="auto" px={{ base: 5, md: 10, lg: 16 }} pb={{ base: 14, md: 20 }} gap={{ base: 6, md: 8 }}>
+      {/* Tercer apartado: con la foto de mármol de fondo. */}
+      <BandaFoto>
+      <Flex direction="column" align="center" maxW="1180px" mx="auto" px={{ base: 5, md: 10, lg: 16 }} gap={{ base: 6, md: 8 }}>
         <Reveal inView direction="up" distance={20} blur duration={1}>
           <Text color={T} fontFamily="'EB Garamond', serif" fontWeight="700" textAlign="center" fontSize={{ base: "md", md: "lg", lg: "xl" }} letterSpacing="0.04em">
             {t("opiniones.titulo")}
@@ -116,6 +119,8 @@ const WelcomeOpiniones = () => {
           </Flex>
         </Reveal>
       </Flex>
+      </BandaFoto>
+      <Box h={{ base: 8, md: 12 }} />
     </Box>
   );
 };

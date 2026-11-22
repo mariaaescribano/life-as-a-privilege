@@ -42,7 +42,7 @@ function montar(user: Record<string, any> = { email: 'ana@x.com', name: 'Ana' })
     enviarAvisoCompra: jest.fn().mockResolvedValue(undefined),
     enviarLibroComprado: jest.fn().mockResolvedValue(undefined),
   };
-  const service = new PaymentService(userService, bookingService, mailService, {} as any);
+  const service = new PaymentService(userService, bookingService, mailService, {} as any, {} as any);
   return { service, userService, bookingService, mailService };
 }
 

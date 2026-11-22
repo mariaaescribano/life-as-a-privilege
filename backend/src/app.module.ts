@@ -37,6 +37,7 @@ import { DiarioMariaModule } from './diarioMaria/diarioMaria.module';
 import { CorreoSesionModule } from './correoSesion/correoSesion.module';
 import { DiarioSesionModule } from './diarioSesion/diarioSesion.module';
 import { BookingModule } from './booking/booking.module';
+import { LecturaModule } from './lectura/lectura.module';
 import { CursosModule } from './cursos/cursos.module';
 import { AstrologiaTextosModule } from './astrologiaTextos/astrologiaTextos.module';
 import { RecorridoProgresoModule } from './recorridoProgreso/recorridoProgreso.module';
@@ -89,6 +90,7 @@ export const uploadFolder = join(process.cwd(), 'img');
     CorreoSesionModule,
     DiarioSesionModule,
     BookingModule,
+    LecturaModule,
     CursosModule,
     AstrologiaTextosModule,
     RecorridoProgresoModule,

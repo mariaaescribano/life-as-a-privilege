@@ -767,6 +767,44 @@ export class MailService {
     });
   }
 
+  /**
+   * «Tu registro está confirmado»: lo recibe quien ha pagado la carta de su lectura. Lleva los datos que dejó
+   * (nacimiento incluido) y avisa de que NO tiene acceso a su cuenta todavía: se le mandará cuando la carta esté
+   * escrita. A María le llega la copia oculta de siempre, que es donde ve los datos del pedido.
+   */
+  async enviarLecturaRecibida(
+    email: string,
+    nombre: string,
+    servicio: string,
+    nacimiento: { fecha: string; hora: string; lugar: string },
+  ): Promise<boolean> {
+    const [y, m, d] = nacimiento.fecha.split('-');
+    const html = this.plantilla(
+      'Tu registro está confirmado',
+      `
+        <p style="font-size: 17px; line-height: 1.7;">
+          Hola${nombre ? ` ${this.escaparHtml(nombre)}` : ''}, he recibido tu pedido y tus datos. Gracias por confiar en mí.
+        </p>
+        ${this.fichaPersona([
+          ['Lo que has pedido', this.escaparHtml(servicio)],
+          ['Nombre', this.escaparHtml(nombre || '—')],
+          ['Email', this.escaparHtml(email)],
+          ['Fecha de nacimiento', `${d}/${m}/${y}`],
+          ['Hora de nacimiento', this.escaparHtml(nacimiento.hora)],
+          ['Lugar de nacimiento', this.escaparHtml(nacimiento.lugar)],
+        ])}
+        <p style="font-size: 16px; line-height: 1.7; margin-top: 22px; opacity: 0.92;">
+          Voy a escribir tu carta con calma. Hasta que esté lista no tendrás acceso a tu cuenta: cuando la tenga
+          terminada te escribiré con el enlace para entrar.
+        </p>
+        <p style="font-size: 14px; line-height: 1.6; margin-top: 14px; opacity: 0.8;">
+          Si algún dato no es correcto, responde a este correo y lo corregimos antes de empezar.
+        </p>
+      `,
+    );
+    return await this.enviar(email, 'Tu registro está confirmado', html, 'lectura recibida');
+  }
+
   /** Ficha con los datos de la persona, igual en los dos avisos. */
   private fichaPersona(filas: [string, string][]): string {
     return `

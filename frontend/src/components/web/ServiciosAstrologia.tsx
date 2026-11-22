@@ -14,9 +14,9 @@ import { useT, type ClaveTexto } from "../../i18n";
  * servicio lleva `texto` (descripción), se pinta bajo el título; los de ahora no la llevan.
  */
 const SERVICIOS: { titulo: ClaveTexto; texto?: ClaveTexto; precio: ClaveTexto; link: string }[] = [
-  { titulo: "astro.serv.1.titulo", precio: "astro.serv.1.precio", link: "/reservar-cita" },
-  { titulo: "astro.serv.2.titulo", precio: "astro.serv.2.precio", link: "/reservar-cita" },
-  { titulo: "astro.serv.3.titulo", precio: "astro.serv.3.precio", link: "/reservar-cita" },
+  { titulo: "astro.serv.1.titulo", precio: "astro.serv.1.precio", link: "/astrologia/pedir?servicio=pdf_parcial" },
+  { titulo: "astro.serv.2.titulo", precio: "astro.serv.2.precio", link: "/astrologia/pedir?servicio=pdf_completo" },
+  { titulo: "astro.serv.3.titulo", precio: "astro.serv.3.precio", link: "/astrologia/pedir?servicio=plataforma" },
   { titulo: "astro.serv.4.titulo", precio: "astro.serv.4.precio", link: "/reservar-cita" },
 ];
 

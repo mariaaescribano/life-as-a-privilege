@@ -13,6 +13,7 @@ import { fisiologia } from "./fisiologia";
 import { header } from "./header";
 import { home } from "./home";
 import { landing } from "./landing";
+import { lectura } from "./lectura";
 import { metodo } from "./metodo";
 import { footer } from "./footer";
 import { opiniones } from "./opiniones";
@@ -45,6 +46,7 @@ export const en: Partial<Record<ClaveTexto, string>> = {
   ...header,
   ...home,
   ...landing,
+  ...lectura,
   ...metodo,
   ...footer,
   ...opiniones,

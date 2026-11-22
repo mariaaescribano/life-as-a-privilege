@@ -12,6 +12,7 @@ import { fisiologia } from "./fisiologia";
 import { header } from "./header";
 import { home } from "./home";
 import { landing } from "./landing";
+import { lectura } from "./lectura";
 import { footer } from "./footer";
 import { opiniones } from "./opiniones";
 import { premium } from "./premium";
@@ -56,6 +57,7 @@ const TEXTOS_BASE = {
   ...header,
   ...home,
   ...landing,
+  ...lectura,
   ...footer,
   ...opiniones,
   ...premium,
