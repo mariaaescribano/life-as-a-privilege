@@ -1,5 +1,6 @@
 import React from "react";
-import { Flex, Image } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
+import { MandalaTinte } from "./MandalaTinte";
 import { Reveal, Breathe } from "./Reveal";
 
 /**
@@ -14,13 +15,7 @@ const FlorTitulo = ({ activo, pt = { base: 10, md: 14 }, mandala }: { activo?: b
   <Flex justify="center" pt={pt}>
     <Reveal direction="none" scaleFrom={0.7} blur duration={1.1} delay={0.1} activo={activo}>
       <Breathe scale={0.035} duration={6} delay={1.3}>
-        <Image
-          src={mandala ? "/img/icono/life.webp" : "/img/icono/flordelavida.png"}
-          alt=""
-          h={{ base: "60px", md: "80px" }}
-          objectFit="contain"
-          style={{ filter: "drop-shadow(0 0 11px rgba(255,255,255,0.59)) drop-shadow(0 0 26px rgba(255,255,255,0.32)) drop-shadow(0 0 52px rgba(180,255,245,0.24))" }}
-        />
+        <MandalaTinte src={mandala ? "/img/icono/life.webp" : "/img/icono/flordelavida.png"} h={{ base: "60px", md: "80px" }} />
       </Breathe>
     </Reveal>
   </Flex>

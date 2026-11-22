@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { MandalaTinte } from "../../components/global/MandalaTinte";
 import { useT } from "../../i18n";
 import { Box, Flex, Image, Input, SimpleGrid, Text, VStack } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
@@ -270,16 +271,7 @@ export default function UserAccount() {
 
       {/* ── MANDALA SEPARADOR ── */}
       <Flex justify="center" pt={{ base: 10, md: 14 }}>
-        <Image
-          src="/img/icono/life.webp"
-          alt=""
-          h={{ base: "60px", md: "80px" }}
-          objectFit="contain"
-          style={{ filter: "drop-shadow(0 0 11px rgba(255,255,255,0.78)) drop-shadow(0 0 26px rgba(255,255,255,0.42)) drop-shadow(0 0 52px rgba(180,255,245,0.32))" }}
-          opacity={mounted ? 1 : 0}
-          transform={mounted ? "scale(1) rotate(0deg)" : "scale(0.7) rotate(-12deg)"}
-          transition="opacity 1s ease 0.1s, transform 1s ease 0.1s"
-        />
+        <MandalaTinte h={{ base: "60px", md: "80px" }} style={{ opacity: mounted ? 1 : 0, transform: mounted ? "scale(1) rotate(0deg)" : "scale(0.7) rotate(-12deg)", transition: "opacity 1s ease 0.1s, transform 1s ease 0.1s" }} />
       </Flex>
 
       {/* ── TÍTULO ── */}
@@ -557,14 +549,7 @@ export default function UserAccount() {
               }}
               transition="all 0.25s ease"
             >
-              <Image
-                src="/img/icono/life.webp"
-                alt=""
-                h={{ base: "26px", md: "32px" }}
-                objectFit="contain"
-                flexShrink={0}
-                style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.7)) drop-shadow(0 0 20px rgba(255,255,255,0.35))" }}
-              />
+              <MandalaTinte h={{ base: "26px", md: "32px" }} />
               <Text
                 color="white"
                 fontFamily="'EB Garamond', serif"

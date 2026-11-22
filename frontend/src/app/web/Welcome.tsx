@@ -5,6 +5,7 @@ import SiteFooter from "../../components/global/Footer";
 import { SubscribeBox } from "../../components/global/SubscribeBox";
 import WelcomeHero from "../../components/welcome/WelcomeHero";
 import WelcomePerspectivas from "../../components/welcome/WelcomePerspectivas";
+import WelcomeOpiniones from "../../components/welcome/WelcomeOpiniones";
 // (botón flotante «Contáctame» quitado) import BotonContactame from "../../components/global/BotonContactame";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { LifeLoading } from "../../components/global/LifeLoading";
@@ -67,6 +68,9 @@ const Welcome = () => {
 
         {/* ── Segundo apartado: «Lo importante eres tú…» y las cuatro fotos ── */}
         <WelcomePerspectivas />
+
+        {/* ── Las experiencias de las personas (todas las opiniones), debajo de las fotos ── */}
+        <WelcomeOpiniones />
 
         {/* ── Suscripción (turquesa oscuro) ── */}
         <Flex justify="center" px={{ base: 5, md: 10 }} pb={{ base: 24, md: 32 }}>

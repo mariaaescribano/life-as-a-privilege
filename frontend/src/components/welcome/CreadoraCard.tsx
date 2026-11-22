@@ -307,7 +307,7 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
             boxShadow={marmol ? c.fotoSombra : undefined}
           >
             <Image
-              src="/img/me/fotoclasica.webp"
+              src="/img/me/maria-portada.webp"
               alt="María Escribano"
               w="100%"
               h="100%"

@@ -1,9 +1,10 @@
 // Página 404. Antes, cualquier URL inventada renderizaba Welcome, así que un
 // enlace roto parecía la portada: ni el visitante sabía que se había equivocado
 // ni Google podía distinguir una página real de una que no existe.
+import { MandalaTinte } from "../../components/global/MandalaTinte";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { useT } from "../../i18n";
@@ -18,13 +19,7 @@ export default function NoEncontrada() {
 
       <Flex flex="1" direction="column" align="center" justify="center" textAlign="center"
             px={{ base: 6, md: 10 }} py={{ base: 12, md: 20 }} gap={{ base: 5, md: 6 }}>
-        <Image
-          src="/img/icono/life.webp"
-          alt=""
-          h={{ base: "64px", md: "84px" }}
-          objectFit="contain"
-          style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.55)) drop-shadow(0 0 24px rgba(180,255,245,0.28))" }}
-        />
+        <MandalaTinte h={{ base: "64px", md: "84px" }} />
 
         <Text color="white" fontSize={{ base: "5xl", md: "7xl" }} fontWeight="700" lineHeight="1"
               letterSpacing="0.04em"

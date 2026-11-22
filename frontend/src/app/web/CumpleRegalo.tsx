@@ -4,8 +4,9 @@
 // comprueba el backend (de esta cuenta, sin caducar, sin gastar); si vale, se
 // elige UNA disciplina y se paga a 15 € en un checkout que crea el servidor.
 // Al pagar vuelve a /home?disciplina_pagada=…, igual que el pago de siempre.
+import { MandalaTinte } from "../../components/global/MandalaTinte";
 import React, { useEffect, useState } from "react";
-import { Box, Flex, Image, Spinner, Text } from "@chakra-ui/react";
+import { Box, Flex, Spinner, Text } from "@chakra-ui/react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -79,8 +80,7 @@ export default function CumpleRegalo() {
       <SiteHeader variant="private" />
 
       <Flex flex="1" direction="column" align="center" px={{ base: 5, md: 10 }} pt={{ base: 10, md: 14 }} pb={{ base: 20, md: 28 }} gap={6} textAlign="center">
-        <Image src="/img/icono/life.webp" alt="" h={{ base: "60px", md: "80px" }} objectFit="contain"
-               style={{ filter: "drop-shadow(0 0 11px rgba(255,255,255,0.78)) drop-shadow(0 0 26px rgba(255,255,255,0.42))" }} />
+        <MandalaTinte h={{ base: "60px", md: "80px" }} />
         <Text color="white" fontSize={{ base: "3xl", md: "5xl" }} fontWeight="700" letterSpacing="0.08em" textTransform="uppercase">
           {t("cumple.titulo")}
         </Text>

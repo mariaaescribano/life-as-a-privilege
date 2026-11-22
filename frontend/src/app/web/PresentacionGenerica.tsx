@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
-import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
+import { MandalaTinte } from "../../components/global/MandalaTinte";
+import { Box, Flex, Grid, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import CreadoraCard from "../../components/welcome/CreadoraCard";
@@ -373,16 +374,7 @@ export default function PresentacionGenerica({ d }: { d: Presentacion }) {
         {/* Mandala de cierre: recuerda que esto es parte de algo mayor */}
         <Reveal inView direction="none" scaleFrom={0.7} duration={1}>
           <Float amplitude={6} duration={7}>
-            <Image
-              src="/img/icono/life.webp"
-              alt=""
-              h={{ base: "52px", md: "68px" }}
-              objectFit="contain"
-              style={{
-                filter:
-                  "drop-shadow(0 0 12px rgba(255,255,255,0.62)) drop-shadow(0 0 26px rgba(255,255,255,0.34)) drop-shadow(0 0 54px rgba(180,255,245,0.26))",
-              }}
-            />
+            <MandalaTinte h={{ base: "52px", md: "68px" }} />
           </Float>
         </Reveal>
 

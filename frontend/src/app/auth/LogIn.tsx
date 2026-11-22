@@ -1,7 +1,8 @@
 // LogIn.tsx
+import { MandalaTinte } from "../../components/global/MandalaTinte";
 import { olvidarPersona } from "../../api/persona";
 import React, { useEffect, useRef, useState } from "react";
-import { Box, Flex, Image, Input, Spinner, Text, VStack } from "@chakra-ui/react";
+import { Box, Flex, Input, Spinner, Text, VStack } from "@chakra-ui/react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import { API_URL } from "../../GlobalVariables";
@@ -424,14 +425,7 @@ export default function LogIn() {
               _focusVisible={focoAzul}
               transition="all 0.25s ease"
             >
-              <Image
-                src="/img/icono/life.webp"
-                alt=""
-                h={{ base: "26px", md: "32px" }}
-                objectFit="contain"
-                flexShrink={0}
-                style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.42)) drop-shadow(0 0 20px rgba(255,255,255,0.2))" }}
-              />
+              <MandalaTinte h={{ base: "26px", md: "32px" }} />
               <Text
                 color="white"
                 fontFamily="'EB Garamond', serif"

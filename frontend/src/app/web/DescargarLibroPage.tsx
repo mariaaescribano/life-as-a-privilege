@@ -1,6 +1,7 @@
 import { TextoRico, useT } from "../../i18n";
+import { MandalaTinte } from "../../components/global/MandalaTinte";
 import React, { useEffect, useRef, useState } from "react";
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -83,13 +84,7 @@ export default function DescargarLibroPage() {
       <SiteHeader variant="auto" />
 
       <Flex justify="center" pt={{ base: 10, md: 14 }}>
-        <Image
-          src="/img/icono/life.webp"
-          alt=""
-          h={{ base: "48px", md: "64px" }}
-          objectFit="contain"
-          style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.59)) drop-shadow(0 0 21px rgba(255,255,255,0.32)) drop-shadow(0 0 42px rgba(180,255,245,0.24))" }}
-        />
+        <MandalaTinte h={{ base: "48px", md: "64px" }} />
       </Flex>
 
       <Flex flex={1} direction="column" align="center" justify="center" textAlign="center" px={{ base: 5, md: 10 }} py={{ base: 12, md: 16 }} gap={{ base: 4, md: 6 }}>

@@ -1,6 +1,11 @@
 export const welcome = {
   "welcome.subtitulo": "Science, psychology, and tradition to discover new perspectives from which to understand yourself.",
+  "welcome.perspectivas.subtitulo": "Together we will explore…",
   "welcome.perspectivas.titular": "What matters is you; the perspectives adapt to you.",
+  "welcome.persp.1.titulo": "How your mind was built",
+  "welcome.persp.2.titulo": "Your essential philosophy",
+  "welcome.persp.3.titulo": "Your being through tradition",
+  "welcome.persp.4.titulo": "Caring for your body",
   "welcome.hero.pedirCita": "Book a free appointment",
   "welcome.hero.nombre": "Your name",
   // The three core ideas (second section, WelcomePilares)

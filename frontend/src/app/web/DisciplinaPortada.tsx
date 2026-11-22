@@ -10,6 +10,7 @@ import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/Disc
 import { presentacionPorKey, type PresentacionDisciplina } from "../../data/presentacionDisciplinas";
 import { AprendizajeIcon } from "../../GlobalVariables";
 import FotoDisciplina from "../../components/web/FotoDisciplina";
+import ServiciosAstrologia from "../../components/web/ServiciosAstrologia";
 import WelcomeCabecera from "../../components/welcome/WelcomeCabecera";
 import { useCabeceraEscribiendo } from "../../components/global/cabeceraEntrada";
 import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
@@ -110,6 +111,8 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
   const t = useT();
   const { segunIdioma } = useIdioma();
   const conFondo = hasDisciplinaBg(d.nom);
+  // Astrología tiene su propia portada: cuatro cajas de servicios sobre su foto, con letra beige y sin la raya del mandala.
+  const esAstro = d.key === "astrologia" && modo === "portada";
   const nombreDe = useNombreDisciplina();
   // Secuencia de entrada: mandala, título, frase, línea con mandala... y DESPUÉS la banda con
   // la foto de la disciplina de fondo (la cabecera avisa cuando termina), y luego su contenido.
@@ -198,7 +201,7 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
       <SiteHeader variant="auto" />
 
       {/* ── CABECERA: mandala, nombre de la disciplina, su frase y la línea con el mandala pequeño ── */}
-      <WelcomeCabecera activo={mounted} titulo={nombreDe(d.nom)} subtitulo={segunIdioma(d.gancho)} mayusculas />
+      <WelcomeCabecera activo={mounted} titulo={nombreDe(d.nom)} subtitulo={segunIdioma(d.gancho)} mayusculas sinSeparador={esAstro} />
 
       {/* ── BANDA CON LA FOTO DE LA DISCIPLINA DE FONDO (como el mármol, pero con su foto) ──
           A la izquierda, su foto cuadrada; a la derecha, las puertas apiladas con el mismo
@@ -218,104 +221,111 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
           <DisciplinaBgLayer nom={d.nom} borderRadius="0" />
         </Box>
 
-        <Box position="relative" zIndex={1} w="100%" maxW="1040px" mx="auto" px={{ base: 5, md: 10, lg: 16 }}>
-          {pagada !== null && (
-            <Grid templateColumns={{ base: "1fr", md: "repeat(2, minmax(0, 1fr))" }} gap={{ base: 6, md: 9 }} alignItems="stretch">
-              <Reveal activo={banda} direction="right" distance={30} scaleFrom={0.95} duration={0.9} delay={0.45}>
-                {/* Misma anchura que las puertas de debajo (en móvil, todo el ancho de la columna). */}
-                <Box w="100%">
-                  <FotoDisciplina d={d} />
-                </Box>
-              </Reveal>
+        {esAstro ? (
+          <Box position="relative" zIndex={1} w="100%" maxW="1320px" mx="auto" px={{ base: 5, md: 10, lg: 14 }}>
+            <ServiciosAstrologia activo={banda} />
+          </Box>
+        ) : (
+          <Box position="relative" zIndex={1} w="100%" maxW="1040px" mx="auto" px={{ base: 5, md: 10, lg: 16 }}>
+            {pagada !== null && (
+              <Grid templateColumns={{ base: "1fr", md: "repeat(2, minmax(0, 1fr))" }} gap={{ base: 6, md: 9 }} alignItems="stretch">
+                <Reveal activo={banda} direction="right" distance={30} scaleFrom={0.95} duration={0.9} delay={0.45}>
+                  {/* Misma anchura que las puertas de debajo (en móvil, todo el ancho de la columna). */}
+                  <Box w="100%">
+                    <FotoDisciplina d={d} />
+                  </Box>
+                </Reveal>
 
-              <Grid templateRows={{ md: `repeat(${puertas.length}, minmax(0, 1fr))` }} gap={{ base: 4, md: 5 }}>
-                {puertas.map((p, i) => (
-                  <Reveal key={p.clave} activo={banda} direction="left" distance={30} scaleFrom={0.97} duration={0.8} delay={0.7 + i * 0.15} h="100%">
-                    <Flex
-                      // Cada puerta se abre en una PESTAÑA NUEVA (la disciplina se queda donde está
-                      // y la persona no se pierde). La apagada (Reels) no lleva enlace.
-                      {...(p.apagada ? {} : { as: "a" as const, href: p.link, target: "_blank", rel: "noopener noreferrer" })}
-                      textDecoration="none"
-                      role="group"
-                      w="100%"
-                      h="100%"
-                      direction="row"
-                      align="center"
-                      gap={{ base: 4, md: 5 }}
-                      position="relative"
-                      overflow="hidden"
-                      bg="transparent"
-                      border={`2px solid ${d.txt}80`}
-                      borderRadius="2xl"
-                      px={{ base: 5, md: 6 }}
-                      py={{ base: 5, md: 4 }}
-                      minH={{ base: "104px", md: "0" }}
-                      // Transparente: se ve la foto de la banda. Solo el filo del color de la disciplina y,
-                      // al pasar el ratón, un velito de ese color y una subida mínima.
-                      cursor={p.apagada ? "default" : "pointer"}
-                      opacity={p.apagada ? 0.6 : 1}
-                      transition="transform 0.28s ease, background 0.28s ease"
-                      _hover={
-                        p.apagada
-                          ? {}
-                          : { transform: "translateY(-3px)", bg: `${d.txt}1a`, borderColor: `${d.txt}b3`, textDecoration: "none" }
-                      }
-                      _focusVisible={focoBlanco}
-                    >
-                      {/* Icono */}
-                      <Box
+                <Grid templateRows={{ md: `repeat(${puertas.length}, minmax(0, 1fr))` }} gap={{ base: 4, md: 5 }}>
+                  {puertas.map((p, i) => (
+                    <Reveal key={p.clave} activo={banda} direction="left" distance={30} scaleFrom={0.97} duration={0.8} delay={0.7 + i * 0.15} h="100%">
+                      <Flex
+                        // Cada puerta se abre en una PESTAÑA NUEVA (la disciplina se queda donde está
+                        // y la persona no se pierde). La apagada (Reels) no lleva enlace.
+                        {...(p.apagada ? {} : { as: "a" as const, href: p.link, target: "_blank", rel: "noopener noreferrer" })}
+                        textDecoration="none"
+                        role="group"
+                        w="100%"
+                        h="100%"
+                        direction="row"
+                        align="center"
+                        gap={{ base: 4, md: 5 }}
                         position="relative"
-                        zIndex={1}
-                        flexShrink={0}
-                        w={{ base: "64px", md: "72px" }}
-                        h={{ base: "64px", md: "72px" }}
-                        borderRadius="full"
-                        border={`1px solid ${d.txt}66`}
-                        bg={`${d.txt}14`}
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center"
-                        transition="transform 0.28s ease"
-                        _groupHover={p.apagada ? {} : { transform: "scale(1.05)" }}
-                        sx={{ "& svg": { width: "38px", height: "38px" } }}
+                        overflow="hidden"
+                        bg="transparent"
+                        border={`2px solid ${d.txt}80`}
+                        borderRadius="2xl"
+                        px={{ base: 5, md: 6 }}
+                        py={{ base: 5, md: 4 }}
+                        minH={{ base: "104px", md: "0" }}
+                        // Transparente: se ve la foto de la banda. Solo el filo del color de la disciplina y,
+                        // al pasar el ratón, un velito de ese color y una subida mínima.
+                        cursor={p.apagada ? "default" : "pointer"}
+                        opacity={p.apagada ? 0.6 : 1}
+                        transition="transform 0.28s ease, background 0.28s ease"
+                        _hover={
+                          p.apagada
+                            ? {}
+                            : { transform: "translateY(-3px)", bg: `${d.txt}1a`, borderColor: `${d.txt}b3`, textDecoration: "none" }
+                        }
+                        _focusVisible={focoBlanco}
                       >
-                        {p.renderIcon(d.txt)}
-                      </Box>
-
-                      {/* Título */}
-                      <Flex position="relative" zIndex={1} direction="column" align="flex-start" gap={1} minW={0}>
-                        <Text
-                          color={d.txt}
-                          fontWeight="700"
-                          fontSize={{ base: "md", md: "lg" }}
-                          letterSpacing="0.12em"
-                          textTransform="uppercase"
-                          textAlign="left"
-                          lineHeight="1.25"
-                          textShadow={conFondo ? `0 1px 3px ${d.bg}, 0 0 14px ${d.bg}dd` : "1px 1px 3px rgba(0,0,0,0.45)"}
+                        {/* Icono */}
+                        <Box
+                          position="relative"
+                          zIndex={1}
+                          flexShrink={0}
+                          w={{ base: "64px", md: "72px" }}
+                          h={{ base: "64px", md: "72px" }}
+                          borderRadius="full"
+                          border={`1px solid ${d.txt}66`}
+                          bg={`${d.txt}14`}
+                          display="flex"
+                          alignItems="center"
+                          justifyContent="center"
+                          transition="transform 0.28s ease"
+                          _groupHover={p.apagada ? {} : { transform: "scale(1.05)" }}
+                          sx={{ "& svg": { width: "38px", height: "38px" } }}
                         >
-                          {p.titulo}
-                        </Text>
-                        {p.pie && (
+                          {p.renderIcon(d.txt)}
+                        </Box>
+
+                        {/* Título */}
+                        <Flex position="relative" zIndex={1} direction="column" align="flex-start" gap={1} minW={0}>
                           <Text
                             color={d.txt}
-                            opacity={0.82}
-                            fontStyle="italic"
-                            fontSize={{ base: "sm", md: "md" }}
-                            letterSpacing="0.04em"
-                            textShadow={conFondo ? `0 1px 3px ${d.bg}, 0 0 12px ${d.bg}dd` : "1px 1px 3px rgba(0,0,0,0.45)"}
+                            fontWeight="700"
+                            fontSize={{ base: "md", md: "lg" }}
+                            letterSpacing="0.12em"
+                            textTransform="uppercase"
+                            textAlign="left"
+                            lineHeight="1.25"
+                            textShadow={conFondo ? `0 1px 3px ${d.bg}, 0 0 14px ${d.bg}dd` : "1px 1px 3px rgba(0,0,0,0.45)"}
                           >
-                            {p.pie}
+                            {p.titulo}
                           </Text>
-                        )}
+                          {p.pie && (
+                            <Text
+                              color={d.txt}
+                              opacity={0.82}
+                              fontStyle="italic"
+                              fontSize={{ base: "sm", md: "md" }}
+                              letterSpacing="0.04em"
+                              textShadow={conFondo ? `0 1px 3px ${d.bg}, 0 0 12px ${d.bg}dd` : "1px 1px 3px rgba(0,0,0,0.45)"}
+                            >
+                              {p.pie}
+                            </Text>
+                          )}
+                        </Flex>
                       </Flex>
-                    </Flex>
-                  </Reveal>
-                ))}
+                    </Reveal>
+                  ))}
+                </Grid>
               </Grid>
-            </Grid>
-          )}
-        </Box>
+            )}
+          </Box>
+
+        )}
       </Box>
 
       {/* Dentro de Teoría: volver a la portada (abajo a la izquierda, fuera de las cajas). */}

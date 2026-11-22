@@ -3,8 +3,9 @@
 // Mismo lenguaje visual que el resto del sitio (fondo turquesa, EB Garamond,
 // header público + footer anclado abajo) pero con el texto alineado a la
 // izquierda y ancho de lectura cómodo: son textos largos, no páginas de venta.
+import { MandalaTinte } from "../../components/global/MandalaTinte";
 import React, { useEffect } from "react";
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import { useIdioma } from "../../i18n";
 import SiteFooter from "../../components/global/Footer";
@@ -75,13 +76,7 @@ export default function PaginaLegal({
 
       <Box flex="1">
         <Flex justify="center" pt={{ base: 8, md: 12 }}>
-          <Image
-            src="/img/icono/life.webp"
-            alt=""
-            h={{ base: "48px", md: "62px" }}
-            objectFit="contain"
-            style={{ filter: "drop-shadow(0 0 11px rgba(255,255,255,0.7)) drop-shadow(0 0 26px rgba(255,255,255,0.35))" }}
-          />
+          <MandalaTinte h={{ base: "48px", md: "62px" }} />
         </Flex>
 
         <Flex direction="column" align="center" textAlign="center" px={{ base: 5, md: 10 }} pt={{ base: 6, md: 8 }}>

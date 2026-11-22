@@ -11,7 +11,12 @@ export const welcome = {
   // (ahí también se lee el rótulo del header): un solo sitio donde cambiarlo.
   "welcome.subtitulo": "Ciencia, psicología y tradición para descubrir nuevas perspectivas desde las que comprenderte.",
   // ── Cabecera de la portada (frase + formulario + foto) ──
+  "welcome.perspectivas.subtitulo": "Juntos abordaremos…",
   "welcome.perspectivas.titular": "Lo importante eres tú, las perspectivas se adaptan a ti.",
+  "welcome.persp.1.titulo": "Cómo se construyó tu mente",
+  "welcome.persp.2.titulo": "Tu filosofía esencial",
+  "welcome.persp.3.titulo": "Tu ser desde la tradición",
+  "welcome.persp.4.titulo": "El cuidado de tu cuerpo",
   "welcome.hero.pedirCita": "Pedir cita gratuita",
   "welcome.hero.nombre": "Tu nombre",
   // Las tres ideas de fondo (segunda sección, WelcomePilares)

@@ -2,13 +2,14 @@ import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import WelcomeCabecera from "../../components/welcome/WelcomeCabecera";
 import { Reveal } from "../../components/global/Reveal";
 import Certificaciones from "../../components/web/Certificaciones";
 import { FONDO_PAGINA_TURQUESA as T } from "../../GlobalVariables";
 import { useT } from "../../i18n";
 
 /**
- * Quién soy. POR AHORA solo lleva: mi foto a la izquierda y mi texto a la derecha (sobre el beige,
+ * Quién soy. POR AHORA solo lleva: la cabecera (mandala + MARÍA ESCRIBANO), mi foto a la izquierda y mi texto a la derecha (sobre el beige,
  * sin mármol), y debajo «Mi formación y herramientas para asesorarte» con su botón (ese sí con el
  * mármol). La página completa se guardó en `QuienSoy.completa.tsx.txt`.
  */
@@ -27,6 +28,9 @@ const QuienSoy = () => {
       <SiteHeader variant="auto" />
 
       <Box flex="1">
+        {/* ── Mandala + «MARÍA ESCRIBANO» + frase (la misma cabecera de la portada) ── */}
+        <WelcomeCabecera activo={mounted} titulo="María Escribano" subtitulo={t("quienSoy.subtitulo")} mayusculas />
+
         {/* ── Foto a la izquierda, mi texto a la derecha ── */}
         <Flex
           w="100%"
@@ -44,7 +48,7 @@ const QuienSoy = () => {
             <Box position="relative">
               <Box position="absolute" inset="-9px" borderRadius="30px" border={`1px solid ${T}66`} pointerEvents="none" />
               <Box borderRadius="22px" overflow="hidden" border={`1.5px solid ${T}`}>
-                <Image src="/img/me/fotoclasica.webp" alt="María Escribano" w="100%" h="auto" display="block" />
+                <Image src="/img/me/maria-portada.webp" alt="María Escribano" w="100%" h="auto" display="block" />
               </Box>
             </Box>
           </Reveal>
