@@ -10,6 +10,7 @@
 // Mini-formato del texto (una marca por línea, párrafos separados por una línea en blanco):
 //   # Título de sección      ## Antetítulo en versalitas      - elemento de lista
 //   --- raya                 > frase de cierre (centrada, en cursiva)
+//   === salto de página (empieza una hoja nueva)
 // Dentro de un párrafo valen **negrita** y *cursiva*, y se respetan los saltos de línea. Los símbolos
 // de los planetas (☉ ☽ ☿ ♀ ♆ ♅…) y los emoji se pintan como imagen en su sitio (ver pdf/glifosTexto.ts).
 //
@@ -74,6 +75,7 @@ type Bloque =
   | { tipo: "h1" | "h2" | "p" | "cierre"; texto: string }
   | { tipo: "lista"; items: string[] }
   | { tipo: "raya" }
+  | { tipo: "pagina" }
   /** Líneas en blanco de MÁS (a partir de la segunda seguida): aire extra entre dos párrafos. */
   | { tipo: "espacio"; lineas: number };
 
@@ -106,6 +108,7 @@ export function bloquesDeTexto(cuerpo: string): Bloque[] {
       continue;
     }
     enBlanco = 0;
+    if (/^={3,}$/.test(l)) { cerrarParrafo(); cerrarLista(); out.push({ tipo: "pagina" }); continue; }
     if (/^-{3,}$/.test(l)) { cerrarParrafo(); cerrarLista(); out.push({ tipo: "raya" }); continue; }
     if (l.startsWith("## ")) { cerrarParrafo(); cerrarLista(); out.push({ tipo: "h2", texto: sinMarcas(l.slice(3)) }); continue; }
     if (l.startsWith("# ")) { cerrarParrafo(); cerrarLista(); out.push({ tipo: "h1", texto: sinMarcas(l.slice(2)) }); continue; }
@@ -174,6 +177,7 @@ export async function generarInforme(d: InformeDatos): Promise<{ blob: Blob; nom
       case "p": taller.parrafoRico(b.texto); break;
       case "lista": taller.lista(b.items); break;
       case "raya": taller.separador(); break;
+      case "pagina": taller.nuevaPagina(); break;
       case "espacio": taller.espacio(5.5 * b.lineas); break;
       case "cierre": taller.cierre(b.texto); break;
     }
