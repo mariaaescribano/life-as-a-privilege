@@ -195,7 +195,7 @@ export function VistaDiarioMaria() {
       </Flex>
 
       {cargando ? (
-        <Flex justify="center" py={4}><LifeLoader color="#ffffff" size="40px" /></Flex>
+        <Flex justify="center" py={4}><LifeLoader size="40px" /></Flex>
       ) : (
         entradas.map((e) => <EntradaDiario key={e.id} e={e} onBorrar={borrar} />)
       )}
@@ -210,7 +210,7 @@ export function ListaDiarioMaria() {
   return (
     <Flex direction="column" gap={4} w="100%">
       {cargando ? (
-        <Flex justify="center" py={6}><LifeLoader color="#ffffff" size="48px" /></Flex>
+        <Flex justify="center" py={6}><LifeLoader size="48px" /></Flex>
       ) : entradas.length === 0 ? (
         <Text color="rgba(255,255,255,0.85)" fontSize="lg" fontStyle="italic" textAlign="center">Todavía no has apuntado nada.</Text>
       ) : (

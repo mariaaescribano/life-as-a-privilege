@@ -75,22 +75,24 @@ const TestDoshasPage = lazyConMetodo(() => import("./app/aprendizaje/TestDoshasP
 const EspacioHome = lazy(() => import("./app/espacio/main/EspacioHome"));
 const ExpandablePage = lazyConMetodo(() => import("./app/espacio/main/ThemePreguntas"));
 const QuienSoy = lazy(() => import("./app/web/QuienSoy"));
+const ReservarCita = lazy(() => import("./app/web/ReservarCita"));
 const Productos = lazy(() => import("./app/web/Productos"));
 const Asesoria = lazy(() => import("./app/web/Asesoria"));
-const Premium = lazy(() => import("./app/web/Premium"));
-const PremiumEspacio = lazy(() => import("./app/web/PremiumEspacio"));
-const PremiumRegistro = lazy(() => import("./app/web/PremiumRegistro"));
+// Premium (público): apartado APARCADO, el código sigue en el repo. Para revivirlo: descomentar estos imports y las rutas /premium/*.
+// const Premium = lazy(() => import("./app/web/Premium"));
+// const PremiumEspacio = lazy(() => import("./app/web/PremiumEspacio"));
+// const PremiumRegistro = lazy(() => import("./app/web/PremiumRegistro"));
 const BajaLista = lazy(() => import("./app/web/BajaLista"));
-const PremiumAvisos = lazy(() => import("./app/web/PremiumAvisos"));
-const PremiumContenido = lazy(() => import("./app/web/PremiumContenido"));
+// const PremiumAvisos = lazy(() => import("./app/web/PremiumAvisos"));
+// const PremiumContenido = lazy(() => import("./app/web/PremiumContenido"));
 // Premium (admin): apartado aparcado, el panel sigue en el repo. Para revivirlo: descomentar esto, la ruta y el menú.
 // const AdminPremium = lazy(() => import("./app/admin/AdminPremium"));
 const Disciplinas = lazy(() => import("./app/web/Disciplinas"));
 const LibrosPage = lazy(() => import("./app/web/LibrosPage"));
 const DescargarLibroPage = lazy(() => import("./app/web/DescargarLibroPage"));
-const Contacto = lazy(() => import("./app/web/Contacto"));
+// const Contacto = lazy(() => import("./app/web/Contacto"));
 const CumpleRegalo = lazy(() => import("./app/web/CumpleRegalo"));
-const ContactoFormulario = lazy(() => import("./app/web/ContactoFormulario"));
+// const ContactoFormulario = lazy(() => import("./app/web/ContactoFormulario"));
 const Opiniones = lazy(() => import("./app/web/Opiniones"));
 const MaterialesGratuitos = lazy(() => import("./app/web/MaterialesGratuitos"));
 // const ProgramasPage = lazy(() => import("./app/web/ProgramasPage"));
@@ -417,28 +419,31 @@ export default function App()
       <Route path="/terminos" element={<Terminos />} />
       <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
       <Route path="/quienSoy" element={<QuienSoy />} />
+      <Route path="/reservar-cita" element={<ReservarCita />} />
       <Route path="/asesoria" element={<Asesoria />} />
-      <Route path="/premium" element={<Premium />} />
-      {/* Home del contenido premium: dos puertas, Podcasts y Reels. */}
-      <Route path="/premium/espacio" element={<PrivateRoute><PremiumEspacio /></PrivateRoute>} />
-      {/* Pagar primero, luego crear la cuenta: Stripe vuelve a /registro; /avisos reclama el pago. */}
-      <Route path="/premium/registro" element={<PremiumRegistro />} />
       <Route path="/baja" element={<BajaLista />} />
-      <Route path="/premium/avisos" element={<PrivateRoute><PremiumAvisos /></PrivateRoute>} />
-      <Route path="/premium/podcasts" element={<PrivateRoute><PremiumContenido tipo="podcast" /></PrivateRoute>} />
-      <Route path="/premium/reels" element={<PrivateRoute><PremiumContenido tipo="reel" /></PrivateRoute>} />
+      {/* Premium (público) APARCADO: rutas comentadas, el código sigue en el repo.
+          <Route path="/premium" element={<Premium />} />
+          Home del contenido premium: dos puertas, Podcasts y Reels.
+          <Route path="/premium/espacio" element={<PrivateRoute><PremiumEspacio /></PrivateRoute>} />
+          Pagar primero, luego crear la cuenta: Stripe vuelve a /registro; /avisos reclama el pago.
+          <Route path="/premium/registro" element={<PremiumRegistro />} />
+          <Route path="/premium/avisos" element={<PrivateRoute><PremiumAvisos /></PrivateRoute>} />
+          <Route path="/premium/podcasts" element={<PrivateRoute><PremiumContenido tipo="podcast" /></PrivateRoute>} />
+          <Route path="/premium/reels" element={<PrivateRoute><PremiumContenido tipo="reel" /></PrivateRoute>} />
+      */}
       <Route path="/disciplinas" element={<Disciplinas />} />
 
       <Route path="/productos" element={<Productos />} />
 
       <Route path="/libros" element={<LibrosPage />} />
       <Route path="/libros/descargar" element={<DescargarLibroPage />} />
-      <Route path="/contacto" element={<Contacto />} />
+      {/* Contáctame APARCADO: <Route path="/contacto" element={<Contacto />} /> */}
       {/* El botón del correo de cumpleaños. Sin PrivateRoute: la página misma
           manda a /logIn con ?next= para volver aquí con el enlace. */}
       <Route path="/cumple" element={<CumpleRegalo />} />
       {/* El formulario, en su propia página: se llega desde la tarjeta «Escríbeme». */}
-      <Route path="/contacto/escribir" element={<ContactoFormulario />} />
+      {/* Contáctame APARCADO: <Route path="/contacto/escribir" element={<ContactoFormulario />} /> */}
       <Route path="/opiniones" element={<Opiniones />} />
       {/* /elMetodo ya no existe (la página se borró), pero hay QR impresos que apuntan
           aquí: llevan a la portada. */}

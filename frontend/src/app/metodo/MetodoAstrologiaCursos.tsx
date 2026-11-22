@@ -93,7 +93,7 @@ export default function MetodoAstrologiaCursos() {
   }
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
 
       {/* Mismos márgenes y ANCHO SIN TOPE que /aprendizaje/cursos/:disciplina

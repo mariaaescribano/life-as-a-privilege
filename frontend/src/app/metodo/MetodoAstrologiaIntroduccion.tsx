@@ -136,7 +136,7 @@ export default function MetodoAstrologiaIntroduccion() {
   const sinDatosNiDisciplina = !carta && !estado?.fecha_nacimiento && disciplinaAbierta === false;
   if (sinDatosNiDisciplina) {
     return (
-      <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+      <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
         <SiteHeader variant="private" />
         <Flex flex="1" align="center" justify="center" px={6} py={10}>
           <Box role="alertdialog" aria-labelledby="aviso-sin-disciplina" position="relative" overflow="hidden" w="100%" maxW="460px"
@@ -162,7 +162,7 @@ export default function MetodoAstrologiaIntroduccion() {
 
   if (fallo) {
     return (
-      <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+      <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
         <SiteHeader variant="private" />
         <Flex flex="1" direction="column" align="center" justify="center" gap={6} px={6}>
           <Text color="white" fontSize={{ base: "lg", md: "xl" }} textAlign="center" fontStyle="italic">{t("comun.error")}</Text>
@@ -177,7 +177,7 @@ export default function MetodoAstrologiaIntroduccion() {
   }
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 28, md: 36 }}>

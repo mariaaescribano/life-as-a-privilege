@@ -64,7 +64,7 @@ export default function AdminLogin() {
   }
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
 
       <Flex flex="1" align="center" justify="center" px={5} py={{ base: 12, md: 16 }}>

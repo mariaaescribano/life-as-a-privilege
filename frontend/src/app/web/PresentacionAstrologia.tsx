@@ -76,7 +76,7 @@ export default function PresentacionAstrologia({ d }: { d: PresentacionDisciplin
   const renderIcon = (size: string) => <AstrologiaIcon size={{ base: size, md: size }} />;
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="auto" />
 
       <Flex

@@ -81,7 +81,7 @@ export const elMetodo = {
    *  Two keys because they're painted with different styles. */
   /** The Map header: the main phrase and the secondary one, in italics. */
   "elMetodo.hero.principal": "A unique methodology of multidimensional self-knowledge",
-  "elMetodo.hero.secundaria": "Eight perspectives to reinterpret your experience and yourself.",
+  "elMetodo.hero.secundaria": "I combine **psychology, **science, **tradition and **philosophy to explore new ways of understanding ourselves, caring for ourselves and discovering the **potential we carry within.",
   "elMetodo.hero.tituloAntes": "To change,",
   "elMetodo.hero.tituloPide": "ask yourself",
   "elMetodo.hero.titulo": "What happened to you?",

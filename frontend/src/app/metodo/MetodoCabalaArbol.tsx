@@ -89,7 +89,7 @@ export default function MetodoCabalaArbol() {
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" fontFamily="'EB Garamond', serif"
-         bg="#008080">
+         bg="#F0DCC0">
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 28, md: 36 }}>

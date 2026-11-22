@@ -64,7 +64,8 @@ export function esAdminDesbloqueado(): boolean {
  */
 export function rutaHome(): string {
   if (esAdminDesbloqueado()) return "/admin";
-  return esSoloPremium() ? "/premium/espacio" : "/home";
+  // Premium APARCADO: return esSoloPremium() ? "/premium/espacio" : "/home";
+  return "/home";
 }
 
 /**

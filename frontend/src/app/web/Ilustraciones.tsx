@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { FONDO_PAGINA_TURQUESA as T } from "../../GlobalVariables";
 import { Box, Flex, Grid, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -117,17 +118,17 @@ export default function Ilustraciones() {
   // lugar del spinner). El header se pinta ya para que cargue antes.
   if (!imagesReady) {
     return (
-      <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+      <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
         <SiteHeader variant="auto" />
         <Flex flex="1" align="center" justify="center" overflow="hidden">
-          <LifeLoader color="#ffffff" />
+          <LifeLoader />
         </Flex>
       </Box>
     );
   }
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="auto" />
 
       {/* Con disciplina: su header (foto de fondo, icono + nombre, sin botones). Sin ella: la flor y el título de siempre. */}
@@ -143,13 +144,12 @@ export default function Ilustraciones() {
       <Flex direction="column" align="center" textAlign="center" px={{ base: 5, md: 10 }} pt={{ base: 6, md: 8 }} gap={{ base: 3, md: 4 }}>
         {!disciplina && (
         <Text
-          color="white"
+          color={T}
           fontSize={{ base: "3xl", md: "5xl", lg: "6xl" }}
           fontWeight="700"
           letterSpacing="0.1em"
           lineHeight="1.1"
           textTransform="uppercase"
-          textShadow="0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(255,255,255,0.39), 0 0 56px rgba(180,255,245,0.32)"
           opacity={mounted ? 1 : 0}
           transform={mounted ? "translateY(0)" : "translateY(20px)"}
           transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
@@ -158,12 +158,11 @@ export default function Ilustraciones() {
         </Text>
         )}
         <Text
-          color="rgba(255,255,255,0.88)"
+          color={`${T}e0`}
           fontSize={{ base: "md", md: "xl" }}
           fontStyle="italic"
           letterSpacing="0.05em"
           lineHeight="1.5"
-          textShadow="0 0 10px rgba(255,255,255,0.41), 0 0 21px rgba(255,255,255,0.22)"
           maxW={{ base: "100%", md: "620px" }}
           opacity={mounted ? 1 : 0}
           transform={mounted ? "translateY(0)" : "translateY(13px)"}
@@ -179,7 +178,7 @@ export default function Ilustraciones() {
           // Una disciplina puede no tener ilustraciones todavía (Cultura). Se
           // dice, en vez de dejar un hueco turquesa sin explicación.
           <Text
-            color="rgba(255,255,255,0.88)"
+            color={`${T}e0`}
             fontSize={{ base: "md", md: "xl" }}
             fontStyle="italic"
             textAlign="center"

@@ -1,9 +1,11 @@
+import { FONDO_PAGINA_TURQUESA } from "../../GlobalVariables";
+import { MandalaTinte } from "./MandalaTinte";
 import React, { useEffect, useState } from "react";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { cerrarSesionLocal, esAdminDesbloqueado, esSoloPremium, recordarSoloPremium, rutaHome } from "../../api/sesion";
+import { cerrarSesionLocal, esAdminDesbloqueado, rutaHome } from "../../api/sesion";
 import { salirDeLaPersona, personaActiva, esMariaMirando } from "../../api/persona";
-import { getUserMe } from "../../api/userMe";
+// (Premium aparcado) import { getUserMe } from "../../api/userMe";
 import { useT } from "../../i18n";
 import SelectorIdioma from "./SelectorIdioma";
 import MenuHamburguesa, { type ItemMenu } from "./MenuHamburguesa";
@@ -93,21 +95,22 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   }, [location.pathname]);
 
   const hasSession = !!localStorage.getItem("userId");
-  // Cuenta solo de Premium: el menú se reduce a Podcasts y Reels. Se recuerda en el
-  // navegador para no parpadear y se confirma con /user/me.
-  const [soloPremium, setSoloPremium] = useState<boolean>(() => hasSession && esSoloPremium());
-  useEffect(() => {
-    if (!hasSession) return;
-    let vivo = true;
-    getUserMe()
-      .then(({ data }) => {
-        const es = data?.solo_premium === true;
-        recordarSoloPremium(es);
-        if (vivo) setSoloPremium(es);
-      })
-      .catch(() => { /* sin red: se queda lo recordado */ });
-    return () => { vivo = false; };
-  }, [hasSession]);
+  // Premium APARCADO: detección de cuentas solo-Premium comentada.
+  // // Cuenta solo de Premium: el menú se reduce a Podcasts y Reels. Se recuerda en el
+  // // navegador para no parpadear y se confirma con /user/me.
+  // const [soloPremium, setSoloPremium] = useState<boolean>(() => hasSession && esSoloPremium());
+  // useEffect(() => {
+  //   if (!hasSession) return;
+  //   let vivo = true;
+  //   getUserMe()
+  //     .then(({ data }) => {
+  //       const es = data?.solo_premium === true;
+  //       recordarSoloPremium(es);
+  //       if (vivo) setSoloPremium(es);
+  //     })
+  //     .catch(() => { /* sin red: se queda lo recordado */ });
+  //   return () => { vivo = false; };
+  // }, [hasSession]);
   const isPrivate  = variant === "private" || (variant === "auto" && hasSession);
   // En el área privada (logueado: /home, /metodo, …) el header es ~10% más compacto.
   const compact = isPrivate;
@@ -133,7 +136,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   // Programas: fuera del menú (ver más abajo, en los destinos). La sección
   // sigue existiendo como cuarta caja de Materiales.
   // const isProgramasPage = path.startsWith("/programas");
-  const isContactoPage = path.startsWith("/contacto");
+  // const isContactoPage = path.startsWith("/contacto");
   // const isEstudioPage = path.startsWith("/estudio");   // estudio aparcado
   // Vídeos: apartado aparcado (ver más abajo, en los destinos del menú).
   // const isVideosPage = path.startsWith("/videos");
@@ -179,18 +182,24 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   // no se usan; las rutas /elMetodo y /materiales siguen vivas.
   const itemsWeb: ItemMenu[] = [
     { etiqueta: t("header.asesoria"),    onSelect: () => navigate("/asesoria"),    activo: path.startsWith("/asesoria") },
-    { etiqueta: t("header.premium"),     onSelect: () => navigate("/premium"),     activo: path.startsWith("/premium") },
-    { etiqueta: t("header.disciplinas"), onSelect: () => navigate("/disciplinas"), activo: path.startsWith("/disciplinas") },
-    { etiqueta: t("header.material"),    onSelect: () => navigate("/materiales"),   activo: isMaterialesPage },
-    { etiqueta: t("header.sobreMi"),     onSelect: () => navigate("/quienSoy"),     activo: path.startsWith("/quiensoy") },
-    { etiqueta: t("header.contacto"),    onSelect: () => navigate("/contacto"),     activo: isContactoPage },
+    // Premium APARCADO (ver App.tsx): { etiqueta: t("header.premium"), onSelect: () => navigate("/premium"), activo: path.startsWith("/premium") },
+    // POR AHORA solo estas cuatro en la cabecera. Astrología y Formación apuntan a páginas provisionales
+    // (la portada de la disciplina y Materiales) hasta que estén las nuevas. El resto, aparcado:
+    { etiqueta: t("header.astrologia"),  onSelect: () => navigate("/disciplina/astrologia"), activo: path.startsWith("/disciplina/astrologia") },
+    { etiqueta: t("header.formacion"),   onSelect: () => navigate("/materiales"),   activo: isMaterialesPage },
+    { etiqueta: t("header.quienSoy"),    onSelect: () => navigate("/quienSoy"),     activo: path.startsWith("/quiensoy") },
+    // { etiqueta: t("header.disciplinas"), onSelect: () => navigate("/disciplinas"), activo: path.startsWith("/disciplinas") },
+    // { etiqueta: t("header.material"),    onSelect: () => navigate("/materiales"),   activo: isMaterialesPage },
+    // { etiqueta: t("header.sobreMi"),     onSelect: () => navigate("/quienSoy"),     activo: path.startsWith("/quiensoy") },
+    // { etiqueta: t("header.contacto"),    onSelect: () => navigate("/contacto"),     activo: isContactoPage },
   ];
 
-  const itemsPremium: ItemMenu[] = [
-    { etiqueta: t("premium.espacio.podcasts"), onSelect: () => navigate("/premium/podcasts"), activo: path.startsWith("/premium/podcasts") },
-    { etiqueta: t("premium.espacio.reels"),    onSelect: () => navigate("/premium/reels"),    activo: path.startsWith("/premium/reels") },
-  ];
-  const premiumSolo = isPrivate && soloPremium && !isAdminPage;
+  // Premium APARCADO: el menú de las cuentas solo-Premium (Podcasts, Reels) y su detección están comentados.
+  // const itemsPremium: ItemMenu[] = [
+  //   { etiqueta: t("premium.espacio.podcasts"), onSelect: () => navigate("/premium/podcasts"), activo: path.startsWith("/premium/podcasts") },
+  //   { etiqueta: t("premium.espacio.reels"),    onSelect: () => navigate("/premium/reels"),    activo: path.startsWith("/premium/reels") },
+  // ];
+  const premiumSolo = false; // antes: isPrivate && soloPremium && !isAdminPage
 
   // Cerrar sesión desde el menú, para que nadie se quede sin salida. Dentro del
   // camino de una persona (María en el de ella) cerrar sesión la echaría del
@@ -216,8 +225,6 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
         { etiqueta: t("header.miCuenta"), onSelect: () => navigate("/user/account"), activo: isCuentaPage },
         itemSalir,
       ]
-    : premiumSolo
-    ? [...itemsPremium, itemSalir]
     : isPrivate
     ? isAdminPage
       ? [
@@ -236,10 +243,12 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
         ]
       : [
           ...itemsWeb,
+          // Contáctame aparcado (la página está fuera por ahora): { etiqueta: t("header.contacto"), onSelect: () => navigate("/contacto"), activo: isContactoPage },
           { etiqueta: t("header.miCuenta"), onSelect: () => navigate("/user/account"), activo: isCuentaPage },
         ]
     : [
         ...itemsWeb,
+        // Contáctame aparcado: { etiqueta: t("header.contacto"), onSelect: () => navigate("/contacto"), activo: isContactoPage },
         { etiqueta: t("header.iniciarSesion"), onSelect: () => navigate("/logIn") },
       ];
 
@@ -251,7 +260,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
       px={{ base: 5, md: 12 }}
       pt={{ base: 2, md: compact ? 3 : 4 }}
       pb={{ base: compact ? "10px" : "13px", md: compact ? 3 : 4 }}
-      bg="#008080"
+      bg="#F0DCC0"
       position="sticky"
       top="0"
       // Con el menú abierto la cabecera se pone POR ENCIMA del velo (que va a
@@ -259,7 +268,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
       // ahí convertidas en X — cerrar es volver a pulsar donde acabas de
       // pulsar, sin buscar un aspa en otro sitio.
       zIndex={menuAbierto ? 400 : 100}
-      borderBottom="1px solid rgba(255,255,255,0.22)"
+      borderBottom={`1px solid ${FONDO_PAGINA_TURQUESA}4D`}
     >
       {/* Logo. Es un <button> de verdad (antes era un div con onClick): con el
           tabulador no se podía llegar a él, y es la vuelta a casa. */}
@@ -280,27 +289,20 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
         transition="opacity 0.2s"
         gap={{ base: 2, md: 3 }}
       >
-        <Image
-          src="/img/icono/life.webp"
-          alt=""
-          h={{ base: compact ? "36px" : "40px", md: compact ? "63px" : "70px" }}
-          objectFit="contain"
-          style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.35)) drop-shadow(0 0 20px rgba(255,255,255,0.17)) drop-shadow(0 0 42px rgba(180,255,245,0.13))" }}
-        />
+        <MandalaTinte h={{ base: compact ? "36px" : "40px", md: compact ? "63px" : "70px" }} />
         {/* Con la sesión dentro de un espacio (la persona, o María en su camino) el nombre que María le puso al crear
             la cuenta va arriba, y debajo, más pequeña y en cursiva, la firma. Fuera de eso (web pública, panel) la marca de
             siempre: «MARÍA ESCRIBANO», el nombre arriba y el apellido debajo, empezando en el mismo borde izquierdo. */}
         {nombrePersona ? (
           <Flex direction="column" align="flex-start" lineHeight="1.15" minW={0}>
             <Text
-              color="white"
+              color={FONDO_PAGINA_TURQUESA}
               fontFamily="'EB Garamond', serif"
               fontWeight="600"
               fontSize={{ base: "12px", md: "20px" }}
               letterSpacing="0.18em"
               textTransform="uppercase"
               // El mismo halo que lleva el mandala de al lado.
-              textShadow="0 0 9px rgba(255,255,255,0.35), 0 0 20px rgba(255,255,255,0.17)"
               whiteSpace="nowrap"
               overflow="hidden"
               textOverflow="ellipsis"
@@ -309,13 +311,12 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
               {nombrePersona}
             </Text>
             <Text
-              color="rgba(255,255,255,0.85)"
+              color={FONDO_PAGINA_TURQUESA}
               fontFamily="'EB Garamond', serif"
               fontStyle="italic"
               fontWeight="500"
               fontSize={{ base: "10px", md: "14px" }}
               letterSpacing="0.08em"
-              textShadow="0 0 9px rgba(255,255,255,0.3), 0 0 20px rgba(255,255,255,0.14)"
               whiteSpace="nowrap"
             >
               {t("header.con")}{" "}
@@ -327,13 +328,12 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
           {t("header.marca").split(" ").map((palabra) => (
             <Text
               key={palabra}
-              color="white"
+              color={FONDO_PAGINA_TURQUESA}
               fontFamily="'EB Garamond', serif"
               fontWeight="600"
               fontSize={{ base: "12px", md: "20px" }}
               letterSpacing="0.18em"
               // El mismo halo que lleva el mandala de al lado.
-              textShadow="0 0 9px rgba(255,255,255,0.35), 0 0 20px rgba(255,255,255,0.17)"
               whiteSpace="nowrap"
             >
               {palabra}
@@ -344,7 +344,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
       </Flex>
 
       {/* ── CENTRO ──
-          Las cuatro primeras opciones del menú (Asesorías, Premium, Disciplinas, Material), a la vista y en medio (solo en
+          Las cuatro primeras opciones del menú (por ahora: Asesorías 1:1, Astrología, Formación, Quién soy), a la vista y en medio (solo en
           pantallas anchas; en las demás viven dentro de la hamburguesa, que se
           queda siempre a la derecha). No hay admin: ahí el menú es otro. */}
       {!isAdminPage && !dentro && (
@@ -361,13 +361,13 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
           align="center"
           gap={{ lg: 6, xl: 10 }}
         >
-          {(premiumSolo ? itemsPremium : itemsWeb.slice(0, 4)).map((it) => (
+          {itemsWeb.slice(0, 4).map((it) => (
             <Box
               key={it.etiqueta}
               as="button"
               type="button"
               onClick={it.onSelect}
-              color="white"
+              color={FONDO_PAGINA_TURQUESA}
               fontFamily="'EB Garamond', serif"
               fontWeight="600"
               fontSize="md"
@@ -375,8 +375,8 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
               textTransform="uppercase"
               whiteSpace="nowrap"
               pb="3px"
-              borderBottom={it.activo ? "1px solid rgba(255,255,255,0.85)" : "1px solid transparent"}
-              _hover={{ borderBottomColor: "rgba(255,255,255,0.55)" }}
+              borderBottom={it.activo ? `1px solid ${FONDO_PAGINA_TURQUESA}` : "1px solid transparent"}
+              _hover={{ borderBottomColor: `${FONDO_PAGINA_TURQUESA}8C` }}
               _focusVisible={focoBlanco}
               transition="border-color 0.2s"
             >
@@ -404,14 +404,11 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
             h={{ base: "40px", md: "50px" }}
             borderRadius="full"
             overflow="hidden"
-            border="2px solid rgba(255,255,255,0.7)"
-            bg="rgba(255,255,255,0.08)"
+            border={`2px solid ${FONDO_PAGINA_TURQUESA}`}
             cursor="pointer"
-            boxShadow="0 0 12px rgba(255,255,255,0.32), 0 0 28px rgba(255,255,255,0.15), 0 0 50px rgba(180,255,245,0.14)"
             transition="border-color 0.25s ease, box-shadow 0.25s ease"
             _hover={{
-              borderColor: "white",
-              boxShadow: "0 0 18px rgba(255,255,255,0.49), 0 0 42px rgba(180,255,245,0.28)",
+              borderColor: FONDO_PAGINA_TURQUESA,
             }}
             _focusVisible={{ borderColor: "white", ...focoBlanco }}
             flexShrink={0}

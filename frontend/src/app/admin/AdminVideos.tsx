@@ -221,7 +221,7 @@ export {};
 //   const previa = portadaDe({ portada: form.portada, url: form.url });
 //
 //   return (
-//     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+//     <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
 //       <SiteHeader variant="private" />
 //
 //       {/* ── MANDALA ── */}
@@ -254,7 +254,7 @@ export {};
 //       <Flex flex="1" justify="center" px={{ base: 5, md: 10 }} pt={{ base: 8, md: 10 }} pb={{ base: 10, md: 14 }}>
 //         <Box w="100%" maxW="920px">
 //           {loading ? (
-//             <LifeLoader color="#ffffff" />
+//             <LifeLoader />
 //           ) : videos.length === 0 ? (
 //             <Text color="rgba(255,255,255,0.75)" fontStyle="italic" textAlign="center" mt={10}>
 //               Aún no hay vídeos. Añade el primero con “+ Nuevo vídeo”.
@@ -271,7 +271,7 @@ export {};
 //       <Modal isOpen={!!editando} onClose={() => setEditando(null)} isCentered size="xl">
 //         <ModalOverlay bg="rgba(0,0,0,0.8)" sx={{ backdropFilter: "blur(8px)" }} />
 //         <ModalContent
-//           bg="#008080"
+//           bg="#F0DCC0"
 //           color="white"
 //           fontFamily="'EB Garamond', serif"
 //           border="1px solid rgba(255,255,255,0.22)"
@@ -392,7 +392,7 @@ export {};
 //       <Modal isOpen={!!aBorrar} onClose={() => setABorrar(null)} isCentered size="md">
 //         <ModalOverlay bg="rgba(0,0,0,0.8)" sx={{ backdropFilter: "blur(8px)" }} />
 //         <ModalContent
-//           bg="#008080"
+//           bg="#F0DCC0"
 //           color="white"
 //           fontFamily="'EB Garamond', serif"
 //           border="1px solid rgba(255,255,255,0.22)"

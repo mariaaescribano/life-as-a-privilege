@@ -63,14 +63,14 @@ const PremiumEspacio = () => {
 
   if (!pagado) {
     return (
-      <Box position="fixed" inset={0} bg="#008080">
+      <Box position="fixed" inset={0} bg="#F0DCC0">
         <LifeLoading variant="private" />
       </Box>
     );
   }
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="auto" />
 
       <Box flex="1">

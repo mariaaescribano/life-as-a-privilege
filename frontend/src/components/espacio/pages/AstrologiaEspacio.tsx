@@ -14,8 +14,7 @@ import {
   API_URL,
   astrologiaBg,
   astrologiaTxt,
-  AstrologiaIcon,
-} from "../../../GlobalVariables";
+  AstrologiaIcon, FONDO_PAGINA_TURQUESA } from "../../../GlobalVariables";
 import axios from "axios";
 import { modulosAstrologia } from "../../../hardCoded/aprendizajes/Astrologia/ModulosAstrologia";
 import SiteFooter from "../../global/Footer";
@@ -425,7 +424,7 @@ const ZodiacModal = ({
             bg="rgba(0,0,0,0.45)"
             display="flex" alignItems="center" justifyContent="center"
           >
-            <AstrologiaLoader color="#ffffff" size="58px" />
+            <AstrologiaLoader color={FONDO_PAGINA_TURQUESA} size="58px" />
           </Box>
         )}
 
@@ -802,7 +801,7 @@ export default function AstrologiaEspacio() {
   };
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="auto" />
 
       <Box flex="1">
@@ -820,7 +819,7 @@ export default function AstrologiaEspacio() {
             maxW="900px"
           />
 
-          {loading && <AstrologiaLoader color="#ffffff" />}
+          {loading && <AstrologiaLoader color={FONDO_PAGINA_TURQUESA} />}
 
           {!loading && (
             <Box

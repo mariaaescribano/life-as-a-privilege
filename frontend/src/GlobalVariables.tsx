@@ -48,6 +48,16 @@ export const whatsappUrl = (): string => `https://wa.me/${WHATSAPP_TELEFONO}`;
 // COLORES
 export const turquesa = "#48C0B5";
 
+// Fondo de página. PRUEBA (2026-11-22): beige. El turquesa original queda guardado aquí;
+// para volver: sustituir "#F0DCC0" por "#008080" en bg/background/pageBg (sed global).
+export const FONDO_PAGINA_BEIGE = "#F0DCC0";
+// Turquesa clásico (el de antes):
+// export const FONDO_PAGINA_TURQUESA = "#008080";
+// Turquesa oscuro (activo): mandala, header, titulares y letra sobre el fondo de página.
+export const FONDO_PAGINA_TURQUESA = "#005F5F";
+// Letra sobre el fondo de página (antes blanca). Turquesa oscuro.
+export const TEXTO_PAGINA = FONDO_PAGINA_TURQUESA;
+
 // Fisiología
 export const fisiologiaNom = "Fisiología";
 export const  fisiologiaTxt= "#c8b5d1";

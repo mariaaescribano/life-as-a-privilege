@@ -1,19 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Box, Flex, SimpleGrid, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { LibrosIcon } from "../../GlobalVariables";
 import { useT } from "../../i18n";
 import WelcomeCabecera from "../../components/welcome/WelcomeCabecera";
-import BandaMarmol from "../../components/global/BandaMarmol";
 import { Reveal } from "../../components/global/Reveal";
 import { focoBlanco } from "../../components/global/foco";
 
 const TINTA = "#004f4f";
-const ORO = "#b08d3f";
-
-/** La foto de la derecha: ocupa el alto de las cuatro cajas. Vacía = las cajas, centradas. */
-const FOTO_AUDIOLIBROS = "/img/me/leyendocontraje.webp";
 
 type Cajita = {
   titulo: string;
@@ -94,19 +89,20 @@ export default function MaterialesGratuitos() {
       link: "/libros",
       renderIcon: () => <LibrosIcon color={TINTA} size="52px" shadow={false} />,
     },
-    {
-      // Audiolibros: la sección está por hacer, el enlace queda preparado.
-      titulo: t("materiales.audiolibros"),
-      delay: 0.6,
-      link: "/audiolibros",
-      renderIcon: () => (
-        <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="52px" height="52px" fill="none" stroke={TINTA} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M4 16v-3a8 8 0 0 1 16 0v3" />
-          <rect x="3" y="14" width="4" height="6" rx="1.4" />
-          <rect x="17" y="14" width="4" height="6" rx="1.4" />
-        </Box>
-      ),
-    },
+    // ── «Audiolibros» comentado: la caja sobra (la sección está por hacer). Se conserva por si vuelve.
+    // {
+    //   // Audiolibros: la sección está por hacer, el enlace queda preparado.
+    //   titulo: t("materiales.audiolibros"),
+    //   delay: 0.6,
+    //   link: "/audiolibros",
+    //   renderIcon: () => (
+    //     <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="52px" height="52px" fill="none" stroke={TINTA} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    //       <path d="M4 16v-3a8 8 0 0 1 16 0v3" />
+    //       <rect x="3" y="14" width="4" height="6" rx="1.4" />
+    //       <rect x="17" y="14" width="4" height="6" rx="1.4" />
+    //     </Box>
+    //   ),
+    // },
     // ── «Programas» comentado: la sección se aparca. Lo que ofrecía —una
     // charla con diapositivas y su podcast— ya cabe en un curso (una lección
     // «video» es un enlace de YouTube pegado tal cual), y de 43 programas del
@@ -134,94 +130,56 @@ export default function MaterialesGratuitos() {
   ];
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="auto" />
 
       {/* ── MANDALA + TÍTULO + FRASE (la misma cabecera de la portada) ── */}
-      <WelcomeCabecera activo={mounted} titulo={t("header.materiales")} subtitulo={t("materiales.subtitulo")} mayusculas />
+      <WelcomeCabecera activo={mounted} titulo={t("header.materiales")} subtitulo={t("materiales.subtitulo")} mayusculas sinSeparador />
 
-      {/* ── LAS CUATRO CAJAS, sobre el mármol, de dos en dos; a la derecha, una foto ── */}
+      {/* ── LAS CAJAS, en horizontal (en una fila en escritorio), sobre el beige de la página ── */}
       <Box flex="1">
-        <BandaMarmol mt={{ base: 2, md: 4 }} pt={{ base: "150px", md: "140px" }} pb={{ base: "160px", md: "150px" }}>
-          {(visible) => (
-            <Flex
-              w="100%"
-              maxW="1100px"
-              mx="auto"
-              px={{ base: 5, md: 10, lg: 16 }}
-              direction={{ base: "column", lg: "row" }}
-              align={{ base: "center", lg: "stretch" }}
-              justify="center"
-              gap={{ base: 8, lg: 14 }}
-            >
-              <SimpleGrid columns={{ base: 1, md: 2 }} gap={{ base: 4, md: 6 }} w="100%" maxW={{ base: "420px", md: "640px" }} flex={FOTO_AUDIOLIBROS ? 1 : undefined}>
-                {cajitas.map((c) => (
-                  <Reveal key={c.link} activo={visible} direction="up" distance={30} scaleFrom={0.96} duration={0.9} delay={c.delay} h="100%" display="flex">
-                    <Flex
-                      as="a"
-                      href={c.link}
-                      // Cada recurso se abre en una PESTAÑA NUEVA: Materiales se queda donde está
-                      // y la persona no se pierde entre páginas.
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      textDecoration="none"
-                      direction="column"
-                      align="center"
-                      justify="center"
-                      flex="1"
-                      w="100%"
-                      gap={{ base: 3, md: 4 }}
-                      bg="transparent"
-                      border={`1.5px solid ${TINTA}55`}
-                      borderRadius="2xl"
-                      px={{ base: 5, md: 6 }}
-                      py={{ base: 7, md: 9 }}
-                      minH={{ base: "170px", md: "210px" }}
-                      boxShadow={`0 0 16px ${ORO}22, 0 0 36px ${ORO}12`}
-                      cursor="pointer"
-                      transition="background 0.25s ease, border-color 0.25s ease, transform 0.28s ease"
-                      _hover={{ bg: `${TINTA}12`, borderColor: `${TINTA}aa`, transform: "translateY(-5px)", textDecoration: "none" }}
-                      _focusVisible={focoBlanco}
-                    >
-                      <Flex w={{ base: "72px", md: "84px" }} h={{ base: "72px", md: "84px" }} borderRadius="full" border={`1px solid ${TINTA}66`} align="center" justify="center">
-                        {c.renderIcon()}
-                      </Flex>
-                      <Box w="40px" h="1px" bg={`linear-gradient(to right, transparent, ${TINTA}, transparent)`} />
-                      <Text color={TINTA} fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "md", md: "xl" }} letterSpacing="0.16em" textTransform="uppercase" textAlign="center" lineHeight="1.2">
-                        {c.titulo}
-                      </Text>
-                    </Flex>
-                  </Reveal>
-                ))}
-              </SimpleGrid>
-
-              {FOTO_AUDIOLIBROS && (
-                <Reveal activo={visible} direction="left" distance={36} scaleFrom={0.94} duration={1} delay={0.4} w={{ base: "100%", md: "320px", lg: "340px" }} maxW={{ base: "420px", md: "none" }} h={{ base: "auto", lg: "auto" }} flexShrink={0} display="flex">
-                  {/* En escritorio la foto ocupa EXACTAMENTE el alto de las cuatro cajas (se recorta con
-                      encuadre); en móvil, debajo, con su proporción. */}
-                  {/* Doble marco: la foto con su borde y, por fuera, un filo fino turquesa oscuro desplazado. */}
-                  <Flex position="relative" w="100%">
-                  <Box position="absolute" inset="-9px" borderRadius="30px" border={`1px solid ${TINTA}66`} pointerEvents="none" />
-                  <Box position="relative" w="100%" borderRadius="22px" overflow="hidden" border={`1.5px solid ${TINTA}`} boxShadow={`0 0 18px ${ORO}44, 0 0 40px ${ORO}22`}>
-                    <Image
-                      src={FOTO_AUDIOLIBROS}
-                      alt=""
-                      display="block"
-                      w="100%"
-                      h={{ base: "auto", lg: "100%" }}
-                      position={{ base: "static", lg: "absolute" }}
-                      inset={{ lg: 0 }}
-                      objectFit="cover"
-                      objectPosition="center 25%"
-                    />
-                  </Box>
+        <Box w="100%" maxW="1180px" mx="auto" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 12, md: 16 }}>
+          <SimpleGrid columns={{ base: 1, md: 2, lg: cajitas.length }} gap={{ base: 5, md: 6 }} justifyItems="center">
+            {cajitas.map((c, i) => (
+              <Reveal key={c.link} inView direction="up" distance={30} scaleFrom={0.96} duration={0.9} delay={(i % 4) * 0.12} w="100%" maxW={{ base: "420px", md: "none" }} h="100%" display="flex">
+                <Flex
+                  as="a"
+                  href={c.link}
+                  // Cada recurso se abre en una PESTAÑA NUEVA: Materiales se queda donde está
+                  // y la persona no se pierde entre páginas.
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  textDecoration="none"
+                  direction="column"
+                  align="center"
+                  justify="center"
+                  flex="1"
+                  w="100%"
+                  gap={{ base: 3, md: 4 }}
+                  bg="transparent"
+                  border={`1.5px solid ${TINTA}55`}
+                  borderRadius="2xl"
+                  px={{ base: 5, md: 6 }}
+                  py={{ base: 7, md: 9 }}
+                  minH={{ base: "170px", md: "210px" }}
+                  cursor="pointer"
+                  transition="background 0.25s ease, border-color 0.25s ease, transform 0.28s ease"
+                  _hover={{ bg: `${TINTA}12`, borderColor: `${TINTA}aa`, transform: "translateY(-5px)", textDecoration: "none" }}
+                  _focusVisible={focoBlanco}
+                >
+                  <Flex w={{ base: "72px", md: "84px" }} h={{ base: "72px", md: "84px" }} borderRadius="full" border={`1px solid ${TINTA}66`} align="center" justify="center">
+                    {c.renderIcon()}
                   </Flex>
-                </Reveal>
-              )}
-            </Flex>
-          )}
-        </BandaMarmol>
-        {/* Hueco turquesa de la página entre el mármol y el pie. */}
+                  <Box w="40px" h="1px" bg={`linear-gradient(to right, transparent, ${TINTA}, transparent)`} />
+                  <Text color={TINTA} fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "md", md: "lg", lg: "md", xl: "lg" }} letterSpacing="0.14em" textTransform="uppercase" textAlign="center" lineHeight="1.2">
+                    {c.titulo}
+                  </Text>
+                </Flex>
+              </Reveal>
+            ))}
+          </SimpleGrid>
+        </Box>
+        {/* Hueco entre las cajas y el pie. */}
         <Box h={{ base: "56px", md: "88px" }} />
       </Box>
 

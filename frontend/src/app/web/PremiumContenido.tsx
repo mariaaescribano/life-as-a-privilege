@@ -50,7 +50,7 @@ const PremiumContenido = ({ tipo }: { tipo: Tipo }) => {
 
   if (!pagado || items === null) {
     return (
-      <Box position="fixed" inset={0} bg="#008080">
+      <Box position="fixed" inset={0} bg="#F0DCC0">
         <LifeLoading variant="private" />
       </Box>
     );
@@ -60,7 +60,7 @@ const PremiumContenido = ({ tipo }: { tipo: Tipo }) => {
     new Date(iso).toLocaleDateString(idioma === "en" ? "en-GB" : "es-ES", { day: "numeric", month: "long", year: "numeric" });
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="auto" />
       <Box flex="1">
         <WelcomeCabecera

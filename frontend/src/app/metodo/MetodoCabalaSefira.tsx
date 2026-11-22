@@ -508,7 +508,7 @@ export default function MetodoCabalaSefira() {
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" fontFamily="'EB Garamond', serif"
-         bg="#008080">
+         bg="#F0DCC0">
       <SiteHeader variant="private" />
 
       {/* Animaciones de la página, en un solo sitio (antes el keyframe del

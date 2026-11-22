@@ -65,7 +65,7 @@ export {};
 //
 //   if (!programa) {
 //     return (
-//       <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+//       <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
 //         <SiteHeader variant="auto" />
 //         <Flex flex={1} direction="column" align="center" justify="center" gap={6} px={5}>
 //           <Text color="white" fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" textAlign="center">
@@ -87,7 +87,7 @@ export {};
 //   const siguiente = programaSiguiente(programa);
 //
 //   return (
-//     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+//     <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
 //       <SiteHeader variant="auto" />
 //
 //       <Flex

@@ -110,7 +110,7 @@ const EspacioHome = () => {
       minH="100vh"
       display="flex"
       flexDirection="column"
-      bg="#008080"
+      bg="#F0DCC0"
       fontFamily="'EB Garamond', serif"
     >
       {/* ── HEADER ── */}
@@ -202,7 +202,7 @@ const EspacioHome = () => {
                     justifyContent="center"
                     zIndex={20}
                   >
-                    <LifeLoader color="#ffffff" size="58px" />
+                    <LifeLoader size="58px" />
                   </Box>
                 )}
               </Box>
@@ -256,7 +256,7 @@ const EspacioHome = () => {
 
         {img == null && (
           <Flex flex="1" align="center" justify="center" py={16}>
-            <LifeLoader color="#ffffff" />
+            <LifeLoader />
           </Flex>
         )}
       </Box>

@@ -16,12 +16,11 @@ export const auth = {
   "auth.login.titulo": "Sign in to your account",
   "auth.login.subtitulo": "Log in to your account on The Map",
   "auth.login.soloYo": "Only I create your account. You'll get an email to activate it.",
-  "auth.login.frase": "Two doors into two complementary worlds",
   // «Entrar» is shorter than the title in Spanish; in English the natural
   // thing is to repeat "Log in" on the button — "Enter" sounds like a door,
   // not a session.
   "auth.login.opcion.asesoria": "I'm being coached",
-  "auth.login.opcion.premium": "Access to premium content",
+  "auth.login.opcion.lectura": "Astrology reading",
   "auth.login.entrar": "Log in",
   "auth.login.olvidada": "Forgot your password?",
   "auth.login.sinCuenta": "Don't have an account? Create account",

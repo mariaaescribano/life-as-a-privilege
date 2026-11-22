@@ -67,7 +67,7 @@ export {};
 //           px={3}
 //           py="2px"
 //           borderRadius="full"
-//           bg="#008080"
+//           bg="#F0DCC0"
 //           border="1px solid rgba(255,255,255,0.45)"
 //           color="white"
 //           fontFamily="'EB Garamond', serif"

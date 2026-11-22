@@ -221,7 +221,7 @@ export default function MetodoAyurvedaDoshaIntro() {
   // Dosha aún sin contenido: página de cortesía.
   if (!c) {
     return (
-      <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+      <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
         <SiteHeader variant="private" />
         <Flex flex="1" justify="center" align="center" px={6} py={20}>
           <Flex direction="column" align="center" w="100%" maxW="640px" gap={6}>
@@ -252,7 +252,7 @@ export default function MetodoAyurvedaDoshaIntro() {
   }
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 28, md: 36 }}>

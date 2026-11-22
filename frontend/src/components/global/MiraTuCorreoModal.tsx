@@ -45,7 +45,7 @@ export function MiraTuCorreoModal({
       <Box
         role="dialog"
         aria-modal="true"
-        bg="#008080"
+        bg="#F0DCC0"
         border="1px solid rgba(255,255,255,0.3)"
         borderRadius="3xl"
         boxShadow="0 0 42px rgba(255,255,255,0.1), 0 0 100px rgba(180,255,245,0.06), 0 22px 60px rgba(0,0,0,0.6)"

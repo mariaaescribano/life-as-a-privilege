@@ -4,7 +4,7 @@ import { AyurvedaLoader } from "../../components/metodo/comicLoaders";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import { AyurvedaIcon, ayurvedaBg, ayurvedaTxt, API_URL, VataIcon, PittaIcon, KaphaIcon, vataColor, pittaColor, kaphaColor } from "../../GlobalVariables";
+import { AyurvedaIcon, ayurvedaBg, ayurvedaTxt, API_URL, VataIcon, PittaIcon, KaphaIcon, vataColor, pittaColor, kaphaColor, FONDO_PAGINA_TURQUESA } from "../../GlobalVariables";
 import { generateAyurvedaPdf, type AyurvedaRespuesta } from "../../utils/generateAyurvedaPdf";
 import AyurvedaTestPage from "../../components/espacio/components/AyurvedaTestPage";
 import { useT, type ClaveTexto } from "../../i18n";
@@ -368,10 +368,10 @@ export default function AyurvedaMiEspacio() {
   ────────────────────────────────────────────── */
   if (loadingInit) {
     return (
-      <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+      <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
         <SiteHeader variant="private" />
         <Flex flex="1" justify="center" align="center" minH="60vh">
-          <AyurvedaLoader color="#ffffff" />
+          <AyurvedaLoader color={FONDO_PAGINA_TURQUESA} />
         </Flex>
         <SiteFooter />
       </Box>
@@ -393,7 +393,7 @@ export default function AyurvedaMiEspacio() {
   }
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
       <Box flex="1">
         <ResultadoPanel

@@ -109,7 +109,7 @@ export default function AdminSuscriptores() {
   }
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10 }} py={{ base: 8, md: 12 }}>
@@ -176,7 +176,7 @@ export default function AdminSuscriptores() {
           )}
 
           {loading ? (
-            <Flex justify="center" py={10}><LifeLoader color="#ffffff" /></Flex>
+            <Flex justify="center" py={10}><LifeLoader /></Flex>
           ) : (
             <Flex direction="column" gap={2}>
               {filtrados.map((s) => (

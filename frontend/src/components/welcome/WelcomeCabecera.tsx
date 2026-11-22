@@ -1,5 +1,7 @@
+import { FONDO_PAGINA_TURQUESA } from "../../GlobalVariables";
+import { MandalaTinte } from "../global/MandalaTinte";
 import React, { useEffect, useState } from "react";
-import { Box, Flex, Image, Text, useBreakpointValue } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import { useT } from "../../i18n";
 import { Reveal } from "../global/Reveal";
 import { LetrasVivas } from "../global/LetrasVivas";
@@ -18,9 +20,12 @@ const WelcomeCabecera = ({
   mayusculas = false,
   sinFrase = false,
   sinSeparador = false,
+  izquierda = false,
 }: {
   /** Sin la frase en cursiva de debajo del titular. */
   sinFrase?: boolean;
+  /** En columna junto a la foto (la portada): sin mandala, titular más pequeño y más aire hasta la frase. */
+  izquierda?: boolean;
   /** Sin la separación horizontal con el mandala pequeño. */
   sinSeparador?: boolean;
   activo: boolean;
@@ -32,7 +37,6 @@ const WelcomeCabecera = ({
   mayusculas?: boolean;
 }) => {
   const t = useT();
-  const esMovil = useBreakpointValue({ base: true, md: false }) ?? true;
 
   // La entrada es una secuencia: primero el mandala, luego el titular, luego la
   // frase en cursiva y, al final, la separación. Cada paso espera al anterior, y
@@ -72,50 +76,33 @@ const WelcomeCabecera = ({
 
   return (
     <Box>
-      <Flex justify="center" pt={{ base: 10, md: 14 }}>
-        {/* Entra girando y se enfoca; luego se queda QUIETO. */}
-        <Box>
-          <Image
-            src="/img/icono/life.webp"
-            alt=""
-            h={{ base: "63px", md: "86px" }}
-            objectFit="contain"
-            style={{
-              opacity: activo ? 1 : 0,
-              transform: activo ? "scale(1) rotate(0deg)" : "scale(0.25) rotate(-45deg)",
-              // glow (drop-shadow) siempre + blur solo durante la entrada.
-              filter:
-                "drop-shadow(0 0 10px rgba(255,255,255,0.59)) drop-shadow(0 0 23px rgba(255,255,255,0.32)) drop-shadow(0 0 47px rgba(180,255,245,0.24))" +
-                (activo ? "" : " blur(6px)"),
-              transition: "opacity 1.1s ease, transform 1.3s cubic-bezier(0.22,1.5,0.36,1), filter 1s ease",
-            }}
-          />
-        </Box>
-      </Flex>
+      {!izquierda && (      <Flex justify="center" pt={{ base: 10, md: 14 }}>
+          {/* Entra girando y se enfoca; luego se queda QUIETO. */}
+          <MandalaTinte h={izquierda ? { base: "56px", md: "70px" } : { base: "63px", md: "86px" }} style={{ opacity: activo ? 1 : 0, transform: activo ? "scale(1) rotate(0deg)" : "scale(0.25) rotate(-45deg)", filter: activo ? "none" : "blur(6px)", transition: "opacity 1.1s ease, transform 1.3s cubic-bezier(0.22,1.5,0.36,1), filter 1s ease" }} />
+        </Flex>)}
 
-      <Flex direction="column" align="center" textAlign="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 7, md: 9 }} gap={{ base: 3, md: 4 }}>
+      <Flex direction="column" align="center" textAlign="center" px={izquierda ? 0 : { base: 5, md: 10, lg: 16 }} pt={izquierda ? 0 : { base: 7, md: 9 }} gap={izquierda ? { base: 8, md: 9 } : { base: 3, md: 4 }}>
         <Text
-          color="white"
+          color={FONDO_PAGINA_TURQUESA}
           fontFamily="'EB Garamond', serif"
-          fontSize={{ base: "3xl", md: "5xl", lg: "6xl" }}
+          fontSize={izquierda ? { base: "3xl", md: "4xl", lg: "clamp(2.1rem, 3.3vw, 3.5rem)" } : { base: "3xl", md: "5xl", lg: "6xl" }}
           fontWeight="700"
           letterSpacing="0.03em"
           lineHeight="1.15"
-          maxW="1000px"
+          maxW={izquierda ? "640px" : "1000px"}
           textTransform={mayusculas ? "uppercase" : undefined}
-          textShadow="0 0 12px rgba(255,255,255,0.26), 0 0 26px rgba(180,255,245,0.12)"
           opacity={tituloListo ? 1 : 0}
           transition="opacity 0.9s ease"
         >
           {/* El titular NO se mueve: ni sube al entrar ni se ondula. Se enfoca al
               entrar y después se queda quieto: SOLO la luz lo repasa, una y otra
               vez (`altura={0}` = ninguna letra se eleva; `sinSubida`). */}
-          <LetrasVivas texto={textoTitulo} entrada sinSubida activo={tituloListo} onda={!esMovil} altura={0} />
+          <LetrasVivas texto={textoTitulo} entrada sinSubida activo={tituloListo} onda={false} altura={0} />
         </Text>
 
         {!sinFrase && (
         <Text
-          color="rgba(255,255,255,0.9)"
+          color={FONDO_PAGINA_TURQUESA}
           fontFamily="'EB Garamond', serif"
           fontSize={{ base: "md", md: "xl" }}
           fontStyle="italic"
@@ -126,7 +113,10 @@ const WelcomeCabecera = ({
           transform={frase ? "translateY(0)" : "translateY(14px)"}
           transition="opacity 0.9s ease, transform 0.9s ease"
         >
-          {subtitulo ?? t("elMetodo.hero.secundaria")}
+          {/* `**palabra` = esa palabra en negrita. */}
+          {(subtitulo ?? t("elMetodo.hero.secundaria")).split(/(\*\*[\p{L}\p{N}]+)/u).map((trozo, i) =>
+            trozo.startsWith("**") ? <b key={i}>{trozo.slice(2)}</b> : trozo,
+          )}
         </Text>
         )}
       </Flex>
@@ -136,18 +126,9 @@ const WelcomeCabecera = ({
       {/* Separación con el mandala pequeño, mismo aire arriba que abajo. */}
       <Reveal activo={separador} direction="none" scaleFrom={0.86} duration={0.9} mt={{ base: "48px", md: "67px" }}>
         <Flex align="center" justify="center" gap={{ base: 4, md: 6 }}>
-          <Box h="1px" w={{ base: "60px", md: "150px" }} bg="linear-gradient(to right, transparent, rgba(255,255,255,0.55))" />
-          <Box>
-            <Image
-              src="/img/icono/life.webp"
-              alt=""
-              h={{ base: "26px", md: "34px" }}
-              objectFit="contain"
-              flexShrink={0}
-              style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.45)) drop-shadow(0 0 18px rgba(255,255,255,0.22))" }}
-            />
-          </Box>
-          <Box h="1px" w={{ base: "60px", md: "150px" }} bg="linear-gradient(to left, transparent, rgba(255,255,255,0.55))" />
+          <Box h="1px" w={{ base: "60px", md: "150px" }} bg={`linear-gradient(to right, transparent, ${FONDO_PAGINA_TURQUESA}8C)`} />
+          <MandalaTinte h={{ base: "26px", md: "34px" }} />
+          <Box h="1px" w={{ base: "60px", md: "150px" }} bg={`linear-gradient(to left, transparent, ${FONDO_PAGINA_TURQUESA}8C)`} />
         </Flex>
       </Reveal>
         </>

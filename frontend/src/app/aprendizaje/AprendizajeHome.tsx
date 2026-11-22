@@ -1,4 +1,6 @@
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
+import { MandalaTinte } from "../../components/global/MandalaTinte";
+import { FONDO_PAGINA_TURQUESA as T } from "../../GlobalVariables";
 import React, { useEffect, useState } from "react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -62,17 +64,17 @@ export const AprendizajeHome = () => {
   // cargue antes de desbloquear la página.
   if (loading || !imagesReady) {
     return (
-      <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+      <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
         <SiteHeader variant="auto" />
         <Flex flex="1" align="center" justify="center" overflow="hidden">
-          <LifeLoader color="#ffffff" />
+          <LifeLoader />
         </Flex>
       </Box>
     );
   }
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
 
       <SiteHeader variant="auto" />
 
@@ -90,18 +92,12 @@ export const AprendizajeHome = () => {
             animation: "mandalaFloat 5.5s ease-in-out infinite",
           }}
         >
-          <Image
-            src="/img/icono/life.webp"
-            alt=""
+          <MandalaTinte
             h={{ base: "48px", md: "64px" }}
-            objectFit="contain"
             style={{
               opacity: mounted ? 1 : 0,
               transform: mounted ? "scale(1) rotate(0deg)" : "scale(0.25) rotate(-45deg)",
-              // glow (drop-shadow) siempre + blur solo durante la entrada.
-              filter:
-                "drop-shadow(0 0 9px rgba(255,255,255,0.59)) drop-shadow(0 0 21px rgba(255,255,255,0.32)) drop-shadow(0 0 42px rgba(180,255,245,0.24))" +
-                (mounted ? "" : " blur(6px)"),
+              filter: mounted ? "none" : "blur(6px)",
               transition: "opacity 1.1s ease, transform 1.3s cubic-bezier(0.22,1.5,0.36,1), filter 1s ease",
             }}
           />
@@ -118,13 +114,12 @@ export const AprendizajeHome = () => {
         gap={{ base: 3, md: 4 }}
       >
         <Text
-          color="white"
+          color={T}
           fontSize={{ base: "3xl", md: "5xl", lg: "6xl" }}
           fontWeight="700"
           letterSpacing="0.1em"
           lineHeight="1.1"
           textTransform="uppercase"
-          textShadow="0 0 14px rgba(255,255,255,0.64), 0 0 30px rgba(255,255,255,0.41), 0 0 56px rgba(180,255,245,0.34)"
           opacity={mounted ? 1 : 0}
           transform={mounted ? "translateY(0)" : "translateY(20px)"}
           transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
@@ -132,12 +127,11 @@ export const AprendizajeHome = () => {
           {t("aprendizaje.titulo")}
         </Text>
         <Text
-          color="rgba(255,255,255,0.88)"
+          color={`${T}e0`}
           fontSize={{ base: "sm", md: "lg" }}
           fontStyle="italic"
           letterSpacing="0.05em"
           lineHeight="1.5"
-          textShadow="0 0 8px rgba(255,255,255,0.38), 0 0 18px rgba(255,255,255,0.21)"
           maxW={{ base: "100%", md: "512px" }}
           opacity={mounted ? 1 : 0}
           transform={mounted ? "translateY(0)" : "translateY(13px)"}

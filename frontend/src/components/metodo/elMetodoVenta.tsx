@@ -327,7 +327,7 @@ function QuieroEsteModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
     <Modal isOpen={isOpen} onClose={cerrar} size="md" isCentered>
       <ModalOverlay bg="rgba(0,0,0,0.55)" />
       <ModalContent
-        bg="#008080"
+        bg="#F0DCC0"
         borderRadius="2xl"
         boxShadow="0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09)"
         mx={{ base: 4, md: 0 }}

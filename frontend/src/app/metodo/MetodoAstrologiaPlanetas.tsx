@@ -39,7 +39,7 @@ export default function MetodoAstrologiaPlanetas() {
   const sigIdx = siguienteCuerpoIndex(carta);
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
 
       {/* ── CABECERA ── */}

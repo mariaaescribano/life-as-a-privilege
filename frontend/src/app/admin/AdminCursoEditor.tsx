@@ -258,7 +258,7 @@ export default function AdminCursoEditor() {
   if (verificando || loading) return <LifeLoading variant="private" />;
   if (!curso) {
     return (
-      <Box minH="100vh" bg="#008080" display="flex" flexDirection="column" fontFamily="'EB Garamond', serif">
+      <Box minH="100vh" bg="#F0DCC0" display="flex" flexDirection="column" fontFamily="'EB Garamond', serif">
         <SiteHeader variant="private" />
         <Box flex="1" display="flex" alignItems="center" justifyContent="center">
           <Text color="white" fontStyle="italic">Curso no encontrado.</Text>
@@ -279,7 +279,7 @@ export default function AdminCursoEditor() {
   const TEXT_SHADOW = `0 1px 4px ${bg}, 0 0 10px ${bg}, 0 0 22px ${bg}`;
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif" color="white">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif" color="white">
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 4, md: 10 }} py={{ base: 6, md: 10 }} sx={{ zoom: 1.15 }}>

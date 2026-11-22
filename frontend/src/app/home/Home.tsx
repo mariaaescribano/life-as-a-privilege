@@ -40,8 +40,8 @@ import { personaActiva } from "../../api/persona";
 import { useT, type ClaveTexto } from "../../i18n";
 import { encogerFoto } from "../../utils/encogerFoto";
 import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
-import { cacheDeOtraCuenta, recordarSoloPremium } from "../../api/sesion";
-import { getUserMe } from "../../api/userMe";
+import { cacheDeOtraCuenta } from "../../api/sesion";
+// (Premium aparcado) import { getUserMe } from "../../api/userMe";
 
 // Entrada de cada círculo del mandala: sube desde algo más pequeño y desenfocado
 // hasta colocarse, con la curva del sistema Reveal (sin rebote ni giro: un
@@ -126,13 +126,13 @@ let suscCache: SuscCache | null = null;
 let imagesReadyCache = false;
 
 const Home = () => {
-  // /home es de las personas asesoradas: una cuenta solo de Premium va a su espacio.
-  const irA = useNavigate();
-  useEffect(() => {
-    getUserMe().then(({ data }) => {
-      if (data?.solo_premium === true) { recordarSoloPremium(true); irA("/premium/espacio", { replace: true }); }
-    }).catch(() => { /* sin red: se queda */ });
-  }, [irA]);
+  // Premium APARCADO: la redirección de las cuentas solo-Premium a /premium/espacio está comentada.
+  // const irA = useNavigate();
+  // useEffect(() => {
+  //   getUserMe().then(({ data }) => {
+  //     if (data?.solo_premium === true) { recordarSoloPremium(true); irA("/premium/espacio", { replace: true }); }
+  //   }).catch(() => { /* sin red: se queda */ });
+  // }, [irA]);
   // Si se ha cambiado de cuenta en esta pestaña, las compras guardadas son de la otra.
   if (cacheDeOtraCuenta("home")) suscCache = null;
   const navigate = useNavigate();
@@ -958,7 +958,7 @@ const Home = () => {
       minH="100vh"
       display="flex"
       flexDirection="column"
-      bg="#008080"
+      bg="#F0DCC0"
       fontFamily="'EB Garamond', serif"
     >
       <SiteHeader variant="private" userImg={img ?? undefined} />
@@ -1129,7 +1129,7 @@ const Home = () => {
                     justifyContent="center"
                     zIndex={20}
                   >
-                    <LifeLoader color="#ffffff" size="58px" />
+                    <LifeLoader size="58px" />
                   </Box>
                 )}
               </Box>
@@ -1361,7 +1361,7 @@ const Home = () => {
           // en Inicio y El Mapa), centrada sobre el turquesa.
           <Flex flex="1" w="100%" minH="80vh" align="center" justify="center">
             <Box transform={{ base: "scale(1.4)", md: "scale(1.9)" }}>
-              <LifeLoader color="#ffffff" />
+              <LifeLoader />
             </Box>
           </Flex>
         )}
@@ -1493,7 +1493,7 @@ const Home = () => {
       />
       {verificandoPago && (
         <Box position="fixed" inset="0" display="flex" alignItems="center" justifyContent="center" zIndex={9999}>
-          <LifeLoader color="#ffffff" />
+          <LifeLoader />
         </Box>
       )}
     </Box>

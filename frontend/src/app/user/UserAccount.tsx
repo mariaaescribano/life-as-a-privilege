@@ -250,8 +250,8 @@ export default function UserAccount() {
   };
 
   if (loading) return (
-    <Flex minH="100vh" bg="#008080" justify="center" align="center">
-      <LifeLoader color="#ffffff" />
+    <Flex minH="100vh" bg="#F0DCC0" justify="center" align="center">
+      <LifeLoader />
     </Flex>
   );
 
@@ -263,7 +263,7 @@ export default function UserAccount() {
     fechaNacimiento !== initialRef.current.fechaNacimiento;
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" userImg={img} />
 
       <Box flex="1" display="flex" flexDirection="column" transform="scale(0.9)" transformOrigin="top center">
@@ -347,7 +347,7 @@ export default function UserAccount() {
                   left={0}
                   zIndex={2}
                 >
-                  <LifeLoader color="#ffffff" size="46px" />
+                  <LifeLoader size="46px" />
                 </Flex>
               )}
               {img ? (

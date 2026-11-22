@@ -86,7 +86,7 @@ export default function MetodoNutricionCursos() {
   }
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif" sx={noSelectSx}>
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif" sx={noSelectSx}>
       <SiteHeader variant="private" />
 
       {/* Mismos márgenes que Materiales (CursosModalidad) y SIN maxW: la rejilla

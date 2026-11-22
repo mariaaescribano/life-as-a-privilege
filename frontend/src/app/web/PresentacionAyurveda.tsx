@@ -228,7 +228,7 @@ export default function PresentacionAyurveda({ d }: { d: PresentacionDisciplina 
   const renderIcon = (size: string) => <AyurvedaIcon size={{ base: size, md: size }} />;
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="auto" />
 
       <Flex

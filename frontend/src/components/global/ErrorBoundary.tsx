@@ -42,7 +42,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
           gap: "20px",
           padding: "24px",
           textAlign: "center",
-          background: "#008080",
+          background: "#F0DCC0",
           color: "#ffffff",
           fontFamily: "'EB Garamond', serif",
         }}

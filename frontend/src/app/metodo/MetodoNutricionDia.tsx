@@ -432,7 +432,7 @@ export default function MetodoNutricionDia() {
   };
 
   return (
-    <Box minH="100vh" position="relative" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif"
+    <Box minH="100vh" position="relative" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif"
          sx={{ touchAction: drag ? "none" : undefined }}>
       <SiteHeader variant="private" />
 

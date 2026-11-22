@@ -304,7 +304,7 @@ export default function NutricionEspacio({ isGuest = false }: { isGuest?: boolea
   const canCalc = peso && altura && edad && actIdx !== null;
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="auto" />
       <Box flex="1">
         <Flex direction="column" alignItems="center" gap={{ base: 6, md: 8 }}

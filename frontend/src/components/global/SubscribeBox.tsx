@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Box, Flex, Image, Input, Text } from "@chakra-ui/react";
+import { Box, Flex, Input, Text } from "@chakra-ui/react";
 import axios from "axios";
-import { API_URL } from "../../GlobalVariables";
-import { useT } from "../../i18n";
+import { API_URL, FONDO_PAGINA_BEIGE, FONDO_PAGINA_TURQUESA as T } from "../../GlobalVariables";
+import { MandalaTinte } from "./MandalaTinte";
+import { useIdioma } from "../../i18n";
 import { EnlaceBaja } from "./EnlaceBaja";
 import { useVistoConEspera } from "../../hooks/useVistoConEspera";
 
@@ -10,7 +11,8 @@ export function SubscribeBox({ esperaInicial = 0 }: { esperaInicial?: number } =
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "ok" | "invalid" | "error">("idle");
   const reveal = useVistoConEspera("0px 0px -18% 0px", esperaInicial);
-  const t = useT();
+  const { t, idioma } = useIdioma();
+  const [nombre, setNombre] = useState("");
 
   const isValidEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
@@ -22,9 +24,10 @@ export function SubscribeBox({ esperaInicial = 0 }: { esperaInicial?: number } =
     }
     setStatus("loading");
     try {
-      await axios.post(`${API_URL}/subscribe`, { email });
+      await axios.post(`${API_URL}/subscribe`, { email: email.trim(), nombre: nombre.trim(), idioma });
       setStatus("ok");
       setEmail("");
+      setNombre("");
     } catch (err) {
       setStatus("error");
     }
@@ -74,40 +77,29 @@ export function SubscribeBox({ esperaInicial = 0 }: { esperaInicial?: number } =
       <Box
         w="100%"
         maxW="560px"
-        bg="rgba(255,255,255,0.07)"
-        border="1.5px solid rgba(255,255,255,0.18)"
+        bg="transparent"
+        border={`1.5px solid ${T}`}
         borderRadius="3xl"
         px={{ base: 7, md: 10 }}
         py={{ base: 8, md: 10 }}
-        sx={{ backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)" }}
         textAlign="center"
-        boxShadow="0 0 16px rgba(255,255,255,0.15), 0 0 38px rgba(255,255,255,0.08), 0 0 70px rgba(180,255,245,0.08)"
         opacity={reveal.visible ? 1 : 0}
         transform={reveal.visible ? "translateY(0) scale(1)" : "translateY(40px) scale(0.95)"}
         transition="opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s"
       >
-        <Image
-          src="/img/icono/life.webp"
-          h={{ base: "48px", md: "60px" }}
-          objectFit="contain"
-          mx="auto"
-          mb={4}
-          opacity={0.9}
-          style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.42)) drop-shadow(0 0 22px rgba(255,255,255,0.22)) drop-shadow(0 0 42px rgba(180,255,245,0.15))" }}
-        />
+        <Box mx="auto" mb={4}><MandalaTinte h={{ base: "48px", md: "60px" }} /></Box>
         <Text
-          color="white"
+          color={T}
           fontSize={{ base: "xl", md: "2xl" }}
           fontWeight="700"
           fontFamily="'EB Garamond', serif"
           letterSpacing="0.08em"
           mb={2}
-          textShadow="0 0 12px rgba(255,255,255,0.39), 0 0 26px rgba(255,255,255,0.21), 0 0 50px rgba(180,255,245,0.15)"
         >
           {t("suscribir.titulo")}
         </Text>
         <Text
-          color="rgba(255,255,255,0.65)"
+          color={`${T}b3`}
           fontSize={{ base: "md", md: "lg" }}
           fontFamily="'EB Garamond', serif"
           mb={6}
@@ -120,7 +112,7 @@ export function SubscribeBox({ esperaInicial = 0 }: { esperaInicial?: number } =
           <Flex direction="column" align="center" gap={2} py={2}>
             <Text fontSize="3xl" lineHeight="1">✓</Text>
             <Text
-              color="white"
+              color={T}
               fontSize={{ base: "lg", md: "xl" }}
               fontWeight="600"
               fontFamily="'EB Garamond', serif"
@@ -128,7 +120,7 @@ export function SubscribeBox({ esperaInicial = 0 }: { esperaInicial?: number } =
               {t("suscribir.ok")}
             </Text>
             <Text
-              color="rgba(255,255,255,0.7)"
+              color={`${T}cc`}
               fontSize={{ base: "md", md: "lg" }}
               fontFamily="'EB Garamond', serif"
               fontStyle="italic"
@@ -139,6 +131,28 @@ export function SubscribeBox({ esperaInicial = 0 }: { esperaInicial?: number } =
         ) : (
           <Flex direction="column" align="center" gap={{ base: 8, md: 10 }}>
             <Input
+              value={nombre}
+              onChange={(e) => setNombre(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+              placeholder={t("welcome.hero.nombre")}
+              aria-label={t("welcome.hero.nombre")}
+              autoComplete="name"
+              maxLength={120}
+              w="100%"
+              maxW="320px"
+              bg="#ffffffb3"
+              border={`1px solid ${T}55`}
+              borderRadius="full"
+              color={T}
+              fontFamily="'EB Garamond', serif"
+              fontSize={{ base: "md", md: "lg" }}
+              px={5}
+              py={3}
+              textAlign="center"
+              _placeholder={{ color: `${T}8c` }}
+              _focus={{ borderColor: T, boxShadow: "none" }}
+            />
+            <Input
               value={email}
               onChange={(e) => { setEmail(e.target.value); if (status === "invalid") setStatus("idle"); }}
               onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
@@ -146,25 +160,25 @@ export function SubscribeBox({ esperaInicial = 0 }: { esperaInicial?: number } =
               type="email"
               w="100%"
               maxW="320px"
-              bg="rgba(255,255,255,0.08)"
-              border={status === "invalid" ? "1px solid rgba(255,130,130,0.6)" : "1px solid rgba(255,255,255,0.25)"}
+              bg="#ffffffb3"
+              border={status === "invalid" ? "1px solid #b3261e" : `1px solid ${T}55`}
               borderRadius="full"
-              color="white"
+              color={T}
               fontFamily="'EB Garamond', serif"
               fontSize={{ base: "md", md: "lg" }}
               px={5}
               py={3}
               textAlign="center"
-              _placeholder={{ color: "rgba(255,255,255,0.4)" }}
-              _focus={{ borderColor: status === "invalid" ? "rgba(255,130,130,0.8)" : "rgba(255,255,255,0.5)", boxShadow: "none" }}
+              _placeholder={{ color: `${T}8c` }}
+              _focus={{ borderColor: status === "invalid" ? "#b3261e" : T, boxShadow: "none" }}
             />
             {status === "invalid" && (
-              <Text color="rgba(255,150,150,0.9)" fontSize="sm" fontFamily="'EB Garamond', serif">
+              <Text color="#b3261e" fontSize="sm" fontFamily="'EB Garamond', serif">
                 {t("suscribir.invalido")}
               </Text>
             )}
             {status === "error" && (
-              <Text color="rgba(255,150,150,0.9)" fontSize="sm" fontFamily="'EB Garamond', serif">
+              <Text color="#b3261e" fontSize="sm" fontFamily="'EB Garamond', serif">
                 {t("suscribir.error")}
               </Text>
             )}
@@ -175,9 +189,9 @@ export function SubscribeBox({ esperaInicial = 0 }: { esperaInicial?: number } =
               px={{ base: 8, md: 10 }}
               py="12px"
               borderRadius="full"
-              bg="rgba(255,255,255,0.12)"
-              border="1.5px solid rgba(255,255,255,0.5)"
-              color="white"
+              bg={T}
+              border={`1.5px solid ${T}`}
+              color={FONDO_PAGINA_BEIGE}
               fontFamily="'EB Garamond', serif"
               fontSize={{ base: "md", md: "lg" }}
               fontWeight="700"
@@ -185,13 +199,7 @@ export function SubscribeBox({ esperaInicial = 0 }: { esperaInicial?: number } =
               textTransform="uppercase"
               cursor={status === "loading" ? "not-allowed" : "pointer"}
               opacity={status === "loading" ? 0.6 : 1}
-              boxShadow="0 0 14px rgba(255,255,255,0.20), 0 0 30px rgba(255,255,255,0.10)"
-              textShadow="0 0 10px rgba(255,255,255,0.35), 0 0 22px rgba(255,255,255,0.20)"
-              _hover={status === "loading" ? {} : {
-                bg: "rgba(255,255,255,0.22)",
-                borderColor: "white",
-                boxShadow: "0 0 22px rgba(255,255,255,0.32), 0 0 44px rgba(180,255,245,0.17)",
-              }}
+              _hover={status === "loading" ? {} : { opacity: 0.92, transform: "translateY(-2px)" }}
               transition="all 0.2s"
               whiteSpace="nowrap"
             >
@@ -201,7 +209,7 @@ export function SubscribeBox({ esperaInicial = 0 }: { esperaInicial?: number } =
         )}
 
         {/* La salida de la lista, a la vista desde el momento de entrar. */}
-        <EnlaceBaja mt={6} />
+        <EnlaceBaja mt={6} color={`${T}99`} colorHover={T} />
       </Box>
     </Flex>
   );

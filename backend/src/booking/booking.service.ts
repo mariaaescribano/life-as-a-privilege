@@ -2,11 +2,15 @@ import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import { DatabaseService } from 'src/database.service';
 import { BookingDto } from './booking.controller';
+import { MailService } from '../mail/mail.service';
 
 
 @Injectable()
 export class BookingService {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(
+    private readonly databaseService: DatabaseService,
+    private readonly mailService: MailService,
+  ) {}
 
   async getTaken(): Promise<{ fecha: string; slot: string }[]> {
     const today = new Date().toISOString().slice(0, 10);
@@ -62,6 +66,11 @@ export class BookingService {
     this.sendNotification(dto).catch((err) => {
       console.error('Error enviando email de reserva:', err);
     });
+
+    // Y a quien reserva le llega la confirmación con sus datos (también por detrás).
+    this.mailService
+      .enviarConfirmacionCita(dto.email.trim(), dto.nombre.trim(), dto.fecha, dto.slot, dto.tema)
+      .catch((err) => console.error('Error enviando la confirmación de la cita:', err));
 
     return 'ok';
   }

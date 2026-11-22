@@ -736,7 +736,7 @@ export function CierreCrearCuenta({ d }: { d: PresentacionDisciplina }) {
       isOpen={dudasOpen}
       onClose={() => setDudasOpen(false)}
       title={t("elMetodo.dudas")}
-      bgColor="#008080"
+      bgColor="#F0DCC0"
       color="#ffffff"
       emailSubject={t("elMetodo.dudas.asunto")}
       showCheckboxes={false}

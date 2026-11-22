@@ -129,7 +129,7 @@ const PopupCondiciones = ({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
         maxH="80dvh"
         overflowY="auto"
         borderRadius="22px"
-        bg="#008080"
+        bg="#F0DCC0"
         border="1px solid rgba(255,255,255,0.35)"
         boxShadow="0 26px 80px rgba(0,0,0,0.62)"
         px={{ base: 6, md: 9 }}
@@ -340,7 +340,7 @@ export default function SignIn() {
   const bloqueado = loading || correoEnviadoA !== null;
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="public" />
 
       <Box flex="1" display="flex" flexDirection="column" transform="scale(0.8)" transformOrigin="top center">

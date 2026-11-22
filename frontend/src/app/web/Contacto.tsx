@@ -32,7 +32,7 @@ const Contacto = () => {
   }, []);
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="auto" />
 
       {/* ── MANDALA + TÍTULO + FRASE (la misma cabecera de la portada) ── */}

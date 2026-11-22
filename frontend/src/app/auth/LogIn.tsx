@@ -6,16 +6,16 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import { API_URL } from "../../GlobalVariables";
 import type { SuccessErrorMessageDto } from "../../components/global/SuccessErrorMessage";
-import { recordarSoloPremium } from "../../api/sesion";
+// (Premium aparcado) import { recordarSoloPremium } from "../../api/sesion";
 import axios from "axios";
 import SuccessErrorMessage from "../../components/global/SuccessErrorMessage";
 import type { LoginUser } from "../../dtos/user.types";
 import { gestionaError } from "../../GlobalHelper";
 import SiteFooter from "../../components/global/Footer";
 import WelcomeCabecera from "../../components/welcome/WelcomeCabecera";
-import { Reveal } from "../../components/global/Reveal";
-import { focoBlanco } from "../../components/global/foco";
-import BandaMarmol from "../../components/global/BandaMarmol";
+// (puertas quitadas) import { Reveal } from "../../components/global/Reveal";
+// (puertas quitadas) import { focoBlanco } from "../../components/global/foco";
+// (puertas quitadas) import BandaMarmol from "../../components/global/BandaMarmol";
 import { CampoContrasena, inputAuthStyles, focoAzul } from "../../components/global/CampoContrasena";
 import { useT } from "../../i18n";
 
@@ -23,15 +23,9 @@ import { useT } from "../../i18n";
 // los normales no puedan quedar distintos.
 const inputStyles = inputAuthStyles;
 
-const TINTA = "#004f4f";
-const ORO = "#b08d3f";
-
-/** Los dos inicios de sesión entre los que se elige primero: asesoría con la foto de María,
- *  premium con el mandala sobre turquesa. */
-const OPCIONES = [
-  { modo: "asesoria" as const, texto: "auth.login.opcion.asesoria" as const },
-  { modo: "premium" as const, texto: "auth.login.opcion.premium" as const },
-];
+// Las dos puertas (asesoría / lectura astrológica) están QUITADAS hasta rehacerlas. Estaban aquí:
+// const TINTA = "#004f4f"; const ORO = "#b08d3f";
+// const OPCIONES = [{ modo: "asesoria", texto: "auth.login.opcion.asesoria" }, { modo: "premium", texto: "auth.login.opcion.lectura" }];
 
 export default function LogIn() {
   const navigate = useNavigate();
@@ -54,8 +48,8 @@ export default function LogIn() {
   const [reenviado, setReenviado] = useState(false);
   // Qué inicio de sesión se ha elegido (null = todavía se está eligiendo).
   // `?modo=premium` (el botón EMPEZAR de Premium) llega con la puerta ya elegida.
-  const [modo, setModo] = useState<"asesoria" | "premium" | null>(
-    params.get("modo") === "premium" ? "premium" : params.get("modo") === "asesoria" ? "asesoria" : null,
+  const [modo] = useState<"asesoria" | "premium" | null>(
+    params.get("modo") === "premium" ? "premium" : "asesoria",
   );
   const [formVisible, setFormVisible] = useState(false);
   // Enter en «nombre o email» salta a la contraseña (allí Enter ya entra).
@@ -156,14 +150,13 @@ export default function LogIn() {
           if (me.data?.admin_email && next === "/home") {
             destinoRef.current = "/admin/login";
           }
-          // Cuenta solo de Premium: su espacio se abre en una pestaña nueva (si el navegador
-          // la bloquea, en esta). Si venía a reclamar un pago (/premium/avisos), sigue aquí.
-          const solo = me.data?.solo_premium === true;
-          recordarSoloPremium(solo);
-          if (solo && !next.startsWith("/premium/avisos")) {
-            const nueva = window.open("/premium/espacio", "_blank");
-            destinoRef.current = nueva ? "/premium" : "/premium/espacio";
-          }
+          // Premium APARCADO: la redirección de las cuentas solo-Premium está comentada.
+          // const solo = me.data?.solo_premium === true;
+          // recordarSoloPremium(solo);
+          // if (solo && !next.startsWith("/premium/avisos")) {
+          //   const nueva = window.open("/premium/espacio", "_blank");
+          //   destinoRef.current = nueva ? "/premium" : "/premium/espacio";
+          // }
         } catch { /* si falla, destino normal */ }
 
         setSinConfirmar(false);
@@ -211,7 +204,7 @@ export default function LogIn() {
   const bloqueado = loading || entrando;
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="public" />
 
       <Box flex="1" display="flex" flexDirection="column">
@@ -221,12 +214,14 @@ export default function LogIn() {
       <WelcomeCabecera
         activo={mounted}
         titulo={t("auth.login.titulo")}
-        subtitulo={modo ? t(modo === "asesoria" ? "auth.login.opcion.asesoria" : "auth.login.opcion.premium") : t("auth.login.frase")}
-        sinSeparador={!!modo}
+        subtitulo={modo ? t(modo === "asesoria" ? "auth.login.opcion.asesoria" : "auth.login.opcion.lectura") : undefined}
+        sinFrase={!modo}
+        sinSeparador
         mayusculas
       />
 
       {/* ── PRIMERO, ELEGIR: dos puertas sobre el mármol, cada una con su foto ── */}
+      {/* Las dos puertas (con el mármol) QUITADAS: se van a rehacer. Mientras, el formulario sale directo.
       {!modo && (
         <BandaMarmol>
           {(visible) => (
@@ -255,7 +250,7 @@ export default function LogIn() {
                       _focusVisible={focoBlanco}
                       sx={{ WebkitTapHighlightColor: "transparent" }}
                     >
-                      {/* Círculo grande, arriba y centrado: mi foto o el mandala. */}
+                      {/* Círculo grande, arriba y centrado: mi foto o el mandala. * /}
                       <Box
                         position="relative"
                         overflow="hidden"
@@ -278,7 +273,7 @@ export default function LogIn() {
                           />
                         ) : (
                           <Flex w="100%" h="100%" align="center" justify="center">
-                            {/* El mandala (blanco, con transparencia) usado como máscara: se pinta en turquesa oscuro. */}
+                            {/* El mandala (blanco, con transparencia) usado como máscara: se pinta en turquesa oscuro. * /}
                             <Box
                               w="62%"
                               bg={TINTA}
@@ -299,9 +294,9 @@ export default function LogIn() {
                           </Flex>
                         )}
                       </Box>
-                      {/* Separación horizontal pequeña. */}
+                      {/* Separación horizontal pequeña. * /}
                       <Box h="1px" w="56px" bgGradient={`linear(to-r, transparent, ${TINTA}99, transparent)`} />
-                      {/* El nombre de la puerta con su flecha. */}
+                      {/* El nombre de la puerta con su flecha. * /}
                       <Flex
                         align="center"
                         justify="center"
@@ -323,6 +318,7 @@ export default function LogIn() {
           )}
         </BandaMarmol>
       )}
+      */}
 
       {/* ── FORMULARIO (sin caja) ── */}
       {modo && (
@@ -509,25 +505,7 @@ export default function LogIn() {
             </Text>
           </Flex>
           )}
-          {/* Volver a elegir el tipo de inicio de sesión. */}
-          <Flex justify="center" pt={2}>
-            <Text
-              as="button"
-              onClick={() => { setModo(null); setmessage(null); }}
-              color="rgba(255,255,255,0.78)"
-              fontSize="sm"
-              letterSpacing="0.06em"
-              bg="transparent"
-              cursor="pointer"
-              borderRadius="md"
-              px={2}
-              _hover={{ color: "white" }}
-              _focusVisible={focoAzul}
-              transition="all 0.22s ease"
-            >
-              ‹ {t("comun.volver")}
-            </Text>
-          </Flex>
+          {/* «Volver a elegir» quitado: ya no hay puertas que elegir. */}
         </VStack>
       </Flex>
       )}

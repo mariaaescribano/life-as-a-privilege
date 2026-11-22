@@ -35,8 +35,7 @@ import {
   neuropsicologiaBg,
   neuropsicologiaNom,
   neuropsicologiaTxt,
-  NeuropsicologiaIcon,
-} from "../../GlobalVariables";
+  NeuropsicologiaIcon, FONDO_PAGINA_TURQUESA } from "../../GlobalVariables";
 import { useT } from "../../i18n";
 
 const TINTA = neuropsicologiaTxt;  // marrón tinta
@@ -84,7 +83,7 @@ export default function MetodoPsicologiaCursos() {
   if (!exp) return null;
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
 
       <Box position="relative" flex="1">
@@ -120,7 +119,7 @@ export default function MetodoPsicologiaCursos() {
                 alrededor, que metía las fotos dentro de una caja y las apagaba. */}
             {cursosLoading || !fotosListas ? (
               <Flex minH={{ base: "220px", md: "300px" }} w="100%" align="center" justify="center">
-                <PsicologiaLoader color="#ffffff" />
+                <PsicologiaLoader color={FONDO_PAGINA_TURQUESA} />
               </Flex>
             ) : cursos.length === 1 ? (
               <Flex

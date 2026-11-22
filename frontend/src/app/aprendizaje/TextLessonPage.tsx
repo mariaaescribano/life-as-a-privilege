@@ -80,7 +80,7 @@ export default function TextLessonPage() {
 
   if (!modalidad || !curso || !leccion) {
     return (
-      <Box minH="100vh" bg="#008080" display="flex" flexDirection="column" fontFamily="'EB Garamond', serif">
+      <Box minH="100vh" bg="#F0DCC0" display="flex" flexDirection="column" fontFamily="'EB Garamond', serif">
         <SiteHeader variant="auto" />
         <Box flex="1" display="flex" alignItems="center" justifyContent="center">
           <Box color="white" fontSize="xl" fontStyle="italic">{t("aprendizaje.leccionNoEncontrada")}</Box>
@@ -132,7 +132,7 @@ export default function TextLessonPage() {
   );
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" position="relative" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" position="relative" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="auto" />
       <VolverAlMapa />
 

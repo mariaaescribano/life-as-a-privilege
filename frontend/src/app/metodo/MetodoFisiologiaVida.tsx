@@ -135,7 +135,7 @@ export default function MetodoFisiologiaVida() {
   if (fase === "cargando") return <FisiologiaLoading />;
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif" sx={noSelectSx}>
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif" sx={noSelectSx}>
       <SiteHeader variant="private" />
 
       {fase === "hub" && vida && (

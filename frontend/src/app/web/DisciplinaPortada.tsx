@@ -194,7 +194,7 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
   return (
     // minH + columna + contenido flex=1: el footer se queda abajo aunque la
     // página sea corta (tres cajas y poco más).
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="auto" />
 
       {/* ── CABECERA: mandala, nombre de la disciplina, su frase y la línea con el mandala pequeño ── */}

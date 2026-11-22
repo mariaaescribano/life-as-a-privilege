@@ -4,12 +4,14 @@ import {
   Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { API_URL } from "../../GlobalVariables";
+import { API_URL, FONDO_PAGINA_TURQUESA } from "../../GlobalVariables";
 import { useT } from "../../i18n";
 
 interface BookCallModalProps {
   isOpen: boolean;
   onClose: () => void;
+  /** Se pinta como CONTENIDO DE PÁGINA (sin ventana encima): lo usa la página /reservar-cita. */
+  enPagina?: boolean;
 }
 
 const DAYS_AHEAD = 14;
@@ -18,8 +20,8 @@ const SLOT_END_HOUR = 21; // último slot empieza a las 20:30
 const SLOT_MINUTES = 30;
 const MIN_LEAD_HOURS = 2; // no permitir reservas con menos de 2h de antelación
 
-const BG = "#008080";
-const FG = "#ffffff";
+const BG = "#F0DCC0";
+const FG = FONDO_PAGINA_TURQUESA;
 
 type TakenSlot = { fecha: string; slot: string };
 
@@ -78,7 +80,7 @@ function slotIsPast(day: Date, slot: string) {
   return slotDate.getTime() < minAllowed.getTime();
 }
 
-export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
+export function BookCallModal({ isOpen, onClose, enPagina = false }: BookCallModalProps) {
   const t = useT();
   const days = useMemo(buildDays, []);
   const slots = useMemo(buildSlots, []);
@@ -174,21 +176,8 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
     _hover: { borderColor: `${FG}aa` },
   };
 
-  return (
-    <Modal isOpen={isOpen} onClose={handleClose} size={{ base: "full", md: "xl" }} isCentered>
-      <ModalOverlay bg="rgba(0,0,0,0.65)" sx={{ backdropFilter: "blur(6px)" }} />
-      <ModalContent
-        bg={BG}
-        border={`1px solid ${FG}33`}
-        borderRadius={{ base: "0", md: "2xl" }}
-        boxShadow={`0 16px 60px rgba(0,0,0,0.5), 0 0 50px ${FG}22`}
-        mx={{ base: 0, md: 0 }}
-        fontFamily="'EB Garamond', serif"
-        maxH={{ base: "100vh", md: "90vh" }}
-        overflow="hidden"
-      >
-        <ModalCloseButton color={`${FG}cc`} top={4} right={4} zIndex={2} />
-        <ModalBody px={{ base: 5, md: 8 }} py={{ base: 7, md: 8 }} overflowY="auto">
+  const contenido = (
+    <>
           {sent ? (
             <Flex direction="column" align="center" gap={4} py={6}>
               <Text fontSize="4xl" color={FG}>✓</Text>
@@ -198,7 +187,6 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
                 fontWeight="700"
                 textAlign="center"
                 letterSpacing="0.04em"
-                textShadow={`0 0 14px ${FG}55`}
               >
                 {t("llamada.confirmada")}
               </Text>
@@ -245,7 +233,6 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
                   fontWeight="900"
                   letterSpacing="0.04em"
                   lineHeight="1.2"
-                  textShadow={`1px 2px 10px ${FG}55`}
                 >
                   {t("llamada.agenda")}
                 </Text>
@@ -372,13 +359,13 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
                   </Flex>
                   {errorMsg && (
                     <Box
-                      bg="rgba(255,90,90,0.18)"
-                      border="1px solid rgba(255,120,120,0.7)"
+                      bg="#b3261e1a"
+                      border="1px solid #b3261e"
                       borderRadius="lg"
                       px={4}
                       py={3}
                     >
-                      <Text color="#ffd4d4" fontSize={{ base: "sm", md: "md" }} textAlign="center" fontWeight="500">
+                      <Text color="#b3261e" fontSize={{ base: "sm", md: "md" }} textAlign="center" fontWeight="500">
                         {errorMsg}
                       </Text>
                     </Box>
@@ -478,13 +465,13 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
 
                   {errorMsg && (
                     <Box
-                      bg="rgba(255,90,90,0.18)"
-                      border="1px solid rgba(255,120,120,0.7)"
+                      bg="#b3261e1a"
+                      border="1px solid #b3261e"
                       borderRadius="lg"
                       px={4}
                       py={3}
                     >
-                      <Text color="#ffd4d4" fontSize={{ base: "sm", md: "md" }} textAlign="center" fontWeight="500">
+                      <Text color="#b3261e" fontSize={{ base: "sm", md: "md" }} textAlign="center" fontWeight="500">
                         {errorMsg}
                       </Text>
                     </Box>
@@ -515,6 +502,33 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
               )}
             </Flex>
           )}
+    </>
+  );
+
+  if (enPagina) {
+    return (
+      <Box w="100%" maxW="720px" mx="auto" px={{ base: 5, md: 8 }} py={{ base: 6, md: 8 }} fontFamily="'EB Garamond', serif" color={FG}>
+        {contenido}
+      </Box>
+    );
+  }
+
+  return (
+    <Modal isOpen={isOpen} onClose={handleClose} size={{ base: "full", md: "xl" }} isCentered>
+      <ModalOverlay bg="rgba(0,0,0,0.65)" sx={{ backdropFilter: "blur(6px)" }} />
+      <ModalContent
+        bg={BG}
+        border={`1px solid ${FG}33`}
+        borderRadius={{ base: "0", md: "2xl" }}
+        boxShadow={`0 16px 60px rgba(0,0,0,0.5), 0 0 50px ${FG}22`}
+        mx={{ base: 0, md: 0 }}
+        fontFamily="'EB Garamond', serif"
+        maxH={{ base: "100vh", md: "90vh" }}
+        overflow="hidden"
+      >
+        <ModalCloseButton color={`${FG}cc`} top={4} right={4} zIndex={2} />
+        <ModalBody px={{ base: 5, md: 8 }} py={{ base: 7, md: 8 }} overflowY="auto">
+          {contenido}
         </ModalBody>
       </ModalContent>
     </Modal>

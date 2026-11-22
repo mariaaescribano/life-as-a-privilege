@@ -222,7 +222,7 @@ export function MiniDiario() {
         pr={{ base: 4, md: 6 }}
         py={{ base: "10px", md: "13px" }}
         borderRadius="full"
-        bg="#008080"
+        bg="#F0DCC0"
         border={{ base: "1.5px solid rgba(255,255,255,0.8)", md: "2px solid rgba(255,255,255,0.9)" }}
         boxShadow="0 0 18px rgba(255,255,255,0.28), 0 0 40px rgba(180,255,245,0.14)"
         cursor="pointer"
@@ -274,7 +274,7 @@ export function MiniDiario() {
           pr={{ base: 4, md: 6 }}
           py={{ base: "10px", md: "13px" }}
           borderRadius="full"
-          bg="#008080"
+          bg="#F0DCC0"
           border={{ base: "1.5px solid rgba(255,255,255,0.8)", md: "2px solid rgba(255,255,255,0.9)" }}
           boxShadow="0 0 18px rgba(255,255,255,0.28), 0 0 40px rgba(180,255,245,0.14)"
           cursor="pointer"
@@ -301,7 +301,7 @@ export function MiniDiario() {
       <Modal isOpen={isOpen} onClose={cerrar} size="lg" isCentered scrollBehavior="inside">
         <ModalOverlay bg="rgba(0,0,0,0.82)" sx={{ backdropFilter: "blur(8px)" }} />
         <ModalContent
-          bg="#008080"
+          bg="#F0DCC0"
           border="1px solid rgba(255,255,255,0.32)"
           borderRadius="2xl"
           boxShadow="0 16px 60px rgba(0,0,0,0.5), 0 0 40px rgba(255,255,255,0.15)"
@@ -677,7 +677,7 @@ function VistaNotas({
 
       {cargando ? (
         <Flex justify="center" align="center" flex="1" minH={0}>
-          <LifeLoader color="#ffffff" size="56px" />
+          <LifeLoader size="56px" />
         </Flex>
       ) : notas.length === 0 ? (
         <Flex justify="center" align="center" flex="1" minH={0}>

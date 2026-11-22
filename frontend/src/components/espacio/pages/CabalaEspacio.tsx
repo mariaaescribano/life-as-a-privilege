@@ -304,7 +304,7 @@ export default function CabalaEspacio() {
   const testDatos = sefiraAbierta ? testCabala[sefiraAbierta.key] : null;
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="auto" />
 
       <Box flex="1">

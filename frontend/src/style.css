@@ -35,7 +35,8 @@
    pinta su Box #008080 encima; esto solo tapa los huecos del rebote. */
 html,
 body {
-  background-color: #008080;
+  background-color: #F0DCC0;
+  color: #005F5F;
 }
 
 /* El foco NUNCA se ve. Al abrir un modal, Chakra enfoca el primer botón: eso

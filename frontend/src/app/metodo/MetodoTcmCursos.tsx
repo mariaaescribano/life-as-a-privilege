@@ -17,8 +17,7 @@ import { useCursosData } from "../../data/cursosApi";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { useT } from "../../i18n";
 import {
-  tcmBg, tcmNom, tcmNomLink, tcmTxt, TCMIcon,
-} from "../../GlobalVariables";
+  tcmBg, tcmNom, tcmNomLink, tcmTxt, TCMIcon, FONDO_PAGINA_TURQUESA } from "../../GlobalVariables";
 
 export default function MetodoTcmCursos() {
   const t = useT();
@@ -57,7 +56,7 @@ export default function MetodoTcmCursos() {
   }
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
 
       {/* Mismos márgenes y MISMO ancho que la página de cursos de Materiales
@@ -99,7 +98,7 @@ export default function MetodoTcmCursos() {
           <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           {cursosLoading || !fotosListas ? (
             <Flex direction="column" align="center" justify="center" gap={4} w="100%" minH={{ base: "260px", md: "340px" }}>
-              <TcmLoader color="#ffffff" />
+              <TcmLoader color={FONDO_PAGINA_TURQUESA} />
             </Flex>
           ) : cursos.length > 0 ? (
             cursos.length === 1 ? (

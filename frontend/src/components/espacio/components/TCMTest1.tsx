@@ -143,7 +143,7 @@ export default function TCMTest1() {
   const recs = useRecsTcm(RECS_CONSTITUCIONES, RECS_CONSTITUCIONES_EN);
   return (
     <TCMTestPage
-      pageBg="#008080"
+      pageBg="#F0DCC0"
       pageIcon={ICON}
       tcmField="constitucion"
       pageTitle={t("espacio.tcm.t1.tarjeta")}

@@ -111,7 +111,7 @@ const Certificaciones = () => {
           <Reveal inView amount={0.5} direction="up" distance={18} duration={0.8}>
             <Text
               textAlign="center"
-              color="white"
+              color={TQ}
               fontFamily="'EB Garamond', serif"
               fontWeight="700"
               fontSize={{ base: "2xl", md: "4xl" }}

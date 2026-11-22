@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import {
-  Box, Flex, Text, Input, Image,
+  Box, Flex, Text, Input,
   Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { API_URL } from "../../GlobalVariables";
+import { API_URL, FONDO_PAGINA_BEIGE, FONDO_PAGINA_TURQUESA as T } from "../../GlobalVariables";
+import { MandalaTinte } from "./MandalaTinte";
 import { useT } from "../../i18n";
 import { EnlaceBaja } from "./EnlaceBaja";
 
@@ -149,21 +150,20 @@ export function ExitIntentSubscribeModal() {
     setIsOpen(false);
   };
 
-  const COLOR = "white";
+  const COLOR = T;
 
   return (
     <Modal isOpen={isOpen} onClose={handleClose} size="md" isCentered>
-      <ModalOverlay bg="rgba(0,0,0,0.65)" sx={{ backdropFilter: "blur(6px)" }} />
+      <ModalOverlay bg={`${T}73`} />
       <ModalContent
-        bg="rgba(0, 128, 128, 0.92)"
-        border="1px solid rgba(255,255,255,0.35)"
+        bg={FONDO_PAGINA_BEIGE}
+        border={`1.5px solid ${T}`}
         borderRadius="2xl"
-        boxShadow="0 16px 60px rgba(0,0,0,0.5), 0 0 50px rgba(107,196,200,0.35)"
+        boxShadow="none"
         mx={{ base: 4, md: 0 }}
         fontFamily="'EB Garamond', serif"
-        sx={{ backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" }}
       >
-        <ModalCloseButton color="rgba(255,255,255,0.85)" top={4} right={4} />
+        <ModalCloseButton color={T} top={4} right={4} />
         <ModalBody px={{ base: 6, md: 8 }} py={{ base: 8, md: 10 }} textAlign="center">
           {status === "ok" ? (
             <Flex direction="column" align="center" gap={3} py={2}>
@@ -177,7 +177,7 @@ export function ExitIntentSubscribeModal() {
                 {t("suscribir.ok")}
               </Text>
               <Text
-                color="rgba(255,255,255,0.75)"
+                color={`${T}cc`}
                 fontSize={{ base: "md", md: "lg" }}
                 fontStyle="italic"
               >
@@ -189,7 +189,7 @@ export function ExitIntentSubscribeModal() {
                 onClick={() => setIsOpen(false)}
                 px={7} py={2.5}
                 borderRadius="full"
-                border="1.5px solid rgba(255,255,255,0.55)"
+                border={`1.5px solid ${T}`}
                 bg="transparent"
                 color={COLOR}
                 fontFamily="'EB Garamond', serif"
@@ -198,32 +198,25 @@ export function ExitIntentSubscribeModal() {
                 letterSpacing="0.06em"
                 cursor="pointer"
                 transition="all 0.2s"
-                _hover={{ bg: "rgba(255,255,255,0.18)" }}
+                _hover={{ bg: `${T}14` }}
               >
                 {t("comun.cerrar")}
               </Box>
             </Flex>
           ) : (
             <Flex direction="column" align="center" gap={4}>
-              <Image
-                src="/img/icono/life.webp"
-                h={{ base: "52px", md: "64px" }}
-                objectFit="contain"
-                opacity={0.9}
-                mb={1}
-              />
+              <Box mb={1}><MandalaTinte h={{ base: "52px", md: "64px" }} /></Box>
               <Text
                 color={COLOR}
                 fontSize={{ base: "2xl", md: "3xl" }}
                 fontWeight="700"
                 letterSpacing="0.06em"
-                textShadow="0 2px 10px rgba(0,0,0,0.3)"
                 lineHeight="1.2"
               >
                 {t("salida.titulo")}
               </Text>
               <Text
-                color="rgba(255,255,255,0.78)"
+                color={`${T}c7`}
                 fontSize={{ base: "md", md: "lg" }}
                 lineHeight="1.6"
                 maxW="380px"
@@ -239,8 +232,8 @@ export function ExitIntentSubscribeModal() {
                 type="email"
                 w="100%"
                 maxW="320px"
-                bg="rgba(255,255,255,0.1)"
-                border={status === "invalid" ? "1px solid rgba(255,130,130,0.7)" : "1px solid rgba(255,255,255,0.3)"}
+                bg="#ffffffb3"
+                border={status === "invalid" ? "1px solid #b3261e" : `1px solid ${T}55`}
                 borderRadius="full"
                 color={COLOR}
                 fontFamily="'EB Garamond', serif"
@@ -248,11 +241,11 @@ export function ExitIntentSubscribeModal() {
                 px={5}
                 py={3}
                 textAlign="center"
-                _placeholder={{ color: "rgba(255,255,255,0.45)" }}
-                _focus={{ borderColor: status === "invalid" ? "rgba(255,130,130,0.9)" : "rgba(255,255,255,0.6)", boxShadow: "none" }}
+                _placeholder={{ color: `${T}8c` }}
+                _focus={{ borderColor: status === "invalid" ? "#b3261e" : T, boxShadow: "none" }}
               />
               {status === "invalid" && (
-                <Text color="rgba(255,170,170,0.95)" fontSize="sm">
+                <Text color="#b3261e" fontSize="sm">
                   {t("suscribir.invalido")}
                 </Text>
               )}
@@ -263,16 +256,16 @@ export function ExitIntentSubscribeModal() {
                 px={{ base: 8, md: 10 }}
                 py="12px"
                 borderRadius="full"
-                bg="rgba(255,255,255,0.14)"
-                border="1.5px solid rgba(255,255,255,0.55)"
-                color={COLOR}
+                bg={T}
+                border={`1.5px solid ${T}`}
+                color={FONDO_PAGINA_BEIGE}
                 fontFamily="'EB Garamond', serif"
                 fontSize={{ base: "md", md: "lg" }}
                 fontWeight="700"
                 letterSpacing="0.08em"
                 cursor="pointer"
                 transition="all 0.2s"
-                _hover={{ bg: "rgba(255,255,255,0.22)" }}
+                _hover={{ opacity: 0.92 }}
               >
                 {t("suscribir.boton")}
               </Box>
@@ -284,16 +277,16 @@ export function ExitIntentSubscribeModal() {
                 px={3} py={1}
                 bg="transparent"
                 border="none"
-                color="rgba(255,255,255,0.55)"
+                color={`${T}99`}
                 fontFamily="'EB Garamond', serif"
                 fontSize="sm"
                 cursor="pointer"
-                _hover={{ color: "rgba(255,255,255,0.85)" }}
+                _hover={{ color: T }}
               >
                 {t("salida.noGracias")}
               </Box>
 
-              <EnlaceBaja mt={0} />
+              <EnlaceBaja mt={0} color={`${T}99`} colorHover={T} />
             </Flex>
           )}
         </ModalBody>

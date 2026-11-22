@@ -11,17 +11,10 @@ export const welcome = {
   // (ahí también se lee el rótulo del header): un solo sitio donde cambiarlo.
   "welcome.subtitulo": "Ciencia, psicología y tradición para descubrir nuevas perspectivas desde las que comprenderte.",
   // ── Cabecera de la portada (frase + formulario + foto) ──
-  "welcome.hero.frase": "Descubre nuevas perspectivas de ti a través de una mirada multidisciplinar",
-  "welcome.hero.gratis": "Introducción gratuita",
-  "welcome.hero.foto": "Te asesoro en mente, cuerpo y tradición para construir una visión integrada de ti.",
+  "welcome.perspectivas.titular": "Lo importante eres tú, las perspectivas se adaptan a ti.",
+  "welcome.hero.pedirCita": "Pedir cita gratuita",
   "welcome.hero.nombre": "Tu nombre",
   // Las tres ideas de fondo (segunda sección, WelcomePilares)
-  "welcome.pilar.1.titulo": "Autoconocimiento",
-  "welcome.pilar.1.texto": "Explora tu propia historia, identifica tus patrones y comprende cómo determinadas formas de pensar o actuar pudieron tener sentido en el pasado pero ya no son útiles en el presente.",
-  "welcome.pilar.2.titulo": "Autoaceptación",
-  "welcome.pilar.2.texto": "Aprende a observarte desde perspectivas diferentes, sin reducir la propia identidad a una etiqueta, un defecto o una dificultad.",
-  "welcome.pilar.3.titulo": "Automejora",
-  "welcome.pilar.3.texto": "No te justifiques con lo que parece negativo. Úsalo para saber dónde poner el foco e incrementar tu calidad de vida, mejorando cada día como ser humano.",
   "welcome.explorar": "Explorar",
   "welcome.explorarDisciplina": "Explorar disciplina",
   "welcome.modal.cuenta": "Crea una cuenta o inicia sesión",

@@ -6,6 +6,7 @@ import { AppleLoader } from "./AppleLoader";
 import {
   astrologiaTxt, neuropsicologiaTxt, ayurvedaTxt, tcmTxt,
   fisiologiaTxt, nutricionTxt, cabalaTxt, culturaTxt,
+  FONDO_PAGINA_TURQUESA,
 } from "../../GlobalVariables";
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -50,7 +51,7 @@ const girarMandala = keyframes`
 // Pétalo de loto con la punta arriba, naciendo del centro (60,60).
 const PETALO_VIDA = "M60,60 C 47,43 47,27 60,15 C 73,27 73,43 60,60 Z";
 export function LifeLoader({ color, size }: LoaderProps = {}) {
-  const c = color ?? "#ffffff";
+  const c = color ?? FONDO_PAGINA_TURQUESA;
   return (
     <Shell size={size}>
       <Box
@@ -163,8 +164,8 @@ export function AstrologiaLoader({ color, size }: LoaderProps = {}) {
 // en todo el recorrido de astrología.
 export function AstrologiaLoading() {
   return (
-    <Flex minH="100vh" bg="#008080" align="center" justify="center">
-      <AstrologiaLoader color="#ffffff" />
+    <Flex minH="100vh" bg="#F0DCC0" align="center" justify="center">
+      <AstrologiaLoader color={FONDO_PAGINA_TURQUESA} />
     </Flex>
   );
 }
@@ -224,8 +225,8 @@ export function PsicologiaLoader({ color, size }: LoaderProps = {}) {
 // en todo el recorrido de psicología.
 export function PsicologiaLoading() {
   return (
-    <Flex minH="100vh" bg="#008080" align="center" justify="center">
-      <PsicologiaLoader color="#ffffff" />
+    <Flex minH="100vh" bg="#F0DCC0" align="center" justify="center">
+      <PsicologiaLoader color={FONDO_PAGINA_TURQUESA} />
     </Flex>
   );
 }
@@ -275,8 +276,8 @@ export function AyurvedaLoader({ color, size }: LoaderProps = {}) {
 // en todo el recorrido de ayurveda.
 export function AyurvedaLoading() {
   return (
-    <Flex minH="100vh" bg="#008080" align="center" justify="center">
-      <AyurvedaLoader color="#ffffff" />
+    <Flex minH="100vh" bg="#F0DCC0" align="center" justify="center">
+      <AyurvedaLoader color={FONDO_PAGINA_TURQUESA} />
     </Flex>
   );
 }
@@ -310,8 +311,8 @@ export function TcmLoader({ color = tcmTxt, size }: LoaderProps = {}) {
 // en todo el recorrido de TCM.
 export function TcmLoading() {
   return (
-    <Flex minH="100vh" bg="#008080" align="center" justify="center">
-      <TcmLoader color="#ffffff" />
+    <Flex minH="100vh" bg="#F0DCC0" align="center" justify="center">
+      <TcmLoader color={FONDO_PAGINA_TURQUESA} />
     </Flex>
   );
 }
@@ -348,8 +349,8 @@ export function FisiologiaLoader({ color, size }: LoaderProps = {}) {
 // en todo el recorrido de fisiología.
 export function FisiologiaLoading() {
   return (
-    <Flex minH="100vh" bg="#008080" align="center" justify="center">
-      <FisiologiaLoader color="#ffffff" />
+    <Flex minH="100vh" bg="#F0DCC0" align="center" justify="center">
+      <FisiologiaLoader color={FONDO_PAGINA_TURQUESA} />
     </Flex>
   );
 }
@@ -359,8 +360,8 @@ export function FisiologiaLoading() {
 // spinner en todo el recorrido de nutrición.
 export function NutricionLoading() {
   return (
-    <Flex minH="100vh" bg="#008080" align="center" justify="center">
-      <AppleLoader color="#ffffff" label={null} />
+    <Flex minH="100vh" bg="#F0DCC0" align="center" justify="center">
+      <AppleLoader color={FONDO_PAGINA_TURQUESA} label={null} />
     </Flex>
   );
 }
@@ -416,8 +417,8 @@ export function CabalaLoader({ color, size }: LoaderProps = {}) {
 // en todo el recorrido de cábala.
 export function CabalaLoading() {
   return (
-    <Flex minH="100vh" bg="#008080" align="center" justify="center">
-      <CabalaLoader color="#ffffff" />
+    <Flex minH="100vh" bg="#F0DCC0" align="center" justify="center">
+      <CabalaLoader color={FONDO_PAGINA_TURQUESA} />
     </Flex>
   );
 }
@@ -492,8 +493,8 @@ export function CulturaLoader({ color, size }: LoaderProps = {}) {
 // todo el recorrido de cultura.
 export function CulturaLoading() {
   return (
-    <Flex minH="100vh" bg="#008080" align="center" justify="center">
-      <CulturaLoader color="#ffffff" />
+    <Flex minH="100vh" bg="#F0DCC0" align="center" justify="center">
+      <CulturaLoader color={FONDO_PAGINA_TURQUESA} />
     </Flex>
   );
 }
@@ -536,7 +537,7 @@ export function loaderDisciplinaBlanco(color?: string, size?: any): React.ReactN
  *  las páginas del recorrido. */
 export function LoadingDisciplina({ color }: { color?: string }) {
   return (
-    <Flex minH="100vh" bg="#008080" align="center" justify="center">
+    <Flex minH="100vh" bg="#F0DCC0" align="center" justify="center">
       {loaderDisciplinaBlanco(color)}
     </Flex>
   );

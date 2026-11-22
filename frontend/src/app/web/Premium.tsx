@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import BotonContactame from "../../components/global/BotonContactame";
+// (botón flotante «Contáctame» quitado) import BotonContactame from "../../components/global/BotonContactame";
 import BandaMarmol from "../../components/global/BandaMarmol";
 import { Reveal } from "../../components/global/Reveal";
 import SeparadorFlor from "../../components/welcome/SeparadorFlor";
@@ -100,7 +100,7 @@ const Premium = () => {
   ];
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="auto" />
 
       <Box flex="1">
@@ -290,7 +290,7 @@ const Premium = () => {
       {/* «Empezar»: antes de pagar, lo que hay que saber (un mes, sin tarjeta guardada) y la
           salida para quien ya tiene cuenta. */}
       {infoAbierta && (
-        <Box position="fixed" inset={0} zIndex={1100} display="flex" alignItems="center" justifyContent="center" bg="#008080" px={{ base: 5, md: 10 }} onClick={() => !pagando && setInfoAbierta(false)}>
+        <Box position="fixed" inset={0} zIndex={1100} display="flex" alignItems="center" justifyContent="center" bg="#F0DCC0" px={{ base: 5, md: 10 }} onClick={() => !pagando && setInfoAbierta(false)}>
           <Flex
             direction="column"
             align="center"
@@ -376,7 +376,7 @@ const Premium = () => {
       )}
 
       <SiteFooter />
-      <BotonContactame />
+      {/* <BotonContactame /> */}
     </Box>
   );
 };

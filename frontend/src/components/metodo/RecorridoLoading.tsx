@@ -2,6 +2,7 @@ import React from "react";
 import { Box, Flex } from "@chakra-ui/react";
 import SiteHeader from "../global/SiteHeader";
 import { AstrologiaLoader } from "./comicLoaders";
+import { FONDO_PAGINA_TURQUESA } from "../../GlobalVariables";
 
 /**
  * Pantalla de carga de las páginas del recorrido (solo Astrología). Pinta YA el
@@ -12,11 +13,11 @@ import { AstrologiaLoader } from "./comicLoaders";
  */
 export function RecorridoLoading() {
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
       <Flex flex="1" position="relative" align="center" justify="center" overflow="hidden">
         {/* Fondo turquesa → estrella blanca dibujándose y titilando. */}
-        <AstrologiaLoader color="#ffffff" />
+        <AstrologiaLoader color={FONDO_PAGINA_TURQUESA} />
       </Flex>
     </Box>
   );

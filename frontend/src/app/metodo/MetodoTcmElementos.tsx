@@ -17,7 +17,7 @@ import { DisciplinaBgLayer, disciplinaBgImg } from "../../components/global/Disc
 import { Reveal, Pop } from "../../components/global/Reveal";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { TcmLoader } from "../../components/metodo/comicLoaders";
-import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
+import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon, FONDO_PAGINA_TURQUESA } from "../../GlobalVariables";
 import {
   ELEMENTOS, ORDEN_ELEMENTOS, elementoDesbloqueado, elementoLeido, elementosTestsCompletos,
   type DatosTcm, type Elemento,
@@ -157,14 +157,14 @@ export default function MetodoTcmElementos() {
 
   if (loading || !fondosListos) {
     return (
-      <Box minH="100vh" bg="#008080" display="flex" alignItems="center" justifyContent="center">
-        <TcmLoader color="#ffffff" />
+      <Box minH="100vh" bg="#F0DCC0" display="flex" alignItems="center" justifyContent="center">
+        <TcmLoader color={FONDO_PAGINA_TURQUESA} />
       </Box>
     );
   }
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 28, md: 36 }}>

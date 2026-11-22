@@ -18,7 +18,7 @@ export default function AdminEditorPlaceholder() {
   }
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
       <Flex flex="1" justify="center" align="center" px={6} py={16}>
         <Flex direction="column" align="center" gap={4} maxW="480px" textAlign="center">

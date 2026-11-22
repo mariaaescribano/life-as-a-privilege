@@ -17,8 +17,7 @@ import { Reveal } from "../../components/global/Reveal";
 import { useCursosData } from "../../data/cursosApi";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import {
-  ayurvedaBg, ayurvedaNom, ayurvedaNomLink, ayurvedaTxt, AyurvedaIcon,
-} from "../../GlobalVariables";
+  ayurvedaBg, ayurvedaNom, ayurvedaNomLink, ayurvedaTxt, AyurvedaIcon, FONDO_PAGINA_TURQUESA } from "../../GlobalVariables";
 import { useT } from "../../i18n";
 import type { DoshaKey } from "../../hardCoded/metodo/doshaIntro";
 import { irAPagoDisciplina } from "../../components/metodo/pagoDisciplinaLink";
@@ -103,7 +102,7 @@ export default function MetodoAyurvedaDoshaCursos() {
   }
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
 
       {/* Sin `maxW` en la columna y con el mismo `px` que /aprendizaje/cursos/:modalidad:
@@ -144,7 +143,7 @@ export default function MetodoAyurvedaDoshaCursos() {
           <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           {loading || !fotosListas ? (
             <Flex direction="column" align="center" justify="center" gap={4} w="100%" minH={{ base: "260px", md: "340px" }}>
-              <AyurvedaLoader color="#ffffff" />
+              <AyurvedaLoader color={FONDO_PAGINA_TURQUESA} />
             </Flex>
           ) : cursos.length > 0 ? (
             cursos.length === 1 ? (

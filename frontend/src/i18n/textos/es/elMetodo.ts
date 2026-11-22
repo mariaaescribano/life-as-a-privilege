@@ -80,7 +80,7 @@ export const elMetodo = {
    *  Van en dos claves porque se pintan con estilos distintos. */
   /** Cabecera de El Mapa: la frase principal y la secundaria, en cursiva. */
   "elMetodo.hero.principal": "Metodología única de autoconocimiento multidimensional",
-  "elMetodo.hero.secundaria": "Ocho perspectivas para reinterpretar tu experiencia y tu persona.",
+  "elMetodo.hero.secundaria": "Combino la **psicología, la **ciencia, la **tradición y la **filosofía para explorar nuevas formas de comprendernos, mirarnos y descubrir el **potencial que llevamos dentro.",
   "elMetodo.hero.tituloAntes": "Para cambiar,",
   "elMetodo.hero.tituloPide": "pregúntate",
   "elMetodo.hero.titulo": "¿Qué te ha pasado?",

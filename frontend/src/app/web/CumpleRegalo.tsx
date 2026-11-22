@@ -75,7 +75,7 @@ export default function CumpleRegalo() {
   };
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
 
       <Flex flex="1" direction="column" align="center" px={{ base: 5, md: 10 }} pt={{ base: 10, md: 14 }} pb={{ base: 20, md: 28 }} gap={6} textAlign="center">
@@ -85,7 +85,7 @@ export default function CumpleRegalo() {
           {t("cumple.titulo")}
         </Text>
 
-        {!estado && !error && <LifeLoader color="#ffffff" />}
+        {!estado && !error && <LifeLoader />}
 
         {error && (
           <Text color="white" fontSize={{ base: "md", md: "lg" }} maxW="560px">{error}</Text>

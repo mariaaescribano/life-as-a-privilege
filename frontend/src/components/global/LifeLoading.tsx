@@ -16,11 +16,11 @@ export function LifeLoading({
   variant?: "public" | "private" | "auto";
 }) {
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant={variant} />
       <Flex flex="1" position="relative" align="center" justify="center" overflow="hidden">
         <Box transform={{ base: "scale(1.4)", md: "scale(1.9)" }}>
-          <LifeLoader color="#ffffff" />
+          <LifeLoader />
         </Box>
       </Flex>
     </Box>

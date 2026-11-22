@@ -133,7 +133,7 @@ const ScaleBtn = ({
    PÁGINA
 ══════════════════════════════════════════════ */
 export default function TCMTestPage({
-  pageBg = "#008080",
+  pageBg = "#F0DCC0",
   pageTitle,
   pageIcon,
   scaleValues,

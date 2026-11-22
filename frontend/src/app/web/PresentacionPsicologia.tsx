@@ -148,7 +148,7 @@ export default function PresentacionPsicologia({ d }: { d: PresentacionDisciplin
   // El box va con `sinBoton`, así que esto solo entra en juego si algún día se
   // vuelve a enseñar el botón de muestra: pone en marcha el vídeo de al lado.
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="auto" />
 
       <Flex

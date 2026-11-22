@@ -161,7 +161,7 @@ export {};
 //   }
 //
 //   return (
-//     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+//     <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
 //       <SiteHeader variant="private" />
 //
 //       <Flex flex="1" justify="center" px={{ base: 5, md: 10 }} py={{ base: 8, md: 12 }}>
@@ -198,7 +198,7 @@ export {};
 //           )}
 //
 //           {loading ? (
-//             <Flex justify="center" py={10}><LifeLoader color="#ffffff" /></Flex>
+//             <Flex justify="center" py={10}><LifeLoader /></Flex>
 //           ) : (
 //             <Flex direction="column" gap={2}>
 //               {filtrados.map((u) => {
@@ -395,7 +395,7 @@ export {};
 //       <Modal isOpen={!!aBorrar} onClose={cerrarBorrado} isCentered size="md">
 //         <ModalOverlay bg="rgba(0,0,0,0.8)" sx={{ backdropFilter: "blur(8px)" }} />
 //         <ModalContent
-//           bg="#008080"
+//           bg="#F0DCC0"
 //           color="white"
 //           fontFamily="'EB Garamond', serif"
 //           border="1px solid rgba(255,255,255,0.22)"

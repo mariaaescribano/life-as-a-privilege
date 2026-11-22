@@ -192,7 +192,7 @@ export default function PresentacionTcm({ d }: { d: PresentacionDisciplina }) {
     setRelacion({ ciclo, origen, destino: (ciclo === "sheng" ? CICLO_SHENG : CICLO_KE)[origen] });
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="auto" />
 
       <Flex

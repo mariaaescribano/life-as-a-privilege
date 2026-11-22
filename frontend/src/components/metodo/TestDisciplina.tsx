@@ -230,7 +230,7 @@ export function TestDisciplinaModal({
           maxH="88dvh"
           borderRadius="22px"
           overflow="hidden"
-          bg="#008080"
+          bg="#F0DCC0"
           border="1px solid rgba(255,255,255,0.35)"
           boxShadow="0 26px 80px rgba(0,0,0,0.62)"
         >

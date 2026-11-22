@@ -3,7 +3,7 @@ import { Box, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import BotonContactame from "../../components/global/BotonContactame";
+// (botón flotante «Contáctame» quitado) import BotonContactame from "../../components/global/BotonContactame";
 import BandaMarmol from "../../components/global/BandaMarmol";
 import WelcomeCabecera from "../../components/welcome/WelcomeCabecera";
 import WelcomeMandala from "../../components/welcome/WelcomeMandala";
@@ -93,7 +93,7 @@ const Disciplinas = () => {
   }, []);
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="auto" />
 
       <Box flex="1">
@@ -220,7 +220,7 @@ const Disciplinas = () => {
       </Box>
 
       <SiteFooter />
-      <BotonContactame />
+      {/* <BotonContactame /> */}
     </Box>
   );
 };

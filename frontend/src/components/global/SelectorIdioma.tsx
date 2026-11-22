@@ -2,7 +2,7 @@ import React from "react";
 import { Flex, Text } from "@chakra-ui/react";
 
 import { IDIOMAS, IDIOMA_ETIQUETA, IDIOMA_NOMBRE, useIdioma } from "../../i18n";
-import { focoBlanco } from "./foco";
+import { FONDO_PAGINA_TURQUESA as T } from "../../GlobalVariables";
 
 type Props = {
   /** El header privado es más compacto: baja un punto el tamaño. */
@@ -23,14 +23,14 @@ type Props = {
  * blanco con glow): el idioma activo va opaco, el otro atenuado. Deliberadamente
  * discreto — es una preferencia, no un destino de navegación.
  */
-const SelectorIdioma = ({ compact = false, fondo = "oscuro" }: Props) => {
+const SelectorIdioma = ({ compact = false }: Props) => {
   const { idioma, cambiarIdioma } = useIdioma();
-  const claro = fondo === "claro";
   // Tinta cálida en la landing; blanco en el resto de la web.
-  const colorLetra = claro ? "#2A2622" : "white";
-  const colorPunto = claro ? "#2A262259" : "rgba(255,255,255,0.35)";
-  const glowActivo = claro ? "none" : "0 0 10px rgba(255,255,255,0.55), 0 0 22px rgba(255,255,255,0.3)";
-  const glowHover = claro ? "none" : "0 0 12px rgba(255,255,255,0.7), 0 0 26px rgba(180,255,245,0.4)";
+  // Sobre el beige de la web: turquesa oscuro, sin brillos.
+  const colorLetra = T;
+  const colorPunto = `${T}66`;
+  const glowActivo = "none";
+  const glowHover = "none";
 
   return (
     <Flex align="center" gap={compact ? "5px" : "6px"} flexShrink={0}>
@@ -71,11 +71,7 @@ const SelectorIdioma = ({ compact = false, fondo = "oscuro" }: Props) => {
               // tinta sobre la landing clara). Sin él, el tabulador pasaba por
               // aquí sin que se viera nada.
               borderRadius="sm"
-              _focusVisible={
-                claro
-                  ? { opacity: 1, outline: "2px solid #2A262299", outlineOffset: "2px" }
-                  : { opacity: 1, textShadow: glowHover, ...focoBlanco }
-              }
+              _focusVisible={{ opacity: 1, outline: `2px solid ${T}99`, outlineOffset: "2px" }}
               transition="opacity 0.25s ease, text-shadow 0.25s ease"
             >
               {IDIOMA_ETIQUETA[codigo]}

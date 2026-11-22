@@ -71,7 +71,7 @@ const FisiologiaEspacio = () => {
   const hayDesequilibrio = organo && siCount >= organo.umbral;
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
 
       <Box flex="1" px={{ base: 4, md: 8, lg: 16 }} pt={{ base: 6, md: 10 }} pb={12}>

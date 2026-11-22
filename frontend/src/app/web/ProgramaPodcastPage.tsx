@@ -33,7 +33,7 @@ export {};
 //
 //   if (!programa) {
 //     return (
-//       <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+//       <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
 //         <SiteHeader variant="auto" />
 //         <Flex flex={1} direction="column" align="center" justify="center" gap={6} px={5}>
 //           <Text color="white" fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" textAlign="center">
@@ -51,7 +51,7 @@ export {};
 //   const color = disciplina?.color ?? "#ffffff";
 //
 //   return (
-//     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+//     <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
 //       <SiteHeader variant="auto" />
 //
 //       <Box flex={1} px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 10, md: 14 }} pb={{ base: 16, md: 24 }}>

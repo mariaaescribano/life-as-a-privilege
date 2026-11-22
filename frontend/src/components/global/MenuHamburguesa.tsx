@@ -4,6 +4,8 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useT } from "../../i18n";
 import { focoBlanco } from "./foco";
+import { FONDO_PAGINA_BEIGE, FONDO_PAGINA_TURQUESA as T } from "../../GlobalVariables";
+import { MandalaTinte } from "./MandalaTinte";
 
 // `motion(Box)` casteado, como en el resto de la casa: Chakra tipa `transition`
 // como cadena CSS y framer como objeto, y sin el casteo chocan.
@@ -73,8 +75,7 @@ const MenuHamburguesa = ({ abierto, onToggle, onClose, items }: Props) => {
     h: `${RAYA_H}px`,
     w: "30px",
     borderRadius: "full",
-    bg: "white",
-    boxShadow: "0 0 10px rgba(255,255,255,0.75), 0 0 22px rgba(180,255,245,0.45)",
+    bg: T,
   } as const;
 
   return (
@@ -100,21 +101,19 @@ const MenuHamburguesa = ({ abierto, onToggle, onClose, items }: Props) => {
         // era la única forma de que se leyera como tal). Tenue a propósito —un
         // aro de luz al 22%, como el del avatar de al lado—: gana presencia sin
         // volverse una pastilla clara sobre el turquesa.
-        border="1px solid rgba(255,255,255,0.22)"
-        bg="rgba(255,255,255,0.06)"
-        boxShadow="0 0 14px rgba(255,255,255,0.16)"
+        border={`1px solid ${T}55`}
+        bg="transparent"
         cursor="pointer"
         _hover={{
-          borderColor: "rgba(255,255,255,0.55)",
-          bg: "rgba(255,255,255,0.12)",
-          boxShadow: "0 0 20px rgba(255,255,255,0.34), 0 0 40px rgba(180,255,245,0.26)",
+          borderColor: T,
+          bg: `${T}14`,
         }}
         // El foco de teclado: mismo encendido que el hover más el aro. Sin esto
         // el tabulador llegaba aquí y no se veía nada (el outline global está
         // apagado).
         _focusVisible={{
-          borderColor: "rgba(255,255,255,0.55)",
-          bg: "rgba(255,255,255,0.12)",
+          borderColor: T,
+          bg: `${T}14`,
           ...focoBlanco,
         }}
         transition="border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease"
@@ -179,9 +178,9 @@ const MenuHamburguesa = ({ abierto, onToggle, onClose, items }: Props) => {
                 pb={{ base: 8, md: 9 }}
                 // Turquesa de la casa, apenas oscurecido hacia abajo para que el
                 // panel se despegue de la página sin cambiar de color.
-                bgGradient="linear(to-b, #008080, #00696b)"
-                borderLeft="1px solid rgba(255,255,255,0.18)"
-                boxShadow="-26px 0 60px rgba(0,0,0,0.38), 0 0 46px rgba(180,255,245,0.12)"
+                bg={FONDO_PAGINA_BEIGE}
+                borderLeft={`1px solid ${T}40`}
+                boxShadow={`-18px 0 50px ${T}22`}
                 initial={{ x: "100%" }}
                 animate={{ x: 0 }}
                 exit={{ x: "100%" }}
@@ -197,7 +196,7 @@ const MenuHamburguesa = ({ abierto, onToggle, onClose, items }: Props) => {
                   w="1px"
                   // Hex con alfa y NO `rgba()`: las comas de `rgba()` parten el
                   // gradiente de Chakra y la línea no se pinta.
-                  bgGradient="linear(to-b, transparent, #b4fff58c, transparent)"
+                  bgGradient={`linear(to-b, transparent, ${T}66, transparent)`}
                   pointerEvents="none"
                 />
 
@@ -214,7 +213,7 @@ const MenuHamburguesa = ({ abierto, onToggle, onClose, items }: Props) => {
                       py={{ base: 4, md: "16px" }}
                       bg="transparent"
                       border="none"
-                      borderBottom="1px solid rgba(255,255,255,0.12)"
+                      borderBottom={`1px solid ${T}22`}
                       cursor="pointer"
                       textAlign="left"
                       // Entran en cascada, de arriba abajo, detrás del panel.
@@ -245,14 +244,13 @@ const MenuHamburguesa = ({ abierto, onToggle, onClose, items }: Props) => {
                         transform={item.activo ? "scaleX(1)" : "scaleX(0)"}
                         transformOrigin="left center"
                         opacity={item.activo ? 1 : 0}
-                        bg="white"
+                        bg={T}
                         flexShrink={0}
-                        boxShadow="0 0 8px rgba(255,255,255,0.7)"
                         transition="transform 0.35s cubic-bezier(0.22,1,0.36,1), opacity 0.35s ease"
                       />
                       <Text
                         className="texto"
-                        color="white"
+                        color={T}
                         fontFamily="'EB Garamond', serif"
                         fontWeight="600"
                         fontSize={{ base: "md", md: "1.0125rem" }}
@@ -265,7 +263,6 @@ const MenuHamburguesa = ({ abierto, onToggle, onClose, items }: Props) => {
                         // desbordar por el lado.
                         whiteSpace={{ base: "normal", md: "nowrap" }}
                         opacity={item.activo ? 1 : 0.82}
-                        textShadow="0 0 10px rgba(255,255,255,0.45), 0 0 24px rgba(255,255,255,0.22)"
                         transition="opacity 0.3s ease, transform 0.35s cubic-bezier(0.22,1,0.36,1)"
                       >
                         {item.etiqueta}
@@ -282,18 +279,10 @@ const MenuHamburguesa = ({ abierto, onToggle, onClose, items }: Props) => {
                   display="flex"
                   justifyContent="center"
                   initial={{ opacity: 0 }}
-                  animate={{ opacity: 0.22 }}
+                  animate={{ opacity: 0.35 }}
                   transition={{ duration: 0.9, delay: 0.35 }}
                 >
-                  <Box
-                    as="img"
-                    src="/img/icono/life.webp"
-                    alt=""
-                    w={{ base: "64px", md: "58px" }}
-                    h={{ base: "64px", md: "58px" }}
-                    objectFit="contain"
-                    sx={{ filter: "drop-shadow(0 0 14px rgba(255,255,255,0.6))" }}
-                  />
+                  <MandalaTinte h={{ base: "64px", md: "58px" }} />
                 </MotionBox>
               </MotionFlex>
             </>

@@ -9,7 +9,7 @@ import WelcomeCabecera from "../../components/welcome/WelcomeCabecera";
 import SeparadorFlor from "../../components/welcome/SeparadorFlor";
 import { LifeLoader } from "../../components/metodo/comicLoaders";
 import { apuntes, libros, librosPago, type Apunte, type Libro, type LibroPago } from "../../hardCoded/libros/libros";
-import { API_URL } from "../../GlobalVariables";
+import { API_URL, FONDO_PAGINA_TURQUESA as T } from "../../GlobalVariables";
 
 const PRECIO_LIBRO_PAGO = "5 €";
 
@@ -82,10 +82,10 @@ function DescargarBtn({
     px: { base: 3, md: 6 },
     py: { base: "7px", md: "10px" },
     borderRadius: "full",
-    border: "1px solid rgba(255,255,255,0.5)",
-    bg: "rgba(255,255,255,0.06)",
+    border: `1px solid ${T}80`,
+    bg: `${T}09`,
     cursor: disabled ? "not-allowed" : "pointer",
-    color: "white",
+    color: T,
     fontFamily: "'EB Garamond', serif",
     fontWeight: "600",
     fontSize: { base: "10px", md: "xs" },
@@ -93,12 +93,9 @@ function DescargarBtn({
     maxW: "100%",
     textTransform: "uppercase" as const,
     textDecoration: "none",
-    boxShadow: "0 0 12px rgba(255,255,255,0.25), 0 0 28px rgba(255,255,255,0.12)",
-    textShadow: "0 0 10px rgba(255,255,255,0.38), 0 0 22px rgba(255,255,255,0.21)",
     _hover: disabled ? {} : {
-      bg: "rgba(255,255,255,0.16)",
-      borderColor: "rgba(255,255,255,0.85)",
-      boxShadow: "0 0 20px rgba(255,255,255,0.45), 0 0 42px rgba(180,255,245,0.28)",
+      bg: `${T}18`,
+      borderColor: `${T}d9`,
     },
     transition: "all 0.25s ease",
     whiteSpace: { base: "normal", md: "nowrap" },
@@ -111,7 +108,7 @@ function DescargarBtn({
     return (
       <Flex as="a" href={href} target="_blank" rel="noopener noreferrer" {...commonProps}>
         {labelTxt}
-        <Box as="span" fontSize="sm" style={{ textShadow: "0 0 8px rgba(255,255,255,0.45)" }}>
+        <Box as="span" fontSize="sm">
           {icon}
         </Box>
       </Flex>
@@ -121,7 +118,7 @@ function DescargarBtn({
   return (
     <Flex as="button" onClick={disabled ? undefined : onClick} disabled={disabled} {...commonProps}>
       {labelTxt}
-      <Box as="span" fontSize="sm" style={{ textShadow: "0 0 8px rgba(255,255,255,0.45)" }}>
+      <Box as="span" fontSize="sm">
         {icon}
       </Box>
     </Flex>
@@ -131,7 +128,7 @@ function DescargarBtn({
 type Item = { id: string; img?: string; titulo: string; link: string };
 type PaidItem = Item & { descripcion: string };
 
-const LINE = "1px solid rgba(255,255,255,0.22)";
+const LINE = `1px solid ${T}38`;
 const LINE_MARMOL = `1px solid ${TINTA}44`;
 
 /** Avisa al padre cuando la banda de mármol ya ha dejado entrar su contenido (con un respiro
@@ -375,7 +372,6 @@ function BookCell({ item, i, total, puerta }: { item: Item; i: number; total: nu
           aspectRatio={1}
           borderRadius="lg"
           overflow="hidden"
-          boxShadow="0 0 14px rgba(255,255,255,0.28), 0 0 32px rgba(255,255,255,0.14), 0 4px 16px rgba(0,0,0,0.22)"
         >
           <Image
             src={item.img}
@@ -401,7 +397,7 @@ function BookCell({ item, i, total, puerta }: { item: Item; i: number; total: nu
         textAlign={{ base: "center", md: "left" }}
       >
         <Text
-          color="white"
+          color={T}
           fontFamily="'EB Garamond', serif"
           // 13px en móvil: los títulos largos («El Sistema Inmunitario (In a
           // Nutshell)») caben en menos líneas dentro de una celda estrecha.
@@ -409,7 +405,6 @@ function BookCell({ item, i, total, puerta }: { item: Item; i: number; total: nu
           fontWeight="700"
           letterSpacing="0.04em"
           lineHeight="1.3"
-          textShadow="0 0 10px rgba(255,255,255,0.3), 0 0 22px rgba(255,255,255,0.15)"
         >
           {item.titulo}
         </Text>
@@ -514,10 +509,10 @@ export default function LibrosPage() {
   // lugar del spinner). El header se pinta ya para que cargue antes.
   if (!imagesReady) {
     return (
-      <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+      <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
         <SiteHeader variant="auto" />
         <Flex flex="1" align="center" justify="center" overflow="hidden">
-          <LifeLoader color="#ffffff" />
+          <LifeLoader />
         </Flex>
       </Box>
     );
@@ -528,7 +523,7 @@ export default function LibrosPage() {
       minH="100vh"
       display="flex"
       flexDirection="column"
-      bg="#008080"
+      bg="#F0DCC0"
       fontFamily="'EB Garamond', serif"
     >
       <SiteHeader variant="auto" />

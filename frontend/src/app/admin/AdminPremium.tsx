@@ -133,7 +133,7 @@ export default function AdminPremium() {
   } as const;
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
       <Flex flex="1" direction="column" align="center" px={{ base: 4, md: 10 }} py={{ base: 8, md: 12 }}>
         <Text color="white" fontSize={{ base: "2xl", md: "4xl" }} fontWeight="700" letterSpacing="0.08em" textTransform="uppercase" textAlign="center">

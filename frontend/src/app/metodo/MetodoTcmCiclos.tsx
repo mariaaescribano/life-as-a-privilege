@@ -12,7 +12,7 @@ import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceTcm } from "../../components/metodo/IndiceTcm";
 import { Reveal } from "../../components/global/Reveal";
 import { useT } from "../../i18n";
-import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
+import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon, FONDO_PAGINA_TURQUESA } from "../../GlobalVariables";
 import { CICLO_SHENG, CICLO_KE, ORDEN_ELEMENTOS, type Elemento, type DatosTcm } from "../../components/metodo/tcmRecorrido";
 import { constitucionHecha } from "../../components/metodo/tcmConstitucion";
 import { ICONO_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
@@ -122,14 +122,14 @@ export default function MetodoTcmCiclos() {
 
   if (loading || !iconosListos) {
     return (
-      <Box minH="100vh" bg="#008080" display="flex" alignItems="center" justifyContent="center">
-        <TcmLoader color="#ffffff" />
+      <Box minH="100vh" bg="#F0DCC0" display="flex" alignItems="center" justifyContent="center">
+        <TcmLoader color={FONDO_PAGINA_TURQUESA} />
       </Box>
     );
   }
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 28, md: 36 }}>

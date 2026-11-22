@@ -151,7 +151,7 @@ export default function MetodoAyurvedaResultado() {
   const titleDelay = BARS_START + (DOSHAS.length - 1) * BAR_STAGGER + BAR_DUR + 0.25;
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
 
       <Box flex="1">

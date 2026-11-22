@@ -15,7 +15,7 @@ export function CaminoCargando({ txt }: { txt?: string }) {
   const { disciplina } = useParams();
   const color = txt ?? disciplinaByKey(disciplina === "medicinachina" ? "tcm" : disciplina ?? "")?.txt;
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
       <Flex flex="1" position="relative" align="center" justify="center" overflow="hidden">
         {loaderDisciplinaBlanco(color)}

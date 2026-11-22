@@ -28,8 +28,8 @@ export default function GoogleAuthCallback() {
   }, []);
 
   return (
-    <Flex minH="100vh" bg="#008080" align="center" justify="center">
-      <LifeLoader color="#ffffff" />
+    <Flex minH="100vh" bg="#F0DCC0" align="center" justify="center">
+      <LifeLoader />
     </Flex>
   );
 }

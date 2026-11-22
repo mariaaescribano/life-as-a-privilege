@@ -365,7 +365,7 @@ export default function AdminDatosUsuario() {
 
   if (!persona) {
     return (
-      <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+      <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
         <SiteHeader variant="private" />
         <Flex flex="1" direction="column" align="center" justify="center" gap={5} px={5}>
           <Text color="white" fontSize="xl" fontStyle="italic">{aviso ?? "Esa cuenta no existe (¿ya la has eliminado?)."}</Text>
@@ -425,7 +425,7 @@ export default function AdminDatosUsuario() {
   );
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 4, md: 10 }} pt={{ base: 8, md: 12 }} pb={{ base: 10, md: 14 }}>

@@ -95,7 +95,7 @@ const FormularioAsesoria = ({ asunto, marmol = false, activo }: { asunto: string
       {/* Aviso de envío: popup con tick, no depende de ninguna animación de entrada. */}
       <Modal isOpen={estado === "ok"} onClose={() => setEstado("idle")} isCentered size="sm">
         <ModalOverlay bg="rgba(0,0,0,0.45)" />
-        <ModalContent bg="#008080" borderRadius="2xl" border="2px solid rgba(255,255,255,0.6)" mx={{ base: 4, md: 0 }}>
+        <ModalContent bg="#F0DCC0" borderRadius="2xl" border="2px solid rgba(255,255,255,0.6)" mx={{ base: 4, md: 0 }}>
           <ModalBody px={8} py={9}>
             <Flex direction="column" align="center" textAlign="center" gap={3}>
               <Flex w="64px" h="64px" borderRadius="full" border="2px solid white" align="center" justify="center" boxShadow="0 0 18px rgba(255,255,255,0.3)">

@@ -309,7 +309,7 @@ export default function MetodoNutricionPlato() {
     platoMacroByKey(macroKey)?.alimentos.find((f) => f.key === foodKey);
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif"
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif"
          sx={drag ? { userSelect: "none", touchAction: "none" } : undefined}>
       <SiteHeader variant="private" />
 

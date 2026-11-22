@@ -13,7 +13,7 @@ export default function NoEncontrada() {
   const t = useT();
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="auto" />
 
       <Flex flex="1" direction="column" align="center" justify="center" textAlign="center"

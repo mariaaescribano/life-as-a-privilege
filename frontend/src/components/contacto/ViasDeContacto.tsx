@@ -263,7 +263,7 @@ export function ViasDeContacto({ onEscribir, activo }: { onEscribir: () => void;
             </Flex>
             <AgendarLlamada
               color="#ffffff"
-              bgColor="#008080"
+              bgColor="#F0DCC0"
               disciplinaNom=""
               titulo={t("contacto.via.llamada")}
               subtitulo={t("contacto.via.llamadaTexto")}

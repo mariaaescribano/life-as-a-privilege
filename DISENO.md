@@ -43,7 +43,7 @@ corrige este documento):
 
 ## 2. Lienzo y estructura de página
 
-- **Fondo de página: SIEMPRE turquesa sólido `#008080`.** Nunca la imagen de una disciplina como
+- **Fondo de página: PRUEBA en curso (2026-11-22) con beige `#F0DCC0`; el turquesa `#008080` original está guardado en `GlobalVariables.tsx` (`FONDO_PAGINA_TURQUESA`) para volver.** (Antes: SIEMPRE turquesa sólido `#008080`.) Nunca la imagen de una disciplina como
   fondo de página (ni oscurecida, ni con velo). `html, body` también van en `#008080`
   (`style.css`), para que el rebote del scroll en móvil no enseñe blanco. Única excepción
   histórica: la landing de la casa (ver memoria `landing-dos-proyectos`).

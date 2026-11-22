@@ -107,7 +107,7 @@ export default function CaminoPagina() {
   // entra por su cuenta).
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       {/* Mientras carga, la MISMA pantalla que la descarga de la página (header + loader). */}
       {!listo && <Box position="fixed" inset={0} zIndex={5}><CaminoCargando txt={disc?.txt} /></Box>}
       <SiteHeader variant="private" />

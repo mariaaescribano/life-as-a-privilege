@@ -724,6 +724,49 @@ export class MailService {
   // (cuenta creada) y quién paga (disciplina comprada).
   // ═══════════════════════════════════════════════════════════════════════════
 
+  /**
+   * La confirmación de una cita (la llamada gratuita que se pide desde la portada) para QUIEN LA RESERVA:
+   * la fecha, la hora y lo que escribió. A María no le va copia oculta (`copiaAdmin: false`): ella ya
+   * recibe su propio aviso de reserva, con los mismos datos y el correo de la persona para responderle.
+   */
+  async enviarConfirmacionCita(
+    email: string,
+    nombre: string,
+    fecha: string,
+    slot: string,
+    tema?: string,
+  ): Promise<boolean> {
+    const [y, m, d] = fecha.split('-').map(Number);
+    const fechaLegible = new Date(Date.UTC(y, (m || 1) - 1, d || 1, 12)).toLocaleDateString('es-ES', {
+      timeZone: 'UTC',
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+    const html = this.plantilla(
+      'Tu cita está reservada',
+      `
+        <p style="font-size: 17px; line-height: 1.7;">
+          Hola${nombre ? ` ${this.escaparHtml(nombre)}` : ''}, gracias por pedir tu cita. Estos son los datos que me has dejado:
+        </p>
+        ${this.fichaPersona([
+          ['Día', this.escaparHtml(fechaLegible)],
+          ['Hora', `${this.escaparHtml(slot)} (horario de España)`],
+          ['Nombre', this.escaparHtml(nombre || '—')],
+          ['Email', this.escaparHtml(email)],
+          ...(tema?.trim() ? [['Lo que quieres tratar', this.escaparHtml(tema.trim()).replace(/\n/g, '<br>')] as [string, string]] : []),
+        ])}
+        <p style="font-size: 16px; line-height: 1.7; margin-top: 22px; opacity: 0.92;">
+          Si necesitas cambiarla, responde a este correo y lo vemos.
+        </p>
+      `,
+    );
+    return await this.enviar(email, `Tu cita del ${fechaLegible} a las ${slot}`, html, 'confirmación de cita', {
+      copiaAdmin: false,
+    });
+  }
+
   /** Ficha con los datos de la persona, igual en los dos avisos. */
   private fichaPersona(filas: [string, string][]): string {
     return `

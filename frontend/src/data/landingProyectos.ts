@@ -78,7 +78,7 @@ export const PROYECTOS: ProyectoLanding[] = [
   {
     key: "elMapa",
     nombreKey: "landing.nombre.elMapa",
-    bg: "#008080",
+    bg: "#F0DCC0",
     txt: "#F3FBF9",
     // El mandala es el logo de ESTE proyecto (no de la casa): por eso vive
     // dentro de su caja y ya no en la cabecera de la landing.

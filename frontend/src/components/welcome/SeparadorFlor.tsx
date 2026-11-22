@@ -1,6 +1,8 @@
 import React from "react";
-import { Box, Flex, Image } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import { Reveal } from "../global/Reveal";
+import { MandalaTinte } from "../global/MandalaTinte";
+import { FONDO_PAGINA_TURQUESA } from "../../GlobalVariables";
 
 /**
  * Separación entre secciones de la portada: raya fina a cada lado y el mandala
@@ -22,16 +24,9 @@ const SeparadorFlor = ({ icono = "/img/icono/life.webp" }: { icono?: string }) =
     >
       {/* Mismo tamaño que la separación de debajo del titular (WelcomeCabecera):
           mandala de 26/34 px y rayas de 60/150 px. */}
-      <Box h="1px" w={{ base: "60px", md: "150px" }} bg="linear-gradient(to right, transparent, rgba(255,255,255,0.55))" />
-      <Image
-        src={icono}
-        alt=""
-        h={{ base: "26px", md: "34px" }}
-        objectFit="contain"
-        flexShrink={0}
-        style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.45)) drop-shadow(0 0 18px rgba(255,255,255,0.22))" }}
-      />
-      <Box h="1px" w={{ base: "60px", md: "150px" }} bg="linear-gradient(to left, transparent, rgba(255,255,255,0.55))" />
+      <Box h="1px" w={{ base: "60px", md: "150px" }} bg={`linear-gradient(to right, transparent, ${FONDO_PAGINA_TURQUESA}8C)`} />
+      <MandalaTinte h={{ base: "26px", md: "34px" }} src={icono} />
+      <Box h="1px" w={{ base: "60px", md: "150px" }} bg={`linear-gradient(to left, transparent, ${FONDO_PAGINA_TURQUESA}8C)`} />
     </Flex>
   </Reveal>
 );

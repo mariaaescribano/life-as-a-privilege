@@ -1,16 +1,9 @@
 export const welcome = {
   "welcome.subtitulo": "Science, psychology, and tradition to discover new perspectives from which to understand yourself.",
-  "welcome.hero.frase": "Discover new perspectives of yourself through a multidisciplinary lens",
-  "welcome.hero.gratis": "Free introduction",
-  "welcome.hero.foto": "I guide you in mind, body and tradition to build an integrated vision of yourself.",
+  "welcome.perspectivas.titular": "What matters is you; the perspectives adapt to you.",
+  "welcome.hero.pedirCita": "Book a free appointment",
   "welcome.hero.nombre": "Your name",
   // The three core ideas (second section, WelcomePilares)
-  "welcome.pilar.1.titulo": "Self-knowledge",
-  "welcome.pilar.1.texto": "Explore your own story, identify your patterns and understand how certain ways of thinking or acting may have made sense in the past but are no longer useful in the present.",
-  "welcome.pilar.2.titulo": "Self-acceptance",
-  "welcome.pilar.2.texto": "Learn to see yourself from different perspectives, without reducing your identity to a label, a flaw or a difficulty.",
-  "welcome.pilar.3.titulo": "Self-improvement",
-  "welcome.pilar.3.texto": "Don't justify yourself with what seems negative. Use it to know where to put your focus and improve your quality of life, getting better every day as a human being.",
   "welcome.explorar": "Explore",
   "welcome.explorarDisciplina": "Explore discipline",
   "welcome.modal.cuenta": "Create an account or log in",

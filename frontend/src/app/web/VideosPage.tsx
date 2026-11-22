@@ -334,7 +334,7 @@ export {};
 //   }, []);
 //
 //   return (
-//     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+//     <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
 //       <SiteHeader variant="auto" />
 //
 //       {/* ── MANDALA SEPARADOR ── */}
@@ -386,7 +386,7 @@ export {};
 //       <Flex flex={1} justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 12, md: 16 }} pb={{ base: 20, md: 28 }}>
 //         <Box w="100%" maxW="1120px">
 //           {cargando ? (
-//             <LifeLoader color="#ffffff" />
+//             <LifeLoader />
 //           ) : videos.length === 0 ? (
 //             <Text color="rgba(255,255,255,0.8)" fontStyle="italic" textAlign="center" fontSize={{ base: "md", md: "lg" }}>
 //               {t("videos.vacio")}

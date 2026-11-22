@@ -134,7 +134,7 @@ export default function MetodoPsicologiaCompromiso() {
     (compromiso.necesitaste || "").trim() !== "" && (compromiso.dartelo || "").trim() !== "";
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
 
       <Box position="relative" flex="1">

@@ -204,7 +204,7 @@ export default function RecuperarPassword() {
   const bloqueado = loading || hecho;
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="public" />
 
       <Box flex="1" display="flex" flexDirection="column" transform="scale(0.8)" transformOrigin="top center">

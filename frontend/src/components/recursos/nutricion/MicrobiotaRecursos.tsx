@@ -597,7 +597,7 @@ export default function MicrobiotaRecursos() {
   }, []);
 
   return (
-    <Box minH="100vh" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant={"auto"} />
        <Flex
           direction="column"

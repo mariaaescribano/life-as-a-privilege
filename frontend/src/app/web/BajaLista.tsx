@@ -114,7 +114,7 @@ const BajaLista = () => {
   );
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="auto" />
       <Box flex="1" display="flex" justifyContent="center" px={{ base: 5, md: 10 }} py={{ base: 14, md: 24 }}>
         <Reveal activo direction="up" distance={20} duration={0.9} w="100%" maxW="560px">

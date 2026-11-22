@@ -11,7 +11,7 @@ import SelectorPerspectivas from "../../components/web/SelectorPerspectivas";
 import FormularioAsesoria from "../../components/web/FormularioAsesoria";
 import { RecorridoMandalaVideo } from "../../components/global/MandalaRecorrido";
 import { BloqueDiferido } from "../../components/global/BloqueDiferido";
-import BotonContactame from "../../components/global/BotonContactame";
+// (botón flotante «Contáctame» quitado) import BotonContactame from "../../components/global/BotonContactame";
 import WelcomeCabecera from "../../components/welcome/WelcomeCabecera";
 import { useT, type ClaveTexto } from "../../i18n";
 
@@ -178,7 +178,7 @@ const Asesoria = () => {
   }, []);
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="auto" />
 
       <Box flex="1">
@@ -500,7 +500,7 @@ const Asesoria = () => {
       <SiteFooter />
 
       {/* Botón flotante «Contáctame», abajo a la derecha, como en la portada. */}
-      <BotonContactame />
+      {/* <BotonContactame /> */}
     </Box>
   );
 };
