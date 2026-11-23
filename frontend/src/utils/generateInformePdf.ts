@@ -145,7 +145,14 @@ async function iconoPng(clave: string): Promise<string | null> {
     if (!img) return null;
     const c = document.createElement("canvas");
     c.width = img.naturalWidth || 320; c.height = img.naturalHeight || 320;
-    c.getContext("2d")!.drawImage(img, 0, 0);
+    const ctx = c.getContext("2d")!;
+    ctx.drawImage(img, 0, 0);
+    // El icono de Astrología va en el beige de la casa (como la letra se ve sobre el cielo), no en el crema casi blanco.
+    if (clave === "astrologia") {
+      ctx.globalCompositeOperation = "source-in";
+      ctx.fillStyle = "#F0DCC0";
+      ctx.fillRect(0, 0, c.width, c.height);
+    }
     return c.toDataURL("image/png");
   } catch {
     return null;

@@ -1074,9 +1074,9 @@ ${plano.slice(corte + 1)}`;
             </Reveal>
             </Flex>
 
-            {/* Las dos cajas de la persona (María, mirando su camino, ve su panel en la columna). */}
-            {!mapaMaria && <HomeCajas />}
-            {!mapaMaria && <HomeDisciplinas />}
+            {/* Las dos cajas de la persona; María, mirando su camino, también las ve (y su panel en la columna). */}
+            <HomeCajas />
+            <HomeDisciplinas />
 
             {/* <Text
               color="rgba(255,255,255,0.92)"

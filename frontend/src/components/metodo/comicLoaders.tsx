@@ -513,6 +513,22 @@ const LOADER_POR_TXT: Record<string, (pintar?: string, size?: any) => React.Reac
   [nutricionTxt.toLowerCase()]: (c, s) => <AppleLoader color={c} size={s} label={null} />,
 };
 
+/** El loader de una disciplina por su CLAVE (astrologia, nutricion…), no por color: hoy varias
+ *  disciplinas comparten el mismo `<disc>Txt` (el beige) y por color siempre ganaría la última (la manzana). */
+export function loaderPorClave(key: string, color?: string, size?: any): React.ReactNode {
+  switch (key) {
+    case "astrologia": return <AstrologiaLoader color={color} size={size} />;
+    case "psicologia": return <PsicologiaLoader color={color} size={size} />;
+    case "ayurveda": return <AyurvedaLoader color={color} size={size} />;
+    case "tcm": return <TcmLoader color={color} size={size} />;
+    case "fisiologia": return <FisiologiaLoader color={color} size={size} />;
+    case "cabala": return <CabalaLoader color={color} size={size} />;
+    case "cultura": return <CulturaLoader color={color} size={size} />;
+    case "nutricion": return <AppleLoader color={color} size={size} label={null} />;
+    default: return <LifeLoader color={color} size={size} />;
+  }
+}
+
 const clave = (color?: string) => (color ?? "").trim().toLowerCase();
 
 /** Loader para el interior de un cómic/ilustración: va sobre la viñeta, así que

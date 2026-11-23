@@ -197,7 +197,7 @@ export default function AdminCorreos() {
               <Box>
                 {etiqueta("Fondo del correo")}
                 <Flex gap={2} wrap="wrap">
-                  {([["disciplina", "Foto de la disciplina"], ["marmol", "Mármol"]] as const).map(([v, nombre]) => {
+                  {([["disciplina", "Foto de la disciplina"], ["marmol", "Beige"]] as const).map(([v, nombre]) => {
                     const sel = b.fondoCorreo === v;
                     return (
                       <Box key={v} as="button" type="button" onClick={() => cambiar({ fondoCorreo: v })} aria-pressed={sel}
@@ -211,7 +211,7 @@ export default function AdminCorreos() {
                 </Flex>
                 <Text color={`${TQ}aa`} fontSize="xs" fontStyle="italic" mt={1.5}>
                   {b.fondoCorreo === "marmol"
-                    ? "Mármol de la casa, con el mandala a la izquierda de MARÍA ESCRIBANO."
+                    ? "Hoja beige con la letra en turquesa oscuro."
                     : "La foto vertical de la disciplina elegida, con toda la letra de su color."}
                 </Text>
               </Box>

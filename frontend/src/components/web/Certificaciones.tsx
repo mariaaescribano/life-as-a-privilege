@@ -34,7 +34,8 @@ const allCerts: Certificado[] = Object.entries(certImages).map(([path, img]) => 
 // ese momento. OJO: un diploma que no esté en ningún grupo NO se enseña (el 21,
 // Neuromarketing, se quitó a propósito); al añadir uno nuevo hay que ponerlo aquí.
 const GRUPOS: { tituloKey: ClaveTexto; nombres: string[] }[] = [
-  { tituloKey: "quienSoy.certif.acompanar", nombres: ["fp0", "fp1", "fp2", "34"] },
+  { tituloKey: "quienSoy.certif.psicoterapia", nombres: ["fp0", "fp1", "fp2"] },
+  { tituloKey: "quienSoy.certif.acompanar", nombres: ["34"] },
   { tituloKey: "quienSoy.certif.mente", nombres: ["2", "26", "e3", "e4", "e7"] },
   { tituloKey: "quienSoy.certif.cuerpo", nombres: ["e1", "e2", "e0", "32", "25", "24", "13", "14", "19", "20", "35", "e5"] },
   { tituloKey: "quienSoy.certif.comes", nombres: ["18", "e6", "11", "7", "3"] },

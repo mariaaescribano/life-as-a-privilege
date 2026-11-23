@@ -2,8 +2,8 @@ import React from "react";
 import { Box, Flex } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import SiteHeader from "../global/SiteHeader";
-import { loaderDisciplinaBlanco } from "./comicLoaders";
-import { disciplinaByKey } from "../../data/adminDisciplinas";
+import { loaderPorClave } from "./comicLoaders";
+import { FONDO_PAGINA_TURQUESA } from "../../GlobalVariables";
 
 /**
  * Pantalla de carga del CAMINO de una disciplina (/camino/<slug>): el header de la casa y, en el
@@ -11,14 +11,15 @@ import { disciplinaByKey } from "../../data/adminDisciplinas";
  * espera —la descarga de la página (Suspense en App.tsx) y la lectura del camino (CaminoPagina)—
  * para que sea UNA sola pantalla, sin saltar de un loader a otro.
  */
-export function CaminoCargando({ txt }: { txt?: string }) {
+/** `txt` ya no se usa (el color de letra es el mismo en varias disciplinas): el loader sale de la clave de la ruta. */
+export function CaminoCargando(_: { txt?: string }) {
   const { disciplina } = useParams();
-  const color = txt ?? disciplinaByKey(disciplina === "medicinachina" ? "tcm" : disciplina ?? "")?.txt;
+  const key = disciplina === "medicinachina" ? "tcm" : disciplina ?? "";
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
       <Flex flex="1" position="relative" align="center" justify="center" overflow="hidden">
-        {loaderDisciplinaBlanco(color)}
+        {loaderPorClave(key, FONDO_PAGINA_TURQUESA)}
       </Flex>
     </Box>
   );
