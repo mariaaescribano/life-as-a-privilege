@@ -212,7 +212,7 @@ export default function MetodoAstrologiaAspectos() {
               bgColor={`${astrologiaBg}dd`}
               color={astrologiaTxt}
               space
-              step={{ current: 8, total: 12 }}
+              step={{ current: 8, total: 20 }}
               mb={0}
               prev={{ label: `← ${t("metodo.astro.paso.casas")}`, onClick: () => navigate("/metodo/astrologia/casas") }}
               next={headerNext}

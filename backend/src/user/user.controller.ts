@@ -32,6 +32,14 @@ export class UserController {
     return await this.usersService.logIn(body);
   }
 
+  // Entrar con el enlace del correo de «tu carta ya está lista» (cuentas solo carta, sin contraseña).
+  @Post("lectura/entrar")
+  @Throttle(LIMITE_AUTH)
+  @HttpCode(HttpStatus.OK)
+  async entrarLectura(@Body() body: { token?: string }) {
+    return await this.usersService.entrarConEnlaceLectura(body?.token ?? "");
+  }
+
   // ── Confirmación de la cuenta (enlace del correo de bienvenida) ──────────
   @Post("confirmar")
   @Throttle(LIMITE_AUTH)
@@ -109,7 +117,12 @@ export class UserController {
     // recorrido sin pagar. No se toca la BD, se abre al vuelo en cada respuesta,
     // así que basta con quitar el email de la variable para cerrarlo de nuevo.
     const accesoLibre = isAccesoLibreEmail(email);
-    const flagsLibres = accesoLibre
+    // TODAS LAS DISCIPLINAS ABIERTAS (nov-2026): no hay que pagar ni esperar a que María abra nada, todas las
+    // cuentas ven las ocho. La excepción es la cuenta «solo carta» (pidió únicamente su lectura): esa sigue sin
+    // acceso al resto. Para volver a cerrar: poner DISCIPLINAS_ABIERTAS a false (vuelve a mandar la BD y el acceso libre).
+    const DISCIPLINAS_ABIERTAS = true;
+    const abiertas = accesoLibre || (DISCIPLINAS_ABIERTAS && (user as any)?.solo_lectura !== true);
+    const flagsLibres = abiertas
       ? Object.fromEntries(DISCIPLINAS_ORDEN.map((k) => [`${k}_suscrito`, true]))
       : {};
 

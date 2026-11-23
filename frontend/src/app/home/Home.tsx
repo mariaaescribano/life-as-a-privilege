@@ -3,6 +3,9 @@ import { Box, Flex, Image, Text, Tooltip, useBreakpointValue, useToast } from "@
 import { keyframes } from "@emotion/react";
 import { Reveal } from "../../components/global/Reveal";
 import { LetrasVivas } from "../../components/global/LetrasVivas";
+import { MandalaTinte } from "../../components/global/MandalaTinte";
+import HomeCajas from "./HomeCajas";
+import HomeDisciplinas from "./HomeDisciplinas";
 import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -18,7 +21,7 @@ import { PagoCulturaModal } from "../../components/metodo/PagoCulturaModal";
 import { PagoExitoModal } from "../../components/metodo/PagoExitoModal";
 import axios from "axios";
 import {
-  API_URL,
+  API_URL, FONDO_PAGINA_TURQUESA,
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
   ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaNomLink, ayurvedaTxt,
   cabalaBg, CabalaIcon, cabalaNom, cabalaTxt,
@@ -31,7 +34,7 @@ import {
 import { DisciplinaBgLayer, hasDisciplinaBg, disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { irAPagoDisciplina } from "../../components/metodo/pagoDisciplinaLink";
-import CaminoUsuario from "./CaminoUsuario";
+// (Tu mapa quitado) import CaminoUsuario from "./CaminoUsuario";
 import MapaDePersona from "./MapaDePersona";
 import { rutaCamino } from "../../data/camino";
 import { personaActiva } from "../../api/persona";
@@ -41,7 +44,8 @@ import { useT, type ClaveTexto } from "../../i18n";
 import { encogerFoto } from "../../utils/encogerFoto";
 import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
 import { cacheDeOtraCuenta } from "../../api/sesion";
-// (Premium aparcado) import { getUserMe } from "../../api/userMe";
+import { getUserMe } from "../../api/userMe";
+import { esMariaMirando } from "../../api/persona";
 
 // Entrada de cada círculo del mandala: sube desde algo más pequeño y desenfocado
 // hasta colocarse, con la curva del sistema Reveal (sin rebote ni giro: un
@@ -136,6 +140,13 @@ const Home = () => {
   // Si se ha cambiado de cuenta en esta pestaña, las compras guardadas son de la otra.
   if (cacheDeOtraCuenta("home")) suscCache = null;
   const navigate = useNavigate();
+  // Cuenta «solo carta» (pidió únicamente su lectura de carta astral): su casa ES el camino de Astrología.
+  useEffect(() => {
+    if (esMariaMirando()) return;
+    getUserMe().then(({ data }) => {
+      if (data?.solo_lectura === true) navigate("/camino/astrologia", { replace: true });
+    }).catch(() => { /* sin red: se queda */ });
+  }, [navigate]);
   const t = useT();
   const nombreDisciplina = useNombreDisciplina();
   const toast = useToast();
@@ -446,7 +457,8 @@ const Home = () => {
   const circleSize    = useBreakpointValue({ base: "73px", sm: "79px", md: "96px", lg: "116px" });
   const iconSize      = useBreakpointValue({ base: "37px", sm: "43px", md: "53px", lg: "64px" });
   const numberSize    = useBreakpointValue({ base: "24px", sm: "25px", md: "29px", lg: "34px" });
-  const mandalaScale  = useBreakpointValue({ base: "none", md: "scale(0.7)" });
+  // const mandalaScale  = useBreakpointValue({ base: "none", md: "scale(0.7)" }); // reducía el mandala grande (quitado): la home va a tamaño real
+  const mandalaScale  = "none";
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -834,8 +846,11 @@ const Home = () => {
   // cargarSuscripcion() fija los 8 estados a la vez, con que metodoSuscrito deje
   // de ser null ya están todos resueltos. Sin esto, los círculos aparecerían
   // bloqueados y luego «saltarían» a desbloqueados (el doble render).
-  const suscripcionesCargadas = metodoSuscrito !== null;
-  const mandalaListo = img != null && imagesReady && suscripcionesCargadas;
+//   const suscripcionesCargadas = metodoSuscrito !== null;
+  // La home ya NO depende de la foto, de los fondos ni de las suscripciones (eso era del mandala grande, quitado):
+  // se pinta enseguida. Si esperaba a la foto (`img`) y la sesión no tenía ninguna —p. ej. la de admin—, se quedaba en blanco.
+  // const mandalaListo = img != null && imagesReady && suscripcionesCargadas;
+  const mandalaListo = true;
   // El mandala espera a que el saludo casi haya terminado de escribirse: entra
   // cuando el saludo está en sus últimas letras (0,03 s por letra), no antes
   // (se pisarían y habría que elegir a cuál mirar) ni cuando ya ha acabado del
@@ -899,7 +914,7 @@ const Home = () => {
     : null;
 
   // María no ve «Tu mapa» (eso es de la persona): solo su panel.
-  const columnaCamino = mapaMaria ?? <CaminoUsuario suscritas={suscritasCamino} />;
+  const columnaCamino = mapaMaria; // «Tu mapa» (CaminoUsuario) QUITADO: la persona ve las dos cajas de HomeCajas.
 
   const ultimoRecorrido = (() => { try { return localStorage.getItem("ultimoRecorrido"); } catch { return null; } })();
   const contDisc = ultimoRecorrido ? disciplinaDeRuta(ultimoRecorrido) : null;
@@ -1020,27 +1035,32 @@ const Home = () => {
             px={{ base: 5, md: 10 }}
             w="100%"
           >
-            {/* ── SALUDO ── */}
+            {/* ── SALUDO ── el mandala (pequeño) un poco a la izquierda y el título a su derecha, empezando desde ahí;
+                todo el conjunto, centrado. */}
+            <Flex direction="column" align="center" justify="center" gap={{ base: 4, md: 5 }} w="100%" mb={{ base: 12, md: 16 }}>
+            <MandalaTinte h={{ base: "56px", md: "84px" }} />
             <Reveal direction="up" distance={animarSaludo ? 18 : 0} duration={animarSaludo ? 0.9 : 0.01} blur={animarSaludo}>
             <Text
-              color="white"
-              fontSize={{ base: "3xl", md: "5xl" }}
+              color={FONDO_PAGINA_TURQUESA}
+              whiteSpace="pre-line"
+              fontSize={{ base: "xl", md: "3xl" }}
               fontWeight="700"
               letterSpacing="0.06em"
               textAlign="center"
               lineHeight="1.15"
-              // Glow un punto POR DEBAJO del estándar de títulos (0.6/0.39/0.32),
-              // a propósito: el saludo brillaba un pelín de más.
-              textShadow="0 0 18px rgba(255,255,255,0.5), 0 0 38px rgba(255,255,255,0.32), 0 0 70px rgba(180,255,245,0.26)"
-              mb={{ base: 10, md: 8 }}
-              // Aire a los lados del ancho de las columnas fijas («Tu mapa» a
-              // la izquierda, «Continuar» a la derecha): el saludo rompe de
-              // línea antes de meterse por debajo de ellas.
-              px={{ lg: "240px", xl: "320px" }}
+              // Sin luz: el título va en turquesa oscuro, sin brillo (estilo nuevo).
             >
               {(() => {
-                const saludo = t("home.bienvenida", { coma: name ? `, ${name}` : "" });
-                if (!animarSaludo) return saludo;
+                const plano = t("home.bienvenida", { coma: name ? `, ${name}` : "" });
+                // Partido por la MITAD: el espacio más cercano al centro pasa a salto de línea → dos líneas.
+                const medio = plano.length / 2;
+                let corte = plano.indexOf(" profunda"); // «…comprensión más / profunda de ti, María»
+                if (corte < 0) for (let i = 0; i < plano.length; i++) {
+                  if (plano[i] === " " && (corte < 0 || Math.abs(i - medio) < Math.abs(corte - medio))) corte = i;
+                }
+                const saludo = corte < 0 ? plano : `${plano.slice(0, corte)}
+${plano.slice(corte + 1)}`;
+                if (!animarSaludo) return <Box as="span" whiteSpace="pre-line">{saludo}</Box>;
                 // El rayo de luz recorre el NOMBRE mientras se escribe: se cuenta
                 // cuántas letras (sin espacios) hay antes de él.
                 const pos = name ? saludo.lastIndexOf(name) : -1;
@@ -1052,6 +1072,11 @@ const Home = () => {
               })()}
             </Text>
             </Reveal>
+            </Flex>
+
+            {/* Las dos cajas de la persona (María, mirando su camino, ve su panel en la columna). */}
+            {!mapaMaria && <HomeCajas />}
+            {!mapaMaria && <HomeDisciplinas />}
 
             {/* <Text
               color="rgba(255,255,255,0.92)"
@@ -1070,7 +1095,8 @@ const Home = () => {
               Este es «El Recorrido» para empezar el camino de vuelta a ti.
             </Text> */}
 
-            {/* Mandala */}
+            {/* El mandala grande (las disciplinas en círculo con la foto en el centro): QUITADO por ahora (nov-2026). */}
+            {false && (
             <Box
               position="relative"
               w={containerSize}
@@ -1107,7 +1133,7 @@ const Home = () => {
                 animation={`${entraFoto} 1.1s cubic-bezier(0.22,1,0.36,1) ${0.1 + esperaMandala}s both, ${respiraFoto} 6s ease-in-out ${1.4 + esperaMandala}s infinite`}
                 sx={SIN_MOVIMIENTO}
               >
-                <Image src={img} alt={t("home.foto")} w="100%" h="100%" objectFit="cover" />
+                <Image src={img ?? undefined} alt={t("home.foto")} w="100%" h="100%" objectFit="cover" />
                 <input
                   type="file"
                   accept="image/*"
@@ -1337,7 +1363,7 @@ const Home = () => {
                 );
               })}
             </Box>
-
+            )}
             {/* Continuar por dónde lo dejé — móvil: debajo del mandala, con
                 aire de sobra entre medias para que el mandala respire y se
                 lleve el protagonismo. */}

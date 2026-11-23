@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, Flex, Text } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
+// APARCADO (nov-2026): sin el botón a /d/<slug> no hace falta navegar.
+// import { useNavigate } from "react-router-dom";
 import { useIdioma, useT, type Texto } from "../../i18n";
 import { useNombreDisciplinaEnMapa } from "../../i18n/nombreDisciplina";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
@@ -166,7 +167,8 @@ export function TestDisciplinaModal({
 }) {
   const t = useT();
   const { segunIdioma } = useIdioma();
-  const navigate = useNavigate();
+  // APARCADO (nov-2026): sin el botón a /d/<slug> ya no se navega desde aquí.
+  // const navigate = useNavigate();
   const nombreEnMapa = useNombreDisciplinaEnMapa();
 
   // Una entrada por pregunta: el índice de la opción elegida (null = sin
@@ -511,6 +513,7 @@ export function TestDisciplinaModal({
                 <PalabrasVivas texto={segunIdioma(R.gancho)} retraso={1.1} total={0.9} />
               </Text>
 
+              {/* APARCADO (nov-2026): el botón «Ver disciplina» llevaba a /d/<slug>, que está comentado.
               <Reveal direction="up" distance={12} duration={0.7} delay={1.9}>
               <Flex
                 as="button"
@@ -547,6 +550,7 @@ export function TestDisciplinaModal({
                 </Text>
               </Flex>
               </Reveal>
+              */}
             </Flex>
           )}
         </Flex>

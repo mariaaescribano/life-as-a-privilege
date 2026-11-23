@@ -220,7 +220,7 @@ export default function MetodoAstrologiaCartaAstral() {
               bgColor={`${astrologiaBg}dd`}
               color={astrologiaTxt}
               space
-              step={{ current: 6, total: 12 }}
+              step={{ current: 6, total: 20 }}
               mb={0}
               prev={{ label: `← ${t("metodo.astro.paso.puntosClave")}`, onClick: () => navigate("/metodo/astrologia/lectura") }}
               next={{

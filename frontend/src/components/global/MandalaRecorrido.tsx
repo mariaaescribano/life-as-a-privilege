@@ -15,7 +15,9 @@ import { useIdioma, useT, type Texto } from "../../i18n";
 import { useNombreDisciplinaEnMapa } from "../../i18n/nombreDisciplina";
 import { useVistoConEspera } from "../../hooks/useVistoConEspera";
 import { DisciplinaVideoBox } from "../metodo/DisciplinaVideoBox";
-import { presentacionPorKey } from "../../data/presentacionDisciplinas";
+import { presentacionPorKey as presentacionPorKeyReal, PRESENTACIONES_ACTIVAS } from "../../data/presentacionDisciplinas";
+// Presentaciones /d/ APARCADAS: sin ellas, `presentacion` es siempre undefined y no se pinta ningún enlace a /d/.
+const presentacionPorKey = (nom: string) => (PRESENTACIONES_ACTIVAS ? presentacionPorKeyReal(nom) : undefined);
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
   ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaNomLink, ayurvedaTxt,

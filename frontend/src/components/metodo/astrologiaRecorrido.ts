@@ -12,6 +12,7 @@
 // que arrancó la página, sin cambiar al pulsar el selector de idioma.
 // ─────────────────────────────────────────────────────────────────────────
 import { traducir } from "../../i18n";
+import { AREAS_TOTAL, pasoDeArea, rutaArea, tituloArea } from "./astrologiaAreas";
 import type { PasoRecorrido } from "./psicologiaRecorrido";
 
 /** Los pasos del recorrido, con los títulos ya en el idioma activo. */
@@ -31,26 +32,22 @@ export const astrologiaIndice = (): PasoRecorrido[] => [
   { n: 4, titulo: traducir("metodo.astro.paso.trio"), ruta: () => "/metodo/astrologia/trio" },
   // 5 · los puntos clave de SU carta, según María.
   { n: 5, titulo: traducir("metodo.astro.paso.puntosClave"), ruta: () => "/metodo/astrologia/lectura" },
-  // 6 · Arquetipos: cada planeta en su signo y en su casa, en cajas.
-  { n: 6, titulo: traducir("metodo.astro.paso.arquetipos"), ruta: () => "/metodo/astrologia/cartaAstral" },
-  // 7-8 · los pasos de siempre, PROVISIONALES hasta que se rehaga el resto.
-  { n: 7, titulo: traducir("metodo.astro.paso.casas"), ruta: () => "/metodo/astrologia/casas" },
-  { n: 8, titulo: traducir("metodo.astro.paso.aspectos"), ruta: () => "/metodo/astrologia/aspectos" },
-  // 9 · su carta entera en un PDF descargable.
+  // 6-17 · las doce ÁREAS (una por casa): Área I «Mi nacimiento» … Área XII. Cada una, una página con su texto.
+  ...Array.from({ length: AREAS_TOTAL }, (_, i) => ({ n: pasoDeArea(i + 1), titulo: tituloArea(i + 1), ruta: () => rutaArea(i + 1) })),
+  // (Casas, Aspectos, Arquetipos y Apuntes: QUITADOS del camino por ahora, nov-2026; las páginas y rutas siguen en el código, comentadas en App.tsx.)
+  // 18 · su carta entera en un PDF descargable.
   {
-    n: 9,
+    n: 18,
     titulo: traducir("metodo.astro.paso.pdf"),
     tituloCorto: traducir("metodo.astro.paso.pdfCorto"),
     ruta: () => "/metodo/astrologia/pdf",
   },
-  // 10 · los apuntes personales: signos, casas, planetas y aspectos a elegir.
-  { n: 10, titulo: traducir("metodo.astro.paso.apuntes"), ruta: () => "/metodo/astrologia/apuntes" },
-  // 11 · la Síntesis: lo que María quiere que no olvide.
-  { n: 11, titulo: traducir("metodo.astro.paso.sintesis"), ruta: () => "/metodo/astrologia/sintesis" },
-  // 12
-  { n: 12, titulo: traducir("metodo.astro.paso.cursos"), ruta: () => "/metodo/astrologia/cursos" },
+  // 19 · la Síntesis: lo que María quiere que no olvide.
+  { n: 19, titulo: traducir("metodo.astro.paso.sintesis"), ruta: () => "/metodo/astrologia/sintesis" },
+  // 20
+  { n: 20, titulo: traducir("metodo.astro.paso.cursos"), ruta: () => "/metodo/astrologia/cursos" },
 ];
 
 /** Cuántos pasos tiene el recorrido. Constante: no depende del idioma.
  *  ⚠️ Si cambia, cambia también `metodo.total` en data/camino.ts. */
-export const ASTROLOGIA_TOTAL = 12;
+export const ASTROLOGIA_TOTAL = 20;

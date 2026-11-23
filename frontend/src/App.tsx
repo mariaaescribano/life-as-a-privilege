@@ -62,6 +62,7 @@ const lazyConMetodo = <T extends { default: React.ComponentType<any> }>(
   carga: () => Promise<T>,
 ) => lazy(() => Promise.all([carga(), cargarTextosMetodo()]).then(([modulo]) => modulo));
 const LogIn = lazy(() => import("./app/auth/LogIn"));
+const AccesoLectura = lazy(() => import("./app/auth/AccesoLectura"));
 const SignIn = lazy(() => import("./app/auth/SignIn"));
 const GoogleAuthCallback = lazy(() => import("./app/auth/GoogleAuthCallback"));
 const Home = lazyConMetodo(() => import("./app/home/Home"));
@@ -108,26 +109,27 @@ const Ilustraciones = lazyConMetodo(() => import("./app/web/Ilustraciones"));
 const DisciplinaPortada = lazy(() => import("./app/web/DisciplinaPortada"));
 // Vídeos: apartado aparcado (la página y su panel de admin siguen en el repo).
 // const VideosPage = lazyConMetodo(() => import("./app/web/VideosPage"));
-const PresentacionDisciplina = lazyConMetodo(() => import("./app/web/PresentacionDisciplina"));
+// APARCADO (nov-2026): las presentaciones /d/:disciplina. Para revivirlas: descomentar esto, la ruta de abajo y poner PRESENTACIONES_ACTIVAS = true en data/presentacionDisciplinas.ts, y las puertas de DisciplinaPortada y el botón de TestDisciplina.
+// const PresentacionDisciplina = lazyConMetodo(() => import("./app/web/PresentacionDisciplina"));
 const CheckoutMetodo = lazy(() => import("./app/web/CheckoutMetodo"));
 const MetodoAstrologia = lazyConMetodo(() => import("./app/metodo/MetodoAstrologia"));
 // El camino de cada disciplina (sus páginas como cajitas con flechas): usa los
 // títulos del recorrido (`metodo.*`), por eso lleva el diccionario del recorrido.
 import { CaminoCargando } from "./components/metodo/CaminoCargando";
 const CaminoPagina = lazyConMetodo(() => import("./app/metodo/CaminoPagina"));
-const MetodoAstrologiaCartaAstral = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaCartaAstral"));
-const MetodoAstrologiaPlanetas = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaPlanetas"));
-const MetodoAstrologiaProfundizar = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaProfundizar"));
+// (camino reducido, nov-2026) const MetodoAstrologiaCartaAstral = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaCartaAstral"));
+// (camino reducido, nov-2026) const MetodoAstrologiaPlanetas = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaPlanetas"));
+// (camino reducido, nov-2026) const MetodoAstrologiaProfundizar = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaProfundizar"));
 const MetodoAstrologiaLectura = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaLectura"));
-const MetodoAstrologiaCasas = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaCasas"));
-const MetodoAstrologiaAspectos = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaAspectos"));
+// (camino reducido, nov-2026) const MetodoAstrologiaCasas = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaCasas"));
+// (camino reducido, nov-2026) const MetodoAstrologiaAspectos = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaAspectos"));
 const MetodoAstrologiaPdf = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaPdf"));
 const MetodoAstrologiaIntroduccion = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaIntroduccion"));
 const MetodoAstrologiaArea = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaArea"));
 const MetodoAstrologiaHistoria = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaHistoria"));
 const MetodoAstrologiaExplicacion = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaExplicacion"));
 const MetodoAstrologiaTrio = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaTrio"));
-const MetodoAstrologiaApuntes = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaApuntes"));
+// (camino reducido, nov-2026) const MetodoAstrologiaApuntes = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaApuntes"));
 const MetodoAstrologiaSintesis = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaSintesis"));
 const MetodoAstrologiaCursos = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaCursos"));
 const AdminHome = lazy(() => import("./app/admin/AdminHome"));
@@ -418,6 +420,8 @@ export default function App({ antigua = false }: { antigua?: boolean } = {})
       <Route path="/" element={antigua ? <WelcomeAntigua /> : <Welcome />} />
       <Route path="/welcome" element={antigua ? <WelcomeAntigua /> : <Welcome />} />
       <Route path="/logIn" element={<LogIn />} />
+      {/* Entrar con el enlace del correo de la carta (cuenta solo carta, sin contraseña). */}
+      <Route path="/acceso" element={<AccesoLectura />} />
       <Route path="/signIn" element={antigua ? <Navigate to="/logIn" replace /> : <SignIn />} />
       <Route path="/recuperar" element={<RecuperarPassword />} />
       <Route path="/auth/google/callback" element={antigua ? <Navigate to="/logIn" replace /> : <GoogleAuthCallback />} />
@@ -477,7 +481,7 @@ export default function App({ antigua = false }: { antigua?: boolean } = {})
       {/* <Route path="/videos" element={<VideosPage />} /> */}
       {/* Presentación pública de una disciplina — destino del QR de los carteles.
           Ruta corta porque va impresa: /d/cabala, /d/nutricion, … */}
-      <Route path="/d/:disciplina" element={<PresentacionDisciplina />} />
+      {/* APARCADO: <Route path="/d/:disciplina" element={<PresentacionDisciplina />} /> */}
       <Route path="/checkoutMetodo" element={<CheckoutMetodo />} />
       <Route path="/camino/:disciplina" element={<PrivateRoute><Suspense fallback={<CaminoCargando />}><CaminoPagina /></Suspense></PrivateRoute>} />
       <Route path="/metodo/astrologia" element={<PrivateRoute><MetodoAstrologia /></PrivateRoute>} />
@@ -485,21 +489,21 @@ export default function App({ antigua = false }: { antigua?: boolean } = {})
           sola página: datos + Sol/Luna/Ascendente). La ruta vieja se conserva
           como redirección: hay migas del Mapa y marcadores apuntándole. */}
       <Route path="/metodo/astrologia/solascendenteluna" element={<Navigate to="/metodo/astrologia/trio" replace />} />
-      <Route path="/metodo/astrologia/cartaAstral" element={<PrivateRoute><MetodoAstrologiaCartaAstral /></PrivateRoute>} />
+      {/* <Route path="/metodo/astrologia/cartaAstral" element={<PrivateRoute><MetodoAstrologiaCartaAstral /></PrivateRoute>} /> */}
       <Route path="/metodo/astrologia/lectura" element={<PrivateRoute><MetodoAstrologiaLectura /></PrivateRoute>} />
-      <Route path="/metodo/astrologia/planetas" element={<PrivateRoute><MetodoAstrologiaPlanetas /></PrivateRoute>} />
-      <Route path="/metodo/astrologia/casas" element={<PrivateRoute><MetodoAstrologiaCasas /></PrivateRoute>} />
-      <Route path="/metodo/astrologia/aspectos" element={<PrivateRoute><MetodoAstrologiaAspectos /></PrivateRoute>} />
+      {/* <Route path="/metodo/astrologia/planetas" element={<PrivateRoute><MetodoAstrologiaPlanetas /></PrivateRoute>} /> */}
+      {/* <Route path="/metodo/astrologia/casas" element={<PrivateRoute><MetodoAstrologiaCasas /></PrivateRoute>} /> */}
+      {/* <Route path="/metodo/astrologia/aspectos" element={<PrivateRoute><MetodoAstrologiaAspectos /></PrivateRoute>} /> */}
       <Route path="/metodo/astrologia/pdf" element={<PrivateRoute><MetodoAstrologiaPdf /></PrivateRoute>} />
       <Route path="/metodo/astrologia/introduccion" element={<PrivateRoute><MetodoAstrologiaIntroduccion /></PrivateRoute>} />
       <Route path="/metodo/astrologia/area/:n" element={<PrivateRoute><MetodoAstrologiaArea /></PrivateRoute>} />
       <Route path="/metodo/astrologia/historia" element={<PrivateRoute><MetodoAstrologiaHistoria /></PrivateRoute>} />
       <Route path="/metodo/astrologia/explicacion" element={<PrivateRoute><MetodoAstrologiaExplicacion /></PrivateRoute>} />
       <Route path="/metodo/astrologia/trio" element={<PrivateRoute><MetodoAstrologiaTrio /></PrivateRoute>} />
-      <Route path="/metodo/astrologia/apuntes" element={<PrivateRoute><MetodoAstrologiaApuntes /></PrivateRoute>} />
+      {/* <Route path="/metodo/astrologia/apuntes" element={<PrivateRoute><MetodoAstrologiaApuntes /></PrivateRoute>} /> */}
       <Route path="/metodo/astrologia/sintesis" element={<PrivateRoute><MetodoAstrologiaSintesis /></PrivateRoute>} />
       <Route path="/metodo/astrologia/cursos" element={<PrivateRoute><MetodoAstrologiaCursos /></PrivateRoute>} />
-      <Route path="/metodo/astrologia/:planetaKey/:campo" element={<PrivateRoute><MetodoAstrologiaProfundizar /></PrivateRoute>} />
+      {/* <Route path="/metodo/astrologia/:planetaKey/:campo" element={<PrivateRoute><MetodoAstrologiaProfundizar /></PrivateRoute>} /> */}
       <Route path="/admin/login" element={<AdminLogin />} />
       <Route path="/admin" element={<AdminRoute><AdminInicio /></AdminRoute>} />
       <Route path="/admin/mi-diario" element={<AdminRoute><AdminMiDiario /></AdminRoute>} />

@@ -805,6 +805,38 @@ export class MailService {
     return await this.enviar(email, 'Tu registro está confirmado', html, 'lectura recibida');
   }
 
+  /**
+   * «Tu carta ya está lista»: el correo con el que la persona de una cuenta «solo carta» ENTRA. No tiene contraseña:
+   * este botón es su llave (ver `crearTokenAccesoLectura`), así que el correo le pide que no lo pierda y, si pasa,
+   * que me escriba. Sale desde /admin/lecturas con «Enviar acceso». Copia oculta a María.
+   */
+  async enviarAccesoLectura(email: string, nombre: string, enlace: string): Promise<boolean> {
+    const nombreSeguro = this.escaparHtml(nombre).trim();
+    const parrafo = (texto: string) =>
+      `<p style="font-size: 16px; line-height: 1.75; opacity: 0.92;">${texto}</p>`;
+    const html = this.plantilla(
+      "Tu carta ya está lista",
+      `
+        ${parrafo(nombreSeguro ? `Hola <strong>${nombreSeguro}</strong>, tu carta ya está lista.` : "Hola, tu carta ya está lista.")}
+        ${parrafo("Entra en tu cuenta con el botón de abajo. No necesitas contraseña: este correo es tu llave.")}
+        <p style="margin: 28px 0;">
+          ${this.pildora(enlace, "Entrar en mi cuenta")}
+        </p>
+        <p style="font-size: 15px; line-height: 1.7; padding: 14px 18px; background: rgba(0,79,79,0.08); border-radius: 12px;">
+          <strong>No pierdas este correo.</strong> Es la única forma de entrar en tu cuenta. Si lo pierdes, ponte en contacto conmigo y te mando otro.
+        </p>
+        <p style="font-size: 13px; line-height: 1.6; opacity: 0.75;">
+          Si el botón no te funciona, copia esta dirección en tu navegador:<br />
+          <a href="${enlace}" style="color:${TINTA_MARMOL};text-decoration:underline;word-break:break-all;">${enlace}</a>
+        </p>
+        <p style="margin: 22px 0 0; font-size: 16px; line-height: 1.75; opacity: 0.92; text-align: right;">
+          Un abrazo,<br />María
+        </p>
+      `,
+    );
+    return await this.enviar(email, "Tu carta ya está lista", html, "acceso a la carta", { copiaAdmin: true });
+  }
+
   /** Ficha con los datos de la persona, igual en los dos avisos. */
   private fichaPersona(filas: [string, string][]): string {
     return `

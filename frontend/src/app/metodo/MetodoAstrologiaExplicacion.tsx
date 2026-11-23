@@ -12,7 +12,7 @@ import { seccionesAstro, type SeccionAstro } from "../../components/metodo/astro
 import { Reveal } from "../../components/global/Reveal";
 import { useAstrologiaProgreso } from "../../hooks/useAstrologiaProgreso";
 import { useAstroLeidos } from "../../hooks/useAstroLeidos";
-import { focoBlanco } from "../../components/global/foco";
+import { BotonLeido } from "../../components/metodo/BotonLeido";
 import { esMariaMirando } from "../../api/persona";
 import { astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon, FONDO_PAGINA_TURQUESA } from "../../GlobalVariables";
 import { useIdioma, useT } from "../../i18n";
@@ -59,7 +59,7 @@ export default function MetodoAstrologiaExplicacion() {
               bgColor={`${astrologiaBg}dd`}
               color={astrologiaTxt}
               space
-              step={{ current: 2, total: 12 }}
+              step={{ current: 2, total: 20 }}
               mb={0}
               prev={{ label: `← ${t("metodo.astro.paso.historia")}`, onClick: () => navigate("/metodo/astrologia/historia") }}
               next={{
@@ -86,12 +86,12 @@ export default function MetodoAstrologiaExplicacion() {
             <Flex key={sec.clave} direction="column" align="center" w="100%" gap={{ base: 6, md: 8 }}>
               <Reveal inView direction="up" distance={14} w="100%">
                 <Flex align="center" gap={4} w="100%">
-                  <Box flex="1" h="1px" bg="rgba(255,255,255,0.4)" />
+                  <Box flex="1" h="1px" bg={`${FONDO_PAGINA_TURQUESA}99`} />
                   <Text color={FONDO_PAGINA_TURQUESA} fontSize={{ base: "lg", md: "2xl" }} fontWeight="700" letterSpacing="0.16em"
                         textTransform="uppercase" textAlign="center">
                     {t(`metodo.astro.explica.${sec.clave}` as ClaveTexto)}
                   </Text>
-                  <Box flex="1" h="1px" bg="rgba(255,255,255,0.4)" />
+                  <Box flex="1" h="1px" bg={`${FONDO_PAGINA_TURQUESA}99`} />
                 </Flex>
               </Reveal>
 
@@ -139,24 +139,9 @@ export default function MetodoAstrologiaExplicacion() {
           const id = idLeido(abierto.sec, tarjeta.clave);
           const hecho = leidos.has(id);
           return (
-            <Flex justify="center" mt={{ base: 3, md: 4 }}>
-              <Box as="button" type="button" onClick={() => marcarLeido(id)} disabled={hecho} aria-pressed={hecho}
-                   display="inline-flex" alignItems="center" gap={2}
-                   px={8} py="9px" borderRadius="full" fontWeight="600" fontSize={{ base: "md", md: "lg" }} letterSpacing="0.05em"
-                   color={astrologiaTxt} bg={hecho ? `${astrologiaTxt}1f` : "transparent"}
-                   border={`1.5px solid ${astrologiaTxt}${hecho ? "55" : "99"}`}
-                   opacity={hecho ? 0.85 : 1} cursor={hecho ? "default" : "pointer"}
-                   transition="all 0.3s ease"
-                   _hover={hecho ? {} : { bg: `${astrologiaTxt}1f`, borderColor: astrologiaTxt, transform: "translateY(-1px)" }}
-                   _active={hecho ? {} : { transform: "scale(0.97)" }} _focusVisible={focoBlanco}>
-                {hecho && (
-                  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px" fill="currentColor" flexShrink={0} aria-hidden>
-                    <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
-                  </Box>
-                )}
-                {t("metodo.astro.leidoBoton")}
-              </Box>
-            </Flex>
+            <BotonLeido hecho={hecho} onClick={() => marcarLeido(id)} color={astrologiaTxt}>
+              {t("metodo.astro.leidoBoton")}
+            </BotonLeido>
           );
         }}
         onClose={() => setAbierto(null)}

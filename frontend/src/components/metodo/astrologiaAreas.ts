@@ -1,12 +1,21 @@
 // ─────────────────────────────────────────────────────────────────────────
-// LAS ÁREAS DEL CAMINO DE ASTROLOGÍA · ÁREA 1 … ÁREA 12 (una por casa).
+// LAS ÁREAS DEL CAMINO DE ASTROLOGÍA · ÁREA I … ÁREA XII (una por casa), después de «Puntos clave».
 //
-// El TEXTO de cada área (la caja de arriba, con scroll vertical) es de María: se escribe aquí, en español
-// y, si hace falta, en inglés. Párrafos separados por una línea en blanco (\n\n). Mientras un área no
-// tenga texto, su página enseña el aviso «pendiente».
+// El camino va así: 1-5 (Historia … Puntos clave) · 6-17 las doce Áreas · 18 Tu carta en PDF · 19 Síntesis · 20 Cursos.
+// Este mismo camino lo recorre quien solo ha pedido su lectura de carta astral.
+//
+// El NOMBRE de cada área está en el diccionario (`metodo.astro.area.N.nombre`). El TEXTO (la caja de arriba, con
+// scroll vertical) es de María: se escribe aquí, en español y, si hace falta, en inglés. Párrafos separados por una
+// línea en blanco. Mientras un área no tenga texto, su página enseña el aviso «pendiente».
 // ─────────────────────────────────────────────────────────────────────────
+import { traducir } from "../../i18n";
+import type { ClaveTexto } from "../../i18n";
 
 export const AREAS_TOTAL = 12;
+/** Cuántos pasos del camino hay ANTES de la primera Área (Historia … Puntos clave). */
+export const PASOS_ANTES_DE_AREAS = 5;
+
+export const ROMANOS = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"];
 
 export const AREAS_TEXTO: Record<number, { es: string; en?: string }> = {
   1: { es: "" },
@@ -25,3 +34,10 @@ export const AREAS_TEXTO: Record<number, { es: string; en?: string }> = {
 
 /** La ruta de un área. */
 export const rutaArea = (n: number) => `/metodo/astrologia/area/${n}`;
+
+/** El número de paso del camino que le toca al área `n` (la 1 es el paso 6). */
+export const pasoDeArea = (n: number) => PASOS_ANTES_DE_AREAS + n;
+
+/** «I Mi nacimiento»: el número romano a la izquierda y el nombre, sin la palabra «Área» ni punto, en el idioma activo. */
+export const tituloArea = (n: number): string =>
+  `${ROMANOS[n - 1]} ${traducir(`metodo.astro.area.${n}.nombre` as ClaveTexto)}`;

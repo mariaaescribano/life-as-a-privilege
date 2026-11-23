@@ -5,7 +5,10 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { CajaTextoScroll } from "../../components/metodo/CajaTextoScroll";
-import { AREAS_TEXTO, AREAS_TOTAL, rutaArea } from "../../components/metodo/astrologiaAreas";
+import { AREAS_TEXTO, AREAS_TOTAL, pasoDeArea, rutaArea, tituloArea } from "../../components/metodo/astrologiaAreas";
+import { useAstrologiaProgreso } from "../../hooks/useAstrologiaProgreso";
+import { esMariaMirando } from "../../api/persona";
+import { ASTROLOGIA_TOTAL } from "../../components/metodo/astrologiaRecorrido";
 import { Reveal } from "../../components/global/Reveal";
 import { astrologiaBg, astrologiaTxt, AstrologiaIcon, FONDO_PAGINA_TURQUESA as T } from "../../GlobalVariables";
 import { useIdioma } from "../../i18n";
@@ -27,7 +30,8 @@ export default function MetodoAstrologiaArea() {
 
   const texto = AREAS_TEXTO[n] ? segunIdioma({ es: AREAS_TEXTO[n].es, en: AREAS_TEXTO[n].en }) : "";
   const pct = Math.round((n / AREAS_TOTAL) * 100);
-  const titulo = t("metodo.astro.area.titulo", { n: String(n) });
+  const titulo = tituloArea(n);
+  const { bloqueada, cargado } = useAstrologiaProgreso();
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
@@ -42,9 +46,16 @@ export default function MetodoAstrologiaArea() {
               bgColor={`${astrologiaBg}dd`}
               color={astrologiaTxt}
               space
+              step={{ current: pasoDeArea(n), total: ASTROLOGIA_TOTAL }}
               mb={0}
-              prev={n > 1 ? { label: `← ${t("metodo.astro.area.titulo", { n: String(n - 1) })}`, onClick: () => navigate(rutaArea(n - 1)) } : undefined}
-              next={n < AREAS_TOTAL ? { label: `${t("metodo.astro.area.titulo", { n: String(n + 1) })} →`, onClick: () => navigate(rutaArea(n + 1)) } : undefined}
+              prev={n > 1
+                ? { label: `← ${tituloArea(n - 1)}`, onClick: () => navigate(rutaArea(n - 1)) }
+                : { label: `← ${t("metodo.astro.paso.puntosClave")}`, onClick: () => navigate("/metodo/astrologia/lectura") }}
+              next={{
+                label: `${n < AREAS_TOTAL ? tituloArea(n + 1) : t("metodo.astro.paso.pdf")} →`,
+                onClick: () => navigate(n < AREAS_TOTAL ? rutaArea(n + 1) : "/metodo/astrologia/pdf"),
+                disabled: !esMariaMirando() && cargado && bloqueada(pasoDeArea(n) + 1),
+              }}
             />
           </Reveal>
 

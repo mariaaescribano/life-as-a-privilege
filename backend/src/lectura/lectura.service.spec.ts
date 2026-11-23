@@ -16,7 +16,7 @@ function montar(opciones: { previo?: any; insertError?: any } = {}) {
   };
   const db: any = { getClient: () => ({ from: jest.fn(() => tabla) }) };
   const mail: any = { enviarLecturaRecibida: jest.fn().mockResolvedValue(true) };
-  const users: any = { crearCuentaLectura: jest.fn().mockResolvedValue({ id: 'u1', existente: false }), reenviarInvitacion: jest.fn() };
+  const users: any = { crearCuentaLectura: jest.fn().mockResolvedValue({ id: 'u1', existente: false }), reenviarInvitacion: jest.fn(), enviarAccesoLectura: jest.fn() };
   return { service: new LecturaService(db, mail, users), tabla, mail, users };
 }
 
@@ -50,7 +50,7 @@ describe('LecturaService.confirmarPago', () => {
     expect(r).toMatchObject({ ok: true, creado: true });
     expect(tabla.insert).toHaveBeenCalledWith(expect.objectContaining({ precio_centimos: 3000, stripe_session_id: 'cs_1' }));
     expect(users.crearCuentaLectura).toHaveBeenCalledTimes(1);
-    expect(users.reenviarInvitacion).not.toHaveBeenCalled(); // sin acceso hasta que la admin lo mande
+    expect(users.enviarAccesoLectura).not.toHaveBeenCalled(); // sin acceso hasta que la admin lo mande
     expect(mail.enviarLecturaRecibida).toHaveBeenCalledTimes(1);
   });
   it('si el pedido ya existe (verify + webhook), no repite nada', async () => {

@@ -134,7 +134,7 @@ export default function MetodoAstrologiaTrio() {
               bgColor={`${astrologiaBg}dd`}
               color={astrologiaTxt}
               space
-              step={{ current: 4, total: 12 }}
+              step={{ current: 4, total: 20 }}
               mb={0}
               prev={{ label: `← ${t("metodo.astro.paso.introduccion")}`, onClick: () => navigate("/metodo/astrologia/introduccion") }}
               next={{

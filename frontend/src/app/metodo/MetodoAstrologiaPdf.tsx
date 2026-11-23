@@ -32,6 +32,7 @@ import {
 } from "../../components/metodo/pdf/pdfCartaAstral";
 import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon, FONDO_PAGINA_TURQUESA } from "../../GlobalVariables";
 import { useT } from "../../i18n";
+import { AREAS_TOTAL, rutaArea, tituloArea } from "../../components/metodo/astrologiaAreas";
 
 const DescargaIcon = () => (
   <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="22px" h="22px" fill="currentColor"
@@ -182,10 +183,10 @@ export default function MetodoAstrologiaPdf() {
               bgColor={`${astrologiaBg}dd`}
               color={astrologiaTxt}
               space
-              step={{ current: 9, total: 12 }}
+              step={{ current: 18, total: 20 }}
               mb={0}
-              prev={{ label: `← ${t("metodo.astro.paso.aspectos")}`, onClick: () => navigate("/metodo/astrologia/aspectos") }}
-              next={{ label: `${t("metodo.astro.paso.apuntes")} →`, onClick: () => navigate("/metodo/astrologia/apuntes") }}
+              prev={{ label: `← ${tituloArea(AREAS_TOTAL)}`, onClick: () => navigate(rutaArea(AREAS_TOTAL)) }}
+              next={{ label: `${t("metodo.astro.paso.sintesis")} →`, onClick: () => navigate("/metodo/astrologia/sintesis") }}
             />
           </Reveal>
 

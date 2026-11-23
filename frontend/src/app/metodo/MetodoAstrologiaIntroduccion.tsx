@@ -190,7 +190,7 @@ export default function MetodoAstrologiaIntroduccion() {
               color={astrologiaTxt}
               space
               dense
-              step={{ current: 3, total: 12 }}
+              step={{ current: 3, total: 20 }}
               mb={0}
               prev={{ label: `← ${t("metodo.astro.paso.explicacion")}`, onClick: () => navigate("/metodo/astrologia/explicacion") }}
               next={{

@@ -239,7 +239,7 @@ export default function MetodoAstrologiaCasas() {
               bgColor={`${astrologiaBg}dd`}
               color={astrologiaTxt}
               space
-              step={{ current: 7, total: 12 }}
+              step={{ current: 7, total: 20 }}
               mb={0}
               prev={{ label: `← ${t("metodo.astro.paso.arquetipos")}`, onClick: () => navigate("/metodo/astrologia/cartaAstral") }}
               next={headerNext}

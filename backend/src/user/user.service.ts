@@ -9,6 +9,8 @@ import { MailService } from '../mail/mail.service';
 import {
   INVITACION_TTL_MS,
   crearTokenRecuperacion,
+  crearTokenAccesoLectura,
+  tokenAccesoLecturaValido,
   leerUserIdDeToken,
   tokenRecuperacionValido,
 } from '../auth/password-reset.util';
@@ -598,6 +600,43 @@ export class UserService {
       console.error('[invitacion] no se pudo enviar el correo:', err);
       return false;
     }
+  }
+
+  /**
+   * El correo con el botón de entrar de una cuenta «SOLO CARTA» (sin contraseña). Solo vale para esas cuentas.
+   * Devuelve si el correo ha salido de verdad.
+   */
+  async enviarAccesoLectura(userId: string): Promise<boolean> {
+    const { data: rows } = await this.databaseService.getClient()
+      .from("user").select("id, name, email, password, solo_lectura").eq("id", userId).limit(1);
+    const u = rows?.[0] as { id: string; name: string; email: string; password: string; solo_lectura?: boolean } | undefined;
+    if (!u) throw new NotFoundException("Esa cuenta no existe");
+    if (u.solo_lectura !== true) throw new ConflictException("Esa cuenta no es de solo carta");
+    const enlace = `${webParaCorreos()}/acceso?token=${encodeURIComponent(crearTokenAccesoLectura(u.id, u.password))}`;
+    try {
+      return (await this.mailService.enviarAccesoLectura(u.email, u.name ?? "", enlace)) === true;
+    } catch (err) {
+      console.error("[acceso-lectura] no se pudo enviar el correo:", err);
+      return false;
+    }
+  }
+
+  /** Entrar con el enlace del correo (cuenta «solo carta»): devuelve lo mismo que `logIn`. */
+  async entrarConEnlaceLectura(token: string) {
+    const uid = leerUserIdDeToken(token);
+    const nope = () => new ForbiddenException({ statusCode: 403, code: "ENLACE_NO_VALIDO", message: "El enlace no es válido" });
+    if (!uid) throw nope();
+    const db = this.databaseService.getClient();
+    const { data: rows } = await db.from("user").select("*").eq("id", uid).limit(1);
+    const user = rows?.[0] as any;
+    // Solo las cuentas «solo carta»: con este enlace NO se entra en ninguna otra.
+    if (!user?.password || user.solo_lectura !== true || !tokenAccesoLecturaValido(token, user.password)) throw nope();
+    if (user.email_confirmado === false) {
+      await db.from("user").update({ email_confirmado: true }).eq("id", user.id);
+    }
+    const jwt = this.authService.generateToken(user.id, user.email);
+    const { password, ...safeUser } = user;
+    return { token: jwt, user: safeUser };
   }
 
   // --------- Obtener todos los usuarios ---------

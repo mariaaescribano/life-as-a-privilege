@@ -60,7 +60,8 @@ export const TEXTO_PAGINA = FONDO_PAGINA_TURQUESA;
 
 // Fisiología
 export const fisiologiaNom = "Fisiología";
-export const  fisiologiaTxt= "#c8b5d1";
+// export const  fisiologiaTxt= "#c8b5d1"; // el de antes
+export const  fisiologiaTxt= FONDO_PAGINA_BEIGE;
 export const  fisiologiaBg = "#331c35";
 
 // Recorrido (juegos de arrastrar): nada se puede SELECCIONAR con el ratón (no se
@@ -169,8 +170,10 @@ export const fisiologiaDescrip = "No tenemos un cuerpo, somos un cuerpo. Redesc�
 
 // Neuropsicología
 export const neuropsicologiaNom = "Psicología";
-export const neuropsicologiaBg = "#daa889";
-export const neuropsicologiaTxt = "#5e2d10";
+// export const neuropsicologiaBg = "#daa889"; // el de antes (claro: con letra beige no se leería)
+// export const neuropsicologiaTxt = "#5e2d10"; // el de antes
+export const neuropsicologiaBg = "#5e2d10";
+export const neuropsicologiaTxt = FONDO_PAGINA_BEIGE;
 export function NeuropsicologiaIcon({ size = { base: "24px", md: "24px" } }: { size?: string | { base: string; md: string } }) {
   return (
     <Box
@@ -212,7 +215,8 @@ export const astrologiaDescrip =  "Entiende los arquetipos que actúan en cada �
 export const tcmNom = "Medicina China";
 export const tcmNomLink = "medicinachina";
 export const tcmBg = "#6b0404";
-export const  tcmTxt = "#ffa2a2";
+// export const  tcmTxt = "#ffa2a2"; // el de antes
+export const  tcmTxt = FONDO_PAGINA_BEIGE;
 export function TCMIcon({ size = { base: "24px", md: "24px" } }: { size?: string | { base: string; md: string } }) {
   return (
     <Box
@@ -232,8 +236,10 @@ export const tcmDescrip = "Comprende el funcionamiento del ser Humano y el orige
 // Nutrición
 export const nutricionNom = "Nutrición";
 export const nutricionNomLink = "nutricion";
-export const nutricionBg = "#e4f8e1";
-export const nutricionTxt = "#2b362a";
+// export const nutricionBg = "#e4f8e1"; // el de antes (claro: con letra beige no se leería)
+// export const nutricionTxt = "#2b362a"; // el de antes
+export const nutricionBg = "#2b362a";
+export const nutricionTxt = FONDO_PAGINA_BEIGE;
 export function NutricionIcon({ size = { base: "24px", md: "24px" }}) {
    return (
    <Box as="svg" xmlns="http://www.w3.org/2000/svg" height={size} viewBox="0 -960 960 960" width={size} fill={nutricionTxt}>
@@ -261,8 +267,10 @@ export const nutricionDescrip="Descubre qué hay más allá de los alimentos que
 // Ayurveda
 export const ayurvedaNom = "Hinduismo";
 export const ayurvedaNomLink = "ayurveda";
-export const ayurvedaBg = "#ffffff"; // "#ecd5ed";
-export const ayurvedaTxt = "#853e0b" ; //"#672d67" ;
+// export const ayurvedaBg = "#ffffff"; // "#ecd5ed"; // el de antes (claro: con letra beige no se leería)
+// export const ayurvedaTxt = "#853e0b" ; //"#672d67" ; // el de antes
+export const ayurvedaBg = "#853e0b";
+export const ayurvedaTxt = FONDO_PAGINA_BEIGE;
 export function AyurvedaIcon({ size = { base: "24px", md: "24px" }}) {
   return (
     <Box as="svg" xmlns="http://www.w3.org/2000/svg" height={size} viewBox="0 -960 960 960" width={size} fill={ayurvedaTxt}>
@@ -366,7 +374,8 @@ export function FisioComidaIcon({ size = { base: "24px", md: "24px" }}) {
 // Cultura
 export const culturaNom = "Cultura";
 export const culturaNomLink = "cultura";
-export const  culturaTxt = "#79dcd4";
+// export const  culturaTxt = "#79dcd4"; // el de antes
+export const  culturaTxt = FONDO_PAGINA_BEIGE;
 export const  culturaBg= "#0c3c3c";
 export function CulturaIcon({ size = { base: "24px", md: "24px" } }: { size?: string | { base: string; md: string } }) {
   return (
@@ -409,7 +418,8 @@ export function FisicaIcon({ size = { base: "24px", md: "24px" } }: { size?: str
 // Cábala
 export const cabalaNom = "Cábala";
 export const cabalaBg = "#3b2612";
-export const cabalaTxt = "#bd814d";
+// export const cabalaTxt = "#bd814d"; // el de antes
+export const cabalaTxt = FONDO_PAGINA_BEIGE;
 export function CabalaIcon({ size = { base: "24px", md: "24px" } }: { size?: string | { base: string; md: string } }) {
   return (
     <Box

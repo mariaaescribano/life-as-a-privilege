@@ -350,7 +350,8 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
           Las cuatro primeras opciones del menú (por ahora: Asesorías 1:1, Astrología, Formación, Quién soy), a la vista y en medio (solo en
           pantallas anchas; en las demás viven dentro de la hamburguesa, que se
           queda siempre a la derecha). No hay admin: ahí el menú es otro. */}
-      {!isAdminPage && !dentro && (
+      {/* Con la sesión dentro (la persona, o María desbloqueada) NUNCA salen las opciones públicas (Asesorías, Astrología…). */}
+      {!isAdminPage && !dentro && !isPrivate && (
         <Flex
           as="nav"
           // Con cuatro opciones hacen falta ~1180 px para que no pisen el nombre

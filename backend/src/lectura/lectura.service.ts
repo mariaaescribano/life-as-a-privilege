@@ -154,17 +154,17 @@ export class LecturaService {
     return data;
   }
 
-  /** Cuando la carta está escrita: se le manda el correo para elegir contraseña y entrar en su cuenta. */
+  /** Cuando la carta está escrita: se le manda el correo con el botón para entrar en su cuenta (sin contraseña; ver `enviarAccesoLectura`). */
   async darAcceso(id: string) {
     const client = this.db.getClient();
     const { data } = await client.from(TABLE).select('id, user_id').eq('id', id).maybeSingle();
     const pedido = data as { id: string; user_id: string | null } | null;
     if (!pedido) throw new NotFoundException('Ese pedido no existe');
     if (!pedido.user_id) throw new BadRequestException('Este pedido no tiene cuenta asociada');
-    const res = await this.users.reenviarInvitacion(pedido.user_id);
-    if (res.correoEnviado) {
+    const correoEnviado = await this.users.enviarAccesoLectura(pedido.user_id);
+    if (correoEnviado) {
       await client.from(TABLE).update({ estado: 'lista', acceso_enviado_at: new Date().toISOString() }).eq('id', id);
     }
-    return { id, correoEnviado: res.correoEnviado };
+    return { id, correoEnviado };
   }
 }

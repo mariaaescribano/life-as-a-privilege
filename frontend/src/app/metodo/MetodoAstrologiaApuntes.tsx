@@ -42,7 +42,7 @@ export default function MetodoAstrologiaApuntes() {
               color={astrologiaTxt}
               space
               compact
-              step={{ current: 10, total: 12 }}
+              step={{ current: 10, total: 20 }}
               mb={0}
               prev={{ label: `← ${t("metodo.astro.paso.pdf")}`, onClick: () => navigate("/metodo/astrologia/pdf") }}
               next={{

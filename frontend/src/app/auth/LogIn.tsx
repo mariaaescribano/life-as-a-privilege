@@ -159,6 +159,11 @@ export default function LogIn() {
           if (me.data?.admin_email && next === "/home") {
             destinoRef.current = "/admin/login";
           }
+          // Cuenta «solo carta» (pidió únicamente su lectura de carta astral): entra directa al camino de
+          // Astrología, el mismo que recorre el resto; no tiene otra cosa que ver.
+          if (me.data?.solo_lectura === true && next === "/home") {
+            destinoRef.current = "/camino/astrologia";
+          }
           // Premium APARCADO: la redirección de las cuentas solo-Premium está comentada.
           // const solo = me.data?.solo_premium === true;
           // recordarSoloPremium(solo);

@@ -13,6 +13,12 @@ export const home = {
   "home.desbloquea.otra":
     "Unlock {disciplina} whenever you want — it's the {ordinal} we recommend, but you can start here.",
 
+  /** Las dos cajas de la home de quien se acompaña (PROVISIONAL en inglés). */
+  /** Titular sobre las ocho disciplinas de la home (propuesto por María; PROVISIONAL en inglés). */
+  "home.perspectivas.titulo": "Different, complementary perspectives. Know yourself more by knowing more.",
+  "home.cajas.lectura": "The reading of my chart",
+  "home.cajas.diario": "Session journal",
+
   "home.bienvenida": "Welcome to a deeper understanding of yourself{coma}",
   "home.continuar": "Continue:",
   "home.foto": "Your photo",

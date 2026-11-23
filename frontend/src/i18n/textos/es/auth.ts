@@ -145,4 +145,6 @@ export const auth = {
   "cumple.motivo.otraCuenta": "Este regalo es de otra cuenta. Inicia sesión con la cuenta a la que llegó el correo.",
   "cumple.motivo.caducado": "Este regalo ha caducado: tenía siete días desde tu cumpleaños.",
   "cumple.motivo.usado": "Este regalo ya lo has usado. ¡Que disfrutes de tu disciplina!",
+  // Entrar con el enlace del correo (cuenta solo carta, sin contraseña). Texto propuesto: pendiente de revisión de María.
+  "auth.acceso.invalido": "Este enlace no es válido. Si has perdido el correo con tu enlace de acceso, ponte en contacto conmigo.",
 } as const;

@@ -15,10 +15,11 @@ import { SpaceBg, SPACE_IMG } from "../../components/metodo/SpaceBg";
 import { useImagesReady } from "../../hooks/useImagesReady";
 import { useAstroLeidos } from "../../hooks/useAstroLeidos";
 import { BotonCompania } from "../../components/global/BotonCompania";
-import { focoBlanco } from "../../components/global/foco";
 import { Reveal } from "../../components/global/Reveal";
 import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon, FONDO_PAGINA_TURQUESA } from "../../GlobalVariables";
+import { BotonLeido } from "../../components/metodo/BotonLeido";
 import { useT } from "../../i18n";
+import { rutaArea, tituloArea } from "../../components/metodo/astrologiaAreas";
 import { LetrasVivas } from "../../components/global/LetrasVivas";
 import { PalabrasVivas } from "../../components/global/PalabrasVivas";
 
@@ -224,12 +225,12 @@ export default function MetodoAstrologiaLectura() {
               bgColor={`${astrologiaBg}dd`}
               color={astrologiaTxt}
               space
-              step={{ current: 5, total: 12 }}
+              step={{ current: 5, total: 20 }}
               mb={0}
               prev={{ label: `← ${t("metodo.astro.paso.trio")}`, onClick: () => navigate("/metodo/astrologia/trio") }}
               next={{
-                label: `${t("metodo.astro.paso.arquetipos")} →`,
-                onClick: () => navigate("/metodo/astrologia/cartaAstral"),
+                label: `${tituloArea(1)} →`,
+                onClick: () => navigate(rutaArea(1)),
                 disabled: !todosRetosLeidos,
                 disabledTooltip: "Lee todos tus puntos clave para continuar.",
               }}
@@ -325,14 +326,9 @@ export default function MetodoAstrologiaLectura() {
                       style={{ textShadow: "none" }}>
                   <PalabrasVivas key={retoAbierto.id} texto={retoAbierto.texto} retraso={0.6} total={1.1} />
                 </Text>
-                <Flex justify="center" mt={2}>
-                  <Box as="button" type="button" onClick={marcarRetoLeido} px={9} py="10px" borderRadius="full"
-                       bg={astrologiaTxt} color="#0a1024" fontWeight="700" fontSize={{ base: "md", md: "lg" }}
-                       letterSpacing="0.04em" cursor="pointer" boxShadow={`0 0 20px ${astrologiaTxt}55`}
-                       transition="transform 0.2s ease" _hover={{ transform: "translateY(-2px)" }} _focusVisible={focoBlanco}>
-                    {t("metodo.astro.leidoBoton")}
-                  </Box>
-                </Flex>
+                <BotonLeido hecho={false} onClick={marcarRetoLeido} color={astrologiaTxt}>
+                  {t("metodo.astro.leidoBoton")}
+                </BotonLeido>
               </Flex>
             )}
           </ModalBody>

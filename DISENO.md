@@ -51,7 +51,7 @@ corrige este documento):
   de las bandas de la portada (`/img/fondos/marmol-bandas.webp`, 1536×1024, a resolución completa; la MISMA foto en móvil
   y escritorio y en todas las cajas de mármol de la web y del admin; se cambia en un solo fichero). Sobre el
   mármol la letra no es blanca: turquesa oscuro `#004f4f` (el de la casa, más hondo), oro `#b08d3f` en los filos y crema `#f2e9d9` (los de
-  `LlamadaCta`). Todas las bandas usan `components/global/BandaMarmol.tsx`: bordes arriba y abajo
+  `LlamadaCta`). Todas las bandas usan `components/global/BandaMarmol.tsx` (la foto, como en Welcome/`BandaFoto`: estirada `100% 100%` en escritorio para que se vean sus vetas, `cover` en móvil): bordes arriba y abajo
   desvanecidos (máscara de 70 px) y, REGLA DE ORO, **el mármol sale PRIMERO**: es el movimiento que
   sigue a la cabecera (mandala, titular, frase y línea con mandala), sin hacer scroll; si la banda aún no se
   ve, aparece (0,5 s) en cuanto asoma, y su contenido entra 0,45 s después

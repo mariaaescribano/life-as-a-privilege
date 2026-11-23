@@ -88,3 +88,43 @@ export function tokenRecuperacionValido(token: string, passwordHash: string): bo
   if (esperada.length !== recibida.length) return false;
   return crypto.timingSafeEqual(esperada, recibida);
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ENLACE DE ACCESO DE LA CUENTA «SOLO CARTA»
+//
+// Quien solo ha pedido la carta de su lectura no tiene contraseña: entra con el botón del correo en el que se le
+// avisa de que su carta está lista. Ese correo ES su llave, así que el enlace:
+//   · NO es de un solo uso (vuelve a entrar con el mismo correo) y dura un año.
+//   · Se firma con una sal propia: un token de recuperación de contraseña no sirve para entrar, ni al revés.
+//   · Sigue atado al hash de la contraseña de la cuenta: si la admin lo cambia, todos los enlaces viejos mueren.
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const ACCESO_LECTURA_TTL_MS = 365 * 24 * 60 * 60 * 1000;
+
+const firmarAcceso = (payloadB64: string, passwordHash: string): string => {
+  const clave = crypto.createHmac('sha256', 'lectura-acceso-v1').update(passwordHash).digest();
+  return b64url(crypto.createHmac('sha256', clave).update(payloadB64).digest());
+};
+
+export function crearTokenAccesoLectura(userId: string, passwordHash: string, ttlMs: number = ACCESO_LECTURA_TTL_MS): string {
+  const payload: PayloadRecuperacion = { uid: userId, exp: Date.now() + ttlMs };
+  const payloadB64 = b64url(Buffer.from(JSON.stringify(payload), 'utf8'));
+  return `${payloadB64}.${firmarAcceso(payloadB64, passwordHash)}`;
+}
+
+export function tokenAccesoLecturaValido(token: string, passwordHash: string): boolean {
+  const partes = (token ?? '').split('.');
+  if (partes.length !== 2) return false;
+  const [payloadB64, firma] = partes;
+  let payload: PayloadRecuperacion;
+  try {
+    payload = JSON.parse(Buffer.from(payloadB64, 'base64url').toString('utf8'));
+  } catch {
+    return false;
+  }
+  if (typeof payload?.exp !== 'number' || Date.now() > payload.exp) return false;
+  const esperada = Buffer.from(firmarAcceso(payloadB64, passwordHash), 'utf8');
+  const recibida = Buffer.from(firma, 'utf8');
+  if (esperada.length !== recibida.length) return false;
+  return crypto.timingSafeEqual(esperada, recibida);
+}

@@ -17,6 +17,12 @@ export const home = {
     "Desbloquea {disciplina} cuando quieras — es la {ordinal} que aconsejamos, pero puedes empezar por aquí.",
 
   /** Saludo grande del Mapa. `{coma}` trae ", Nombre" cuando se sabe el nombre. */
+  /** Las dos cajas de la home de quien se acompaña (PROVISIONAL en inglés). */
+  /** Titular sobre las ocho disciplinas de la home (propuesto por María; PROVISIONAL en inglés). */
+  "home.perspectivas.titulo": "Distintas perspectivas complementarias. Conócete más conociendo más.",
+  "home.cajas.lectura": "La lectura de mi carta",
+  "home.cajas.diario": "Diario de sesiones",
+
   "home.bienvenida": "Bienvenido a una comprensión más profunda de ti{coma}",
   "home.continuar": "Continuar:",
   "home.foto": "Tu foto",

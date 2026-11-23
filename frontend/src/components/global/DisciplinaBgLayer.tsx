@@ -56,7 +56,8 @@ const DISCIPLINA_OVERLAY: Record<string, string> = {
   // Ayurveda: velo BLANCO al 33% para suavizar el dorado de la acuarela — el
   // mismo lavado que lleva el fondo del selector de Ilustraciones. Sin él, los
   // boxes salían mucho más amarillos que el resto de la disciplina.
-  [ayurvedaNom]: "#ffffff55",
+  // (nov-2026) con la foto nueva, naranja y ya a su punto, no hace falta el lavado.
+  // [ayurvedaNom]: "#ffffff55",
   // Psicología: el mismo lavado blanco pero más suave (20% en vez de 33%): su
   // acuarela es menos amarilla, solo hace falta bajarle un punto la intensidad.
   [neuropsicologiaNom]: "#ffffff33",

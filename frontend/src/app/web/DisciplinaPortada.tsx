@@ -138,16 +138,14 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
       delay: 0.05,
       renderIcon: IconoReels,
     },
-    {
-      clave: "recorrido",
-      titulo: t("portada.recorrido"),
-      // La página «escaparate» del recorrido (/d/<slug>), no el recorrido por dentro.
-      link: `/d/${d.key}`,
-      delay: 0.15,
-      // El Recorrido lleva el icono de SU disciplina (ya viene pintado con su
-      // color), en vez de un icono genérico de camino.
-      renderIcon: () => <d.Icon size="52px" />,
-    },
+    // APARCADO (nov-2026): la puerta «El Recorrido» llevaba a /d/<slug>, que está comentado.
+    // {
+    //   clave: "recorrido",
+    //   titulo: t("portada.recorrido"),
+    //   link: `/d/${d.key}`,
+    //   delay: 0.15,
+    //   renderIcon: () => <d.Icon size="52px" />,
+    // },
     {
       clave: "teoria",
       titulo: t("portada.teoria"),
@@ -177,14 +175,15 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
   const puertasSinPagar: Puerta[] = [
     { ...puertasTeoria[0], delay: 0.05 },
     { ...puertasTeoria[1], delay: 0.15 },
-    {
-      clave: "recorrido",
-      titulo: t("portada.contenidoAsesoramiento"),
-      pie: t("portada.recorridoPack"),
-      link: `/d/${d.key}`,
-      delay: 0.25,
-      renderIcon: () => <d.Icon size="52px" />,
-    },
+    // APARCADO (nov-2026): la puerta del pack llevaba a /d/<slug>, que está comentado.
+    // {
+    //   clave: "recorrido",
+    //   titulo: t("portada.contenidoAsesoramiento"),
+    //   pie: t("portada.recorridoPack"),
+    //   link: `/d/${d.key}`,
+    //   delay: 0.25,
+    //   renderIcon: () => <d.Icon size="52px" />,
+    // },
   ];
   const pagada = usePagada(d.key);
   // La Teoría solo se ve pagada: si alguien llega por la URL sin pagar, vuelve a la portada.

@@ -265,3 +265,6 @@ export const presentacionPorKey = (
       || (p.alias ?? []).some((a) => normaliza(a) === s),
   );
 };
+
+/** APARCADO (nov-2026): las páginas /d/:disciplina están comentadas. Con false desaparecen todos los enlaces a ellas (mandala del mapa, «Saber más»). Al revivirlas, ponerlo a true. */
+export const PRESENTACIONES_ACTIVAS = false;
