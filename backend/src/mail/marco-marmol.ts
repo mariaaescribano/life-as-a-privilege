@@ -1,11 +1,14 @@
-// El marco de los correos de la casa: el mármol de la web (el MISMO de las bandas de Welcome, `marmol-bandas.webp`, exportado a JPG en /img/correo/marmol-correo.jpg: los correos no pintan WebP; si cambia el mármol, regenerarlo) (con sus zonas
-// turquesas) de fondo y, arriba, la cabecera de la web: el mandala turquesa y
-// MARÍA / ESCRIBANO al lado, con su filete debajo. Lo usan la bienvenida de la
-// intro gratuita y todos los correos de `MailService.plantilla`, para que no
-// puedan volver a separarse.
+// El marco de los correos de la casa: SENCILLO. Una HOJA centrada (600 px, esquinas redondeadas) de beige liso (el de
+// la web) con letra turquesa oscuro; fuera de la hoja queda el fondo propio del cliente de correo. Con la
+// cabecera de la web (el mandala turquesa y MARÍA / ESCRIBANO al lado, con su filete debajo) y la firma al pie.
+// Sin mármol ni fotos ni fondo a todo el ancho. Lo usan la bienvenida de la intro gratuita y todos los correos de `MailService.plantilla`,
+// para que no puedan volver a separarse. (El nombre del fichero y de `marcoMarmol` es histórico.)
 
-/** El turquesa oscuro de la letra sobre el mármol. */
-export const TINTA_MARMOL = '#004f4f';
+/** El beige de fondo: el mismo de la web (FONDO_PAGINA_BEIGE). */
+export const FONDO_CORREO = '#F0DCC0';
+
+/** El turquesa oscuro de la letra: el mismo de la web (FONDO_PAGINA_TURQUESA). */
+export const TINTA_MARMOL = '#005F5F';
 
 // Garamond que sí tiene la gente (Gmail no carga tipografías de la web).
 export const SERIF_CORREO =
@@ -36,16 +39,15 @@ export function conFirma(cuerpo: string, tinta: string, serif: string): string {
 }
 
 /**
- * `web` es la dirección pública de la web (de ahí salen las dos imágenes);
- * `titulo` va grande bajo la cabecera (si va vacío, no se pinta) y `cuerpo` es el HTML de debajo. Debajo
- * del mármol va un `bgcolor` beige por si el cliente de correo no pinta imágenes.
+ * `web` es la dirección pública de la web (de ahí sale el mandala); `titulo` va grande bajo la cabecera (si va vacío,
+ * no se pinta) y `cuerpo` es el HTML de debajo. Una hoja beige centrada; no hay foto ni mármol.
  */
 export function marcoMarmol({ web, titulo, cuerpo, firma = true }: { web: string; titulo: string; cuerpo: string; firma?: boolean }): string {
   const T = TINTA_MARMOL;
   const SERIF = SERIF_CORREO;
   const imagenes = webParaImagenes(web);
-  const fondo = `${imagenes}/img/correo/marmol-correo.jpg`;
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#efe5cf" background="${fondo}" style="max-width:600px;margin:0 auto;border-radius:16px;background-color:#efe5cf;background-image:url('${fondo}');background-size:100% 100%;background-position:center;background-repeat:no-repeat;">
+  const B = FONDO_CORREO;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="${B}" style="max-width:600px;margin:0 auto;background-color:${B};border-radius:16px;">
 <tr><td style="padding:44px 40px 12px;font-family:${SERIF};">
   <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
     <td style="padding-right:14px;vertical-align:middle;"><img src="${imagenes}/img/correo/mandala-turquesa.png" width="58" height="58" alt="" style="display:block;border:0;"></td>

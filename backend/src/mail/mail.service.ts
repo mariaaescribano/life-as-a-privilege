@@ -475,7 +475,7 @@ export class MailService {
           <p style="margin: 28px 0;">
             <a href="${enlaceLlamada}"
                style="display:inline-block;padding:14px 28px;border-radius:999px;
-                      background:#004f4f;color:#ffffff;text-decoration:none;
+                      background:#005F5F;color:#ffffff;text-decoration:none;
                       font-size:16px;font-weight:600;">Buscamos un hueco</a>
           </p>
           <p style="margin: 0; font-size: 14px; line-height: 1.7; opacity: 0.78;">
@@ -565,7 +565,7 @@ export class MailService {
   private pildora(href: string, label: string): string {
     return `<a href="${href}"
              style="display:inline-block;padding:14px 28px;border-radius:999px;
-                    border:1px solid #004f4f;background:#004f4f;
+                    border:1px solid #005F5F;background:#005F5F;
                     color:#ffffff;text-decoration:none;font-size:16px;font-weight:600;">${label}</a>`;
   }
 
@@ -943,7 +943,7 @@ export class MailService {
         ])}
         <p style="font-size: 16px; line-height: 1.7; margin: 20px 0 0;">
           <a href="${this.frontendUrl}/admin/astrologia/${userId}"
-             style="color: #004f4f; font-weight: bold; text-decoration: underline;">
+             style="color: #005F5F; font-weight: bold; text-decoration: underline;">
             Escribir su carta →
           </a>
         </p>
