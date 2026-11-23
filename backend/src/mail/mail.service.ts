@@ -745,10 +745,10 @@ export class MailService {
       year: 'numeric',
     });
     const html = this.plantilla(
-      'Tu cita está reservada',
+      'Tu sesión está reservada',
       `
         <p style="font-size: 17px; line-height: 1.7;">
-          Hola${nombre ? ` ${this.escaparHtml(nombre)}` : ''}, gracias por pedir tu cita. Estos son los datos que me has dejado:
+          Hola${nombre ? ` ${this.escaparHtml(nombre)}` : ''}, gracias por pedir tu sesión. Estos son los datos que me has dejado:
         </p>
         ${this.fichaPersona([
           ['Día', this.escaparHtml(fechaLegible)],
@@ -762,7 +762,7 @@ export class MailService {
         </p>
       `,
     );
-    return await this.enviar(email, `Tu cita del ${fechaLegible} a las ${slot}`, html, 'confirmación de cita', {
+    return await this.enviar(email, `Tu sesión del ${fechaLegible} a las ${slot}`, html, 'confirmación de cita', {
       copiaAdmin: false,
     });
   }

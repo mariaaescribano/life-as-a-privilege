@@ -3,7 +3,7 @@ import { Box } from "@chakra-ui/react";
 import { useCabeceraEscribiendo } from "./cabeceraEntrada";
 
 /**
- * Banda a todo el ancho con el mármol de María (`marmolfondo`) de fondo.
+ * Banda a todo el ancho con el mármol de las bandas de la portada (`marmol-bandas.webp`) de fondo.
  *
  * · El mármol es una capa propia con los bordes de arriba y abajo desvanecidos
  *   (máscara de 70 px), para que la banda se funda con el turquesa de la página
@@ -86,16 +86,8 @@ const BandaMarmol = ({
       <Box
         position="absolute"
         inset={0}
-        // En móvil la banda es alta y estrecha: se usa un mármol SOLO CREMA (sin turquesa ni
-        // vetas fuertes), así la letra cae siempre sobre lo claro, sea cual sea el alto de la
-        // banda. El turquesa del principio y del final lo pone el fundido de la máscara.
-        // Con `tapas` (bandas con letra suelta sobre el mármol, como los nombres del mandala): el
-        // turquesa con oro va SOLO en dos tapas, arriba y abajo, que se funden hacia el crema; el
-        // cuerpo es crema liso. La banda lleva más relleno para que el texto empiece bajo la tapa.
-        bgImage={{
-          base: "url('/img/fondos/marmolfondo-crema.webp')",
-          md: tapas ? "url('/img/fondos/marmolfondo-crema-ancho.webp')" : "url('/img/fondos/marmolfondo.webp')",
-        }}
+        // Mármol de las bandas de la portada (`marmol-bandas.webp`), el mismo en móvil y escritorio.
+        bgImage="url('/img/fondos/marmol-bandas.webp')"
         bgSize="cover"
         bgPosition="center"
         bgRepeat="no-repeat"
@@ -109,14 +101,7 @@ const BandaMarmol = ({
           WebkitMaskImage: "linear-gradient(to bottom, transparent 0, #000 var(--fundido), #000 calc(100% - var(--fundido)), transparent 100%)",
           maskImage: "linear-gradient(to bottom, transparent 0, #000 var(--fundido), #000 calc(100% - var(--fundido)), transparent 100%)",
         }}
-      >
-        {/* Con `tapas`: el turquesa con oro va solo en dos tapas (arriba y abajo) que se funden
-            hacia el crema del cuerpo. Una imagen por capa. */}
-        {/* En móvil todas las bandas llevan las tapas (bajas, para no llegar al texto); en
-            escritorio solo las del mandala (`tapas`), el resto usa el mármol entero. */}
-        <Box position="absolute" top={0} left={0} right={0} h={tapas ? { base: "240px", md: "200px" } : { base: "170px", md: "0" }} display={tapas ? "block" : { base: "block", md: "none" }} bgImage="url('/img/fondos/marmol-tapa-arriba.webp')" bgRepeat="no-repeat" bgSize={{ base: "auto 100%", md: "100% 100%" }} bgPosition="right top" />
-        <Box position="absolute" bottom={0} left={0} right={0} h={tapas ? { base: "240px", md: "200px" } : { base: "170px", md: "0" }} display={tapas ? "block" : { base: "block", md: "none" }} bgImage="url('/img/fondos/marmol-tapa-abajo.webp')" bgRepeat="no-repeat" bgSize={{ base: "auto 100%", md: "100% 100%" }} bgPosition="right bottom" />
-      </Box>
+      />
       <Box ref={setCuerpo} position="relative" zIndex={1}>
         {children(visible)}
       </Box>

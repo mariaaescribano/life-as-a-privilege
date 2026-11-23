@@ -129,7 +129,7 @@ export default function AdminHome() {
                   borderRadius="2xl"
                   // El mármol de María, a resolución completa, con la letra en turquesa oscuro.
                   bgColor="#efe5cf"
-                  bgImage="url('/img/fondos/marmolfondo-crema.webp')"
+                  bgImage="url('/img/fondos/marmol-bandas.webp')"
                   bgSize="cover"
                   bgPosition="center"
                   border="1px solid rgba(255,255,255,0.65)"

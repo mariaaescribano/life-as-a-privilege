@@ -10,6 +10,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Flex, Image } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
+import TrasCabecera from "../../components/global/TrasCabecera";
 import SiteFooter from "../../components/global/Footer";
 import ViasDeContacto from "../../components/contacto/ViasDeContacto";
 import { Reveal } from "../../components/global/Reveal";
@@ -40,7 +41,7 @@ const Contacto = () => {
 
       {/* ── SOBRE EL MÁRMOL: mi foto a la izquierda y, a la derecha, las cuatro vías
           (llamada, escribirme, WhatsApp e Instagram). ── */}
-      <Box flex="1">
+      <TrasCabecera flex="1">
         <BandaMarmol>
           {(visible) => (
             <Flex
@@ -69,9 +70,9 @@ const Contacto = () => {
         </BandaMarmol>
         {/* Hueco turquesa de la página entre el mármol y el pie. */}
         <Box h={{ base: "56px", md: "88px" }} />
-      </Box>
+      </TrasCabecera>
 
-      <SiteFooter />
+      <TrasCabecera><SiteFooter /></TrasCabecera>
     </Box>
   );
 };

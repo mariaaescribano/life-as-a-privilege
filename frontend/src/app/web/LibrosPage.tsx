@@ -2,11 +2,11 @@ import { useT } from "../../i18n";
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Grid, Image, Text, useToast } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
+import TrasCabecera from "../../components/global/TrasCabecera";
 import SiteFooter from "../../components/global/Footer";
-import BandaMarmol from "../../components/global/BandaMarmol";
+import BandaFoto from "../../components/global/BandaFoto";
 import { useCabeceraEscribiendo } from "../../components/global/cabeceraEntrada";
 import WelcomeCabecera from "../../components/welcome/WelcomeCabecera";
-import SeparadorFlor from "../../components/welcome/SeparadorFlor";
 import { LifeLoader } from "../../components/metodo/comicLoaders";
 import { apuntes, libros, librosPago, type Apunte, type Libro, type LibroPago } from "../../hardCoded/libros/libros";
 import { API_URL, FONDO_PAGINA_TURQUESA as T } from "../../GlobalVariables";
@@ -532,23 +532,21 @@ export default function LibrosPage() {
       <WelcomeCabecera activo={mounted} titulo={t("libros.titulo")} subtitulo={t("libros.subtitulo")} mayusculas />
 
       {/* ── LOS LIBROS DE PAGO, sobre el mármol; luego otra separación con el mandala ── */}
+      <TrasCabecera flex="1" display="flex" flexDirection="column">
       {paidItems.length > 0 && (
         <>
           <Box mt={{ base: 8, md: 12 }}>
-            <BandaMarmol pt={{ base: "104px", md: "72px" }} pb={{ base: "116px", md: "72px" }}>
-              {(visibleBanda) => (
-                <Box w="100%" maxW="820px" mx="auto" px={{ base: 5, md: 6 }}>
-                  <AvisaVisible visible={visibleBanda} onVisible={() => setMarmolListo(true)} />
-                  <Grid templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }}>
-                    {paidItems.map((item, i) => (
-                      <PaidBookCell key={item.id} item={item} i={i} total={paidItems.length} puerta={visibleBanda} />
-                    ))}
-                  </Grid>
-                </Box>
-              )}
-            </BandaMarmol>
+            <BandaFoto pt={{ base: "104px", md: "72px" }} pb={{ base: "116px", md: "72px" }}>
+              <Box w="100%" maxW="820px" mx="auto" px={{ base: 5, md: 6 }}>
+                <AvisaVisible visible={!escribiendo} onVisible={() => setMarmolListo(true)} />
+                <Grid templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }}>
+                  {paidItems.map((item, i) => (
+                    <PaidBookCell key={item.id} item={item} i={i} total={paidItems.length} puerta={!escribiendo} />
+                  ))}
+                </Grid>
+              </Box>
+            </BandaFoto>
           </Box>
-          <SeparadorFlor />
         </>
       )}
 
@@ -575,8 +573,9 @@ export default function LibrosPage() {
           </Grid>
         </Box>
       </Flex>
+      </TrasCabecera>
 
-      <SiteFooter />
+      <TrasCabecera><SiteFooter /></TrasCabecera>
     </Box>
   );
 }

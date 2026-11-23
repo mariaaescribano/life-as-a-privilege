@@ -18,7 +18,7 @@ export const auth = {
   "auth.login.subtitulo": "Entra a tu cuenta de El Mapa",
   "auth.login.soloYo": "Solo María puede crear tu cuenta. Si estás siendo asesorado, te llegará un correo para activarla.",
   "auth.login.opcion.asesoria": "Estoy siendo asesorado",
-  "auth.login.opcion.lectura": "Lectura astrológica",
+  "auth.login.opcion.lectura": "Lectura de mi carta astral",
   "auth.login.entrar": "Entrar",
   "auth.login.olvidada": "¿Has olvidado tu contraseña?",
   "auth.login.sinCuenta": "¿No tienes cuenta? Crear cuenta",

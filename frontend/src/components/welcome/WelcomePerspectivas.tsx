@@ -1,7 +1,6 @@
 import React from "react";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { Reveal } from "../global/Reveal";
-import SeparadorFlor from "./SeparadorFlor";
 import { FONDO_PAGINA_TURQUESA as T } from "../../GlobalVariables";
 import { useT, type ClaveTexto } from "../../i18n";
 
@@ -27,9 +26,8 @@ const WelcomePerspectivas = () => {
   const t = useT();
   return (
     <Box w="100%">
-      <SeparadorFlor />
-
-      <Flex direction="column" align="center" px={{ base: 0, md: 10, lg: 14 }} pb={{ base: 16, md: 24 }} maxW="1440px" mx="auto" gap={{ base: 5, md: 6 }}>
+      <Box px={{ base: 4, md: 10, lg: 14 }} pt={{ base: 8, md: 12 }} pb={{ base: 16, md: 24 }} maxW="1440px" mx="auto">
+      <Flex direction="column" align="center" px={{ base: 2, md: 8 }} py={{ base: 4, md: 6 }} gap={{ base: 5, md: 6 }}>
         <Reveal inView direction="up" distance={22} blur duration={1} w="100%">
           <Text
             color={T}
@@ -98,6 +96,7 @@ const WelcomePerspectivas = () => {
           ))}
         </Box>
       </Flex>
+      </Box>
     </Box>
   );
 };

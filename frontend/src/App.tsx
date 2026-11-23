@@ -5,6 +5,7 @@ import { Box } from "@chakra-ui/react";
 // La landing de dos proyectos está aparcada (ver la nota en la ruta «/»).
 // import Landing from "./app/web/Landing";
 import Welcome from "./app/web/Welcome";
+import WelcomeAntigua from "./antigua/app/web/WelcomeAntigua";
 import { Navigate, Route, Routes, useLocation, useParams } from "react-router-dom";
 import { cargarTextosMetodo } from "./i18n";
 
@@ -409,6 +410,8 @@ export default function App()
       {/* <Route path="/" element={<Landing />} /> */}
       <Route path="/" element={<Welcome />} />
       <Route path="/welcome" element={<Welcome />} />
+      {/* La web de antes (turquesa y las 8 boxes, 27-oct-2026): copia aparte en src/antigua/, no depende de la portada actual. */}
+      <Route path="/antigua" element={<WelcomeAntigua />} />
       <Route path="/logIn" element={<LogIn />} />
       <Route path="/signIn" element={<SignIn />} />
       <Route path="/recuperar" element={<RecuperarPassword />} />

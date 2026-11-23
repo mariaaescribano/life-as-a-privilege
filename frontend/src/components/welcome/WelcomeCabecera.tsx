@@ -5,7 +5,7 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 import { useT } from "../../i18n";
 import { Reveal } from "../global/Reveal";
 import { LetrasVivas } from "../global/LetrasVivas";
-import { marcarCabeceraEscribiendo } from "../global/cabeceraEntrada";
+import { marcarCabeceraEscribiendo, fijarCabeceraEscribiendo } from "../global/cabeceraEntrada";
 
 /**
  * Lo primero que se ve en la portada: el mandala (entra girando desde muy
@@ -50,7 +50,9 @@ const WelcomeCabecera = ({
   const [tituloListo, setTitulo] = useState(false);
   const [frase, setFrase] = useState(false);
   const [separador, setSeparador] = useState(false);
-  // Mientras el titular se escribe, el resto de la página espera (ver cabeceraEntrada).
+  // Mientras el titular se escribe, el resto de la página espera (ver cabeceraEntrada). Se enciende YA, al
+  // pintar, para que el cuerpo (que va justo después) no llegue a montarse ni un instante.
+  useState(() => { fijarCabeceraEscribiendo(true); });
   useEffect(() => {
     marcarCabeceraEscribiendo(true);
     return () => marcarCabeceraEscribiendo(false);

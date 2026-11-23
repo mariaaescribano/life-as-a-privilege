@@ -61,8 +61,8 @@ const entra = (delay: number, dur = 0.8) => ({
   animation: `certSube ${dur}s cubic-bezier(0.22,1,0.36,1) ${delay}s both`,
   "@media (prefers-reduced-motion: reduce)": { animation: "none" },
 });
-const MARMOL_DESKTOP = "/img/fondos/marmolfondo.webp";
-const MARMOL_MOVIL = "/img/fondos/marmolfondo-crema.webp";
+const MARMOL_DESKTOP = "/img/fondos/marmol-bandas-anterior.webp";
+const MARMOL_MOVIL = "/img/fondos/marmol-bandas-anterior.webp";
 
 const Certificaciones = () => {
   const t = useT();
@@ -138,7 +138,7 @@ const Certificaciones = () => {
                 fontSize={{ base: "md", md: "lg" }}
                 letterSpacing="0.1em"
                 textTransform="uppercase"
-                bgImage="url('/img/fondos/marmolfondo.webp')"
+                bgImage="url('/img/fondos/marmol-bandas-anterior.webp')"
                 bgSize="cover"
                 bgPosition="center"
                 border={`1px solid ${TQ}88`}

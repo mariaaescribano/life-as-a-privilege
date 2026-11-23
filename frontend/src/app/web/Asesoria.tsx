@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Flex } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
+import TrasCabecera from "../../components/global/TrasCabecera";
 import SiteFooter from "../../components/global/Footer";
 import { Reveal } from "../../components/global/Reveal";
 import WelcomeCabecera from "../../components/welcome/WelcomeCabecera";
@@ -11,7 +12,7 @@ import { useT } from "../../i18n";
 
 /**
  * Asesoría 1:1. POR AHORA solo lleva el titular «Asesorías 1:1» con su frase de debajo y, en medio, el
- * botón «Pedir cita gratuita» (que lleva a /reservar-cita). Todo lo demás (foto, cajas, «¿Cómo trabajo?»,
+ * botón «Pedir una sesión gratuita» (que lleva a /reservar-cita). Todo lo demás (foto, cajas, «¿Cómo trabajo?»,
  * mapa de disciplinas, opiniones, formulario…) está fuera: la página completa se guardó en
  * `Asesoria.completa.tsx.txt`.
  */
@@ -34,9 +35,11 @@ const Asesoria = () => {
       <Box flex="1">
         <WelcomeCabecera activo={mounted} titulo={t("asesoria.titulo")} subtitulo={t("asesoria.subtitulo")} mayusculas sinSeparador />
 
+        <TrasCabecera>
+
         {/* ── El botón, en medio ── */}
         <Flex justify="center" pt={{ base: 12, md: 16 }} pb={{ base: 24, md: 32 }} px={5}>
-          <Reveal activo={mounted} direction="up" distance={16} duration={0.9} delay={3.6}>
+          <Reveal activo={mounted} direction="up" distance={16} duration={0.9} delay={0.2}>
             <Flex
               as="button"
               type="button"
@@ -63,9 +66,10 @@ const Asesoria = () => {
             </Flex>
           </Reveal>
         </Flex>
+        </TrasCabecera>
       </Box>
 
-      <SiteFooter />
+      <TrasCabecera><SiteFooter /></TrasCabecera>
     </Box>
   );
 };

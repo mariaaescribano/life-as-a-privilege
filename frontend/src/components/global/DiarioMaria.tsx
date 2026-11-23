@@ -87,7 +87,7 @@ export function EntradaDiario({ e, onBorrar, plana = false }: { e: EntradaMaria;
       py={plana ? 2 : 3}
       // Suelta (en el popup): su propia tarjeta de mármol. «plana» (dentro de la caja del inicio, que ya es mármol): sin fondo, con una raya fina.
       bgColor={plana ? "transparent" : "#efe5cf"}
-      bgImage={plana ? undefined : "url('/img/fondos/marmolfondo.webp')"}
+      bgImage={plana ? undefined : "url('/img/fondos/marmol-bandas.webp')"}
       bgSize="cover"
       bgPosition="center"
       border={plana ? "none" : `1px solid ${TQ}55`}
@@ -150,7 +150,7 @@ export function VistaDiarioMaria() {
       </Text>
 
       <Box borderRadius="xl" overflow="hidden" flexShrink={0} minH={{ base: "150px", md: "170px" }}
-           bgColor="#f2e9d9" bgImage="url('/img/fondos/marmolfondo.webp')" bgSize="cover" bgPosition="center"
+           bgColor="#f2e9d9" bgImage="url('/img/fondos/marmol-bandas.webp')" bgSize="cover" bgPosition="center"
            border={`1px solid ${TQ}55`} boxShadow={`0 0 18px ${ORO}33`}>
         <Textarea
           value={texto}

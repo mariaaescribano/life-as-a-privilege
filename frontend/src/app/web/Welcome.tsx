@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, Flex } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
+import TrasCabecera from "../../components/global/TrasCabecera";
 import SiteFooter from "../../components/global/Footer";
 import { SubscribeBox } from "../../components/global/SubscribeBox";
 import WelcomeHero from "../../components/welcome/WelcomeHero";
@@ -69,6 +70,7 @@ const Welcome = () => {
           <WelcomeHero activo={mounted} marmol compacto />
         </BandaFoto>
 
+        <TrasCabecera>
         {/* ── Segundo apartado: «Lo importante eres tú…» y las cuatro fotos ── */}
         <WelcomePerspectivas />
 
@@ -79,9 +81,10 @@ const Welcome = () => {
         <Flex justify="center" px={{ base: 5, md: 10 }} pb={{ base: 24, md: 32 }}>
           <SubscribeBox />
         </Flex>
+        </TrasCabecera>
       </Box>
 
-      <SiteFooter />
+      <TrasCabecera><SiteFooter /></TrasCabecera>
 
       {/* Botón flotante «Contáctame» (fuera de cualquier contenedor con zoom). */}
       {/* <BotonContactame /> */}

@@ -5,6 +5,10 @@ export const lectura = {
   "lectura.fecha": "Date of birth",
   "lectura.hora": "Time of birth",
   "lectura.lugar": "Place of birth (city and country)",
+  "lectura.pais": "Country",
+  "lectura.region": "Region",
+  "lectura.ciudad": "City",
+  "lectura.accesoAviso": "Once your chart is ready, I will send a personal, secure link to your email so you can access your account on the platform.",
   "lectura.todoObligatorio": "All the details are required: your chart is built from them.",
   "lectura.horaAviso":
     "The time of birth is the most delicate piece of data in the whole chart. Your Ascendant and the twelve houses depend on it: half an hour's difference can change your Ascendant entirely. If you put it down as \"more or less\", the reading will not be correct.",
@@ -13,7 +17,7 @@ export const lectura = {
     "Request your literal birth certificate from the Civil Registry (it is free and can be done online) and check the time shown on it. Not from memory, nor the one your family remembers: the one on the certificate.",
   "lectura.certificadoBoton": "Request my birth certificate",
   "lectura.responsabilidad":
-    "If the time of birth I give is not the correct one, the reading will differ from the real one and María is not responsible for the result.",
+    "If the time of birth I give is not the correct one, the reading will differ from the real one and I will not be able to take responsibility for the result.",
   "lectura.acepto": "I have read the notice and I understand it",
   "lectura.pagar": "Continue to payment →",
   "lectura.enviando": "One moment…",

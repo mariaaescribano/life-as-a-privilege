@@ -3,6 +3,7 @@ import { Box, Flex, Input, Text } from "@chakra-ui/react";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
+import TrasCabecera from "../../components/global/TrasCabecera";
 import SiteFooter from "../../components/global/Footer";
 import WelcomeCabecera from "../../components/welcome/WelcomeCabecera";
 import { Reveal } from "../../components/global/Reveal";
@@ -28,8 +29,8 @@ const SERVICIOS: Record<string, { titulo: ClaveTexto; precio: ClaveTexto }> = {
 
 const campo = {
   w: "100%",
-  bg: "#ffffffb3",
-  border: `1px solid ${T}55`,
+  bg: "#F7EBD9",
+  border: `1.5px solid ${T}66`,
   borderRadius: "full",
   color: T,
   fontFamily: "'EB Garamond', serif",
@@ -60,7 +61,9 @@ export default function PedirLectura() {
   const [email, setEmail] = useState("");
   const [fecha, setFecha] = useState("");
   const [hora, setHora] = useState("");
-  const [lugar, setLugar] = useState("");
+  const [pais, setPais] = useState("");
+  const [region, setRegion] = useState("");
+  const [ciudad, setCiudad] = useState("");
   const [acepta, setAcepta] = useState(false);
   const [enviando, setEnviando] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -86,12 +89,12 @@ export default function PedirLectura() {
   const enviar = async () => {
     if (enviando || !info) return;
     setError(null);
-    if (![nombre, email, fecha, hora, lugar].every((v) => v.trim())) { setError(t("lectura.error.datos")); return; }
+    if (![nombre, email, fecha, hora, pais, region, ciudad].every((v) => v.trim())) { setError(t("lectura.error.datos")); return; }
     if (!acepta) { setError(t("lectura.error.aviso")); return; }
     setEnviando(true);
     try {
       const r = await axios.post(`${API_URL}/payment/lectura/checkout`, {
-        servicio, nombre: nombre.trim(), email: email.trim(), fecha, hora, lugar: lugar.trim(), acepta,
+        servicio, nombre: nombre.trim(), email: email.trim(), fecha, hora, lugar: [ciudad, region, pais].map((v) => v.trim()).join(", "), acepta,
       });
       if (r.data?.url) { window.location.href = r.data.url; return; }
       setError(t("lectura.error.generico"));
@@ -114,6 +117,7 @@ export default function PedirLectura() {
         {sessionId ? (
           <>
             {cabecera(pago === "ok" ? t("lectura.confirmado") : t("lectura.titulo"))}
+            <TrasCabecera>
             <Flex justify="center" px={6} pt={{ base: 10, md: 14 }} textAlign="center">
               {pago === "cargando" ? (
                 <Flex direction="column" align="center" gap={4}>
@@ -126,6 +130,7 @@ export default function PedirLectura() {
                 </Text>
               )}
             </Flex>
+            </TrasCabecera>
           </>
         ) : !info ? (
           // Sin servicio válido en la dirección: no hay nada que pedir.
@@ -134,20 +139,35 @@ export default function PedirLectura() {
           <>
             {cabecera(t("lectura.titulo"), `${t(info.titulo)} · ${t(info.precio)}`)}
 
-            <Flex direction="column" gap={{ base: 5, md: 6 }} maxW="560px" mx="auto" px={{ base: 5, md: 0 }} pt={{ base: 10, md: 14 }}>
+            <TrasCabecera>
+            <Flex direction="column" gap={{ base: 5, md: 6 }} maxW="680px" mx="auto" px={{ base: 5, md: 0 }} pt={{ base: 10, md: 14 }}>
               <Reveal activo={mounted} direction="up" distance={20} duration={0.9} delay={0.2}>
-                <Flex direction="column" gap={4}>
-                  <Text color={T} fontStyle="italic" textAlign="center" fontSize={{ base: "md", md: "lg" }}>
-                    {t("lectura.todoObligatorio")}
-                  </Text>
-                  <Box><Etiqueta>{t("lectura.nombre")}</Etiqueta><Input {...campo} value={nombre} onChange={(e) => setNombre(e.target.value)} autoComplete="name" maxLength={120} /></Box>
-                  <Box><Etiqueta>{t("lectura.email")}</Etiqueta><Input {...campo} type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" /></Box>
-                  <Flex gap={4} direction={{ base: "column", md: "row" }}>
-                    <Box flex="1"><Etiqueta>{t("lectura.fecha")}</Etiqueta><Input {...campo} type="date" value={fecha} onChange={(e) => setFecha(e.target.value)} max={new Date().toISOString().slice(0, 10)} /></Box>
-                    <Box flex="1"><Etiqueta>{t("lectura.hora")}</Etiqueta><Input {...campo} type="time" value={hora} onChange={(e) => setHora(e.target.value)} /></Box>
+                {/* Todos los datos a rellenar, juntos en una caja con el borde turquesa. */}
+                <Box border={`1.5px solid ${T}`} borderRadius="3xl" px={{ base: 5, md: 8 }} py={{ base: 6, md: 8 }}>
+                  <Flex direction="column" gap={{ base: 4, md: 5 }}>
+                    <Flex gap={{ base: 4, md: 5 }} direction={{ base: "column", md: "row" }}>
+                      <Box flex="1"><Etiqueta>{t("lectura.nombre")}</Etiqueta><Input {...campo} value={nombre} onChange={(e) => setNombre(e.target.value)} autoComplete="name" maxLength={120} /></Box>
+                      <Box flex="1"><Etiqueta>{t("lectura.email")}</Etiqueta><Input {...campo} type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" /></Box>
+                    </Flex>
+                    <Flex gap={{ base: 4, md: 5 }} direction={{ base: "column", md: "row" }}>
+                      <Box flex="1"><Etiqueta>{t("lectura.fecha")}</Etiqueta><Input {...campo} type="date" value={fecha} onChange={(e) => setFecha(e.target.value)} max={new Date().toISOString().slice(0, 10)} /></Box>
+                      <Box flex="1"><Etiqueta>{t("lectura.hora")}</Etiqueta><Input {...campo} type="time" value={hora} onChange={(e) => setHora(e.target.value)} /></Box>
+                    </Flex>
+                    <Box>
+                      <Flex gap={{ base: 3, md: 4 }} direction={{ base: "column", md: "row" }}>
+                        <Box flex="1"><Etiqueta>{t("lectura.pais")}</Etiqueta><Input {...campo} value={pais} onChange={(e) => setPais(e.target.value)} autoComplete="country-name" maxLength={60} /></Box>
+                        <Box flex="1"><Etiqueta>{t("lectura.region")}</Etiqueta><Input {...campo} value={region} onChange={(e) => setRegion(e.target.value)} autoComplete="address-level1" maxLength={60} /></Box>
+                        <Box flex="1"><Etiqueta>{t("lectura.ciudad")}</Etiqueta><Input {...campo} value={ciudad} onChange={(e) => setCiudad(e.target.value)} autoComplete="address-level2" maxLength={60} /></Box>
+                      </Flex>
+                    </Box>
                   </Flex>
-                  <Box><Etiqueta>{t("lectura.lugar")}</Etiqueta><Input {...campo} value={lugar} onChange={(e) => setLugar(e.target.value)} maxLength={160} /></Box>
-                </Flex>
+                </Box>
+                {/* Solo con «acceso a la plataforma»: cómo y cuándo llega el acceso. */}
+                {servicio === "plataforma" && (
+                  <Text color={T} fontStyle="italic" textAlign="center" fontSize={{ base: "md", md: "lg" }} lineHeight="1.6" mt={{ base: 4, md: 5 }} px={{ base: 2, md: 6 }}>
+                    {t("lectura.accesoAviso")}
+                  </Text>
+                )}
               </Reveal>
 
               {/* El aviso sobre la hora, el certificado y la responsabilidad */}
@@ -218,10 +238,11 @@ export default function PedirLectura() {
                 </Box>
               </Flex>
             </Flex>
+            </TrasCabecera>
           </>
         )}
       </Box>
-      <SiteFooter />
+      <TrasCabecera><SiteFooter /></TrasCabecera>
     </Box>
   );
 }

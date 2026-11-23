@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
+import TrasCabecera from "../../components/global/TrasCabecera";
 import SiteFooter from "../../components/global/Footer";
 import { LibrosIcon } from "../../GlobalVariables";
 import { useT } from "../../i18n";
@@ -137,7 +138,7 @@ export default function MaterialesGratuitos() {
       <WelcomeCabecera activo={mounted} titulo={t("header.materiales")} subtitulo={t("materiales.subtitulo")} mayusculas sinSeparador />
 
       {/* ── LAS CAJAS, en horizontal (en una fila en escritorio), sobre el beige de la página ── */}
-      <Box flex="1">
+      <TrasCabecera flex="1">
         <Box w="100%" maxW="1180px" mx="auto" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 12, md: 16 }}>
           <SimpleGrid columns={{ base: 1, md: 2, lg: cajitas.length }} gap={{ base: 5, md: 6 }} justifyItems="center">
             {cajitas.map((c, i) => (
@@ -181,9 +182,9 @@ export default function MaterialesGratuitos() {
         </Box>
         {/* Hueco entre las cajas y el pie. */}
         <Box h={{ base: "56px", md: "88px" }} />
-      </Box>
+      </TrasCabecera>
 
-      <SiteFooter />
+      <TrasCabecera><SiteFooter /></TrasCabecera>
     </Box>
   );
 }

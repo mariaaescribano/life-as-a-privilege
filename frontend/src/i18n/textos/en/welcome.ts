@@ -6,7 +6,7 @@ export const welcome = {
   "welcome.persp.2.titulo": "Your essential philosophy",
   "welcome.persp.3.titulo": "Your being through tradition",
   "welcome.persp.4.titulo": "Caring for your body",
-  "welcome.hero.pedirCita": "Book a free appointment",
+  "welcome.hero.pedirCita": "Request a free session",
   "welcome.hero.nombre": "Your name",
   // The three core ideas (second section, WelcomePilares)
   "welcome.explorar": "Explore",

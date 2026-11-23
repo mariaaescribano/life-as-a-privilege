@@ -32,7 +32,7 @@ const TQ = "#004f4f";
 const ORO = "#b08d3f";
 const cajaMarmol = {
   bgColor: "#efe5cf",
-  bgImage: "url('/img/fondos/marmolfondo-crema.webp')",
+  bgImage: "url('/img/fondos/marmol-bandas.webp')",
   bgSize: "cover",
   bgPosition: "center",
   border: "1px solid rgba(255,255,255,0.7)",

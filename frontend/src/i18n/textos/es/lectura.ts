@@ -6,6 +6,10 @@ export const lectura = {
   "lectura.fecha": "Fecha de nacimiento",
   "lectura.hora": "Hora de nacimiento",
   "lectura.lugar": "Lugar de nacimiento (ciudad y país)",
+  "lectura.pais": "País",
+  "lectura.region": "Región",
+  "lectura.ciudad": "Ciudad",
+  "lectura.accesoAviso": "Cuando tu carta esté lista, te enviaré a tu correo un enlace personal y seguro para que accedas a tu cuenta en la plataforma.",
   "lectura.todoObligatorio": "Todos los datos son obligatorios: de ellos sale tu carta.",
   // El aviso sobre la hora y el certificado: el texto que ya tenía María para el estudio.
   "lectura.horaAviso":
@@ -16,7 +20,7 @@ export const lectura = {
   "lectura.certificadoBoton": "Pedir mi certificado de nacimiento",
   // PROVISIONAL (propuesto, a revisar por María): el aviso de responsabilidad sobre la hora.
   "lectura.responsabilidad":
-    "Si la hora de nacimiento que indico no es la correcta, la lectura saldrá distinta de la real y María no se hace responsable del resultado.",
+    "Si la hora de nacimiento que indico no es la correcta, la lectura saldrá distinta de la real y no me podré hacer responsable del resultado.",
   "lectura.acepto": "He leído el aviso y lo entiendo",
   "lectura.pagar": "Continuar al pago →",
   "lectura.enviando": "Un momento…",

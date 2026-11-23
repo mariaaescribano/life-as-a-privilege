@@ -10,8 +10,7 @@ import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/Disc
 import { presentacionPorKey, type PresentacionDisciplina } from "../../data/presentacionDisciplinas";
 import { AprendizajeIcon } from "../../GlobalVariables";
 import FotoDisciplina from "../../components/web/FotoDisciplina";
-import ServiciosAstrologia from "../../components/web/ServiciosAstrologia";
-import WelcomeCabecera from "../../components/welcome/WelcomeCabecera";
+import ServiciosAstrologia from "../../components/web/ServiciosAstrologia";import WelcomeCabecera from "../../components/welcome/WelcomeCabecera";
 import { useCabeceraEscribiendo } from "../../components/global/cabeceraEntrada";
 import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
 import { getUserMe } from "../../api/userMe";

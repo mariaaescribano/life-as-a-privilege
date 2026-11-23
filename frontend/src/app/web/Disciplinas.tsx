@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
+import TrasCabecera from "../../components/global/TrasCabecera";
 import SiteFooter from "../../components/global/Footer";
 // (botón flotante «Contáctame» quitado) import BotonContactame from "../../components/global/BotonContactame";
 import BandaMarmol from "../../components/global/BandaMarmol";
@@ -100,6 +101,7 @@ const Disciplinas = () => {
         {/* ── 0 · MANDALA + «DISCIPLINAS» + FRASE (la misma cabecera de la portada) ── */}
         <WelcomeCabecera activo={mounted} titulo={t("header.disciplinas")} subtitulo={t("disciplinasPagina.subtitulo")} mayusculas />
 
+        <TrasCabecera>
         {/* ── 1 · LAS OCHO DISCIPLINAS EN SU MANDALA, sobre el mármol ──
             Solo para mostrarlas: cada una con su nombre y su frase. */}
         <BandaMarmol mt={{ base: 2, md: 4 }} tapas pt={{ base: "170px", md: "110px" }} pb={{ base: "180px", md: "120px" }}>
@@ -217,9 +219,10 @@ const Disciplinas = () => {
 
         {/* Aire turquesa antes del pie: la tercera sección es la última. */}
         <Box h={{ base: "72px", md: "110px" }} />
+        </TrasCabecera>
       </Box>
 
-      <SiteFooter />
+      <TrasCabecera><SiteFooter /></TrasCabecera>
       {/* <BotonContactame /> */}
     </Box>
   );

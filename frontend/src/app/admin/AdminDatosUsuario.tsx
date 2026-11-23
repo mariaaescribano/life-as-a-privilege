@@ -49,7 +49,7 @@ const telefonoConPrefijo = (t: string) => /^\+\d{6,15}$/.test(t.replace(/[\s().-
 //   · el vidrio turquesa de siempre para eliminar, que es lo serio y va callado.
 // Las fotos van a resolución completa, sin velo ni desenfoque.
 const TINTA = "#004f4f";
-const MARMOL = "url('/img/fondos/marmolfondo-crema.webp')";
+const MARMOL = "url('/img/fondos/marmol-bandas.webp')";
 const CIELO = "url('/img/astrologia/space.webp')";
 
 const CAJA_BASE = {

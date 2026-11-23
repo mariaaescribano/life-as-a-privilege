@@ -22,3 +22,7 @@ export const useCabeceraEscribiendo = () =>
     () => escribiendo,
     () => false,
   );
+
+/** Fija la señal SIN avisar a nadie: la usa la cabecera mientras se pinta, para que el cuerpo de la
+ *  página (que se pinta justo después, en la misma pasada) ya la vea encendida y no llegue a montarse. */
+export const fijarCabeceraEscribiendo = (valor: boolean) => { escribiendo = valor; };

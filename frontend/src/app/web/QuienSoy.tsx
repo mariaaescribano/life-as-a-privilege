@@ -1,6 +1,7 @@
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import SiteHeader from "../../components/global/SiteHeader";
+import TrasCabecera from "../../components/global/TrasCabecera";
 import SiteFooter from "../../components/global/Footer";
 import WelcomeCabecera from "../../components/welcome/WelcomeCabecera";
 import { Reveal } from "../../components/global/Reveal";
@@ -29,7 +30,9 @@ const QuienSoy = () => {
 
       <Box flex="1">
         {/* ── Mandala + «MARÍA ESCRIBANO» + frase (la misma cabecera de la portada) ── */}
-        <WelcomeCabecera activo={mounted} titulo="María Escribano" subtitulo={t("quienSoy.subtitulo")} mayusculas />
+        <WelcomeCabecera activo={mounted} titulo="María Escribano" subtitulo={t("quienSoy.subtitulo")} mayusculas sinSeparador />
+
+        <TrasCabecera>
 
         {/* ── Foto a la izquierda, mi texto a la derecha ── */}
         <Flex
@@ -72,9 +75,10 @@ const QuienSoy = () => {
         <Box pb={{ base: 20, md: 28 }}>
           <Certificaciones />
         </Box>
+        </TrasCabecera>
       </Box>
 
-      <SiteFooter />
+      <TrasCabecera><SiteFooter /></TrasCabecera>
     </Box>
   );
 };

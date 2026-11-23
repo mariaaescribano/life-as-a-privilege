@@ -17,7 +17,7 @@ export const welcome = {
   "welcome.persp.2.titulo": "Tu filosofía esencial",
   "welcome.persp.3.titulo": "Tu ser desde la tradición",
   "welcome.persp.4.titulo": "El cuidado de tu cuerpo",
-  "welcome.hero.pedirCita": "Pedir cita gratuita",
+  "welcome.hero.pedirCita": "Pedir una sesión gratuita",
   "welcome.hero.nombre": "Tu nombre",
   // Las tres ideas de fondo (segunda sección, WelcomePilares)
   "welcome.explorar": "Explorar",

@@ -29,7 +29,7 @@ export const DISCIPLINAS = [
 ] as const;
 
 export const TQ = "#004f4f";
-export const MARMOL = "url('/img/fondos/marmolfondo.webp')";
+export const MARMOL = "url('/img/fondos/marmol-bandas.webp')";
 
 /** El borrador del informe (PDF). */
 export interface BorradorInforme { disciplina: string; titulo: string; para: string; cuerpo: string }

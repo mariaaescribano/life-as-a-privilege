@@ -76,21 +76,21 @@ export function SubscribeBox({ esperaInicial = 0 }: { esperaInicial?: number } =
 
       <Box
         w="100%"
-        maxW="560px"
+        maxW="440px"
         bg="transparent"
         border={`1.5px solid ${T}`}
         borderRadius="3xl"
-        px={{ base: 7, md: 10 }}
-        py={{ base: 8, md: 10 }}
+        px={{ base: 5, md: 8 }}
+        py={{ base: 5, md: 6 }}
         textAlign="center"
         opacity={reveal.visible ? 1 : 0}
         transform={reveal.visible ? "translateY(0) scale(1)" : "translateY(40px) scale(0.95)"}
         transition="opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s"
       >
-        <Box mx="auto" mb={4}><MandalaTinte h={{ base: "48px", md: "60px" }} /></Box>
+        <Box mx="auto" mb={2}><MandalaTinte h={{ base: "36px", md: "44px" }} /></Box>
         <Text
           color={T}
-          fontSize={{ base: "xl", md: "2xl" }}
+          fontSize={{ base: "lg", md: "xl" }}
           fontWeight="700"
           fontFamily="'EB Garamond', serif"
           letterSpacing="0.08em"
@@ -100,9 +100,9 @@ export function SubscribeBox({ esperaInicial = 0 }: { esperaInicial?: number } =
         </Text>
         <Text
           color={`${T}b3`}
-          fontSize={{ base: "md", md: "lg" }}
+          fontSize={{ base: "sm", md: "md" }}
           fontFamily="'EB Garamond', serif"
-          mb={6}
+          mb={4}
           lineHeight="1.6"
         >
           {t("suscribir.texto")}
@@ -129,7 +129,8 @@ export function SubscribeBox({ esperaInicial = 0 }: { esperaInicial?: number } =
             </Text>
           </Flex>
         ) : (
-          <Flex direction="column" align="center" gap={{ base: 8, md: 10 }}>
+          <Flex direction="column" align="center" gap={4}>
+           <Flex direction="column" align="center" gap={2} w="100%">
             <Input
               value={nombre}
               onChange={(e) => setNombre(e.target.value)}
@@ -140,14 +141,14 @@ export function SubscribeBox({ esperaInicial = 0 }: { esperaInicial?: number } =
               maxLength={120}
               w="100%"
               maxW="320px"
-              bg="#ffffffb3"
+              bg="#F7EBD9"
               border={`1px solid ${T}55`}
               borderRadius="full"
               color={T}
               fontFamily="'EB Garamond', serif"
               fontSize={{ base: "md", md: "lg" }}
               px={5}
-              py={3}
+              py={2}
               textAlign="center"
               _placeholder={{ color: `${T}8c` }}
               _focus={{ borderColor: T, boxShadow: "none" }}
@@ -160,18 +161,19 @@ export function SubscribeBox({ esperaInicial = 0 }: { esperaInicial?: number } =
               type="email"
               w="100%"
               maxW="320px"
-              bg="#ffffffb3"
+              bg="#F7EBD9"
               border={status === "invalid" ? "1px solid #b3261e" : `1px solid ${T}55`}
               borderRadius="full"
               color={T}
               fontFamily="'EB Garamond', serif"
               fontSize={{ base: "md", md: "lg" }}
               px={5}
-              py={3}
+              py={2}
               textAlign="center"
               _placeholder={{ color: `${T}8c` }}
               _focus={{ borderColor: status === "invalid" ? "#b3261e" : T, boxShadow: "none" }}
             />
+           </Flex>
             {status === "invalid" && (
               <Text color="#b3261e" fontSize="sm" fontFamily="'EB Garamond', serif">
                 {t("suscribir.invalido")}
@@ -187,7 +189,7 @@ export function SubscribeBox({ esperaInicial = 0 }: { esperaInicial?: number } =
               onClick={handleSubmit}
               disabled={status === "loading"}
               px={{ base: 8, md: 10 }}
-              py="12px"
+              py="8px"
               borderRadius="full"
               bg={T}
               border={`1.5px solid ${T}`}
@@ -209,7 +211,7 @@ export function SubscribeBox({ esperaInicial = 0 }: { esperaInicial?: number } =
         )}
 
         {/* La salida de la lista, a la vista desde el momento de entrar. */}
-        <EnlaceBaja mt={6} color={`${T}99`} colorHover={T} />
+        <EnlaceBaja mt={4} color={`${T}99`} colorHover={T} />
       </Box>
     </Flex>
   );

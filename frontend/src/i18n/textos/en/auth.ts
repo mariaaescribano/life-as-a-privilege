@@ -20,7 +20,7 @@ export const auth = {
   // thing is to repeat "Log in" on the button — "Enter" sounds like a door,
   // not a session.
   "auth.login.opcion.asesoria": "I'm being coached",
-  "auth.login.opcion.lectura": "Astrology reading",
+  "auth.login.opcion.lectura": "My birth chart reading",
   "auth.login.entrar": "Log in",
   "auth.login.olvidada": "Forgot your password?",
   "auth.login.sinCuenta": "Don't have an account? Create account",

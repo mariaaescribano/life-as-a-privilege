@@ -13,40 +13,29 @@ import { useT } from "../../i18n";
  * puedan quedar distintos: antes estaba copiado en las tres páginas.
  */
 export const inputAuthStyles = {
-  bg: "rgba(255,255,255,0.09)",
-  border: "1px solid rgba(255,255,255,0.34)",
-  color: "white",
+  bg: "#F7EBD9",
+  border: "1.5px solid #005F5F66",
+  color: "#005F5F",
   borderRadius: "full",
   size: "lg" as const,
-  // Un poco más grandes que el `lg` de Chakra (48px de alto): estas pantallas van
-  // dentro de un scale(0.8), así que a tamaño normal se quedaban pequeñas.
-  h: { base: "54px", md: "58px" },
+  h: { base: "50px", md: "54px" },
   fontSize: { base: "lg", md: "xl" },
   textAlign: "center" as const,
   fontFamily: "'EB Garamond', serif",
   letterSpacing: "0.04em",
-  // Dos sombras SIEMPRE (la primera con alfa 0): la lista en reposo y la del
-  // foco tienen el mismo largo, y así la animación nunca rellena con sombras
-  // transparentes (= negro con alfa 0), que oscurecían el borde un instante.
-  boxShadow: "0 0 0 1px rgba(150,200,255,0), 0 0 10px rgba(255,255,255,0.12)",
-  _placeholder: { color: "rgba(255,255,255,0.4)" },
-  _hover: { border: "1px solid rgba(255,255,255,0.55)" },
-  // El campo con el foco se marca en AZUL, a propósito: en las pantallas de
-  // acceso (iniciar sesión, crear cuenta, recuperar) hay varios campos iguales
-  // y en blanco no se distinguía cuál estaba activo. Es la excepción al «nada
-  // azul al pulsar» del resto de la web, y por eso va suave: un azul cielo
-  // claro con un halo tenue, no el azul eléctrico del navegador.
+  boxShadow: "0 0 0 1px #005F5F00, 0 0 0 #005F5F00",
+  _placeholder: { color: "#005F5F8c" },
+  _hover: { border: "1.5px solid #005F5Faa" },
+  // El campo con el foco: borde turquesa oscuro pleno y un halo tenue del mismo color.
   _focus: {
-    border: "1px solid rgba(150,200,255,0.85)",
-    boxShadow: "0 0 0 1px rgba(150,200,255,0.3), 0 0 18px rgba(150,200,255,0.28)",
-    bg: "rgba(255,255,255,0.12)",
+    border: "1.5px solid #005F5F",
+    boxShadow: "0 0 0 1px #005F5F33, 0 0 16px #005F5F26",
+    bg: "#FAF1E2",
     outline: "none",
   },
-  // También en _focusVisible: es donde Chakra aplica su focusBorderColor (el
-  // `currentColor` global de main.tsx, aquí blanco), y sin esto taparía el azul.
   _focusVisible: {
-    border: "1px solid rgba(150,200,255,0.85)",
-    boxShadow: "0 0 0 1px rgba(150,200,255,0.3), 0 0 18px rgba(150,200,255,0.28)",
+    border: "1.5px solid #005F5F",
+    boxShadow: "0 0 0 1px #005F5F33, 0 0 16px #005F5F26",
     outline: "none",
   },
 };
@@ -54,7 +43,7 @@ export const inputAuthStyles = {
 /** Para el <input type="date">: el icono del calendario sale negro sobre el
  *  turquesa si no se invierte. */
 export const inputFechaSx = {
-  "&::-webkit-calendar-picker-indicator": { filter: "invert(1)", cursor: "pointer" },
+  "&::-webkit-calendar-picker-indicator": { cursor: "pointer" },
 };
 
 /**
@@ -70,7 +59,7 @@ export const focoAzul = {
   // (= NEGRO con alfa 0): el aro pasaba por azul casi negro y en el botón
   // «Entrar» se veían dos rayas oscuras un instante. El outline no es una
   // sombra: aparece nítido al momento, como el foco de cualquier programa.
-  outline: "2px solid rgba(150,200,255,0.85)",
+  outline: "2px solid #005F5Fcc",
   outlineOffset: "2px",
 } as const;
 
@@ -108,7 +97,7 @@ export function CampoContrasena({
   return (
     <Box>
       <Text
-        color="rgba(255,255,255,0.78)"
+        color="#005F5F"
         fontSize="sm"
         letterSpacing="0.18em"
         mb={2.5}
@@ -148,12 +137,11 @@ export function CampoContrasena({
             h="34px"
             borderRadius="full"
             bg="transparent"
-            color={visible ? "white" : "rgba(255,255,255,0.6)"}
+            color={visible ? "#005F5F" : "#005F5Fa6"}
             cursor="pointer"
             transition="all 0.2s ease"
-            _hover={{ color: "white", bg: "rgba(255,255,255,0.14)" }}
+            _hover={{ color: "#005F5F", bg: "#005F5F14" }}
             _focusVisible={focoAzul}
-            style={visible ? { filter: "drop-shadow(0 0 8px rgba(255,255,255,0.5))" } : undefined}
           >
             {visible ? <ViewOffIcon boxSize="20px" /> : <ViewIcon boxSize="20px" />}
           </Box>
