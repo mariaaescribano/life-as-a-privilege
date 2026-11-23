@@ -21,10 +21,10 @@ import { rutaHome } from "../../api/sesion";
 import { esMariaMirando, personaActiva } from "../../api/persona";
 import { claveDeSlug, porcentajeCamino } from "../../data/camino";
 import { disciplinaByKey } from "../../data/adminDisciplinas";
-import { API_URL } from "../../GlobalVariables";
+import { API_URL, FONDO_PAGINA_TURQUESA } from "../../GlobalVariables";
 import CaminoDisciplina from "../../components/metodo/CaminoDisciplina";
 
-/** La barra de avance: se llena con un muelle suave y un brillo la recorre sin parar. */
+/** La barra de avance: se llena con un muelle suave y sin brillo. */
 function BarraAvance({ pct, color }: { pct: number; color: string }) {
   const [ancho, setAncho] = useState(0);
   useEffect(() => {
@@ -37,7 +37,7 @@ function BarraAvance({ pct, color }: { pct: number; color: string }) {
       w="100%"
       h="8px"
       borderRadius="full"
-      bg="rgba(255,255,255,0.2)"
+      bg={`${FONDO_PAGINA_TURQUESA}33`}
       overflow="hidden"
       position="relative"
     >
@@ -49,24 +49,7 @@ function BarraAvance({ pct, color }: { pct: number; color: string }) {
         overflow="hidden"
         bg={color}
         transition="width 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.15s"
-        style={{ boxShadow: `0 0 14px ${color}aa, 0 0 30px ${color}55` }}
       >
-        {/* el brillo que la recorre */}
-        <Box
-          position="absolute"
-          top={0}
-          bottom={0}
-          w="45%"
-          bgGradient="linear(to-r, transparent, rgba(255,255,255,0.75), transparent)"
-          sx={{
-            animation: "barraBrillo 2.8s ease-in-out 2.2s infinite",
-            "@keyframes barraBrillo": {
-              "0%": { transform: "translateX(-120%)" },
-              "60%, 100%": { transform: "translateX(320%)" },
-            },
-            "@media (prefers-reduced-motion: reduce)": { animation: "none" },
-          }}
-        />
       </Box>
     </Box>
   );
@@ -127,12 +110,12 @@ export default function CaminoPagina() {
           </Reveal>
         )}
 
-        {/* La barra de avance. Fuera de las cajas: blanco y sin sombra de texto. */}
+        {/* La barra de avance. Fuera de las cajas: turquesa oscuro y sin sombra de texto. */}
         {listo && fase >= 1 && <Reveal direction="up" distance={14} duration={0.45} w="100%" display="flex" justifyContent="center"
                 mt={{ base: 7, md: 9 }} mb={{ base: 9, md: 12 }}>
           <Flex align="center" gap={4} w={{ base: "86%", md: "460px" }} maxW="100%">
-            <Box flex="1" minW={0}><BarraAvance pct={pct} color="white" /></Box>
-            <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" minW="64px" textAlign="right" lineHeight="1">
+            <Box flex="1" minW={0}><BarraAvance pct={pct} color={FONDO_PAGINA_TURQUESA} /></Box>
+            <Text color={FONDO_PAGINA_TURQUESA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" minW="64px" textAlign="right" lineHeight="1">
               <Contador valor={pct} sufijo="%" duracion={0.9} />
             </Text>
           </Flex>

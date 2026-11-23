@@ -17,13 +17,12 @@ import { useAstroLeidos } from "../../hooks/useAstroLeidos";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { focoBlanco } from "../../components/global/foco";
 import { Reveal } from "../../components/global/Reveal";
-import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon, FONDO_PAGINA_BEIGE } from "../../GlobalVariables";
+import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon, FONDO_PAGINA_TURQUESA } from "../../GlobalVariables";
 import { useT } from "../../i18n";
 import { LetrasVivas } from "../../components/global/LetrasVivas";
 import { PalabrasVivas } from "../../components/global/PalabrasVivas";
 
 const MotionBox = motion(Box) as any;
-const MotionLine = motion.line as any;
 
 interface Reto { id: string; titulo: string; texto: string; }
 
@@ -75,8 +74,8 @@ function layoutStars(total: number): { top: string; left: string }[] {
 // pequeño ✓) para que el usuario vea de un vistazo cuáles le faltan.
 function EstrellaReto({ index, pos, leido, onOpen }: { index: number; pos: { top: string; left: string }; leido: boolean; onOpen: () => void }) {
   const { top, left } = pos;
-  const glow = `drop-shadow(0 0 6px ${astrologiaTxt}) drop-shadow(0 0 16px ${astrologiaTxt}cc)`;
-  const glowFuerte = `drop-shadow(0 0 12px ${astrologiaTxt}) drop-shadow(0 0 30px ${astrologiaTxt})`;
+  const glow = "none";
+  const glowFuerte = "none";
   return (
     <MotionBox
       as="button"
@@ -143,7 +142,7 @@ function EstrellaReto({ index, pos, leido, onOpen }: { index: number; pos: { top
           fill={astrologiaTxt}
           opacity={leido ? 0.4 : 1}
           style={leido
-            ? { filter: `drop-shadow(0 0 4px ${astrologiaTxt}77)` }
+            ? { filter: "none" }
             : { animation: "retoTwinkle 3s ease-in-out infinite", animationDelay: `${(index % 5) * 0.45}s` }}
         >
           {/* Estrella de 8 puntas (octograma) con rayos finos y elegantes. */}
@@ -152,7 +151,7 @@ function EstrellaReto({ index, pos, leido, onOpen }: { index: number; pos: { top
         {leido && (
           <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
                position="absolute" bottom="-2px" right="-2px" w="16px" h="16px" fill={astrologiaTxt}
-               style={{ filter: `drop-shadow(0 0 3px ${astrologiaTxt})` }}>
+               style={{ filter: "none" }}>
             <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
           </Box>
         )}
@@ -243,7 +242,7 @@ export default function MetodoAstrologiaLectura() {
                   display="flex" flexDirection="column" alignItems="center" gap={3}>
             {/* Sin sombra: el texto de debajo del header va sobre el fondo limpio. */}
             {/* Las dos frases juntas, en un solo párrafo en cursiva, al tamaño de los demás textos de introducción. */}
-            <Text color={FONDO_PAGINA_BEIGE} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center" fontStyle="italic" maxW="680px">
+            <Text color={FONDO_PAGINA_TURQUESA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center" fontStyle="italic" maxW="680px">
               {t("metodo.astro.lectura.intro", { nombre })} {t("metodo.astro.pulsaEstrella")}
             </Text>
           </Reveal>
@@ -258,7 +257,7 @@ export default function MetodoAstrologiaLectura() {
             w="100%"
             borderRadius="2xl"
             overflow="hidden"
-            boxShadow={`0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${astrologiaTxt}1a, 0 0 48px ${astrologiaTxt}10`}
+            boxShadow="none"
           >
             <SpaceBg overlay="rgba(8,13,30,0.28)" sinEstrellas />
 
@@ -266,28 +265,7 @@ export default function MetodoAstrologiaLectura() {
               {/* Cielo con las estrellas-reto */}
               {retos.length > 0 ? (
                 <Box position="relative" w="100%" h={{ base: "220px", md: "300px" }} px={{ base: 4, md: 8 }} py={{ base: 4, md: 6 }}>
-                  {/* Constelación: hilos finos que unen las estrellas y se
-                      DIBUJAN una vez colocadas (después de encenderse). */}
-                  {starPositions.length > 1 && (
-                    <Box as="svg" viewBox="0 0 100 100" preserveAspectRatio="none" position="absolute" inset={0}
-                         w="100%" h="100%" pointerEvents="none" aria-hidden>
-                      {starPositions.slice(1).map((p, i) => {
-                        const a = starPositions[i];
-                        return (
-                          <MotionLine
-                            key={i}
-                            x1={parseFloat(a.left)} y1={parseFloat(a.top)}
-                            x2={parseFloat(p.left)} y2={parseFloat(p.top)}
-                            stroke={astrologiaTxt} strokeWidth={1} vectorEffect="non-scaling-stroke"
-                            strokeLinecap="round"
-                            initial={{ pathLength: 0, opacity: 0 }}
-                            animate={{ pathLength: 1, opacity: 0.22 }}
-                            transition={{ delay: 0.7 + (i + 1) * 0.22 + 0.5, duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
-                          />
-                        );
-                      })}
-                    </Box>
-                  )}
+                  {/* Sin hilos entre las estrellas (se quitaron a propósito). */}
                   {retos.map((r, i) => (
                     <EstrellaReto key={r.id} index={i} pos={starPositions[i]} leido={retosLeidos.has(r.id)} onOpen={() => abrirReto(r)} />
                   ))}
@@ -329,7 +307,7 @@ export default function MetodoAstrologiaLectura() {
                 {retoAbierto.titulo?.trim() && (
                   <>
                     <Text color={astrologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.03em" textAlign="center"
-                          style={{ textShadow: `0 0 14px rgba(255,255,255,0.5), 0 0 30px ${astrologiaTxt}55` }}>
+                          style={{ textShadow: "none" }}>
                       <LetrasVivas key={retoAbierto.id} texto={retoAbierto.titulo} entrada onda={false} pasoEntrada={0.03} retraso={0.2} />
                     </Text>
                     {/* Separador horizontal elegante: línea con degradado que se desvanece en los bordes */}
@@ -344,7 +322,7 @@ export default function MetodoAstrologiaLectura() {
                   </>
                 )}
                 <Text color={`${astrologiaTxt}ee`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.9" whiteSpace="pre-line"
-                      style={{ textShadow: `0 0 10px rgba(255,255,255,0.35)` }}>
+                      style={{ textShadow: "none" }}>
                   <PalabrasVivas key={retoAbierto.id} texto={retoAbierto.texto} retraso={0.6} total={1.1} />
                 </Text>
                 <Flex justify="center" mt={2}>

@@ -178,6 +178,8 @@ export default function MetodoAstrologiaCartaAstral() {
         paragraphs: partes ? partes.parrafos : [t("metodo.astro.textoNoDisponible", { arquetipo: titulo })],
         // Primero el título, luego las frases destacadas, luego el texto.
         destacadas: partes?.destacadas ?? 0,
+        // El título lleva el color del planeta que se lee (Marte en rojo…).
+        colorTitulo: p.cuerpo.color,
       };
     });
     const inicial = f.tipo === "signo" ? 0 : 1 + indiceCasa;

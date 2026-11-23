@@ -30,12 +30,12 @@ import {
   type DatosPdfCarta,
   type RetoPdf,
 } from "../../components/metodo/pdf/pdfCartaAstral";
-import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon, FONDO_PAGINA_BEIGE } from "../../GlobalVariables";
+import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon, FONDO_PAGINA_TURQUESA } from "../../GlobalVariables";
 import { useT } from "../../i18n";
 
 const DescargaIcon = () => (
   <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="22px" h="22px" fill="currentColor"
-       flexShrink={0} style={{ filter: "drop-shadow(0 0 6px rgba(255,255,255,0.5))" }}>
+       flexShrink={0} style={{ filter: "none" }}>
     <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
   </Box>
 );
@@ -191,7 +191,7 @@ export default function MetodoAstrologiaPdf() {
 
           <Reveal direction="up" distance={20} delay={0.12} duration={0.65} w="100%">
             <Text
-              color={FONDO_PAGINA_BEIGE}
+              color={FONDO_PAGINA_TURQUESA}
               fontSize={{ base: "lg", md: "xl" }}
               fontStyle="italic"
               textAlign="center"

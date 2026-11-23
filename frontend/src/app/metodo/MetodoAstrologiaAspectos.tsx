@@ -28,7 +28,7 @@ import { PalabrasVivas } from "../../components/global/PalabrasVivas";
 // Check pequeño para marcar un elemento ya leído.
 const CheckIcon = ({ color, size = 14 }: { color: string; size?: number }) => (
   <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={`${size}px`} h={`${size}px`} fill={color}
-       style={{ filter: `drop-shadow(0 0 4px ${color}aa)` }}>
+       style={{ filter: "none" }}>
     <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
   </Box>
 );
@@ -36,7 +36,7 @@ const CheckIcon = ({ color, size = 14 }: { color: string; size?: number }) => (
 // Candado para los planetas aún bloqueados (desbloqueo secuencial).
 const LockIcon = ({ color, size = 18 }: { color: string; size?: number }) => (
   <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={`${size}px`} h={`${size}px`} fill={color}
-       style={{ filter: `drop-shadow(0 0 4px ${color}77)` }}>
+       style={{ filter: "none" }}>
     <path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm240-200q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80Z" />
   </Box>
 );
@@ -250,7 +250,7 @@ export default function MetodoAstrologiaAspectos() {
                   position="relative"
                   borderRadius="2xl"
                   overflow="hidden"
-                  boxShadow={`0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${astrologiaTxt}1a, 0 0 48px ${astrologiaTxt}10`}
+                  boxShadow="none"
                   opacity={desbloqueada ? 1 : 0.55}
                   transition="opacity 0.25s, box-shadow 0.25s"
                 >
@@ -364,13 +364,13 @@ export default function MetodoAstrologiaAspectos() {
                               <Flex align="center" gap={2} justify="center" flex="1" minW={0}>
                                 <Text w="28px" textAlign="center" flexShrink={0} fontSize={{ base: "xl", md: "2xl" }}
                                       color={colorAsp} fontFamily="'Times New Roman', serif"
-                                      style={{ filter: `drop-shadow(0 0 6px ${colorAsp}aa)`, lineHeight: 1 }}
+                                      style={{ filter: "none", lineHeight: 1 }}
                                       // El símbolo de un aspecto por leer late (invita a abrirlo);
                                       // el ya leído se queda quieto.
                                       sx={desbloqueada && !leido && escrito ? {
                                         [`@keyframes aspectoLate${String(colorAsp).replace(/[^0-9a-zA-Z]/g, "")}`]: {
-                                          "0%, 100%": { filter: `drop-shadow(0 0 4px ${colorAsp}88)` },
-                                          "50%": { filter: `drop-shadow(0 0 12px ${colorAsp}) drop-shadow(0 0 22px ${colorAsp}88)` },
+                                          "0%, 100%": { filter: "none" },
+                                          "50%": { filter: "none" },
                                         },
                                         animation: `aspectoLate${String(colorAsp).replace(/[^0-9a-zA-Z]/g, "")} ${3.2 + (idx % 3) * 0.5}s ease-in-out ${(idx % 5) * 0.4}s infinite`,
                                         "@media (prefers-reduced-motion: reduce)": { animation: "none" },
@@ -471,7 +471,7 @@ export default function MetodoAstrologiaAspectos() {
                 <Flex align="center" justify="center" gap={3} mb={5} flexWrap="wrap">
                   {cuerpoA && <Glifo symbol={cuerpoA.symbol} color={cuerpoA.color} size={34} />}
                   <Text fontSize="2xl" color={colorAsp} fontFamily="'Times New Roman', serif"
-                        style={{ filter: `drop-shadow(0 0 8px ${colorAsp}aa)` }}>
+                        style={{ filter: "none" }}>
                     {ASPECTO_SYMBOL[abierto.tipo]}
                   </Text>
                   {cuerpoB && <Glifo symbol={cuerpoB.symbol} color={cuerpoB.color} size={34} />}

@@ -18,7 +18,7 @@ import { comicLoaderPorColor } from "./comicLoaders";
 import { ClavesRapidas } from "./ClavesRapidas";
 import { AvisoLeida } from "./MarcaLeido";
 import { useSinBarraDeScroll } from "../global/sinBarraDeScroll";
-import { astrologiaTxt } from "../../GlobalVariables";
+import { astrologiaTxt, FONDO_PAGINA_BEIGE } from "../../GlobalVariables";
 
 // Frontend único del cómic: misma vista, misma maquetación, mismas animaciones.
 // Lo que varía entre cómics son las viñetas (foto + texto) y las acciones
@@ -66,6 +66,8 @@ export interface Vineta {
    *  estrecha en desktop y foto completa centrada en móvil. Lo usa la última
    *  viñeta del cómic de estrellas (la tabla periódica). */
   fotoVertical?: boolean;
+  /** Color del título de ESTA viñeta (p.ej. el del planeta que se lee: Marte en rojo). Sin él, beige. */
+  colorTitulo?: string;
 }
 
 const Stars = () => {
@@ -534,9 +536,9 @@ export function ComicViewer({
   // define un `textColor` NO blanco (p.ej. Nutrición: verde oscuro sobre foto
   // clara), el título usa ese color y su misma sombra (`textShadow`), que en
   // Nutrición es "none". Los cómics con título blanco no cambian.
-  const tituloColor = textColor ?? "white";
+  const tituloColor = current?.colorTitulo ?? textColor ?? FONDO_PAGINA_BEIGE;
   const tituloBlanco =
-    !textColor || textColor.toLowerCase() === "#ffffff" || textColor.toLowerCase() === "white";
+    !!current?.colorTitulo || !textColor || ["#ffffff", "white", FONDO_PAGINA_BEIGE.toLowerCase()].includes(textColor.toLowerCase());
   const tituloShadow = tituloBlanco ? "0 2px 8px rgba(0,0,0,0.9)" : textShadow;
 
   // ── Nada de barra de scroll fuera de la caja (SOLO escritorio) ────────────
@@ -708,7 +710,7 @@ export function ComicViewer({
       _focus={{ boxShadow: noPrev ? "none" : "0 2px 14px rgba(0,0,0,0.45)" }}
       _focusVisible={{ boxShadow: noPrev ? "none" : "0 2px 14px rgba(0,0,0,0.45)" }}
       icon={
-        <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "24px", md: "32px" }} h={{ base: "24px", md: "32px" }} fill="#ffffff"
+        <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "24px", md: "32px" }} h={{ base: "24px", md: "32px" }} fill={FONDO_PAGINA_BEIGE}
           style={{ filter: `drop-shadow(0 0 6px ${themeColor}) drop-shadow(0 1px 2px rgba(0,0,0,0.85))` }}>
           <path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z" />
         </Box>
@@ -741,12 +743,12 @@ export function ComicViewer({
       _focusVisible={{ boxShadow: blocked ? "none" : "0 2px 14px rgba(0,0,0,0.45)" }}
       icon={
         esUltima ? (
-          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "24px", md: "32px" }} h={{ base: "24px", md: "32px" }} fill="#ffffff"
+          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "24px", md: "32px" }} h={{ base: "24px", md: "32px" }} fill={FONDO_PAGINA_BEIGE}
             style={{ filter: `drop-shadow(0 0 6px ${themeColor}) drop-shadow(0 1px 2px rgba(0,0,0,0.85))` }}>
             <path d="M382-200 154-428l57-57 171 171 367-367 57 57-424 424Z" />
           </Box>
         ) : (
-          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "24px", md: "32px" }} h={{ base: "24px", md: "32px" }} fill="#ffffff"
+          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "24px", md: "32px" }} h={{ base: "24px", md: "32px" }} fill={FONDO_PAGINA_BEIGE}
             style={{ filter: `drop-shadow(0 0 6px ${themeColor}) drop-shadow(0 1px 2px rgba(0,0,0,0.85))` }}>
             <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
           </Box>
@@ -848,7 +850,7 @@ export function ComicViewer({
         _focusVisible={{ boxShadow: "0 2px 12px rgba(0,0,0,0.45)" }}
         icon={
           <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="26px" h="26px"
-            fill={cerrarColor ?? "#ffffff"}
+            fill={cerrarColor ?? FONDO_PAGINA_BEIGE}
             style={{
               filter: cerrarColor
                 ? undefined

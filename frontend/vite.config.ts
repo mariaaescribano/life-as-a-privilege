@@ -70,6 +70,13 @@ const copia404: Plugin = {
 
 export default defineConfig({
   plugins: [copia404],
+  // Las librerías 3D (la rueda de la carta astral) solo se cargan al abrir esas páginas. Si el servidor de
+  // desarrollo las descubre en ese momento, vuelve a empaquetar y la página que las pedía (por ejemplo
+  // /admin/astrologia/:id) se queda con «Algo se ha torcido» hasta recargar a mano. Declaradas aquí se
+  // empaquetan desde el principio y no pasa. No afecta al build de producción.
+  optimizeDeps: {
+    include: ["three", "@react-three/fiber", "@react-three/postprocessing", "@react-three/drei"],
+  },
   build: {
     rollupOptions: {
       output: {

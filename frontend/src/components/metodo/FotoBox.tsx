@@ -1,3 +1,4 @@
+import { astrologiaTxt } from "../../GlobalVariables";
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
@@ -10,13 +11,13 @@ import { culturaNom, fisiologiaNom, nutricionNom } from "../../GlobalVariables";
 // los fondos claros (Nutrición) eran invisibles de todos modos. Así que se
 // quitan: queda un glow tintado del acento y el turquesa se mantiene limpio.
 export const glowSuave = (c: string): string =>
-  `0 0 14px ${c}26, 0 0 32px ${c}14`;
+  c === astrologiaTxt ? "none" : `0 0 14px ${c}26, 0 0 32px ${c}14`;
 
 // Glow de la CABECERA (halo blanco + menta suave con el tinte de la disciplina).
 // Es el mismo que usa MetodoStepHeader; se centraliza aquí para que TODAS las
 // cajas puedan llevar glow (nunca sombra plana) y queden a juego con el header.
 export const glowHeader = (c: string): string =>
-  `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${c}1a, 0 0 48px ${c}10`;
+  c === astrologiaTxt ? "none" : `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${c}1a, 0 0 48px ${c}10`;
 
 // Variante más intensa para el hover.
 export const glowSuaveHover = (c: string): string =>

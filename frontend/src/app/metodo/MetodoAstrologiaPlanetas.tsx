@@ -22,7 +22,7 @@ import {
   astrologiaNom,
   astrologiaTxt,
   AstrologiaIcon,
-  FONDO_PAGINA_BEIGE,
+  FONDO_PAGINA_TURQUESA,
 } from "../../GlobalVariables";
 import { useT } from "../../i18n";
 
@@ -104,7 +104,7 @@ export default function MetodoAstrologiaPlanetas() {
         </Grid>
 
         <Flex justify="center" mt={6}>
-          <Text color={`${FONDO_PAGINA_BEIGE}80`} fontSize="xs" letterSpacing="0.1em" fontStyle="italic">
+          <Text color={`${FONDO_PAGINA_TURQUESA}80`} fontSize="xs" letterSpacing="0.1em" fontStyle="italic">
             {saving ? "Guardando…" : "Tus cambios se guardan automáticamente."}
           </Text>
         </Flex>

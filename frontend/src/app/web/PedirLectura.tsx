@@ -11,6 +11,7 @@ import { focoBlanco } from "../../components/global/foco";
 import { LifeLoader } from "../../components/metodo/comicLoaders";
 import { API_URL, FONDO_PAGINA_BEIGE as BEIGE, FONDO_PAGINA_TURQUESA as T } from "../../GlobalVariables";
 import { useT, type ClaveTexto } from "../../i18n";
+import { mascaraDMA, dmaAIso } from "../../utils/fechas";
 
 /**
  * /astrologia/pedir — pedir la carta de la lectura (Astrología → Adquirir), con los datos de nacimiento
@@ -90,11 +91,13 @@ export default function PedirLectura() {
     if (enviando || !info) return;
     setError(null);
     if (![nombre, email, fecha, hora, pais, region, ciudad].every((v) => v.trim())) { setError(t("lectura.error.datos")); return; }
+    const fechaIso = dmaAIso(fecha);
+    if (!fechaIso) { setError(t("lectura.error.datos")); return; }
     if (!acepta) { setError(t("lectura.error.aviso")); return; }
     setEnviando(true);
     try {
       const r = await axios.post(`${API_URL}/payment/lectura/checkout`, {
-        servicio, nombre: nombre.trim(), email: email.trim(), fecha, hora, lugar: [ciudad, region, pais].map((v) => v.trim()).join(", "), acepta,
+        servicio, nombre: nombre.trim(), email: email.trim(), fecha: fechaIso, hora, lugar: [ciudad, region, pais].map((v) => v.trim()).join(", "), acepta,
       });
       if (r.data?.url) { window.location.href = r.data.url; return; }
       setError(t("lectura.error.generico"));
@@ -150,7 +153,7 @@ export default function PedirLectura() {
                       <Box flex="1"><Etiqueta>{t("lectura.email")}</Etiqueta><Input {...campo} type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" /></Box>
                     </Flex>
                     <Flex gap={{ base: 4, md: 5 }} direction={{ base: "column", md: "row" }}>
-                      <Box flex="1"><Etiqueta>{t("lectura.fecha")}</Etiqueta><Input {...campo} type="date" value={fecha} onChange={(e) => setFecha(e.target.value)} max={new Date().toISOString().slice(0, 10)} /></Box>
+                      <Box flex="1"><Etiqueta>{t("lectura.fecha")}</Etiqueta><Input {...campo} inputMode="numeric" placeholder="dd/mm/aaaa" maxLength={10} autoComplete="bday" value={fecha} onChange={(e) => setFecha(mascaraDMA(e.target.value))} /></Box>
                       <Box flex="1"><Etiqueta>{t("lectura.hora")}</Etiqueta><Input {...campo} type="time" value={hora} onChange={(e) => setHora(e.target.value)} /></Box>
                     </Flex>
                     <Box>

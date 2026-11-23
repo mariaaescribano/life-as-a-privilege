@@ -6,6 +6,7 @@
 // escrita, desde aquí se le manda el correo para elegir contraseña («Enviar acceso»).
 // ─────────────────────────────────────────────────────────────────────────────
 import React, { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Box, Flex, Input, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -13,7 +14,7 @@ import SiteFooter from "../../components/global/Footer";
 import { LifeLoading } from "../../components/global/LifeLoading";
 import { LifeLoader } from "../../components/metodo/comicLoaders";
 import { API_URL, FONDO_PAGINA_BEIGE as BEIGE, FONDO_PAGINA_TURQUESA as T } from "../../GlobalVariables";
-import { fechaDMA } from "../../utils/fechas";
+import { fechaDMA, mascaraDMA, dmaAIso } from "../../utils/fechas";
 import { useAdminGuard, adminHeaders } from "./useAdminGuard";
 import { MandalaTurquesa } from "./PildorasAdmin";
 import { Reveal } from "../../components/global/Reveal";
@@ -82,6 +83,7 @@ const Etiqueta = ({ children }: { children: React.ReactNode }) => (
 );
 
 export default function AdminLecturas() {
+  const navigate = useNavigate();
   const { verificando } = useAdminGuard();
   const [lista, setLista] = useState<Pedido[]>([]);
   const [loading, setLoading] = useState(true);
@@ -147,12 +149,17 @@ export default function AdminLecturas() {
       setErrorNueva("Faltan datos: todos son obligatorios.");
       return;
     }
+    const fechaIso = dmaAIso(n.fecha);
+    if (!fechaIso) {
+      setErrorNueva("La fecha de nacimiento no es válida: día/mes/año.");
+      return;
+    }
     setCreando(true);
     try {
       await axios.post(
         `${API_URL}/lectura/admin/crear`,
         {
-          servicio: n.servicio, nombre: n.nombre.trim(), email: n.email.trim(), fecha: n.fecha, hora: n.hora,
+          servicio: n.servicio, nombre: n.nombre.trim(), email: n.email.trim(), fecha: fechaIso, hora: n.hora,
           lugar: [n.ciudad, n.region, n.pais].map((v) => v.trim()).join(", "),
         },
         { headers: adminHeaders() },
@@ -213,7 +220,7 @@ export default function AdminLecturas() {
                   </Flex>
                 </Box>
                 <Flex gap={{ base: 4, md: 5 }} direction={{ base: "column", md: "row" }}>
-                  <Box flex="1"><Etiqueta>Fecha de nacimiento</Etiqueta><Input {...campo} type="date" value={nueva.fecha} onChange={(e) => setNueva({ ...nueva, fecha: e.target.value })} max={new Date().toISOString().slice(0, 10)} /></Box>
+                  <Box flex="1"><Etiqueta>Fecha de nacimiento</Etiqueta><Input {...campo} inputMode="numeric" placeholder="día/mes/año" maxLength={10} value={nueva.fecha} onChange={(e) => setNueva({ ...nueva, fecha: mascaraDMA(e.target.value) })} /></Box>
                   <Box flex="1"><Etiqueta>Hora de nacimiento</Etiqueta><Input {...campo} type="time" value={nueva.hora} onChange={(e) => setNueva({ ...nueva, hora: e.target.value })} /></Box>
                 </Flex>
                 <Flex gap={{ base: 3, md: 4 }} direction={{ base: "column", md: "row" }}>
@@ -256,7 +263,8 @@ export default function AdminLecturas() {
           ) : (
             <Flex direction="column" gap={4}>
               {filtrados.map((p) => (
-                <Box key={p.id} px={{ base: 5, md: 6 }} py={5} borderRadius="2xl" border={`1.5px solid ${T}55`} color={T}>
+                <Flex key={p.id} align="stretch" borderRadius="2xl" border={`1.5px solid ${T}55`} color={T} overflow="hidden">
+                  <Box flex="1" minW={0} px={{ base: 5, md: 6 }} py={5}>
                   <Flex justify="space-between" align="baseline" gap={3} wrap="wrap">
                     <Text fontWeight="700" fontSize={{ base: "lg", md: "xl" }}>{p.nombre}</Text>
                     <Text fontSize="sm" opacity={0.75}>{fechaDMA(p.created_at) ?? ""}</Text>
@@ -285,7 +293,33 @@ export default function AdminLecturas() {
                       {p.acceso_enviado_at ? "Reenviar acceso" : "Enviar acceso"}
                     </Box>
                   </Flex>
-                </Box>
+                  </Box>
+
+                  {/* Ir a escribir la carta: todo el alto de la tarjeta, solo una flecha. */}
+                  <Box
+                    as="button"
+                    type="button"
+                    onClick={() => navigate(`/admin/astrologia/${p.user_id}`)}
+                    disabled={!p.user_id}
+                    aria-label="Escribir la carta"
+                    title="Escribir la carta"
+                    flexShrink={0}
+                    w={{ base: "64px", md: "96px" }}
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    bg={T}
+                    color={BEIGE}
+                    fontSize={{ base: "3xl", md: "4xl" }}
+                    cursor={p.user_id ? "pointer" : "not-allowed"}
+                    opacity={p.user_id ? 1 : 0.4}
+                    transition="all 0.2s"
+                    _hover={p.user_id ? { opacity: 0.9, w: { base: "72px", md: "112px" } } : {}}
+                    _focusVisible={{ outline: `2px solid ${BEIGE}`, outlineOffset: "-6px" }}
+                  >
+                    →
+                  </Box>
+                </Flex>
               ))}
 
               {filtrados.length === 0 && (

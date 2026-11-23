@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-import { API_URL, turquesa } from "../../GlobalVariables";
+import { API_URL, turquesa, FONDO_PAGINA_TURQUESA } from "../../GlobalVariables";
 import { ADMIN_DISCIPLINAS, disciplinaByKey } from "../../data/adminDisciplinas";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "./DisciplinaBgLayer";
 import { LifeLoader } from "../metodo/comicLoaders";
@@ -222,17 +222,13 @@ export function MiniDiario() {
         pr={{ base: 4, md: 6 }}
         py={{ base: "10px", md: "13px" }}
         borderRadius="full"
-        bg="#F0DCC0"
-        border={{ base: "1.5px solid rgba(255,255,255,0.8)", md: "2px solid rgba(255,255,255,0.9)" }}
-        boxShadow="0 0 18px rgba(255,255,255,0.28), 0 0 40px rgba(180,255,245,0.14)"
+        bg="transparent"
+        border={`1.5px solid ${FONDO_PAGINA_TURQUESA}`}
         cursor="pointer"
         transition="all 0.22s ease"
-        _hover={{
-          transform: "translateY(-2px)",
-          boxShadow: "0 0 26px rgba(255,255,255,0.45), 0 0 54px rgba(180,255,245,0.22)",
-        }}
+        _hover={{ transform: "translateY(-2px)", bg: `${FONDO_PAGINA_TURQUESA}14` }}
         _active={{ transform: "translateY(0)" }}
-        _focusVisible={focoBlanco}
+        _focusVisible={{ outline: `2px solid ${FONDO_PAGINA_TURQUESA}cc`, outlineOffset: "2px" }}
         aria-label={t("diario.abrir")}
       >
         <Box
@@ -243,10 +239,10 @@ export function MiniDiario() {
           alignItems="center"
           justifyContent="center"
         >
-          <DiarioIcon fill="white" size="100%" />
+          <DiarioIcon fill={FONDO_PAGINA_TURQUESA} size="100%" />
         </Box>
         <Text
-          color="white"
+          color={FONDO_PAGINA_TURQUESA}
           fontFamily="'EB Garamond', serif"
           fontWeight="700"
           fontSize={{ base: "sm", md: "lg" }}
@@ -274,24 +270,23 @@ export function MiniDiario() {
           pr={{ base: 4, md: 6 }}
           py={{ base: "10px", md: "13px" }}
           borderRadius="full"
-          bg="#F0DCC0"
-          border={{ base: "1.5px solid rgba(255,255,255,0.8)", md: "2px solid rgba(255,255,255,0.9)" }}
-          boxShadow="0 0 18px rgba(255,255,255,0.28), 0 0 40px rgba(180,255,245,0.14)"
+          bg="transparent"
+          border={`1.5px solid ${FONDO_PAGINA_TURQUESA}`}
           cursor="pointer"
           transition="all 0.22s ease"
-          _hover={{ transform: "translateY(-2px)", boxShadow: "0 0 26px rgba(255,255,255,0.45), 0 0 54px rgba(180,255,245,0.22)" }}
+          _hover={{ transform: "translateY(-2px)", bg: `${FONDO_PAGINA_TURQUESA}14` }}
           _active={{ transform: "translateY(0)" }}
-          _focusVisible={focoBlanco}
+          _focusVisible={{ outline: `2px solid ${FONDO_PAGINA_TURQUESA}cc`, outlineOffset: "2px" }}
           aria-label="Diario"
         >
           <Box flexShrink={0} w={{ base: "24px", md: "27px" }} h={{ base: "24px", md: "27px" }} display="flex" alignItems="center" justifyContent="center">
-            <Box as="svg" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" w="100%" h="100%">
+            <Box as="svg" viewBox="0 0 24 24" fill="none" stroke={FONDO_PAGINA_TURQUESA} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" w="100%" h="100%">
               <path d="M6.5 3.5h11a1.5 1.5 0 0 1 1.5 1.5v14a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 5 19V5a1.5 1.5 0 0 1 1.5-1.5Z" />
               <path d="M9 3.5v17" />
               <path d="M12.6 9.2c0-1 .8-1.7 1.7-1.7s1.7.7 1.7 1.7c0 1.4-1.7 2.4-1.7 2.4s-1.7-1-1.7-2.4Z" />
             </Box>
           </Box>
-          <Text color="white" fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "lg" }} letterSpacing="0.06em" lineHeight="1">
+          <Text color={FONDO_PAGINA_TURQUESA} fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "lg" }} letterSpacing="0.06em" lineHeight="1">
             Diario
           </Text>
         </Flex>

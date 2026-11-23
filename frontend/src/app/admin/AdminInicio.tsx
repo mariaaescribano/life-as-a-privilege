@@ -8,7 +8,6 @@ import { Reveal } from "../../components/global/Reveal";
 import { useT } from "../../i18n";
 import { MandalaTurquesa } from "./PildorasAdmin";
 import { useAdminGuard } from "./useAdminGuard";
-import { useUltimaEntradaDiario } from "../../components/global/DiarioMaria";
 
 // Inicio del panel: una tarjeta por cada sitio del menú de la derecha, para ir
 // directo desde aquí. Si se añade una entrada al menú de admin (SiteHeader), va
@@ -29,8 +28,6 @@ export default function AdminInicio() {
   const navigate = useNavigate();
   const t = useT();
   const { verificando } = useAdminGuard();
-  // Lo último que María apuntó de sí misma: se asoma en la tarjeta DIARIO.
-  const ultimaDiario = useUltimaEntradaDiario();
 
   if (verificando) {
     return <LifeLoading variant="private" />;
@@ -103,7 +100,7 @@ export default function AdminInicio() {
               </Flex>
             </Reveal>
           ))}
-          {/* DIARIO: una tarjeta más, con lo último que María apunta de sí misma (solo ella lo ve). */}
+          {/* DIARIO: una tarjeta más, igual que las demás (sin frase debajo). */}
           <Reveal direction="up" distance={24} delay={0.25 + SITIOS.length * 0.08} display="flex">
             <Flex
               as="button"
@@ -134,11 +131,6 @@ export default function AdminInicio() {
                 Diario
               </Text>
               <Box h="1px" w="36px" bg="#004f4f" transition="width 0.35s ease" _groupHover={{ w: "72px" }} />
-              {ultimaDiario && (
-                <Text color="#004f4fcc" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" textAlign="center" noOfLines={2} maxW="100%">
-                  {ultimaDiario}
-                </Text>
-              )}
             </Flex>
           </Reveal>
         </Grid>

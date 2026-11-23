@@ -15,7 +15,7 @@ import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
 import { useCursosData } from "../../data/cursosApi";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
-import { astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon, FONDO_PAGINA_BEIGE } from "../../GlobalVariables";
+import { astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon, FONDO_PAGINA_TURQUESA } from "../../GlobalVariables";
 import { useT } from "../../i18n";
 import { irAPagoDisciplina } from "../../components/metodo/pagoDisciplinaLink";
 
@@ -137,7 +137,7 @@ export default function MetodoAstrologiaCursos() {
               grid, para que no se estire de lado a lado en pantallas anchas). */}
           <Reveal direction="up" distance={20} delay={0.12} duration={0.65} w="100%" maxW="850px">
             <Text
-              color={FONDO_PAGINA_BEIGE}
+              color={FONDO_PAGINA_TURQUESA}
               fontSize={{ base: "lg", md: "xl" }}
               fontStyle="italic"
               textAlign="center"

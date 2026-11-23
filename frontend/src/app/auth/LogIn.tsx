@@ -264,7 +264,14 @@ export default function LogIn() {
                       _hover={{ bg: `${TINTA}12`, transform: "translateY(-3px)" }}
                       _focusVisible={focoBlanco}
                     >
-                      <MandalaTinte h={{ base: "52px", md: "64px" }} color={TINTA} />
+                      {o.modo === "premium" ? (
+                        // «Lectura de mi carta astral»: el icono de las estrellas de Astrología, en turquesa.
+                        <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill={TINTA} w={{ base: "52px", md: "64px" }} h={{ base: "52px", md: "64px" }} aria-hidden="true">
+                          <path d="m354-287 126-76 126 77-33-144 111-96-146-13-58-136-58 135-146 13 111 97-33 143ZM233-120l65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Zm457-560 21-89-71-59 94-8 36-84 36 84 94 8-71 59 21 89-80-47-80 47ZM480-481Z" />
+                        </Box>
+                      ) : (
+                        <MandalaTinte h={{ base: "52px", md: "64px" }} color={TINTA} />
+                      )}
                       <Box h="1px" w="56px" bg={`linear-gradient(to right, transparent, ${TINTA}99, transparent)`} />
                       <Text
                         color={TINTA}

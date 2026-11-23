@@ -35,7 +35,7 @@ const QUE_ES_ESTO = {
 // Check pequeño para marcar una casa ya leída.
 const CheckIcon = ({ color, size = 14 }: { color: string; size?: number }) => (
   <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={`${size}px`} h={`${size}px`} fill={color}
-       style={{ filter: `drop-shadow(0 0 4px ${color}aa)` }}>
+       style={{ filter: "none" }}>
     <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
   </Box>
 );
@@ -266,7 +266,7 @@ export default function MetodoAstrologiaCasas() {
                 position="relative"
                 borderRadius="2xl"
                 overflow="hidden"
-                boxShadow={`0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${astrologiaTxt}1a, 0 0 48px ${astrologiaTxt}10`}
+                boxShadow="none"
                 minH={{ lg: "380px" }}
               >
                 <SpaceBg overlay="rgba(8,13,30,0.28)" />
@@ -280,7 +280,7 @@ export default function MetodoAstrologiaCasas() {
               {/* ── RUEDA giratoria (las casas: arriba en móvil, izda en desktop) ── */}
               <Reveal direction="right" distance={30} delay={0.22} duration={0.7}
                       display="flex" order={{ base: 0, lg: 0 }} w="100%" position="relative" borderRadius="2xl" overflow="hidden"
-                      boxShadow={`0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${astrologiaTxt}1a, 0 0 48px ${astrologiaTxt}10`}>
+                      boxShadow="none">
                 <SpaceBg overlay="rgba(8,13,30,0.28)" />
                 <Flex position="relative" zIndex={1} w="100%" align="center" justify="center" px={{ base: 5, md: 8 }} py={{ base: 7, md: 9 }}>
                 <Box w="100%" maxW="340px">
@@ -302,7 +302,7 @@ export default function MetodoAstrologiaCasas() {
                   >
                     {/* aro exterior con glow */}
                     <circle cx={CX} cy={CY} r={R_OUT} fill="none" stroke={`${astrologiaTxt}55`} strokeWidth={1.5}
-                            style={{ filter: `drop-shadow(0 0 6px ${astrologiaTxt}66)` }} />
+                            style={{ filter: "none" }} />
                     <circle cx={CX} cy={CY} r={R_OUT * 0.62} fill="none" stroke={`${astrologiaTxt}22`} strokeWidth={1} />
                     {/* anillo de puntos que gira lentísimo */}
                     <circle className="anillo-vivo" cx={CX} cy={CY} r={R_OUT * 0.81} fill="none"
@@ -344,7 +344,7 @@ export default function MetodoAstrologiaCasas() {
                                 fontFamily="'EB Garamond', serif"
                                 fill={activa ? astrologiaTxt : `${astrologiaTxt}99`}
                                 fontWeight={activa ? 700 : 400}
-                                style={{ filter: activa ? `drop-shadow(0 0 6px ${astrologiaTxt}aa)` : "none" }}
+                                style={{ filter: "none" }}
                               >
                                 {NUMEROS_ROMANOS[i]}
                               </text>
@@ -352,12 +352,12 @@ export default function MetodoAstrologiaCasas() {
                               {leida ? (
                                 <text x={lp.x} y={lp.y - 11} textAnchor="middle" fontSize={12} fontWeight={700}
                                       fill={astrologiaTxt} fontFamily="'EB Garamond', serif"
-                                      style={{ filter: `drop-shadow(0 0 3px ${astrologiaTxt})` }}>
+                                      style={{ filter: "none" }}>
                                   ✓
                                 </text>
                               ) : escrita ? (
                                 <circle cx={lp.x} cy={lp.y - 16} r={1.8} fill={astrologiaTxt}
-                                        style={{ filter: `drop-shadow(0 0 3px ${astrologiaTxt})` }} />
+                                        style={{ filter: "none" }} />
                               ) : null}
                             </g>
                           </MotionG>
@@ -367,7 +367,7 @@ export default function MetodoAstrologiaCasas() {
 
                     {/* marcador superior (12 en punto) */}
                     <polygon points={`${CX - 8},${CY - R_OUT - 6} ${CX + 8},${CY - R_OUT - 6} ${CX},${CY - R_OUT + 8}`}
-                             fill={astrologiaTxt} style={{ filter: `drop-shadow(0 0 5px ${astrologiaTxt})` }} />
+                             fill={astrologiaTxt} style={{ filter: "none" }} />
                     {/* Icono del signo de la casa activa, en el centro de la
                         rueda. Va DIBUJADO (ya no el carácter ♈♉♊…, que los
                         sistemas pintan como emoji morado): escalamos el lienzo
@@ -376,7 +376,7 @@ export default function MetodoAstrologiaCasas() {
                       <g className="signo-vivo" transform={`translate(${CX - 20} ${CY - 20}) scale(${40 / 24})`}
                          fill="none" stroke={info.regente?.color ?? astrologiaTxt}
                          strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round"
-                         style={{ filter: `drop-shadow(0 0 8px ${(info.regente?.color ?? astrologiaTxt)}aa)` }}>
+                         style={{ filter: "none" }}>
                         {(trazosSigno(info.signo.name) ?? []).map((d, i) => (
                           <path key={i} d={d} />
                         ))}

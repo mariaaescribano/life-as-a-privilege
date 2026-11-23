@@ -21,7 +21,7 @@ import { Box, Flex, Text, useBreakpointValue } from "@chakra-ui/react";
 import { motion, useReducedMotion } from "framer-motion";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
 import { sombraSoloContraste } from "../global/disciplinaSombras";
-import { astrologiaNom } from "../../GlobalVariables";
+import { astrologiaNom, astrologiaTxt, FONDO_PAGINA_TURQUESA } from "../../GlobalVariables";
 import { Reveal } from "../global/Reveal";
 import { focoBlanco } from "../global/foco";
 import { useT } from "../../i18n";
@@ -94,12 +94,12 @@ function Flecha({ dir, retraso = 0, entrada = 0 }: { dir: "right" | "left" | "do
       aria-hidden
     >
       <Box position="absolute" top="50%" left="50%" w={`${ANCHO_FLECHA}px`} h="28px"
-           style={{ transform: `translate(-50%, -50%) ${giro}`.trim(), filter: "drop-shadow(0 0 3px rgba(255,255,255,0.35))" }}>
+           style={{ transform: `translate(-50%, -50%) ${giro}`.trim() }}>
         <svg width={ANCHO_FLECHA} height="28" viewBox="0 0 56 28" fill="none">
           {/* El hilo. */}
           <motion.line
             x1="5" y1="14" x2="47" y2="14"
-            stroke="white" strokeOpacity="0.6" strokeWidth="1.2" strokeLinecap="round"
+            stroke={FONDO_PAGINA_TURQUESA} strokeOpacity="0.7" strokeWidth="1.2" strokeLinecap="round"
             initial={reduce ? false : { pathLength: 0, opacity: 0 }}
             whileInView={{ pathLength: 1, opacity: 1 }}
             viewport={vista}
@@ -108,7 +108,7 @@ function Flecha({ dir, retraso = 0, entrada = 0 }: { dir: "right" | "left" | "do
           {/* La punta, al llegar. */}
           <motion.path
             d="M43 9.5 L49 14 L43 18.5"
-            stroke="white" strokeOpacity="0.9" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"
+            stroke={FONDO_PAGINA_TURQUESA} strokeOpacity="0.95" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"
             initial={reduce ? false : { opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={vista}
@@ -118,7 +118,7 @@ function Flecha({ dir, retraso = 0, entrada = 0 }: { dir: "right" | "left" | "do
           {!reduce && (
             <motion.line
               x1="5" y1="14" x2="47" y2="14"
-              stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeDasharray="9 120"
+              stroke={FONDO_PAGINA_TURQUESA} strokeWidth="1.8" strokeLinecap="round" strokeDasharray="9 120"
               initial={{ strokeDashoffset: 9, opacity: 0 }}
               animate={{ strokeDashoffset: [9, -45], opacity: [0, 0.95, 0.95, 0] }}
               transition={{ duration: 1.5, ease: "easeInOut", repeat: Infinity, repeatDelay: 2.6, delay: entrada + 1.2 + retraso * 0.6 }}
@@ -132,7 +132,7 @@ function Flecha({ dir, retraso = 0, entrada = 0 }: { dir: "right" | "left" | "do
 
 /** El halo del header, un poco más grande (para cuando se pasa el ratón por una caja). */
 const glowHeaderGrande = (color: string) =>
-  `0 0 24px rgba(255,255,255,0.24), 0 0 52px rgba(255,255,255,0.13), 0 0 92px rgba(180,255,245,0.14), 0 0 30px ${color}2a, 0 0 72px ${color}1a`;
+  color === astrologiaTxt ? "none" : `0 0 24px rgba(255,255,255,0.24), 0 0 52px rgba(255,255,255,0.13), 0 0 92px rgba(180,255,245,0.14), 0 0 30px ${color}2a, 0 0 72px ${color}1a`;
 
 const Candado = ({ color }: { color: string }) => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
@@ -270,18 +270,17 @@ function Caja({
             px={4}
             py="5px"
             borderRadius="full"
-            border="1px solid rgba(255,255,255,0.7)"
-            bg="rgba(255,255,255,0.14)"
-            color="white"
+            border={`1.5px solid ${FONDO_PAGINA_TURQUESA}`}
+            bg="transparent"
+            color={FONDO_PAGINA_TURQUESA}
             fontSize="sm"
             fontWeight="600"
             letterSpacing="0.04em"
             cursor={abriendo ? "wait" : "pointer"}
             opacity={abriendo ? 0.6 : 1}
-            boxShadow="0 0 16px rgba(255,255,255,0.25)"
             transition="all 0.2s"
-            _hover={{ bg: "rgba(255,255,255,0.26)", transform: "translateY(-1px)" }}
-            _focusVisible={focoBlanco}
+            _hover={{ bg: `${FONDO_PAGINA_TURQUESA}14`, transform: "translateY(-1px)" }}
+            _focusVisible={{ outline: `2px solid ${FONDO_PAGINA_TURQUESA}cc`, outlineOffset: "2px" }}
           >
             {abriendo ? "Abriendo…" : "Abrir hasta aquí"}
           </Box>
@@ -338,11 +337,11 @@ export function CaminoVista({ nom, bg, txt, secciones: seccionesDe, conInicio, e
             {sec.titulo && (
               <Reveal inView direction="up" distance={14} w="100%" mb={{ base: 5, md: 7 }} mt={si > 0 ? 3 : 0}>
                 <Flex align="center" gap={4} w="100%" maxW="900px" mx="auto">
-                  <Box flex="1" h="1px" bg="rgba(255,255,255,0.4)" />
-                  <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.14em" textTransform="uppercase" textAlign="center">
+                  <Box flex="1" h="1px" bg={`${FONDO_PAGINA_TURQUESA}66`} />
+                  <Text color={FONDO_PAGINA_TURQUESA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.14em" textTransform="uppercase" textAlign="center">
                     {sec.titulo}
                   </Text>
-                  <Box flex="1" h="1px" bg="rgba(255,255,255,0.4)" />
+                  <Box flex="1" h="1px" bg={`${FONDO_PAGINA_TURQUESA}66`} />
                 </Flex>
               </Reveal>
             )}

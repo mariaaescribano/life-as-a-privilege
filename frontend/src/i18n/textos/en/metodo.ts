@@ -242,6 +242,9 @@ export const metodo = {
   "metodo.astro.intro.datosTexto": "{nombre}, to be able to read your Birth Chart, look up the time and the city you were born in as carefully as you can. The more precise you are, the better the reading will turn out.",
   "metodo.astro.intro.apuntes1": "You do not need to take notes,",
   "metodo.astro.intro.apuntes2": "at the end you will have everything in a PDF",
+  "metodo.astro.area.titulo": "Area {n}",
+  // PROVISIONAL: aviso mientras un Área no tenga su texto (se escribe en components/metodo/astrologiaAreas.ts).
+  "metodo.astro.area.pendiente": "The text for this area is coming soon.",
   "metodo.astro.paso.historia": "History",
   "metodo.camino.empezar": "START",
   "metodo.header.alCamino": "Path",
@@ -251,7 +254,7 @@ export const metodo = {
   "metodo.astro.sintesis.intro": "{nombre}, this is what you must not forget about your chart...",
   "metodo.astro.paso.trio": "Ascendant, Sun and Moon",
   "metodo.astro.trio.intro": "{nombre}, before moving on, understand these fundamental notions: the **Sun** represents your purpose and the promise of what you came here to develop in your highest version; the **Moon** symbolizes your refuge, your emotional world and the place where you find safety; and the **Ascendant** represents the energy and the path that lead you toward your best version.",
-  "metodo.astro.paso.explicacion": "Explanation",
+  "metodo.astro.paso.explicacion": "Explanations",
   "metodo.astro.historia.intro": "Astrology is an ancient discipline, born in the earliest civilizations. You do not need to read it, but you will enjoy it and it will help you understand the power of knowing your Birth Chart.",
   "metodo.astro.historia.leer": "Read the comic",
   "metodo.astro.historia.reel": "Watch the reel",

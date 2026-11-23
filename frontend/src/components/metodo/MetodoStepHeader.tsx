@@ -117,7 +117,7 @@ interface MetodoStepHeaderProps {
   dense?: boolean;
 }
 
-const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip, whiteBg, small, dense, arrow, btnColor, btnBg, soloFlecha, ariaLabel }: StepButton & { color: string; bgColor: string; whiteBg?: boolean; soloFlecha?: "prev" | "next" }) => {
+const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip, whiteBg, small, dense, arrow, btnColor, btnBg, soloFlecha, ariaLabel, sinLuz }: StepButton & { color: string; bgColor: string; whiteBg?: boolean; soloFlecha?: "prev" | "next"; sinLuz?: boolean }) => {
   // Colores efectivos: si el botón trae los suyos (p.ej. lleva a otra disciplina),
   // mandan sobre los del header. `c` = texto/borde; `fillBg` = fondo.
   const c = btnColor ?? color;
@@ -153,7 +153,7 @@ const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip, white
       // casi instantáneo al pulsar. background/border/box-shadow son las
       // propiedades que pintan el "pressed".
       transition="background 0.08s ease, border-color 0.08s ease, box-shadow 0.08s ease, color 0.08s ease, transform 0.08s ease"
-      boxShadow={disabled ? "none" : `0 0 10px rgba(255,255,255,0.16), 0 0 22px ${c}44, inset 0 0 12px ${c}22`}
+      boxShadow={disabled || sinLuz ? "none" : `0 0 10px rgba(255,255,255,0.16), 0 0 22px ${c}44, inset 0 0 12px ${c}22`}
       // En el header de TCM (whiteBg) el texto lleva una sombra granate oscura
       // para contrastar con el fondo de la disciplina.
       textShadow={whiteBg && !disabled ? "0 1px 4px rgba(58,10,10,0.95), 0 2px 10px rgba(58,10,10,0.85), 0 0 5px rgba(58,10,10,0.8)" : undefined}
@@ -169,14 +169,14 @@ const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip, white
       _hover={disabled ? undefined : {
         bg: hoverBg,
         borderColor: `${c}cc`,
-        boxShadow: `0 0 14px rgba(255,255,255,0.35), 0 0 30px ${c}33, 0 0 30px ${c}44`,
+        boxShadow: sinLuz ? "none" : `0 0 14px rgba(255,255,255,0.35), 0 0 30px ${c}33, 0 0 30px ${c}44`,
       }}
       // _active: feedback inmediato al pulsar (móvil y desktop).
       _active={disabled ? undefined : {
         bg: activeBg,
         borderColor: c,
         transform: "scale(0.96)",
-        boxShadow: `0 0 22px rgba(255,255,255,0.5), 0 0 42px ${c}66`,
+        boxShadow: sinLuz ? "none" : `0 0 22px rgba(255,255,255,0.5), 0 0 42px ${c}66`,
       }}
       // Sin texto visible, el botón se queda mudo para los lectores de pantalla:
       // se le pone de nombre la etiqueta que llevaba (sin la flecha del texto).
@@ -372,6 +372,8 @@ export function MetodoStepHeader({
   // Si pasas `nom` y esa disciplina tiene fondo propio, lo usamos. El antiguo
   // prop `space` se mantiene como alias para Astrología.
   const headerNom = nom ?? (space ? astrologiaNom : undefined);
+  // Astrología, por ahora, sin luz: sin halo en la caja, sin la luz que recorre el título y sin brillo en los botones.
+  const sinLuz = headerNom === astrologiaNom;
   const useDiscBg = !!headerNom && hasDisciplinaBg(headerNom);
   // En el header de Medicina China los botones llevan un fondo blanco mínimo
   // (casi transparente) para que el texto se lea sobre su fondo.
@@ -442,7 +444,7 @@ export function MetodoStepHeader({
   // públicas (/d/…) llevan la misma magia, en TODAS las disciplinas.
   // El camino de cada disciplina (/camino/<slug>) también: su nombre entra igual que en el recorrido.
   const enPublica = ruta.startsWith("/aprendizaje/cursos/") || ruta.startsWith("/d/") || ruta.startsWith("/camino/");
-  const tituloMagico = typeof title === "string" && (enRecorrido || enPublica) && (!!nom || !!space);
+  const tituloMagico = typeof title === "string" && (enRecorrido || enPublica) && (!!nom || !!space) && !sinLuz;
   // Se activa PARA un título concreto: si el header sigue montado y cambia de
   // título (p. ej. de una sefirá a la siguiente), el nuevo entra de cero.
   const [tituloActivoPara, setTituloActivoPara] = useState<string | null>(null);
@@ -520,8 +522,8 @@ export function MetodoStepHeader({
                 color={color}
                 cursor="pointer"
                 transition="background 0.08s ease, border-color 0.08s ease, box-shadow 0.08s ease, transform 0.08s ease"
-                boxShadow={`0 0 10px rgba(255,255,255,0.16), 0 0 22px ${color}44, inset 0 0 12px ${color}22`}
-                _hover={{ bg: btnWhiteBg ? "rgba(255,255,255,0.12)" : `${color}2b`, borderColor: `${color}cc`, boxShadow: `0 0 14px rgba(255,255,255,0.35), 0 0 30px ${color}44` }}
+                boxShadow={sinLuz ? "none" : `0 0 10px rgba(255,255,255,0.16), 0 0 22px ${color}44, inset 0 0 12px ${color}22`}
+                _hover={{ bg: btnWhiteBg ? "rgba(255,255,255,0.12)" : `${color}2b`, borderColor: `${color}cc`, boxShadow: sinLuz ? "none" : `0 0 14px rgba(255,255,255,0.35), 0 0 30px ${color}44` }}
                 _active={{ transform: "scale(0.94)" }}
                 _focusVisible={focoBlanco}
                 sx={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
@@ -542,6 +544,8 @@ export function MetodoStepHeader({
       bg={useDiscBg ? "transparent" : bgColor}
       border={useDiscBg ? "none" : `1px solid ${color}33`}
       boxShadow={
+        // Astrología, por ahora, SIN LUZ: ni halo alrededor de la caja ni brillo en sus botones.
+        sinLuz ? "none" :
         boxShadow ??
         (useDiscBg
           ? glowHeaderDisciplina(color)
@@ -618,7 +622,7 @@ export function MetodoStepHeader({
                 // entero (Fisiología, Astrología…).
                 pb="0.18em"
                 style={{
-                  textShadow: useDiscBg
+                  textShadow: sinLuz ? "none" : useDiscBg
                     ? `0 1px 3px ${bgHex}f5, 0 0 8px ${bgHex}cc, 0 2px 16px ${bgHex}88`
                     : `0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(255,255,255,0.3), 0 0 60px ${color}55`,
                 }}
@@ -652,13 +656,13 @@ export function MetodoStepHeader({
             encogen (gracias al flex:0 1 auto + minW:0 del StepBtn) en lugar
             de saltar a una segunda fila. */}
         {(prev || next || extra || extra2 || showPsicoCursos) && (() => {
-          const bPrev = prev && <StepBtn {...prev} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} soloFlecha={prev.arrow ?? "prev"} />;
-          const bNext = next && <StepBtn {...next} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} soloFlecha={next.arrow ?? "next"} />;
+          const bPrev = prev && <StepBtn {...prev} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} sinLuz={sinLuz} soloFlecha={prev.arrow ?? "prev"} />;
+          const bNext = next && <StepBtn {...next} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} sinLuz={sinLuz} soloFlecha={next.arrow ?? "next"} />;
           const bExtras = (
             <>
-              {extraFinal && <StepBtn {...extraFinal} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
-              {extra2 && <StepBtn {...extra2} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
-              {showPsicoCursos && <StepBtn label={t("header.cursos")} onClick={() => setCursosOpen(true)} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
+              {extraFinal && <StepBtn {...extraFinal} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} sinLuz={sinLuz} />}
+              {extra2 && <StepBtn {...extra2} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} sinLuz={sinLuz} />}
+              {showPsicoCursos && <StepBtn label={t("header.cursos")} onClick={() => setCursosOpen(true)} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} sinLuz={sinLuz} />}
             </>
           );
           const hueco = dense ? { base: 2.5, md: 4 } : { base: 3, md: 6 };

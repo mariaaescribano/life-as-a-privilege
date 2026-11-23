@@ -296,6 +296,9 @@ export const metodo = {
   "metodo.astro.intro.datosTexto": "{nombre}, para poder leer tu Carta Astral, busca muy bien la hora y la ciudad en la que naciste. Cuanto más preciso sea, mejor saldrá la lectura.",
   "metodo.astro.intro.apuntes1": "No hace falta que tomes apuntes,",
   "metodo.astro.intro.apuntes2": "al final lo tendrás todo en pdf",
+  "metodo.astro.area.titulo": "Área {n}",
+  // PROVISIONAL: aviso mientras un Área no tenga su texto (se escribe en components/metodo/astrologiaAreas.ts).
+  "metodo.astro.area.pendiente": "El texto de esta área está pendiente.",
   "metodo.astro.paso.historia": "Historia",
   "metodo.camino.empezar": "EMPEZAR",
   "metodo.header.alCamino": "Camino",
@@ -305,7 +308,7 @@ export const metodo = {
   "metodo.astro.sintesis.intro": "{nombre}, esto es lo que no debes olvidar de tu carta...",
   "metodo.astro.paso.trio": "Ascendente, Sol y Luna",
   "metodo.astro.trio.intro": "{nombre}, antes de continuar, recuerda: la **Luna** simboliza tu emocionalidad y tu seguridad; el **Sol** representa tu propósito y tu mejor versión; y el **Ascendente** representa la energía del camino hacia esa mejor versión.",
-  "metodo.astro.paso.explicacion": "Explicación",
+  "metodo.astro.paso.explicacion": "Explicaciones",
   "metodo.astro.historia.intro": "La Astrología es una disciplina milenaria nacida en una de las más antiguas civilizaciones. Conocer su historia te gustará y te ayudará a entender el poder que tiene conocer en profundidad tu Carta Astral.",
   "metodo.astro.historia.leer": "Leer el cómic",
   "metodo.astro.historia.reel": "Ver el reel",

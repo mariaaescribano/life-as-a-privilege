@@ -15,7 +15,7 @@ import { useComic } from "../../i18n/comics";
 import { Reveal } from "../../components/global/Reveal";
 import { useAstrologiaProgreso } from "../../hooks/useAstrologiaProgreso";
 import { esMariaMirando } from "../../api/persona";
-import { astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon, FONDO_PAGINA_BEIGE } from "../../GlobalVariables";
+import { astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon, FONDO_PAGINA_TURQUESA } from "../../GlobalVariables";
 import { useT } from "../../i18n";
 
 /**
@@ -60,9 +60,9 @@ export default function MetodoAstrologiaHistoria() {
             />
           </Reveal>
 
-          {/* Fuera de las cajas: blanco y sin sombra. */}
+          {/* Fuera de las cajas: turquesa oscuro y sin sombra. */}
           <Reveal direction="up" distance={18} delay={0.4} duration={1} blur w="100%" maxW="680px">
-            <Text color={FONDO_PAGINA_BEIGE} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center" fontStyle="italic">
+            <Text color={FONDO_PAGINA_TURQUESA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center" fontStyle="italic">
               {t("metodo.astro.historia.intro")}
             </Text>
           </Reveal>

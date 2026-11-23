@@ -213,8 +213,10 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
           opacity={banda ? 1 : 0}
           transition="opacity 0.5s ease"
           sx={{
-            WebkitMaskImage: "linear-gradient(to bottom, transparent 0, #000 70px, #000 calc(100% - 70px), transparent 100%)",
-            maskImage: "linear-gradient(to bottom, transparent 0, #000 70px, #000 calc(100% - 70px), transparent 100%)",
+            // Borde en ARCO y no en línea recta: una elipse ancha que se funde poco a poco hacia fuera,
+            // más pronto en las esquinas y más tarde en el centro (nunca un corte horizontal seco).
+            WebkitMaskImage: "radial-gradient(ellipse 150% 50% at 50% 50%, #000 62%, rgba(0,0,0,0.6) 78%, rgba(0,0,0,0.22) 90%, transparent 100%)",
+            maskImage: "radial-gradient(ellipse 150% 50% at 50% 50%, #000 62%, rgba(0,0,0,0.6) 78%, rgba(0,0,0,0.22) 90%, transparent 100%)",
           }}
         >
           <DisciplinaBgLayer nom={d.nom} borderRadius="0" />
