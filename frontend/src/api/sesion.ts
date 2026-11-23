@@ -54,6 +54,17 @@ export function esAdminDesbloqueado(): boolean {
   }
 }
 
+/** Cuenta «solo carta»: se apunta al entrar (login o enlace del correo) para que «Home» y los «volver» no la lleven a /home. */
+export function recordarSoloLectura(si: boolean): void {
+  try {
+    if (si) localStorage.setItem("soloLectura", "1");
+    else localStorage.removeItem("soloLectura");
+  } catch { /* modo privado */ }
+}
+export function esSoloLectura(): boolean {
+  try { return localStorage.getItem("soloLectura") === "1"; } catch { return false; }
+}
+
 /**
  * A dónde lleva «Home» dentro de la sesión.
  *
@@ -64,6 +75,8 @@ export function esAdminDesbloqueado(): boolean {
  */
 export function rutaHome(): string {
   if (esAdminDesbloqueado()) return "/admin";
+  // Cuenta «solo carta» (pidió su lectura): su casa ES Astrología. Nunca el /home.
+  if (esSoloLectura()) return "/camino/astrologia";
   // Premium APARCADO: return esSoloPremium() ? "/premium/espacio" : "/home";
   return "/home";
 }

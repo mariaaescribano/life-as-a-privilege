@@ -55,6 +55,12 @@ export class RecorridoProgresoService {
   }
 
   async getPasoMax(userId: string, disciplina: string): Promise<number> {
+    // La cuenta «solo carta» (pidió la carta de su lectura) tiene TODO Astrología abierto, para empezar por donde quiera.
+    // Se resuelve aquí y no escribiendo un techo: así su barra de avance no sale ya completa.
+    if (disciplina === 'metodo') {
+      const { data: u } = await this.databaseService.getClient().from('user').select('solo_lectura').eq('id', userId).maybeSingle();
+      if ((u as { solo_lectura?: boolean } | null)?.solo_lectura === true) return 99;
+    }
     const { data, error } = await this.databaseService.getClient()
       .from('recorrido_progreso')
       .select('paso_max')

@@ -7,12 +7,13 @@ import SiteFooter from "../../components/global/Footer";
 import { LifeLoading } from "../../components/global/LifeLoading";
 import { API_URL, FONDO_PAGINA_BEIGE, FONDO_PAGINA_TURQUESA as T } from "../../GlobalVariables";
 import { olvidarPersona } from "../../api/persona";
+import { recordarSoloLectura } from "../../api/sesion";
 import { useT } from "../../i18n";
 
 /**
  * /acceso?token=… — entrar con el botón del correo «Tu carta ya está lista». La cuenta «solo carta» no tiene
  * contraseña: ese enlace es su llave. Se canjea en el backend (`/user/lectura/entrar`); si vale, se guarda la
- * sesión igual que en /logIn y se va al Home. Si no vale, se dice que me escriba (el correo ya lo avisa).
+ * sesión igual que en /logIn y se va directo a su camino de Astrología. Si no vale, se dice que me escriba (el correo ya lo avisa).
  */
 export default function AccesoLectura() {
   const t = useT();
@@ -33,7 +34,9 @@ export default function AccesoLectura() {
         localStorage.setItem("token", data.token);
         localStorage.setItem("img", "/img/icono/noImg.webp");
         olvidarPersona(); // una entrada nueva nunca mira a otra persona
-        navigate("/home", { replace: true });
+        recordarSoloLectura(true);
+        // Directo a SU Astrología (nunca pasa por /home): todo el recorrido está abierto para empezar por donde quiera.
+        navigate("/camino/astrologia", { replace: true });
       } catch {
         if (vivo) setFallo(true);
       }

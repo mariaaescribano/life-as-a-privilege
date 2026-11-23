@@ -121,10 +121,11 @@ export class UserController {
     // cuentas ven las ocho. La excepción es la cuenta «solo carta» (pidió únicamente su lectura): esa sigue sin
     // acceso al resto. Para volver a cerrar: poner DISCIPLINAS_ABIERTAS a false (vuelve a mandar la BD y el acceso libre).
     const DISCIPLINAS_ABIERTAS = true;
-    const abiertas = accesoLibre || (DISCIPLINAS_ABIERTAS && (user as any)?.solo_lectura !== true);
+    const abiertas = accesoLibre || (DISCIPLINAS_ABIERTAS && (extra as any)?.solo_lectura !== true);
     const flagsLibres = abiertas
       ? Object.fromEntries(DISCIPLINAS_ORDEN.map((k) => [`${k}_suscrito`, true]))
-      : {};
+      // Cuenta «solo carta»: tiene abierta ASTROLOGÍA (su carta y todo su recorrido), y solo esa.
+      : (extra as any)?.solo_lectura === true ? { metodo_suscrito: true } : {};
 
     return {
       ...user,

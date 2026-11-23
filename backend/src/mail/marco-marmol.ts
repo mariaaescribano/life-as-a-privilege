@@ -1,4 +1,4 @@
-// El marco de los correos de la casa: el mármol de la web (con sus zonas
+// El marco de los correos de la casa: el mármol de la web (el MISMO de las bandas de Welcome, `marmol-bandas.webp`, exportado a JPG en /img/correo/marmol-correo.jpg: los correos no pintan WebP; si cambia el mármol, regenerarlo) (con sus zonas
 // turquesas) de fondo y, arriba, la cabecera de la web: el mandala turquesa y
 // MARÍA / ESCRIBANO al lado, con su filete debajo. Lo usan la bienvenida de la
 // intro gratuita y todos los correos de `MailService.plantilla`, para que no
@@ -26,16 +26,26 @@ export function webParaImagenes(web: string): string {
 }
 
 /**
+ * La firma de TODOS los correos: «Un abrazo, María», abajo a la derecha. Si el cuerpo ya la lleva (algunos
+ * correos la escriben a su manera), no se repite.
+ */
+export function conFirma(cuerpo: string, tinta: string, serif: string): string {
+  if (/Un abrazo/i.test(cuerpo)) return cuerpo;
+  return `${cuerpo}
+<p style="margin:28px 0 0;font-family:${serif};font-size:17px;line-height:1.75;text-align:right;color:${tinta};">Un abrazo,<br>María</p>`;
+}
+
+/**
  * `web` es la dirección pública de la web (de ahí salen las dos imágenes);
  * `titulo` va grande bajo la cabecera (si va vacío, no se pinta) y `cuerpo` es el HTML de debajo. Debajo
  * del mármol va un `bgcolor` beige por si el cliente de correo no pinta imágenes.
  */
-export function marcoMarmol({ web, titulo, cuerpo }: { web: string; titulo: string; cuerpo: string }): string {
+export function marcoMarmol({ web, titulo, cuerpo, firma = true }: { web: string; titulo: string; cuerpo: string; firma?: boolean }): string {
   const T = TINTA_MARMOL;
   const SERIF = SERIF_CORREO;
   const imagenes = webParaImagenes(web);
-  const fondo = `${imagenes}/img/correo/marmol-bienvenida.jpg`;
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#efe5cf" background="${fondo}" style="max-width:600px;margin:0 auto;border-radius:16px;background-color:#efe5cf;background-image:url('${fondo}');background-size:cover;background-position:center;">
+  const fondo = `${imagenes}/img/correo/marmol-correo.jpg`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#efe5cf" background="${fondo}" style="max-width:600px;margin:0 auto;border-radius:16px;background-color:#efe5cf;background-image:url('${fondo}');background-size:100% 100%;background-position:center;background-repeat:no-repeat;">
 <tr><td style="padding:44px 40px 12px;font-family:${SERIF};">
   <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
     <td style="padding-right:14px;vertical-align:middle;"><img src="${imagenes}/img/correo/mandala-turquesa.png" width="58" height="58" alt="" style="display:block;border:0;"></td>
@@ -45,6 +55,6 @@ export function marcoMarmol({ web, titulo, cuerpo }: { web: string; titulo: stri
 </td></tr>
 <tr><td style="padding:22px 40px 40px;font-family:${SERIF};color:${T};">
 ${titulo ? `<h1 style="margin:0 0 20px;font-size:30px;line-height:1.25;letter-spacing:0.03em;font-weight:700;color:${T};">${titulo}</h1>
-` : ''}${cuerpo}
+` : ''}${firma ? conFirma(cuerpo, T, SERIF) : cuerpo}
 </td></tr></table>`;
 }

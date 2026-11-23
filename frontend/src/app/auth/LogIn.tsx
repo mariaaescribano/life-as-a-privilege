@@ -1,6 +1,7 @@
 // LogIn.tsx
 import { MandalaTinte } from "../../components/global/MandalaTinte";
 import { olvidarPersona } from "../../api/persona";
+import { recordarSoloLectura } from "../../api/sesion";
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Input, Spinner, Text, VStack } from "@chakra-ui/react";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -156,6 +157,7 @@ export default function LogIn() {
             headers: { Authorization: `Bearer ${response.data?.token}` },
           });
           localStorage.removeItem("isAdmin");
+          recordarSoloLectura(me.data?.solo_lectura === true);
           if (me.data?.admin_email && next === "/home") {
             destinoRef.current = "/admin/login";
           }

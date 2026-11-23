@@ -603,7 +603,8 @@ export class UserService {
   }
 
   /**
-   * El correo con el botón de entrar de una cuenta «SOLO CARTA» (sin contraseña). Solo vale para esas cuentas.
+   * El correo «Tu carta ya está lista». En una cuenta «SOLO CARTA» (sin contraseña) lleva el botón-llave; en una cuenta
+   * normal, el aviso con el enlace al login.
    * Devuelve si el correo ha salido de verdad.
    */
   async enviarAccesoLectura(userId: string): Promise<boolean> {
@@ -611,10 +612,14 @@ export class UserService {
       .from("user").select("id, name, email, password, solo_lectura").eq("id", userId).limit(1);
     const u = rows?.[0] as { id: string; name: string; email: string; password: string; solo_lectura?: boolean } | undefined;
     if (!u) throw new NotFoundException("Esa cuenta no existe");
-    if (u.solo_lectura !== true) throw new ConflictException("Esa cuenta no es de solo carta");
-    const enlace = `${webParaCorreos()}/acceso?token=${encodeURIComponent(crearTokenAccesoLectura(u.id, u.password))}`;
+    // Cuenta «solo carta» (sin contraseña): el botón del correo ES su llave. Cuenta normal (ya tiene contraseña, p. ej.
+    // alguien que ya era alumna o la propia María): el correo solo avisa y lleva al login de siempre.
+    const conLlave = u.solo_lectura === true;
+    const enlace = conLlave
+      ? `${webParaCorreos()}/acceso?token=${encodeURIComponent(crearTokenAccesoLectura(u.id, u.password))}`
+      : `${webParaCorreos()}/logIn`;
     try {
-      return (await this.mailService.enviarAccesoLectura(u.email, u.name ?? "", enlace)) === true;
+      return (await this.mailService.enviarAccesoLectura(u.email, u.name ?? "", enlace, conLlave)) === true;
     } catch (err) {
       console.error("[acceso-lectura] no se pudo enviar el correo:", err);
       return false;
@@ -938,6 +943,12 @@ export class UserService {
     // `en_sesiones` (sql/user-en-sesiones.sql) dice si es una cuenta de asesoría: sus
     // datos personales los fija María y la persona solo los ve. Si esa columna aún
     // no existe, se pide sin ella para no perder el resto.
+    // `solo_lectura` (sql/user-solo-lectura.sql): la cuenta «solo carta». Sin ella, /user/me no lo decía y a esa cuenta
+    // se le abrían todas las disciplinas y no se la mandaba a su Astrología.
+    const conSolo = await db.from('user')
+      .select('telefono, fecha_nacimiento, comunidad_popup_visto, en_sesiones, solo_lectura')
+      .eq('id', id).maybeSingle();
+    if (!conSolo.error && conSolo.data) return conSolo.data;
     const con = await db.from('user')
       .select('telefono, fecha_nacimiento, comunidad_popup_visto, en_sesiones')
       .eq('id', id).maybeSingle();

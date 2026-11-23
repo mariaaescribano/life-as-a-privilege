@@ -3,6 +3,7 @@ import type Stripe from 'stripe';
 import { DatabaseService } from '../database.service';
 import { MailService } from '../mail/mail.service';
 import { UserService } from '../user/user.service';
+import { MetodoAstrologiaService } from '../metodoAstrologia/metodoAstrologia.service';
 import { ESTADOS_LECTURA, findLectura, LecturaEstado } from './lectura.data';
 
 const TABLE = 'lectura_pedido';
@@ -22,7 +23,24 @@ export class LecturaService {
     private readonly db: DatabaseService,
     private readonly mail: MailService,
     private readonly users: UserService,
+    // Opcional a propósito (los tests no lo montan): sin él, simplemente no se precarga la carta.
+    private readonly astrologia?: MetodoAstrologiaService,
   ) {}
+
+  /**
+   * La cuenta de «plataforma» entra en un recorrido de Astrología que ya tiene SU carta: se le guardan (y se calcula la
+   * carta con) los datos de nacimiento que dio al pedir, para que no tenga que escribirlos otra vez. No manda ningún
+   * correo ni abre nada. Por detrás y sin romper nada: si falla (p. ej. el geocoding), el pedido y la cuenta siguen bien.
+   */
+  private precargarCarta(userId: string, d: { fecha: string; hora: string; lugar: string }): void {
+    if (!this.astrologia) return;
+    // El formulario manda el lugar como «ciudad, región, país».
+    const partes = d.lugar.split(',').map((x) => x.trim()).filter(Boolean);
+    const [lugar, region, pais] = partes.length >= 3 ? [partes[0], partes[1], partes.slice(2).join(', ')] : [d.lugar, '', ''];
+    void this.astrologia
+      .guardarNacimientoAdmin(userId, { fecha_nacimiento: d.fecha, hora_nacimiento: d.hora, lugar, region, pais })
+      .catch((err) => console.error('[lectura] no se pudo precargar la carta:', err instanceof Error ? err.message : err));
+  }
 
   /** Valida lo que manda el formulario (TODOS los datos de nacimiento son obligatorios) y lo deja limpio. */
   validar(body: Partial<Record<keyof DatosLectura | 'acepta', unknown>>): DatosLectura {
@@ -85,16 +103,20 @@ export class LecturaService {
     }
     const id = (ins as { id: string }).id;
 
-    try {
-      const cuenta = await this.users.crearCuentaLectura({ name: m.nombre, email: m.email });
-      await client.from(TABLE).update({ user_id: cuenta.id }).eq('id', id);
-    } catch (err) {
-      console.error('[lectura] pedido guardado pero no se pudo crear la cuenta:', err);
+    // Solo «plataforma» da entrada a la cuenta (Astrología). Las cartas en PDF se entregan por correo: sin cuenta.
+    if (tarifa.servicio === 'plataforma') {
+      try {
+        const cuenta = await this.users.crearCuentaLectura({ name: m.nombre, email: m.email });
+        await client.from(TABLE).update({ user_id: cuenta.id }).eq('id', id);
+        this.precargarCarta(cuenta.id, { fecha: m.fecha, hora: m.hora, lugar: m.lugar });
+      } catch (err) {
+        console.error('[lectura] pedido guardado pero no se pudo crear la cuenta:', err);
+      }
     }
 
     // Un solo correo a la persona, con sus datos: a ella le llega la confirmación y a María la copia oculta con lo mismo.
     void this.mail
-      .enviarLecturaRecibida(m.email, m.nombre, tarifa.nombre, { fecha: m.fecha, hora: m.hora, lugar: m.lugar })
+      .enviarLecturaRecibida(m.email, m.nombre, tarifa.nombre, { fecha: m.fecha, hora: m.hora, lugar: m.lugar }, tarifa.servicio === 'plataforma')
       .catch((e) => console.error('[lectura] correo de confirmación:', e));
     return { ok: true, nombre: m.nombre, creado: true };
   }
@@ -137,11 +159,14 @@ export class LecturaService {
       throw new BadRequestException('No se pudo crear la carta');
     }
     const id = (ins as { id: string }).id;
-    try {
-      const cuenta = await this.users.crearCuentaLectura({ name: d.nombre, email: d.email });
-      await client.from(TABLE).update({ user_id: cuenta.id }).eq('id', id);
-    } catch (err) {
-      console.error('[lectura] pedido creado pero no se pudo crear la cuenta:', err);
+    if (tarifa.servicio === 'plataforma') {
+      try {
+        const cuenta = await this.users.crearCuentaLectura({ name: d.nombre, email: d.email });
+        await client.from(TABLE).update({ user_id: cuenta.id }).eq('id', id);
+        this.precargarCarta(cuenta.id, { fecha: d.fecha, hora: d.hora, lugar: d.lugar });
+      } catch (err) {
+        console.error('[lectura] pedido creado pero no se pudo crear la cuenta:', err);
+      }
     }
     return { id };
   }

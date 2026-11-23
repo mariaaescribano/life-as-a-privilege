@@ -44,14 +44,24 @@ describe('LecturaService.validar', () => {
 });
 
 describe('LecturaService.confirmarPago', () => {
-  it('crea el pedido, la cuenta SIN acceso y el correo, una vez', async () => {
+  it('«plataforma»: crea el pedido, la cuenta SIN acceso y el correo (avisando de que pronto podrá entrar), una vez', async () => {
     const { service, users, mail, tabla } = montar();
-    const r = await service.confirmarPago(sesion());
+    const r = await service.confirmarPago(sesion({ servicio: 'plataforma' }));
     expect(r).toMatchObject({ ok: true, creado: true });
-    expect(tabla.insert).toHaveBeenCalledWith(expect.objectContaining({ precio_centimos: 3000, stripe_session_id: 'cs_1' }));
+    expect(tabla.insert).toHaveBeenCalledWith(expect.objectContaining({ precio_centimos: 3500, stripe_session_id: 'cs_1' }));
     expect(users.crearCuentaLectura).toHaveBeenCalledTimes(1);
     expect(users.enviarAccesoLectura).not.toHaveBeenCalled(); // sin acceso hasta que la admin lo mande
     expect(mail.enviarLecturaRecibida).toHaveBeenCalledTimes(1);
+    expect(mail.enviarLecturaRecibida.mock.calls[0][4]).toBe(true); // con cuenta
+  });
+  it('carta en PDF: pedido y correo de confirmación, pero SIN cuenta', async () => {
+    const { service, users, mail, tabla } = montar();
+    const r = await service.confirmarPago(sesion()); // pdf_completo
+    expect(r).toMatchObject({ ok: true, creado: true });
+    expect(tabla.insert).toHaveBeenCalledWith(expect.objectContaining({ precio_centimos: 3000, stripe_session_id: 'cs_1' }));
+    expect(users.crearCuentaLectura).not.toHaveBeenCalled();
+    expect(mail.enviarLecturaRecibida).toHaveBeenCalledTimes(1);
+    expect(mail.enviarLecturaRecibida.mock.calls[0][4]).toBe(false); // sin cuenta
   });
   it('si el pedido ya existe (verify + webhook), no repite nada', async () => {
     const { service, users, mail } = montar({ previo: { id: 'p1', nombre: 'Ana' } });

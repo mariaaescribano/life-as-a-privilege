@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
-import { marcoMarmol, TINTA_MARMOL, webParaImagenes } from './marco-marmol';
+import { marcoMarmol, conFirma, TINTA_MARMOL, webParaImagenes } from './marco-marmol';
 
 // Destinatario de las solicitudes de carta astral (lecturas de /metodo/astrologia).
 // Usa NOTIFY_EMAIL (igual que contacto/reservas/suscripción); el hardcode solo
@@ -148,6 +148,11 @@ export class MailService {
    *  los de Astrología siguen con su propio diseño. */
   private plantilla(titulo: string, cuerpo: string): string {
     return marcoMarmol({ web: this.frontendUrl, titulo, cuerpo });
+  }
+
+  /** Igual que `plantilla`, pero SIN la firma «Un abrazo, María»: para los avisos que te llegan a ti misma. */
+  private plantillaInterna(titulo: string, cuerpo: string): string {
+    return marcoMarmol({ web: this.frontendUrl, titulo, cuerpo, firma: false });
   }
 
   /**
@@ -365,7 +370,9 @@ export class MailService {
         to,
         bcc: copia,
         subject,
-        html,
+        // Marca invisible y distinta en cada envío, AL FINAL: Gmail esconde bajo «…» el final de un correo cuando
+        // repite al pie lo mismo que otro de la misma conversación (la firma, el pie). Con esto el final nunca coincide.
+        html: `${html}<div style="display:none;max-height:0;overflow:hidden;font-size:0;line-height:0;color:transparent;mso-hide:all;">${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}</div>`,
         attachments: [
           ...(opciones?.imagenes ?? []).map((img) => ({
             filename: img.nombre,
@@ -777,6 +784,7 @@ export class MailService {
     nombre: string,
     servicio: string,
     nacimiento: { fecha: string; hora: string; lugar: string },
+    conCuenta = true,
   ): Promise<boolean> {
     const [y, m, d] = nacimiento.fecha.split('-');
     const html = this.plantilla(
@@ -794,8 +802,9 @@ export class MailService {
           ['Lugar de nacimiento', this.escaparHtml(nacimiento.lugar)],
         ])}
         <p style="font-size: 16px; line-height: 1.7; margin-top: 22px; opacity: 0.92;">
-          Voy a escribir tu carta con calma. Hasta que esté lista no tendrás acceso a tu cuenta: cuando la tenga
-          terminada te escribiré con el enlace para entrar.
+          ${conCuenta
+            ? 'Voy a escribir tu carta con calma. Muy pronto podrás entrar en tu cuenta: cuando la tenga terminada te escribiré con el enlace para entrar.'
+            : 'Voy a escribir tu carta con calma. Cuando la tenga terminada te la haré llegar por correo.'}
         </p>
         <p style="font-size: 14px; line-height: 1.6; margin-top: 14px; opacity: 0.8;">
           Si algún dato no es correcto, responde a este correo y lo corregimos antes de empezar.
@@ -810,7 +819,7 @@ export class MailService {
    * este botón es su llave (ver `crearTokenAccesoLectura`), así que el correo le pide que no lo pierda y, si pasa,
    * que me escriba. Sale desde /admin/lecturas con «Enviar acceso». Copia oculta a María.
    */
-  async enviarAccesoLectura(email: string, nombre: string, enlace: string): Promise<boolean> {
+  async enviarAccesoLectura(email: string, nombre: string, enlace: string, conLlave = true): Promise<boolean> {
     const nombreSeguro = this.escaparHtml(nombre).trim();
     const parrafo = (texto: string) =>
       `<p style="font-size: 16px; line-height: 1.75; opacity: 0.92;">${texto}</p>`;
@@ -818,13 +827,15 @@ export class MailService {
       "Tu carta ya está lista",
       `
         ${parrafo(nombreSeguro ? `Hola <strong>${nombreSeguro}</strong>, tu carta ya está lista.` : "Hola, tu carta ya está lista.")}
-        ${parrafo("Entra en tu cuenta con el botón de abajo. No necesitas contraseña: este correo es tu llave.")}
+        ${parrafo(conLlave
+          ? "Entra en tu cuenta con el botón de abajo. No necesitas contraseña: este correo es tu llave."
+          : "Entra en tu cuenta con el botón de abajo, con tu contraseña de siempre.")}
         <p style="margin: 28px 0;">
           ${this.pildora(enlace, "Entrar en mi cuenta")}
         </p>
-        <p style="font-size: 15px; line-height: 1.7; padding: 14px 18px; background: rgba(0,79,79,0.08); border-radius: 12px;">
+        ${conLlave ? `<p style="font-size: 15px; line-height: 1.7; padding: 14px 18px; background: rgba(0,79,79,0.08); border-radius: 12px;">
           <strong>No pierdas este correo.</strong> Es la única forma de entrar en tu cuenta. Si lo pierdes, ponte en contacto conmigo y te mando otro.
-        </p>
+        </p>` : ""}
         <p style="font-size: 13px; line-height: 1.6; opacity: 0.75;">
           Si el botón no te funciona, copia esta dirección en tu navegador:<br />
           <a href="${enlace}" style="color:${TINTA_MARMOL};text-decoration:underline;word-break:break-all;">${enlace}</a>
@@ -867,7 +878,7 @@ export class MailService {
     nombre: string,
     opciones?: { conGoogle?: boolean },
   ): Promise<void> {
-    const html = this.plantilla(
+    const html = this.plantillaInterna(
       'Cuenta nueva',
       `
         <p style="font-size: 16px; line-height: 1.7; opacity: 0.92;">
@@ -888,7 +899,7 @@ export class MailService {
   // Alguien ha PAGADO una disciplina de El Recorrido. Este es el correo que
   // dice que ha entrado dinero; sale una sola vez por compra.
   async enviarAvisoCompra(email: string, nombre: string, disciplina: string): Promise<void> {
-    const html = this.plantilla(
+    const html = this.plantillaInterna(
       'Disciplina pagada',
       `
         <p style="font-size: 16px; line-height: 1.7; opacity: 0.92;">
@@ -917,7 +928,7 @@ export class MailService {
   // (queda apuntado en metodo_astrologia.data.aviso_arquetipos_at) y solo si
   // la lectura no está escrita todavía (sin puntos clave y sin enlace).
   async enviarAvisoArquetiposLeidos(email: string, nombre: string, userId: string): Promise<void> {
-    const html = this.plantilla(
+    const html = this.plantillaInterna(
       'Le toca su carta astral',
       `
         <p style="font-size: 16px; line-height: 1.7; opacity: 0.92;">
@@ -986,7 +997,7 @@ export class MailService {
     nombre: string,
     datos: { edad: number | null; telefono: string | null; felicitado: boolean },
   ): Promise<void> {
-    const html = this.plantilla(
+    const html = this.plantillaInterna(
       'Hoy es su cumpleaños',
       `
         <p style="font-size: 16px; line-height: 1.7; opacity: 0.92;">
@@ -1097,7 +1108,7 @@ export class MailService {
         <!-- Cuerpo -->
         <tr>
           <td style="padding:22px 44px 42px;font-family:${serif};">
-            ${cuerpo}
+            ${conFirma(cuerpo, c.tinta, serif)}
           </td>
         </tr>
       </table>

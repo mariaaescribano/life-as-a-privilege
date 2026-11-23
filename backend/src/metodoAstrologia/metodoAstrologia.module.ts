@@ -10,5 +10,6 @@ import { UsersModule } from '../user/user.module';
   imports: [MailModule, UsersModule],
   controllers: [MetodoAstrologiaController],
   providers: [MetodoAstrologiaService, CartaNatalService, DatabaseService],
+  exports: [MetodoAstrologiaService],
 })
 export class MetodoAstrologiaModule {}
