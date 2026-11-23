@@ -1210,7 +1210,7 @@ export class MailService {
 
     // YYYY-MM-DD → DD-MM-YYYY (si no viene en ese formato, se deja tal cual).
     const fechaLegible = /^\d{4}-\d{2}-\d{2}/.test(datos.fecha_nacimiento)
-      ? datos.fecha_nacimiento.slice(0, 10).split('-').reverse().join('-')
+      ? datos.fecha_nacimiento.slice(0, 10).split('-').reverse().join('/')
       : datos.fecha_nacimiento;
     const lugarLegible = [datos.lugar, datos.region, datos.pais]
       .map((s) => (s ?? '').trim())
@@ -1473,7 +1473,7 @@ export class MailService {
 
     // YYYY-MM-DD → DD-MM-YYYY (si no viene en ese formato, se deja tal cual).
     const fechaLegible = /^\d{4}-\d{2}-\d{2}/.test(datos.fecha_nacimiento)
-      ? datos.fecha_nacimiento.slice(0, 10).split('-').reverse().join('-')
+      ? datos.fecha_nacimiento.slice(0, 10).split('-').reverse().join('/')
       : datos.fecha_nacimiento;
 
     const html = `

@@ -11,7 +11,8 @@ import SuccessErrorMessage from "../../components/global/SuccessErrorMessage";
 import type { CreateUser, Trato } from "../../dtos/user.types";
 import { gestionaError } from "../../GlobalHelper";
 import SiteFooter from "../../components/global/Footer";
-import { CampoContrasena, inputAuthStyles, inputFechaSx, focoAzul } from "../../components/global/CampoContrasena";
+import { CampoContrasena, inputAuthStyles, focoAzul } from "../../components/global/CampoContrasena";
+import { mascaraDMA, dmaAIso } from "../../utils/fechas";
 import { useT } from "../../i18n";
 import { MiraTuCorreoModal } from "../../components/global/MiraTuCorreoModal";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
@@ -227,6 +228,8 @@ export default function SignIn() {
   // Opcionales: teléfono y fecha de nacimiento (para el regalo de cumpleaños).
   const [telefono, setTelefono] = useState<string>("");
   const [fechaNacimiento, setFechaNacimiento] = useState<string>("");
+  // Lo que se teclea: día/mes/año. `fechaNacimiento` guarda la ISO (aaaa-mm-dd) que espera el servidor.
+  const [fechaTxt, setFechaTxt] = useState<string>("");
   // Condiciones: casilla obligatoria; el texto completo, en el popup de «saber más».
   const [acepta, setAcepta] = useState(false);
   const [condicionesOpen, setCondicionesOpen] = useState(false);
@@ -472,14 +475,18 @@ export default function SignIn() {
               <Etiqueta>{t("auth.campo.fechaNacimiento")}</Etiqueta>
               <Input
                 ref={fechaRef}
-                type="date"
+                inputMode="numeric"
                 autoComplete="bday"
-                max={new Date().toISOString().slice(0, 10)}
-                value={fechaNacimiento}
-                onChange={(e) => setFechaNacimiento(e.target.value)}
+                placeholder="día/mes/año"
+                maxLength={10}
+                value={fechaTxt}
+                onChange={(e) => {
+                  const txt = mascaraDMA(e.target.value);
+                  setFechaTxt(txt);
+                  setFechaNacimiento(dmaAIso(txt) ?? "");
+                }}
                 onKeyDown={saltarA(contraRef)}
                 {...inputStyles}
-                sx={inputFechaSx}
               />
             </Box>
             )}

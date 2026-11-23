@@ -10,8 +10,8 @@ import { salirDeLaPersona, personaActiva, cabeceraPersona } from "../../api/pers
 import { encogerFoto } from "../../utils/encogerFoto";
 import { LifeLoader } from "../../components/metodo/comicLoaders";
 
-import { inputFechaSx, inputAuthStyles } from "../../components/global/CampoContrasena";
-import { fechaDMA } from "../../utils/fechas";
+import { inputAuthStyles } from "../../components/global/CampoContrasena";
+import { fechaDMA, mascaraDMA, dmaAIso } from "../../utils/fechas";
 
 /** Años cumplidos a partir de la fecha (ISO), o null si no hay fecha válida.
  *  El mismo cálculo que la columna «Edad» de /admin/usuarios. */
@@ -46,6 +46,8 @@ export default function UserAccount() {
   const [contra, setContra] = useState("");
   const [telefono, setTelefono] = useState("");
   const [fechaNacimiento, setFechaNacimiento] = useState("");
+  // Lo que se ve y se teclea: día/mes/año. `fechaNacimiento` guarda la ISO (aaaa-mm-dd) que espera el servidor.
+  const [fechaTxt, setFechaTxt] = useState("");
   // Cuenta de asesoría: sus datos personales los fija María; aquí solo se ven.
   const [soloLectura, setSoloLectura] = useState(false);
   const [nacCarta, setNacCarta] = useState<{ hora: string; lugar: string }>({ hora: "", lugar: "" });
@@ -78,6 +80,7 @@ export default function UserAccount() {
         setIsAdmin(!!u.is_admin);
         setTelefono(u.telefono ?? "");
         setFechaNacimiento(u.fecha_nacimiento ?? "");
+        setFechaTxt(fechaDMA(u.fecha_nacimiento) ?? "");
         setSoloLectura(u.en_sesiones === true);
         initialRef.current = {
           name: u.name ?? "",
@@ -423,13 +426,18 @@ export default function UserAccount() {
                 <Input value={fechaDMA(fechaNacimiento) ?? ""} {...inputStyles} isReadOnly {...SOLO_LECTURA} />
               ) : (
                 <Input
-                  type="date"
+                  inputMode="numeric"
                   autoComplete="bday"
-                  max={new Date().toISOString().slice(0, 10)}
-                  value={fechaNacimiento}
-                  onChange={(e) => setFechaNacimiento(e.target.value)}
+                  placeholder="día/mes/año"
+                  maxLength={10}
+                  value={fechaTxt}
+                  onChange={(e) => {
+                    const txt = mascaraDMA(e.target.value);
+                    setFechaTxt(txt);
+                    // Completa y válida → ISO; incompleta → vacía (no se guarda a medias).
+                    setFechaNacimiento(dmaAIso(txt) ?? "");
+                  }}
                   {...inputStyles}
-                  sx={inputFechaSx}
                 />
               )}
             </Flex>
