@@ -277,25 +277,24 @@ export default function AdminAstrologiaTextos() {
           {/* ── Cabecera ── */}
           <Flex align="flex-start" justify="space-between" gap={4} wrap="wrap">
             <Box>
-              <Text color="white" fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700"
-                    style={{ textShadow: "0 0 14px rgba(255,255,255,0.4)" }}>
+              <Text color="#005F5F" fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700">
                 Interpretaciones de la carta
               </Text>
-              <Text color="rgba(255,255,255,0.75)" fontSize="sm">
+              <Text color="#005F5F" fontSize="sm">
                 Arquetipos del mapa · {totalPrivadas} privada{totalPrivadas === 1 ? "" : "s"} · {totalPublicas} pública{totalPublicas === 1 ? "" : "s"}
               </Text>
             </Box>
             <Box as="button" onClick={guardando || !hayCambios ? undefined : onGuardar}
                  px={7} py={2.5} borderRadius="full"
-                 bg={hayCambios ? "white" : "rgba(255,255,255,0.12)"}
-                 color={hayCambios ? "#008080" : "rgba(255,255,255,0.6)"}
+                 bg={hayCambios ? "#005F5F" : "transparent"}
+                 color={hayCambios ? "#F0DCC0" : "#005F5F99"}
                  fontWeight="700" fontSize="sm" letterSpacing="0.03em"
-                 border="1.5px solid rgba(255,255,255,0.5)"
+                 border={hayCambios ? "1.5px solid #005F5F" : "1.5px solid #005F5F55"}
                  cursor={guardando ? "wait" : hayCambios ? "pointer" : "default"}
                  opacity={guardando ? 0.6 : 1}
-                 boxShadow={hayCambios ? "0 4px 20px rgba(255,255,255,0.25)" : "none"}
                  transition="all 0.2s"
-                 _hover={guardando || !hayCambios ? {} : { transform: "translateY(-2px)" }}>
+                 _hover={guardando || !hayCambios ? {} : { bg: "#004a4a", transform: "translateY(-1px)" }}
+                 _focusVisible={{ outline: "2px solid #005F5Fcc", outlineOffset: "2px" }}>
               {guardando ? "Guardando…" : hayCambios ? "Guardar cambios" : "Sin cambios"}
             </Box>
           </Flex>
@@ -308,16 +307,16 @@ export default function AdminAstrologiaTextos() {
               return (
                 <Flex key={c.key} as="button" onClick={() => seleccionarCuerpo(c.key)}
                       align="center" gap={2} px={3} py={2} borderRadius="xl"
-                      bg={activo ? `${c.color}22` : "rgba(255,255,255,0.05)"}
-                      border={`1.5px solid ${activo ? c.color : "rgba(255,255,255,0.15)"}`}
+                      bg={activo ? "#005F5F14" : "transparent"}
+                      border={`1.5px solid ${activo ? "#005F5F" : "#005F5F55"}`}
                       cursor="pointer" transition="all 0.18s"
-                      boxShadow={activo ? `0 0 16px ${c.color}55` : "none"}
-                      _hover={{ borderColor: `${c.color}aa`, bg: `${c.color}18` }}>
+                      _hover={{ borderColor: "#005F5F", bg: "#005F5F14" }}
+                      _focusVisible={{ outline: "2px solid #005F5Fcc", outlineOffset: "2px" }}>
                   <Glifo symbol={c.symbol} color={c.color} size={20} />
-                  <Text color={activo ? c.color : "rgba(255,255,255,0.85)"} fontSize="sm" fontWeight={activo ? "700" : "500"}>
+                  <Text color="#005F5F" fontSize="sm" fontWeight={activo ? "700" : "500"}>
                     {c.label}
                   </Text>
-                  <Text color={`${c.color}cc`} fontSize="xs" fontWeight="700">{prog}/12</Text>
+                  <Text color="#005F5Fb3" fontSize="xs" fontWeight="700">{prog}/12</Text>
                 </Flex>
               );
             })}
@@ -325,8 +324,7 @@ export default function AdminAstrologiaTextos() {
 
           {/* ── Caja estrellada con la rejilla + editor ── */}
           <Box position="relative" borderRadius="2xl" overflow="hidden"
-               border={`1px solid ${color}44`}
-               boxShadow={`0 0 22px ${color}1a, 0 0 60px rgba(0,0,0,0.3)`}>
+               border="1.5px solid #005F5F">
             <SpaceBg overlay="rgba(8,13,30,0.38)" />
 
             <Flex position="relative" zIndex={1} direction="column" gap={5} p={{ base: 4, md: 7 }}>

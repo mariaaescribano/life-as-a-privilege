@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
-  Box, Flex, Text, Image, Badge, Input, Textarea, Select, Checkbox,
+  Box, Flex, Text, Badge, Input, Textarea, Select, Checkbox,
   Modal, ModalOverlay, ModalContent, ModalCloseButton,
   useToast,
 } from "@chakra-ui/react";
@@ -11,8 +11,9 @@ import SiteFooter from "../../components/global/Footer";
 import { LifeLoading } from "../../components/global/LifeLoading";
 import { LifeLoader } from "../../components/metodo/comicLoaders";
 import { useAdminGuard, adminHeaders } from "./useAdminGuard";
-import { API_URL } from "../../GlobalVariables";
+import { API_URL, FONDO_PAGINA_TURQUESA as T } from "../../GlobalVariables";
 import { DISCIPLINAS_CURSO, disciplinaCursoBySlug } from "../../data/disciplinasCurso";
+import { MandalaTurquesa } from "./PildorasAdmin";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
 
 interface CursoRow {
@@ -86,6 +87,18 @@ async function copiarAlPortapapeles(texto: string): Promise<boolean> {
     }
   }
 }
+
+// Foco de teclado sobre el beige (el focoBlanco no se ve).
+const focoT = { outline: "2px solid #005F5Fcc", outlineOffset: "2px" } as const;
+// Campos de los popups.
+const campoSx = {
+  bg: "#F7EBD9", border: "1.5px solid #005F5F66", color: T, borderRadius: "lg",
+  _placeholder: { color: "#005F5F8c" }, _hover: { borderColor: "#005F5Faa" },
+  _focus: { borderColor: T, boxShadow: "none" }, _focusVisible: { borderColor: T, boxShadow: "none" },
+} as const;
+// Botón secundario (contorno) y principal (relleno), en turquesa oscuro.
+const btnSec = { color: T, bg: "transparent", border: `1.5px solid ${T}`, _hover: { bg: "#005F5F14" }, _focusVisible: focoT } as const;
+const btnPri = { color: "#F0DCC0", bg: T, border: `1.5px solid ${T}`, _hover: { bg: "#004a4a" }, _focusVisible: focoT } as const;
 
 const btnStyle = {
   fontFamily: "'EB Garamond', serif", fontWeight: 700, letterSpacing: "0.06em",
@@ -186,19 +199,26 @@ export default function AdminCursos() {
   // Una fila de curso, con el fondo y el icono de su disciplina.
   const renderFila = (c: CursoRow) => {
     const disc = disciplinaCursoBySlug(c.modalidad);
-    const color = disc?.color ?? "#ffffff";
+    const hasBg = !!disc && hasDisciplinaBg(disc.nom);
+    // Con foto de disciplina se conservan sus colores; sin foto, turquesa oscuro sobre el beige.
+    const color = hasBg ? (disc?.color ?? "#ffffff") : T;
     const bg = disc?.bg ?? "#003535";
     const Icon = disc?.Icon;
-    const hasBg = !!disc && hasDisciplinaBg(disc.nom);
-    const tShadow = `0 1px 4px ${bg}, 0 0 10px ${bg}, 0 0 20px ${bg}`;
+    const tShadow = hasBg ? `0 1px 4px ${bg}, 0 0 10px ${bg}, 0 0 20px ${bg}` : "none";
+    // Botones: sobre la foto, translúcidos oscuros con letra blanca; sobre el beige, turquesa.
+    const bSec = hasBg
+      ? { color: "white", bg: "rgba(0,0,0,0.28)", border: "1px solid rgba(255,255,255,0.4)", _hover: { borderColor: "white" } }
+      : btnSec;
+    const bPri = hasBg ? { color: "#008080", bg: "rgba(255,255,255,0.92)", _hover: { bg: "white" } } : btnPri;
     return (
-      <Box key={c.id} position="relative" overflow="hidden" borderRadius="xl" bg="#05403f"
-           boxShadow={`0 0 18px rgba(255,255,255,0.22), 0 0 45px rgba(255,255,255,0.1), 0 0 78px rgba(180,255,245,0.14), 0 0 28px ${color}40`}>
+      <Box key={c.id} position="relative" overflow="hidden" borderRadius="xl"
+           bg={hasBg ? "#05403f" : "transparent"} border={hasBg ? undefined : `1.5px solid ${T}`}
+           boxShadow={hasBg ? `0 0 28px ${color}40` : undefined}>
         {hasBg && disc && <DisciplinaBgLayer nom={disc.nom} borderRadius="xl" />}
         <Flex position="relative" zIndex={1} align="center" gap={3} p={{ base: 4, md: 5 }} flexWrap="wrap">
           {Icon && (
             <Flex flexShrink={0} w={{ base: "42px", md: "48px" }} h={{ base: "42px", md: "48px" }} borderRadius="full"
-                  align="center" justify="center" bg={`${color}1c`} border={`2px solid ${color}`} boxShadow={`0 0 12px ${color}88`}>
+                  align="center" justify="center" bg={`${color}1c`} border={`2px solid ${color}`} boxShadow={hasBg ? `0 0 12px ${color}88` : undefined}>
               <Icon size="26px" />
             </Flex>
           )}
@@ -222,32 +242,30 @@ export default function AdminCursos() {
             title="Marca los cursos que ya has revisado (solo lo ves tú)"
             sx={{
               "& .chakra-checkbox__label": {
-                color: "white", fontWeight: 700, fontSize: "sm", textShadow: tShadow,
+                color: hasBg ? "white" : T, fontWeight: 700, fontSize: "sm", textShadow: tShadow,
               },
               "& .chakra-checkbox__control": {
-                borderColor: "rgba(255,255,255,0.7)", bg: "rgba(0,0,0,0.28)",
+                borderColor: hasBg ? "rgba(255,255,255,0.7)" : T, bg: hasBg ? "rgba(0,0,0,0.28)" : "#F7EBD9",
               },
             }}
           >
             Revisado
           </Checkbox>
           <Box as="button" onClick={() => copiarCurso(c)} {...btnStyle}
-               color="white" bg="rgba(0,0,0,0.28)" border="1px solid rgba(255,255,255,0.4)" px={4} py="7px" fontSize="sm"
-               _hover={{ borderColor: "white" }} title="Copiar todo el texto del curso al portapapeles">
+               {...bSec} px={4} py="7px" fontSize="sm" title="Copiar todo el texto del curso al portapapeles">
             ⧉ Copiar texto
           </Box>
           <Box as="button" onClick={() => toggleCompletado(c)} {...btnStyle}
-               color="white" bg="rgba(0,0,0,0.28)" border="1px solid rgba(255,255,255,0.4)" px={4} py="7px" fontSize="sm"
-               _hover={{ borderColor: "white" }}>
+               {...bSec} px={4} py="7px" fontSize="sm">
             {c.completado ? "↩ Reabrir" : "✓ Completar"}
           </Box>
           <Box as="button" onClick={() => navigate(`/admin/cursos/${c.id}`)} {...btnStyle}
-               color="#008080" bg="rgba(255,255,255,0.92)" px={5} py="8px" fontSize="sm" _hover={{ bg: "white" }}>
+               {...bPri} px={5} py="8px" fontSize="sm">
             Editar
           </Box>
           <Box as="button" onClick={() => setABorrar(c)} {...btnStyle}
-               color="white" bg="rgba(0,0,0,0.28)" border="1px solid rgba(255,255,255,0.4)" px={4} py="7px" fontSize="sm"
-               _hover={{ borderColor: "#ff8a8a", color: "#ff8a8a" }}>
+               {...bSec} px={4} py="7px" fontSize="sm"
+               _hover={hasBg ? { borderColor: "#ff8a8a", color: "#ff8a8a" } : { bg: "#b3261e14", borderColor: "#b3261e", color: "#b3261e" }}>
             Borrar
           </Box>
         </Flex>
@@ -259,17 +277,17 @@ export default function AdminCursos() {
   const Seccion = ({ titulo, list }: { titulo: string; list: CursoRow[] }) => (
     <Box mb={{ base: 10, md: 12 }}>
       <Flex align="center" gap={4} mb={{ base: 5, md: 6 }}>
-        <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.08em"
-              textTransform="uppercase" whiteSpace="nowrap" textShadow="0 0 12px rgba(255,255,255,0.5)">
+        <Text color={T} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.08em"
+              textTransform="uppercase" whiteSpace="nowrap">
           {titulo}
         </Text>
-        <Box flex="1" h="1px" bg="rgba(255,255,255,0.22)" />
-        <Text color="rgba(255,255,255,0.6)" fontSize="sm" flexShrink={0}>{list.length}</Text>
+        <Box flex="1" h="1px" bg={`${T}40`} />
+        <Text color={`${T}99`} fontSize="sm" flexShrink={0}>{list.length}</Text>
       </Flex>
       {list.length ? (
         <Flex direction="column" gap={3}>{list.map(renderFila)}</Flex>
       ) : (
-        <Text color="rgba(255,255,255,0.55)" fontStyle="italic" fontSize="sm">Ninguno todavía.</Text>
+        <Text color={`${T}99`} fontStyle="italic" fontSize="sm">Ninguno todavía.</Text>
       )}
     </Box>
   );
@@ -282,24 +300,18 @@ export default function AdminCursos() {
 
       {/* ── MANDALA ── */}
       <Flex justify="center" pt={{ base: 8, md: 12 }}>
-        <Image
-          src="/img/icono/life.webp"
-          alt=""
-          h={{ base: "48px", md: "64px" }}
-          objectFit="contain"
-          style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.59)) drop-shadow(0 0 21px rgba(255,255,255,0.32)) drop-shadow(0 0 42px rgba(180,255,245,0.24))" }}
-        />
+        <MandalaTurquesa tam="64px" />
       </Flex>
 
       {/* ── TÍTULO + NUEVO CURSO ── */}
       <Flex direction="column" align="center" textAlign="center" px={{ base: 5, md: 10 }} pt={{ base: 5, md: 7 }} gap={{ base: 4, md: 5 }}>
-        <Text color="white" fontSize={{ base: "3xl", md: "5xl" }} fontWeight="700" letterSpacing="0.1em"
-              textTransform="uppercase" textShadow="0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(180,255,245,0.3)">
+        <Text color={T} fontSize={{ base: "3xl", md: "5xl" }} fontWeight="700" letterSpacing="0.1em"
+              textTransform="uppercase">
           Cursos
         </Text>
         <Box as="button" onClick={() => setCrearOpen(true)} {...btnStyle}
-             color="#008080" bg="white" px={6} py="11px" fontSize={{ base: "md", md: "lg" }}
-             boxShadow="0 0 16px rgba(255,255,255,0.4)" _hover={{ transform: "translateY(-1px)", boxShadow: "0 0 24px rgba(255,255,255,0.6)" }}>
+             {...btnPri} px={6} py="11px" fontSize={{ base: "md", md: "lg" }}
+             _hover={{ transform: "translateY(-1px)", bg: "#004a4a" }}>
           + Nuevo curso
         </Box>
       </Flex>
@@ -309,7 +321,7 @@ export default function AdminCursos() {
           {loading ? (
             <LifeLoader />
           ) : cursos.length === 0 ? (
-            <Text color="rgba(255,255,255,0.75)" fontStyle="italic" textAlign="center" mt={10}>
+            <Text color={`${T}bb`} fontStyle="italic" textAlign="center" mt={10}>
               Aún no hay cursos. Crea el primero con “+ Nuevo curso”.
             </Text>
           ) : (
@@ -325,66 +337,62 @@ export default function AdminCursos() {
 
       {/* ── Modal crear curso ── */}
       <Modal isOpen={crearOpen} onClose={() => setCrearOpen(false)} isCentered size="xl">
-        <ModalOverlay bg="rgba(0,0,0,0.8)" sx={{ backdropFilter: "blur(8px)" }} />
+        <ModalOverlay bg="#F0DCC0d9" />
         <ModalContent
           bg="#F0DCC0"
-          color="white"
+          color={T}
           fontFamily="'EB Garamond', serif"
-          border="1px solid rgba(255,255,255,0.22)"
+          border={`1.5px solid ${T}`}
           borderRadius="2xl"
-          boxShadow="0 0 42px rgba(180,255,245,0.2), 0 0 100px rgba(255,255,255,0.1), 0 22px 60px rgba(0,0,0,0.6)"
+          boxShadow="none"
           mx={4}
           overflow="hidden"
         >
-          <ModalCloseButton color="white" />
+          <ModalCloseButton color={T} _focusVisible={focoT} />
           <Box p={{ base: 6, md: 8 }}>
               {/* Título con el mandala como pequeño adorno a la izquierda */}
               <Flex align="center" gap={3}>
-                <Image src="/img/icono/life.webp" alt="" h="30px" w="auto" flexShrink={0} objectFit="contain"
-                  style={{ filter: "drop-shadow(0 0 7px rgba(255,255,255,0.5)) drop-shadow(0 0 16px rgba(180,255,245,0.3))" }} />
-                <Text fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.12em" textTransform="uppercase"
-                      textShadow="0 0 12px rgba(255,255,255,0.5)">
+                <MandalaTurquesa tam="30px" />
+                <Text fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.12em" textTransform="uppercase">
                   Nuevo curso
                 </Text>
               </Flex>
               {/* Línea elegante de separación */}
               <Box h="1px" mt={3} mb={5}
-                   bgGradient="linear(to-r, rgba(255,255,255,0.7), rgba(255,255,255,0.15) 70%, transparent)"
-                   boxShadow="0 0 8px rgba(255,255,255,0.3)" />
+                   bgGradient={`linear(to-r, ${T}aa, ${T}26 70%, ${T}00)`} />
 
               <Flex direction="column" gap={4}>
                 <Box>
                   <Text fontSize="sm" mb={1} opacity={0.8}>Disciplina</Text>
                   <Select value={form.modalidad} onChange={(e) => setForm({ ...form, modalidad: e.target.value })}
-                          bg="rgba(255,255,255,0.1)" border="1px solid rgba(255,255,255,0.25)" sx={{ option: { color: "black" } }}>
+                          {...campoSx} sx={{ option: { color: "black" } }}>
                     {DISCIPLINAS_CURSO.map((d) => <option key={d.slug} value={d.slug}>{d.nom}</option>)}
                   </Select>
                 </Box>
                 <Box>
                   <Text fontSize="sm" mb={1} opacity={0.8}>Título</Text>
                   <Input value={form.titulo} onChange={(e) => setForm({ ...form, titulo: e.target.value })}
-                         placeholder="Fundamentos de la Astrología" bg="rgba(255,255,255,0.1)" border="1px solid rgba(255,255,255,0.25)" />
+                         placeholder="Fundamentos de la Astrología" {...campoSx} />
                 </Box>
                 <Box>
                   <Text fontSize="sm" mb={1} opacity={0.8}>Foto (ruta o URL)</Text>
                   <Input value={form.foto} onChange={(e) => setForm({ ...form, foto: e.target.value })}
-                         placeholder="/img/astrologia/space.webp" bg="rgba(255,255,255,0.1)" border="1px solid rgba(255,255,255,0.25)" />
+                         placeholder="/img/astrologia/space.webp" {...campoSx} />
                 </Box>
                 <Box>
                   <Text fontSize="sm" mb={1} opacity={0.8}>Descripción</Text>
                   <Textarea value={form.descripcion} onChange={(e) => setForm({ ...form, descripcion: e.target.value })}
-                            placeholder="Breve frase del curso" bg="rgba(255,255,255,0.1)" border="1px solid rgba(255,255,255,0.25)" rows={2} />
+                            placeholder="Breve frase del curso" {...campoSx} rows={2} />
                 </Box>
                 <Flex gap={6} align="center">
-                  <Checkbox isChecked={form.de_pago} onChange={(e) => setForm({ ...form, de_pago: e.target.checked })}>De pago</Checkbox>
-                  <Checkbox isChecked={form.publicado} onChange={(e) => setForm({ ...form, publicado: e.target.checked })}>Publicado</Checkbox>
+                  <Checkbox colorScheme="teal" isChecked={form.de_pago} onChange={(e) => setForm({ ...form, de_pago: e.target.checked })}>De pago</Checkbox>
+                  <Checkbox colorScheme="teal" isChecked={form.publicado} onChange={(e) => setForm({ ...form, publicado: e.target.checked })}>Publicado</Checkbox>
                 </Flex>
               </Flex>
 
               <Flex justify="flex-end" gap={3} mt={6}>
-                <Box as="button" onClick={() => setCrearOpen(false)} {...btnStyle} px={5} py="9px"
-                     border="1px solid rgba(255,255,255,0.4)" color="white">Cancelar</Box>
-                <Box as="button" onClick={crear} {...btnStyle} px={6} py="9px" bg="white" color="#008080"
+                <Box as="button" onClick={() => setCrearOpen(false)} {...btnStyle} {...btnSec} px={5} py="9px">Cancelar</Box>
+                <Box as="button" onClick={crear} {...btnStyle} {...btnPri} px={6} py="9px"
                      opacity={guardando ? 0.6 : 1} pointerEvents={guardando ? "none" : "auto"}>
                   {guardando ? "Creando…" : "Crear y editar"}
                 </Box>
@@ -395,23 +403,21 @@ export default function AdminCursos() {
 
       {/* ── Modal confirmar borrado ── */}
       <Modal isOpen={!!aBorrar} onClose={() => setABorrar(null)} isCentered size="md">
-        <ModalOverlay bg="rgba(0,0,0,0.8)" sx={{ backdropFilter: "blur(8px)" }} />
+        <ModalOverlay bg="#F0DCC0d9" />
         <ModalContent
           bg="#F0DCC0"
-          color="white"
+          color={T}
           fontFamily="'EB Garamond', serif"
-          border="1px solid rgba(255,255,255,0.22)"
+          border={`1.5px solid ${T}`}
           borderRadius="2xl"
-          boxShadow="0 0 42px rgba(255,140,140,0.18), 0 0 100px rgba(255,255,255,0.08), 0 22px 60px rgba(0,0,0,0.6)"
+          boxShadow="none"
           mx={4}
           overflow="hidden"
         >
-          <ModalCloseButton color="white" />
+          <ModalCloseButton color={T} _focusVisible={focoT} />
           <Box p={{ base: 6, md: 8 }} textAlign="center">
-            <Image src="/img/icono/life.webp" alt="" h="34px" mx="auto" mb={4} objectFit="contain"
-              style={{ filter: "drop-shadow(0 0 7px rgba(255,255,255,0.5)) drop-shadow(0 0 16px rgba(180,255,245,0.3))" }} />
-            <Text fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.06em" mb={2}
-                  textShadow="0 0 12px rgba(255,255,255,0.45)">
+            <Flex justify="center" mb={4}><MandalaTurquesa tam="34px" /></Flex>
+            <Text fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.06em" mb={2}>
               ¿Borrar este curso?
             </Text>
             <Text fontSize="md" opacity={0.85} mb={1}>
@@ -421,13 +427,12 @@ export default function AdminCursos() {
               Esta acción no se puede deshacer.
             </Text>
             <Flex justify="center" gap={3}>
-              <Box as="button" onClick={() => setABorrar(null)} {...btnStyle} px={6} py="9px"
-                   border="1px solid rgba(255,255,255,0.45)" color="white" _hover={{ bg: "rgba(255,255,255,0.1)" }}>
+              <Box as="button" onClick={() => setABorrar(null)} {...btnStyle} {...btnSec} px={6} py="9px">
                 Cancelar
               </Box>
               <Box as="button" onClick={() => aBorrar && borrar(aBorrar)} {...btnStyle} px={6} py="9px"
-                   bg="#e05a5a" color="white" boxShadow="0 0 16px rgba(224,90,90,0.55)"
-                   _hover={{ bg: "#d44b4b", boxShadow: "0 0 24px rgba(224,90,90,0.8)" }}>
+                   bg="transparent" color="#b3261e" border="1.5px solid #b3261e"
+                   _hover={{ bg: "#b3261e14" }} _focusVisible={focoT}>
                 Borrar
               </Box>
             </Flex>

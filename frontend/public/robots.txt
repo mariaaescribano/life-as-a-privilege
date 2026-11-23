@@ -23,6 +23,10 @@ Disallow: /espacio/
 Disallow: /checkoutMetodo
 Disallow: /libros/descargar
 
+# Web antigua (TFG): escondida, ni buscadores ni nadie sin la cuenta
+Disallow: /antigua
+Disallow: /antigua/
+
 # Administración
 Disallow: /admin
 Disallow: /admin/

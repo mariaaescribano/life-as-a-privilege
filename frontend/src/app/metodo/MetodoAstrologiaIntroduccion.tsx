@@ -16,7 +16,7 @@ import { Reveal } from "../../components/global/Reveal";
 import { esMariaMirando } from "../../api/persona";
 import { rutaHome } from "../../api/sesion";
 import { useAstrologiaProgreso } from "../../hooks/useAstrologiaProgreso";
-import { API_URL, astrologiaBg, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
+import { API_URL, astrologiaBg, astrologiaTxt, AstrologiaIcon, FONDO_PAGINA_BEIGE } from "../../GlobalVariables";
 import { useT } from "../../i18n";
 import { focoBlanco } from "../../components/global/foco";
 
@@ -165,7 +165,7 @@ export default function MetodoAstrologiaIntroduccion() {
       <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
         <SiteHeader variant="private" />
         <Flex flex="1" direction="column" align="center" justify="center" gap={6} px={6}>
-          <Text color="white" fontSize={{ base: "lg", md: "xl" }} textAlign="center" fontStyle="italic">{t("comun.error")}</Text>
+          <Text color={FONDO_PAGINA_BEIGE} fontSize={{ base: "lg", md: "xl" }} textAlign="center" fontStyle="italic">{t("comun.error")}</Text>
           <Box as="button" type="button" onClick={cargar} px={7} py="10px" borderRadius="full" bg="white" color="#008080"
                fontWeight="700" letterSpacing="0.04em" cursor="pointer" boxShadow="0 0 22px rgba(255,255,255,0.3)" _focusVisible={focoBlanco}>
             {t("comun.reintentar")}
@@ -207,7 +207,7 @@ export default function MetodoAstrologiaIntroduccion() {
               {/* Primera vez: lo que María le dice antes de pedirle la hora y el lugar. */}
               {!corrigiendo && (
                 <Reveal direction="up" distance={18} delay={0.4} duration={1} blur w="100%">
-                  <Text color="white" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center" fontStyle="italic">
+                  <Text color={FONDO_PAGINA_BEIGE} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center" fontStyle="italic">
                     {t("metodo.astro.intro.datosTexto", { nombre })}
                   </Text>
                 </Reveal>
@@ -226,7 +226,7 @@ export default function MetodoAstrologiaIntroduccion() {
             <>
             {/* Fuera de las cajas: blanco y sin sombra. */}
             <Reveal direction="up" distance={18} delay={0.4} duration={1} blur w="100%">
-              <Text color="white" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center" fontStyle="italic">
+              <Text color={FONDO_PAGINA_BEIGE} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center" fontStyle="italic">
                 {t("metodo.astro.intro.cartaTexto", { nombre })}
               </Text>
             </Reveal>
@@ -266,7 +266,7 @@ export default function MetodoAstrologiaIntroduccion() {
                        aria-label={t("metodo.astro.cambiar")} title={t("metodo.astro.cambiar")}
                        position="absolute" bottom="14px" right="14px" zIndex={2}
                        display="inline-flex" alignItems="center" justifyContent="center" w="26px" h="26px"
-                       borderRadius="full" bg="rgba(255,255,255,0.14)" color="white" cursor="pointer"
+                       borderRadius="full" bg="rgba(255,255,255,0.14)" color={FONDO_PAGINA_BEIGE} cursor="pointer"
                        transition="all 0.2s" _hover={{ bg: "rgba(255,255,255,0.28)" }} _focusVisible={focoBlanco}>
                     <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="13px" h="13px" fill="currentColor">
                       <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T846-647L319-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
@@ -285,7 +285,7 @@ export default function MetodoAstrologiaIntroduccion() {
 
             <Reveal inView amount={0.6} direction="up" distance={18} duration={0.9} blur w="100%">
               {/* Estirada, en UNA sola línea (en móvil, si no cabe, baja). */}
-              <Text color="white" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center"
+              <Text color={FONDO_PAGINA_BEIGE} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center"
                     whiteSpace={{ base: "normal", md: "nowrap" }}>
                 {t("metodo.astro.intro.apuntes1")} {t("metodo.astro.intro.apuntes2")}
               </Text>

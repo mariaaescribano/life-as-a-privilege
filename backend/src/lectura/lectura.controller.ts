@@ -14,6 +14,13 @@ export class LecturaController {
     return await this.lectura.listar();
   }
 
+  @Post('admin/crear')
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  @HttpCode(HttpStatus.OK)
+  async crear(@Body() body: Record<string, unknown>) {
+    return await this.lectura.crearManual(body ?? {});
+  }
+
   @Post('admin/estado')
   @UseGuards(JwtAuthGuard, AdminGuard)
   @HttpCode(HttpStatus.OK)

@@ -25,7 +25,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { LifeLoading } from "../../components/global/LifeLoading";
 import { LifeLoader } from "../../components/metodo/comicLoaders";
-import { API_URL } from "../../GlobalVariables";
+import { API_URL, FONDO_PAGINA_TURQUESA as T } from "../../GlobalVariables";
 import { adminHeaders, useAdminGuard } from "./useAdminGuard";
 import {
   actualizarEntrada,
@@ -78,16 +78,16 @@ const deEntrada = (e: EntradaDiario): Borrador => ({
 
 /** Los campos del formulario se visten con el Txt de la disciplina elegida:
  *  lo que se teclea, el placeholder y los bordes van de su color. */
-const campoSx = (txt: string) =>
+const campoSx = (txt: string, conFoto: boolean) =>
   ({
-    bg: "rgba(0,0,0,0.25)",
-    border: `1px solid ${txt}4d`,
+    bg: conFoto ? "#00000040" : "#F7EBD9",
+    border: `1.5px solid ${txt}66`,
     color: txt,
     caretColor: txt,
     fontFamily: "'EB Garamond', serif",
     transition: "color 0.25s, border-color 0.25s",
-    _placeholder: { color: `${txt}73` },
-    _hover: { borderColor: `${txt}8c` },
+    _placeholder: { color: `${txt}8c` },
+    _hover: { borderColor: `${txt}aa` },
     _focus: { borderColor: txt, boxShadow: "none" },
     _focusVisible: { boxShadow: "none" },
   }) as const;
@@ -235,6 +235,8 @@ export default function AdminDiario() {
 
   // La cara del formulario: el color de la disciplina elegida (o neutra).
   const caraForm = caraDeEntrada(form.disciplina || null);
+  // Sin disciplina el formulario va sobre el beige: turquesa oscuro; con disciplina, su Txt sobre su foto.
+  const txtForm = caraForm.nom ? caraForm.txt : T;
 
   if (verificando) return <LifeLoading variant="private" />;
 
@@ -247,17 +249,16 @@ export default function AdminDiario() {
           {/* ── TÍTULO ── */}
           <Flex direction="column" align="center" textAlign="center" gap={2} mb={{ base: 6, md: 8 }}>
             <Text
-              color="white"
+              color={T}
               fontSize={{ base: "2xl", md: "4xl" }}
               fontWeight="700"
               letterSpacing="0.08em"
               textTransform="uppercase"
               lineHeight="1.15"
-              textShadow="0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(180,255,245,0.3)"
             >
               Diario de terapias
             </Text>
-            <Text color="rgba(255,255,255,0.72)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic">
+            <Text color={`${T}b3`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic">
               {cargando
                 ? "Cargando…"
                 : `${persona.name || persona.email} · ${entradas.length} ${entradas.length === 1 ? "nota" : "notas"}` +
@@ -280,9 +281,9 @@ export default function AdminDiario() {
               {/* ── LAS NOTAS DEL DÍA ── */}
               <Flex align="center" gap={3} mb={4}>
                 {/* Las rayitas se desvanecen hacia fuera: la fecha queda arropada. */}
-                <Box flex="1" h="1px" bgGradient="linear(to-r, #ffffff00, #ffffff40)" />
+                <Box flex="1" h="1px" bgGradient={`linear(to-r, ${T}00, ${T}66)`} />
                 <Text
-                  color="white"
+                  color={T}
                   fontWeight="700"
                   fontSize={{ base: "md", md: "lg" }}
                   letterSpacing="0.04em"
@@ -290,11 +291,11 @@ export default function AdminDiario() {
                 >
                   {fechaLarga(dia)}
                 </Text>
-                <Box flex="1" h="1px" bgGradient="linear(to-l, #ffffff00, #ffffff40)" />
+                <Box flex="1" h="1px" bgGradient={`linear(to-l, ${T}00, ${T}66)`} />
               </Flex>
 
               {delDia.length === 0 ? (
-                <Text color="rgba(255,255,255,0.6)" fontStyle="italic" textAlign="center" py={4} mb={{ base: 6, md: 8 }}>
+                <Text color={`${T}aa`} fontStyle="italic" textAlign="center" py={4} mb={{ base: 6, md: 8 }}>
                   Este día no tiene ninguna nota. Escríbele una abajo.
                 </Text>
               ) : (
@@ -324,8 +325,8 @@ export default function AdminDiario() {
                 px={{ base: 4, md: 6 }}
                 py={{ base: 5, md: 6 }}
                 borderRadius="2xl"
-                bg={caraForm.nom ? caraForm.bg : "rgba(255,255,255,0.07)"}
-                border={`1px solid ${caraForm.txt}55`}
+                bg={caraForm.nom ? caraForm.bg : "transparent"}
+                border={`1.5px solid ${caraForm.nom ? `${caraForm.txt}55` : T}`}
                 // Con disciplina, un halo suave de su acento envuelve el formulario.
                 boxShadow={caraForm.nom ? `0 0 26px ${caraForm.txt}33` : undefined}
                 transition="background 0.25s, border-color 0.25s, box-shadow 0.35s"
@@ -339,18 +340,18 @@ export default function AdminDiario() {
                 )}
                 <Box position="relative" zIndex={1}>
                 <Flex align="center" justify="space-between" gap={3} mb={4} flexWrap="wrap">
-                  <Text color={caraForm.txt} fontWeight="700" fontSize="lg" letterSpacing="0.04em">
+                  <Text color={txtForm} fontWeight="700" fontSize="lg" letterSpacing="0.04em">
                     {editando ? "Editar la nota" : "Escribir una nota"}
                   </Text>
                   {editando && (
                     <Box
                       as="button"
                       onClick={limpiar}
-                      color={`${caraForm.txt}bb`}
+                      color={`${txtForm}bb`}
                       fontSize="sm"
                       textDecoration="underline"
                       cursor="pointer"
-                      _hover={{ color: caraForm.txt }}
+                      _hover={{ color: txtForm }}
                     >
                       Cancelar y escribir una nueva
                     </Box>
@@ -360,7 +361,7 @@ export default function AdminDiario() {
                 {/* fecha + disciplina */}
                 <Flex gap={3} mb={3} direction={{ base: "column", md: "row" }}>
                   <Box flex={{ md: "0 0 190px" }}>
-                    <Etiqueta color={caraForm.txt}>Fecha de la sesión</Etiqueta>
+                    <Etiqueta color={txtForm}>Fecha de la sesión</Etiqueta>
                     <Input
                       type="date"
                       value={form.fecha}
@@ -370,17 +371,17 @@ export default function AdminDiario() {
                         if (ev.target.value) setDia(ev.target.value);
                       }}
                       borderRadius="lg"
-                      sx={{ "&::-webkit-calendar-picker-indicator": { filter: "invert(1)" } }}
-                      {...campoSx(caraForm.txt)}
+                      sx={caraForm.nom ? { "&::-webkit-calendar-picker-indicator": { filter: "invert(1)" } } : undefined}
+                      {...campoSx(txtForm, !!caraForm.nom)}
                     />
                   </Box>
                   <Box flex="1" minW={0}>
-                    <Etiqueta color={caraForm.txt}>Disciplina (el color de la nota)</Etiqueta>
+                    <Etiqueta color={txtForm}>Disciplina (el color de la nota)</Etiqueta>
                     <Flex gap={2} flexWrap="wrap">
                       <Pastilla
                         activa={form.disciplina === ""}
-                        bg="rgba(0,0,0,0.25)"
-                        txt="#ffffff"
+                        bg="transparent"
+                        txt={T}
                         onClick={() => set("disciplina", "")}
                       >
                         Sin disciplina
@@ -400,17 +401,17 @@ export default function AdminDiario() {
                   </Box>
                 </Flex>
 
-                <Etiqueta color={caraForm.txt}>Título (opcional)</Etiqueta>
+                <Etiqueta color={txtForm}>Título (opcional)</Etiqueta>
                 <Input
                   value={form.titulo}
                   onChange={(ev) => set("titulo", ev.target.value)}
                   placeholder="Una frase que resuma la sesión"
                   borderRadius="lg"
                   mb={3}
-                  {...campoSx(caraForm.txt)}
+                  {...campoSx(txtForm, !!caraForm.nom)}
                 />
 
-                <Etiqueta color={caraForm.txt}>Qué trabajamos</Etiqueta>
+                <Etiqueta color={txtForm}>Qué trabajamos</Etiqueta>
                 <Textarea
                   value={form.contenido}
                   onChange={(ev) => set("contenido", ev.target.value)}
@@ -419,13 +420,13 @@ export default function AdminDiario() {
                   borderRadius="lg"
                   mb={1.5}
                   lineHeight="1.8"
-                  {...campoSx(caraForm.txt)}
+                  {...campoSx(txtForm, !!caraForm.nom)}
                 />
-                <Text color={`${caraForm.txt}99`} fontSize="xs" fontStyle="italic" mb={3}>
+                <Text color={`${txtForm}99`} fontSize="xs" fontStyle="italic" mb={3}>
                   Se puede marcar: **negrita**, *cursiva* y una línea con --- pinta una rayita separadora.
                 </Text>
 
-                <Etiqueta color={caraForm.txt}>Por qué te digo esto</Etiqueta>
+                <Etiqueta color={txtForm}>Por qué te digo esto</Etiqueta>
                 <Textarea
                   value={form.porque}
                   onChange={(ev) => set("porque", ev.target.value)}
@@ -434,18 +435,18 @@ export default function AdminDiario() {
                   borderRadius="lg"
                   mb={4}
                   lineHeight="1.8"
-                  {...campoSx(caraForm.txt)}
+                  {...campoSx(txtForm, !!caraForm.nom)}
                 />
 
                 <Flex gap={3} flexWrap="wrap">
-                  <Boton onClick={() => guardar(true)} disabled={guardando} principal>
+                  <Boton onClick={() => guardar(true)} disabled={guardando} principal txt={txtForm} conFoto={!!caraForm.nom}>
                     {guardando ? "Guardando…" : "Publicar"}
                   </Boton>
-                  <Boton onClick={() => guardar(false)} disabled={guardando}>
+                  <Boton onClick={() => guardar(false)} disabled={guardando} txt={txtForm} conFoto={!!caraForm.nom}>
                     Guardar como borrador
                   </Boton>
                 </Flex>
-                <Text color={`${caraForm.txt}99`} fontSize="xs" fontStyle="italic" mt={3}>
+                <Text color={`${txtForm}99`} fontSize="xs" fontStyle="italic" mt={3}>
                   Un borrador no se ve en su diario. Al publicar, le aparece la marca de «nuevo».
                 </Text>
                 </Box>
@@ -481,6 +482,8 @@ function NotaDelDia({
 }) {
   const cara = caraDeEntrada(entrada.disciplina);
   const conFoto = cara.nom ? hasDisciplinaBg(cara.nom) : false;
+  // Sin disciplina la nota va sobre el beige: turquesa oscuro.
+  const colorNota = cara.nom ? cara.txt : T;
   return (
     <Box
       position="relative"
@@ -488,13 +491,13 @@ function NotaDelDia({
       px={{ base: 4, md: 5 }}
       py={4}
       borderRadius="xl"
-      bg={cara.bg}
-      border={`1px solid ${editandoEsta ? cara.txt : `${cara.txt}55`}`}
+      bg={cara.nom ? cara.bg : "transparent"}
+      border={`1.5px solid ${editandoEsta ? colorNota : cara.nom ? `${cara.txt}55` : `${T}55`}`}
       transition="border-color 0.18s, box-shadow 0.25s"
       // El halo, solo con el acento de la disciplina: la nota neutra no brilla.
       boxShadow={editandoEsta && cara.nom ? `0 0 18px ${cara.txt}40` : undefined}
       _hover={{
-        borderColor: `${cara.txt}aa`,
+        borderColor: `${colorNota}aa`,
         boxShadow: cara.nom ? `0 0 18px ${cara.txt}40` : undefined,
       }}
     >
@@ -505,39 +508,39 @@ function NotaDelDia({
       )}
       <Box position="relative" zIndex={1}>
       <Flex align="center" gap={2} flexWrap="wrap" mb={2}>
-        <Text color={cara.txt} fontSize="xs" fontWeight="700" letterSpacing="0.12em" textTransform="uppercase">
+        <Text color={colorNota} fontSize="xs" fontWeight="700" letterSpacing="0.12em" textTransform="uppercase">
           {cara.nom || "Sin disciplina"}
         </Text>
         <Box flex="1" />
         {entrada.publicada ? (
-          <Text color="rgba(180,255,245,0.95)" fontSize="xs" fontWeight="700" letterSpacing="0.08em">
+          <Text color={cara.nom ? "rgba(180,255,245,0.95)" : T} fontSize="xs" fontWeight="700" letterSpacing="0.08em">
             {entrada.leida_at ? "PUBLICADA · LEÍDA" : "PUBLICADA · SIN LEER"}
           </Text>
         ) : (
-          <Text color="rgba(255,220,180,0.9)" fontSize="xs" fontWeight="700" letterSpacing="0.08em">
+          <Text color={cara.nom ? "rgba(255,220,180,0.9)" : "#8a5a14"} fontSize="xs" fontWeight="700" letterSpacing="0.08em">
             BORRADOR
           </Text>
         )}
       </Flex>
 
       {entrada.titulo && (
-        <Text color={cara.txt} fontWeight="700" fontSize="lg" mb={1}>
+        <Text color={colorNota} fontWeight="700" fontSize="lg" mb={1}>
           {entrada.titulo}
         </Text>
       )}
       <TextoMarcado
         texto={entrada.contenido}
-        colorRaya={cara.txt}
-        color={cara.txt}
+        colorRaya={colorNota}
+        color={colorNota}
         fontSize="sm"
         lineHeight="1.7"
       />
       {entrada.porque && (
-        <Box mt={3} pl={3} borderLeft={`3px solid ${cara.txt}`}>
+        <Box mt={3} pl={3} borderLeft={`3px solid ${colorNota}`}>
           <TextoMarcado
             texto={entrada.porque}
-            colorRaya={cara.txt}
-            color={cara.txt}
+            colorRaya={colorNota}
+            color={colorNota}
             fontSize="sm"
             fontStyle="italic"
             lineHeight="1.7"
@@ -546,11 +549,11 @@ function NotaDelDia({
       )}
 
       <Flex gap={4} mt={3} flexWrap="wrap">
-        <Enlace color={cara.txt} onClick={onEditar}>Editar</Enlace>
-        <Enlace color={cara.txt} onClick={onVisibilidad}>
+        <Enlace color={colorNota} onClick={onEditar}>Editar</Enlace>
+        <Enlace color={colorNota} onClick={onVisibilidad}>
           {entrada.publicada ? "Volver a borrador" : "Publicar"}
         </Enlace>
-        <Enlace onClick={onBorrar} peligro>Borrar</Enlace>
+        <Enlace onClick={onBorrar} peligro color={cara.nom ? cara.txt : undefined}>Borrar</Enlace>
       </Flex>
       </Box>
     </Box>
@@ -559,7 +562,7 @@ function NotaDelDia({
 
 // ── Piezas sueltas del panel ────────────────────────────────────────────────
 
-const Etiqueta = ({ color = "#ffffff", children }: { color?: string; children: React.ReactNode }) => (
+const Etiqueta = ({ color = T, children }: { color?: string; children: React.ReactNode }) => (
   <Text color={`${color}b3`} fontSize="xs" letterSpacing="0.1em" textTransform="uppercase" mb={1.5}>
     {children}
   </Text>
@@ -603,11 +606,17 @@ const Boton = ({
   onClick,
   disabled,
   principal,
+  txt,
+  conFoto,
   children,
 }: {
   onClick: () => void;
   disabled?: boolean;
   principal?: boolean;
+  /** Color de la letra/borde (el Txt de la disciplina, o turquesa oscuro sobre el beige). */
+  txt: string;
+  /** Va sobre la foto de una disciplina (si no, sobre el beige). */
+  conFoto: boolean;
   children: React.ReactNode;
 }) => (
   <Box
@@ -617,16 +626,17 @@ const Boton = ({
     px={6}
     py={2.5}
     borderRadius="full"
-    bg={principal ? "rgba(255,255,255,0.22)" : "rgba(255,255,255,0.08)"}
-    border={`1.5px solid ${principal ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.4)"}`}
-    color="white"
+    bg={principal ? (conFoto ? `${txt}33` : T) : "transparent"}
+    border={`1.5px solid ${txt}`}
+    color={principal && !conFoto ? "#F0DCC0" : txt}
     fontWeight="700"
     fontSize={{ base: "sm", md: "md" }}
     letterSpacing="0.04em"
     cursor={disabled ? "not-allowed" : "pointer"}
     opacity={disabled ? 0.55 : 1}
     transition="all 0.2s"
-    _hover={disabled ? undefined : { bg: "rgba(255,255,255,0.3)", transform: "translateY(-2px)" }}
+    _hover={disabled ? undefined : { bg: principal && !conFoto ? "#004a4a" : `${txt}22`, transform: "translateY(-2px)" }}
+    _focusVisible={{ outline: `2px solid ${txt}cc`, outlineOffset: "2px" }}
   >
     {children}
   </Box>
@@ -646,11 +656,12 @@ const Enlace = ({
   <Box
     as="button"
     onClick={onClick}
-    color={peligro ? "rgba(255,190,190,0.9)" : color ? `${color}cc` : "rgba(255,255,255,0.8)"}
+    color={peligro ? (color && color !== T ? "rgba(255,190,190,0.9)" : "#b3261e") : `${color ?? T}cc`}
     fontSize="sm"
     textDecoration="underline"
     cursor="pointer"
-    _hover={{ color: peligro ? "#ffcccc" : color || "white" }}
+    _focusVisible={{ outline: "2px solid #005F5Fcc", outlineOffset: "2px" }}
+    _hover={{ color: peligro ? (color && color !== T ? "#ffcccc" : "#b3261e") : color || T }}
   >
     {children}
   </Box>

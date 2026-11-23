@@ -3,7 +3,7 @@ import { Box, Flex, Text, Textarea } from "@chakra-ui/react";
 import axios from "axios";
 import { API_URL } from "../../GlobalVariables";
 import { LifeLoader } from "../metodo/comicLoaders";
-import { focoBlanco } from "./foco";
+import { BotonPildora } from "../../app/admin/PildorasAdmin";
 
 /**
  * El DIARIO de María: lo que apunta de sí misma. SOLO lo ve ella (el servidor lo
@@ -115,8 +115,8 @@ export function EntradaDiario({ e, onBorrar, plana = false }: { e: EntradaMaria;
           fontSize="sm"
           lineHeight="1"
           transition="all 0.18s"
-          _hover={{ color: "#9b2c2c", bg: `${TQ}14` }}
-          _focusVisible={focoBlanco}
+          _hover={{ color: "#b3261e", bg: `${TQ}14` }}
+          _focusVisible={{ outline: `2px solid ${TQ}cc`, outlineOffset: "2px" }}
           aria-label="✕"
         >
           ✕
@@ -143,9 +143,9 @@ export function VistaDiarioMaria() {
 
   return (
     <Flex direction="column" gap={4} flex="1" minH={0} overflowY="auto" pr={1}
-          sx={{ scrollbarWidth: "thin", scrollbarColor: "rgba(255,255,255,0.4) transparent",
-                "&::-webkit-scrollbar": { width: "8px" }, "&::-webkit-scrollbar-thumb": { background: "rgba(255,255,255,0.35)", borderRadius: "8px" } }}>
-      <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight="800" letterSpacing="0.08em" textAlign="center" textTransform="uppercase">
+          sx={{ scrollbarWidth: "thin", scrollbarColor: "#005F5F66 transparent",
+                "&::-webkit-scrollbar": { width: "8px" }, "&::-webkit-scrollbar-thumb": { background: "#005F5F55", borderRadius: "8px" } }}>
+      <Text color="#005F5F" fontSize={{ base: "xl", md: "2xl" }} fontWeight="800" letterSpacing="0.08em" textAlign="center" textTransform="uppercase">
         Diario
       </Text>
 
@@ -168,30 +168,12 @@ export function VistaDiarioMaria() {
         />
       </Box>
 
-      {error && <Text color="#ffb4b4" fontSize="sm" textAlign="center" fontStyle="italic">{error}</Text>}
+      {error && <Text color="#b3261e" fontSize="sm" textAlign="center" fontStyle="italic">{error}</Text>}
 
       <Flex justify="flex-end">
-        <Box
-          as="button"
-          type="button"
-          onClick={guardar}
-          px={9}
-          py={2.5}
-          borderRadius="full"
-          bg="white"
-          color="#008080"
-          fontSize={{ base: "md", md: "lg" }}
-          fontWeight="700"
-          letterSpacing="0.06em"
-          cursor={puede ? "pointer" : "not-allowed"}
-          opacity={puede ? 1 : 0.55}
-          boxShadow="0 4px 24px rgba(255,255,255,0.28)"
-          transition="all 0.22s"
-          _hover={puede ? { transform: "translateY(-2px)" } : {}}
-          _focusVisible={focoBlanco}
-        >
+        <BotonPildora solido onClick={guardar} desactivado={!puede} ocupado={guardando}>
           {guardando ? "Guardando…" : "Guardar"}
-        </Box>
+        </BotonPildora>
       </Flex>
 
       {cargando ? (
@@ -212,7 +194,7 @@ export function ListaDiarioMaria() {
       {cargando ? (
         <Flex justify="center" py={6}><LifeLoader size="48px" /></Flex>
       ) : entradas.length === 0 ? (
-        <Text color="rgba(255,255,255,0.85)" fontSize="lg" fontStyle="italic" textAlign="center">Todavía no has apuntado nada.</Text>
+        <Text color="#005F5F" fontSize="lg" fontStyle="italic" textAlign="center">Todavía no has apuntado nada.</Text>
       ) : (
         entradas.map((e) => <EntradaDiario key={e.id} e={e} onBorrar={borrar} />)
       )}

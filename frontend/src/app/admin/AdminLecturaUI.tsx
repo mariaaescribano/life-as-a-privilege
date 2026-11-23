@@ -47,7 +47,6 @@ export function LecturaCard({
       border={`1px solid ${ac}55`}
       mb={5}
       overflow="hidden"
-      boxShadow="0 4px 18px rgba(0,0,0,0.14)"
     >
       {hasDisciplinaBg(nom) && <DisciplinaBgLayer nom={nom} borderRadius="xl" overlay={overlay} />}
       <Box position="relative" zIndex={1} p={{ base: 5, md: 6 }}>
@@ -152,7 +151,6 @@ export function LineaImagen({ img, txt }: { img?: string; txt: string }) {
       borderRadius="full"
       overflow="hidden"
       border={`1px solid ${txt}44`}
-      boxShadow="0 2px 8px rgba(0,0,0,0.12)"
       bgImage={`url('${img}')`}
       bgRepeat="repeat-x"
       bgSize="auto 100%"

@@ -6,6 +6,7 @@ import { Box } from "@chakra-ui/react";
 // import Landing from "./app/web/Landing";
 import Welcome from "./app/web/Welcome";
 import WelcomeAntigua from "./antigua/app/web/WelcomeAntigua";
+import GuardiaAntigua from "./antigua/GuardiaAntigua";
 import { Navigate, Route, Routes, useLocation, useParams } from "react-router-dom";
 import { cargarTextosMetodo } from "./i18n";
 
@@ -64,6 +65,8 @@ const LogIn = lazy(() => import("./app/auth/LogIn"));
 const SignIn = lazy(() => import("./app/auth/SignIn"));
 const GoogleAuthCallback = lazy(() => import("./app/auth/GoogleAuthCallback"));
 const Home = lazyConMetodo(() => import("./app/home/Home"));
+// Web antigua (/antigua/*): el Home de antes, congelado en src/antigua/app/home.
+const HomeAntigua = lazyConMetodo(() => import("./antigua/app/home/Home"));
 const AprendizajeHome = lazy(() => import("./app/aprendizaje/AprendizajeHome").then((m) => ({ default: m.AprendizajeHome })));
 const ModulosPage = lazyConMetodo(() => import("./app/aprendizaje/ModulosPage"));
 const VideoLessonPage = lazy(() => import("./app/aprendizaje/VideoLessonPage"));
@@ -367,7 +370,7 @@ function AdminRoute({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function App()
+export default function App({ antigua = false }: { antigua?: boolean } = {})
 {
   // Si en una visita anterior se aceptaron las cookies analíticas, se cargan
   // ahora. Si no, no se carga nada hasta que se pulse «Aceptar» en el aviso.
@@ -386,7 +389,7 @@ export default function App()
     {/* La nota de María en cada página del recorrido: pestaña en el borde derecho. */}
     {/* Apunta qué recursos gratuitos abre quien tiene cuenta (para los emails). */}
     <RegistroActividad />
-    <ExitIntentSubscribeModal />
+    {!antigua && <ExitIntentSubscribeModal />}
     <MiniDiario />
     <AvisoCookies />
     <BarraPersona />
@@ -395,6 +398,8 @@ export default function App()
         casa. Antes todo iba en un unico bundle de 6 MB que habia que bajar
         entero para ver la portada. */}
     <Suspense fallback={<LifeLoading />}>
+    {/* En /antigua todo va detrás de GuardiaAntigua (solo la cuenta de ANTIGUA_EMAILS) y sin registro. */}
+    {(antigua ? (c: React.ReactNode) => <GuardiaAntigua>{c}</GuardiaAntigua> : (c: React.ReactNode) => <>{c}</>)(
     <Routes>
       {/* ── LA PORTADA ──
           Por ahora la casa enseña UN SOLO proyecto: «/» es la portada de Life
@@ -408,21 +413,20 @@ export default function App()
           es todo lo que hay que hacer: descomentar el import de arriba y las
           dos líneas de aquí abajo, y quitar el `<Welcome />` de «/». */}
       {/* <Route path="/" element={<Landing />} /> */}
-      <Route path="/" element={<Welcome />} />
-      <Route path="/welcome" element={<Welcome />} />
-      {/* La web de antes (turquesa y las 8 boxes, 27-oct-2026): copia aparte en src/antigua/, no depende de la portada actual. */}
-      <Route path="/antigua" element={<WelcomeAntigua />} />
+      {/* En /antigua: «/» y «/welcome» son la portada de antes (turquesa y las 8 boxes, 27-oct-2026), congelada en src/antigua. */}
+      <Route path="/" element={antigua ? <WelcomeAntigua /> : <Welcome />} />
+      <Route path="/welcome" element={antigua ? <WelcomeAntigua /> : <Welcome />} />
       <Route path="/logIn" element={<LogIn />} />
-      <Route path="/signIn" element={<SignIn />} />
+      <Route path="/signIn" element={antigua ? <Navigate to="/logIn" replace /> : <SignIn />} />
       <Route path="/recuperar" element={<RecuperarPassword />} />
-      <Route path="/auth/google/callback" element={<GoogleAuthCallback />} />
+      <Route path="/auth/google/callback" element={antigua ? <Navigate to="/logIn" replace /> : <GoogleAuthCallback />} />
 
       {/* ── Páginas legales (públicas, enlazadas desde el footer) ── */}
       <Route path="/aviso-legal" element={<AvisoLegal />} />
       <Route path="/privacidad" element={<Privacidad />} />
       <Route path="/cookies" element={<Cookies />} />
       <Route path="/terminos" element={<Terminos />} />
-      <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
+      <Route path="/home" element={<PrivateRoute>{antigua ? <HomeAntigua /> : <Home />}</PrivateRoute>} />
       <Route path="/quienSoy" element={<QuienSoy />} />
       <Route path="/reservar-cita" element={<ReservarCita />} />
       <Route path="/astrologia/pedir" element={<PedirLectura />} />
@@ -708,6 +712,7 @@ export default function App()
 
       <Route path="*" element={<NoEncontrada />} />
     </Routes>
+    )}
     </Suspense>
     </>
   );

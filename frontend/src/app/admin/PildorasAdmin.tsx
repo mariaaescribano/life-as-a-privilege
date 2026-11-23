@@ -1,12 +1,11 @@
 import React from "react";
 import { Box } from "@chakra-ui/react";
-import { focoBlanco } from "../../components/global/foco";
 
 // Piezas compartidas por las pantallas de Asesorías (la lista y la página de cada
 // persona): el mandala turquesa y el botón en píldora.
 
 /** Mandala de la casa en turquesa (el PNG es blanco: se usa de máscara). */
-export const MandalaTurquesa = ({ tam, color = "#008080" }: { tam: string; color?: string }) => (
+export const MandalaTurquesa = ({ tam, color = "#005F5F" }: { tam: string; color?: string }) => (
   <Box
     flexShrink={0}
     w={tam}
@@ -25,14 +24,14 @@ export const MandalaTurquesa = ({ tam, color = "#008080" }: { tam: string; color
   />
 );
 
-export const HALO = "0 0 22px rgba(255,255,255,0.3)";
+export const HALO = "none";
 
 export function BotonPildora({ children, onClick, solido, peligro, titulo, ocupado, marmol, desactivado }: {
   children: React.ReactNode;
   onClick: () => void;
-  /** Relleno blanco (el botón principal de la fila). */
+  /** Relleno turquesa oscuro (el botón principal de la fila). */
   solido?: boolean;
-  /** Acción sin vuelta atrás (eliminar): borde y letra rosados, sin relleno. */
+  /** Acción sin vuelta atrás (eliminar): borde y letra rojos, sin relleno. */
   peligro?: boolean;
   titulo?: string;
   ocupado?: boolean;
@@ -55,19 +54,18 @@ export function BotonPildora({ children, onClick, solido, peligro, titulo, ocupa
       px={{ base: 4, md: 5 }}
       py="8px"
       borderRadius="full"
-      border={marmol ? "1.5px solid #004f4f" : peligro ? "1.5px solid rgba(255,200,200,0.8)" : "1.5px solid rgba(255,255,255,0.75)"}
-      bg={marmol ? (solido ? "#004f4f" : "rgba(255,255,255,0.45)") : solido ? "white" : peligro ? "rgba(255,160,160,0.1)" : "rgba(255,255,255,0.14)"}
-      color={marmol ? (solido ? "white" : "#004f4f") : solido ? "#008080" : peligro ? "#ffd6d6" : "white"}
+      border={marmol ? "1.5px solid #004f4f" : peligro ? "1.5px solid #b3261e" : "1.5px solid #005F5F"}
+      bg={marmol ? (solido ? "#004f4f" : "rgba(255,255,255,0.45)") : solido ? "#005F5F" : "transparent"}
+      color={marmol ? (solido ? "#F0DCC0" : "#004f4f") : solido ? "#F0DCC0" : peligro ? "#b3261e" : "#005F5F"}
       fontWeight="700"
       fontSize="sm"
       letterSpacing="0.04em"
       whiteSpace="nowrap"
       cursor={desactivado ? "not-allowed" : ocupado ? "wait" : "pointer"}
       opacity={desactivado ? 0.4 : ocupado ? 0.6 : 1}
-      boxShadow={marmol ? "none" : HALO}
       transition="all 0.2s ease"
-      _hover={desactivado ? {} : marmol ? { transform: "translateY(-1px)", boxShadow: "0 0 18px #004f4f55" } : { transform: "translateY(-1px)", bg: solido ? "#e8fffc" : "rgba(255,255,255,0.26)" }}
-      _focusVisible={marmol ? { outline: "2px solid #004f4f", outlineOffset: "2px" } : focoBlanco}
+      _hover={desactivado ? {} : marmol ? { transform: "translateY(-1px)", boxShadow: "0 0 18px #004f4f55" } : { transform: "translateY(-1px)", bg: solido ? "#004a4a" : peligro ? "#b3261e14" : "#005F5F14" }}
+      _focusVisible={{ outline: marmol ? "2px solid #004f4f" : "2px solid #005F5Fcc", outlineOffset: "2px" }}
     >
       {children}
     </Box>

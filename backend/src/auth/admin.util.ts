@@ -33,7 +33,8 @@ export function getAccesoLibreEmails(): string[] {
 
 export function isAccesoLibreEmail(email?: string | null): boolean {
   if (!email) return false;
-  return getAccesoLibreEmails().includes(email.trim().toLowerCase());
+  // La cuenta de la web antigua ve todo el recorrido sin pagar (es la de María, para el TFG).
+  return getAccesoLibreEmails().includes(email.trim().toLowerCase()) || isAntiguaEmail(email);
 }
 
 // Contraseña ÚNICA de administración (además de estar en ADMIN_EMAILS). Se
@@ -55,4 +56,23 @@ export function verifyAdminPassword(password?: string | null): boolean {
     diff |= expected.charCodeAt(i) ^ given.charCodeAt(i);
   }
   return diff === 0;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// WEB ANTIGUA (/antigua/*) — el proyecto grande de antes, escondido para el TFG.
+// Solo entran las cuentas de ANTIGUA_EMAILS (separados por comas). Vive en el
+// servidor, no en la BD: nadie puede dárselo a sí mismo desde la app. Sin la
+// variable, NADIE entra. Registro cerrado: en /antigua no existe «crear cuenta».
+// Ej: ANTIGUA_EMAILS="maria@ejemplo.com"
+// ─────────────────────────────────────────────────────────────────────────────
+export function getAntiguaEmails(): string[] {
+  return (process.env.ANTIGUA_EMAILS ?? '')
+    .split(',')
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean);
+}
+
+export function isAntiguaEmail(email?: string | null): boolean {
+  if (!email) return false;
+  return getAntiguaEmails().includes(email.trim().toLowerCase());
 }

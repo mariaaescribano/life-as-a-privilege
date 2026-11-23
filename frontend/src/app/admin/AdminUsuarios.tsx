@@ -101,7 +101,7 @@ export default function AdminUsuarios() {
           <AdminDisciplinaHeader disc={disc} subtitle="Cuentas y quién ha pagado" fotoTalCual={fotoTalCual} />
 
           {!disc.disponible && (
-            <Text color="rgba(255,220,180,0.85)" fontSize="sm" fontStyle="italic" mb={4}>
+            <Text color="#b3261e" fontSize="sm" fontStyle="italic" mb={4}>
               Esta disciplina aún no tiene panel de administración. Puedes ver la lista, pero la lectura llegará pronto.
             </Text>
           )}
@@ -212,7 +212,7 @@ export default function AdminUsuarios() {
                 </Flex>
               ))}
               {filtrados.length === 0 && (
-                <Text color="rgba(255,255,255,0.6)" fontStyle="italic" textAlign="center" py={8}>
+                <Text color="#005F5Fb3" fontStyle="italic" textAlign="center" py={8}>
                   {usuarios.length === 0 ? "No hay cuentas todavía." : "Ninguna cuenta coincide con la búsqueda."}
                 </Text>
               )}

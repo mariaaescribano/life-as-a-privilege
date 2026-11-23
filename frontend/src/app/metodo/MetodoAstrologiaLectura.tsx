@@ -17,7 +17,7 @@ import { useAstroLeidos } from "../../hooks/useAstroLeidos";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { focoBlanco } from "../../components/global/foco";
 import { Reveal } from "../../components/global/Reveal";
-import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
+import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon, FONDO_PAGINA_BEIGE } from "../../GlobalVariables";
 import { useT } from "../../i18n";
 import { LetrasVivas } from "../../components/global/LetrasVivas";
 import { PalabrasVivas } from "../../components/global/PalabrasVivas";
@@ -243,7 +243,7 @@ export default function MetodoAstrologiaLectura() {
                   display="flex" flexDirection="column" alignItems="center" gap={3}>
             {/* Sin sombra: el texto de debajo del header va sobre el fondo limpio. */}
             {/* Las dos frases juntas, en un solo párrafo en cursiva, al tamaño de los demás textos de introducción. */}
-            <Text color="white" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center" fontStyle="italic" maxW="680px">
+            <Text color={FONDO_PAGINA_BEIGE} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center" fontStyle="italic" maxW="680px">
               {t("metodo.astro.lectura.intro", { nombre })} {t("metodo.astro.pulsaEstrella")}
             </Text>
           </Reveal>

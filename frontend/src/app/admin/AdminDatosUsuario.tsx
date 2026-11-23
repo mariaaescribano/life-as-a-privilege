@@ -5,7 +5,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { Box, Flex, Grid, Image, Input, Text } from "@chakra-ui/react";
+import { Box, Flex, Grid, Input, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { LifeLoading } from "../../components/global/LifeLoading";
@@ -14,7 +14,7 @@ import { sombraTexto } from "../../components/global/disciplinaSombras";
 import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt } from "../../GlobalVariables";
 import { dmaAIso, fechaDMA, mascaraDMA } from "../../utils/fechas";
 import { adminHeaders, useAdminGuard } from "./useAdminGuard";
-import { BotonPildora } from "./PildorasAdmin";
+import { BotonPildora, MandalaTurquesa } from "./PildorasAdmin";
 
 interface Persona {
   id: string;
@@ -67,8 +67,8 @@ const CAJA_MARMOL = {
   bgSize: "cover",
   bgPosition: "center",
   color: TINTA,
-  border: "1px solid rgba(255,255,255,0.65)",
-  boxShadow: "0 0 30px rgba(255,255,255,0.28), 0 0 70px rgba(180,255,245,0.14)",
+  border: `1.5px solid ${TINTA}`,
+  boxShadow: "0 0 18px #b08d3f44, 0 0 40px #b08d3f22",
 } as const;
 
 const CAJA_CIELO = {
@@ -84,40 +84,41 @@ const CAJA_CIELO = {
 
 const CAJA_VIDRIO = {
   ...CAJA_BASE,
-  bg: "rgba(255,255,255,0.07)",
-  color: "white",
-  border: "1px solid rgba(255,200,200,0.5)",
-  boxShadow: "0 0 24px rgba(255,255,255,0.12)",
+  bg: "transparent",
+  color: "#005F5F",
+  border: "1.5px solid #b3261e",
 } as const;
 
 /** Un campo que se escribe, sobre el mármol. */
 const ESTILO_CAMPO = {
   h: "50px",
   fontSize: "lg",
-  bg: "rgba(255,255,255,0.62)",
-  border: "1px solid rgba(0,79,79,0.4)",
+  bg: "#F7EBD9",
+  border: "1.5px solid #005F5F66",
   color: TINTA,
   borderRadius: "full",
   px: 5,
   fontFamily: "'EB Garamond', serif",
-  _placeholder: { color: "rgba(0,79,79,0.45)" },
-  _hover: { borderColor: "rgba(0,79,79,0.7)" },
-  _focus: { borderColor: TINTA, bg: "rgba(255,255,255,0.85)", boxShadow: "0 0 0 2px rgba(0,79,79,0.35)", outline: "none" },
-  _focusVisible: { borderColor: TINTA, bg: "rgba(255,255,255,0.85)", boxShadow: "0 0 0 2px rgba(0,79,79,0.35)", outline: "none" },
+  _placeholder: { color: "#005F5F8c" },
+  _hover: { borderColor: "#005F5Faa" },
+  _focus: { borderColor: "#005F5F", boxShadow: "none", outline: "none" },
+  _focusVisible: { borderColor: "#005F5F", boxShadow: "none", outline: "none" },
 } as const;
 
 /** El campo de confirmar el borrado, sobre el vidrio. */
 const ESTILO_CAMPO_VIDRIO = {
   h: "50px",
   fontSize: "md",
-  bg: "rgba(255,255,255,0.09)",
-  border: "1px solid rgba(255,200,200,0.6)",
-  color: "white",
+  bg: "#F7EBD9",
+  border: "1.5px solid #005F5F66",
+  color: "#005F5F",
   borderRadius: "full",
   px: 5,
   fontFamily: "'EB Garamond', serif",
-  _focus: { borderColor: "white", boxShadow: "0 0 0 2px rgba(255,255,255,0.55)", outline: "none" },
-  _focusVisible: { borderColor: "white", boxShadow: "0 0 0 2px rgba(255,255,255,0.55)", outline: "none" },
+  _placeholder: { color: "#005F5F8c" },
+  _hover: { borderColor: "#005F5Faa" },
+  _focus: { borderColor: "#005F5F", boxShadow: "none", outline: "none" },
+  _focusVisible: { borderColor: "#005F5F", boxShadow: "none", outline: "none" },
 } as const;
 
 /** Botón en píldora para las cajas de mármol: turquesa oscuro, o solo el contorno. */
@@ -138,15 +139,15 @@ function PildoraMarmol({ children, onClick, contorno, off, titulo }: {
       py="10px"
       borderRadius="full"
       border={`1.5px solid ${TINTA}`}
-      bg={contorno ? "rgba(255,255,255,0.45)" : TINTA}
-      color={contorno ? TINTA : "white"}
+      bg={contorno ? "transparent" : TINTA}
+      color={contorno ? TINTA : "#F0DCC0"}
       fontWeight="700"
       fontSize="md"
       letterSpacing="0.05em"
       cursor={off ? "not-allowed" : "pointer"}
       opacity={off ? 0.5 : 1}
       transition="all 0.2s ease"
-      _hover={off ? undefined : { transform: "translateY(-1px)", boxShadow: `0 0 18px ${TINTA}55` }}
+      _hover={off ? undefined : { transform: "translateY(-1px)", bg: contorno ? "#004f4f14" : "#003f3f" }}
       _focusVisible={{ outline: `2px solid ${TINTA}`, outlineOffset: "2px" }}
     >
       {children}
@@ -368,7 +369,7 @@ export default function AdminDatosUsuario() {
       <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
         <SiteHeader variant="private" />
         <Flex flex="1" direction="column" align="center" justify="center" gap={5} px={5}>
-          <Text color="white" fontSize="xl" fontStyle="italic">{aviso ?? "Esa cuenta no existe (¿ya la has eliminado?)."}</Text>
+          <Text color="#005F5F" fontSize="xl" fontStyle="italic">{aviso ?? "Esa cuenta no existe (¿ya la has eliminado?)."}</Text>
           <BotonPildora onClick={() => navigate("/admin/asesorias")}>Volver a Asesorías</BotonPildora>
         </Flex>
         <SiteFooter />
@@ -399,7 +400,7 @@ export default function AdminDatosUsuario() {
   const dato = (texto: string, valor?: string | null) => (
     <Box>
       {etiqueta(texto)}
-      <Flex align="center" minH="50px" px={5} borderRadius="full" bg="rgba(255,255,255,0.4)" border="1px solid rgba(0,79,79,0.22)">
+      <Flex align="center" minH="50px" px={5} borderRadius="full" bg="transparent" border="1.5px solid #005F5F55">
         <Text fontSize="lg" fontWeight="600" noOfLines={1} wordBreak="break-all">{valor || "—"}</Text>
       </Flex>
     </Box>
@@ -433,25 +434,17 @@ export default function AdminDatosUsuario() {
           {/* ── Cabecera: mandala, nombre y email ── */}
           <Reveal direction="down" distance={16}>
             <Flex direction="column" align="center" textAlign="center" mb={{ base: 7, md: 9 }}>
-              <Image
-                src="/img/icono/life.webp"
-                alt=""
-                h={{ base: "48px", md: "62px" }}
-                objectFit="contain"
-                mb={4}
-                style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.59)) drop-shadow(0 0 21px rgba(255,255,255,0.32)) drop-shadow(0 0 42px rgba(180,255,245,0.24))" }}
-              />
-              <Text color="white" fontSize={{ base: "2xl", md: "4xl" }} fontWeight="700" letterSpacing="0.08em"
-                    textTransform="uppercase" lineHeight="1.15"
-                    textShadow="0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(180,255,245,0.3)">
+              <Box mb={4}><MandalaTurquesa tam="56px" /></Box>
+              <Text color="#005F5F" fontSize={{ base: "2xl", md: "4xl" }} fontWeight="700" letterSpacing="0.08em"
+                    textTransform="uppercase" lineHeight="1.15">
                 {persona.name}
               </Text>
-              <Text color="rgba(255,255,255,0.8)" fontSize="lg" fontStyle="italic" mt={1}>{persona.email}</Text>
+              <Text color="#005F5F" opacity={0.8} fontSize="lg" fontStyle="italic" mt={1}>{persona.email}</Text>
             </Flex>
           </Reveal>
 
           {aviso && (
-            <Text role="status" color="#ffe7bd" fontSize="md" fontStyle="italic" textAlign="center" mb={5}>{aviso}</Text>
+            <Text role="status" color="#005F5F" fontSize="md" fontStyle="italic" textAlign="center" mb={5}>{aviso}</Text>
           )}
 
           {/* ── Datos personales ── */}
@@ -459,9 +452,9 @@ export default function AdminDatosUsuario() {
             <Box {...CAJA_MARMOL}>
               <Flex align="center" justify="space-between" gap={3} wrap="wrap" mb={6}>
                 {tituloMarmol("Datos personales")}
-                <Flex align="center" gap={2} px={4} py="5px" borderRadius="full" bg="rgba(255,255,255,0.55)" border="1px solid rgba(0,79,79,0.3)">
+                <Flex align="center" gap={2} px={4} py="5px" borderRadius="full" bg="transparent" border="1.5px solid #004f4f88">
                   <Box w="9px" h="9px" borderRadius="full" bg={pendiente ? "#d99a2b" : activada ? "#1f9d8f" : "#9aa"}
-                       boxShadow={pendiente ? "0 0 8px #d99a2b" : activada ? "0 0 8px #1f9d8f" : "none"} />
+                       />
                   <Text fontSize="md" fontWeight="700">
                     {pendiente ? "Pendiente de activar" : activada ? "Activada" : "—"}
                   </Text>

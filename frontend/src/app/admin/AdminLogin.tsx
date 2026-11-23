@@ -6,7 +6,7 @@ import { Box, Flex, Input, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { LifeLoading } from "../../components/global/LifeLoading";
-import { CampoContrasena, focoAzul, inputAuthStyles } from "../../components/global/CampoContrasena";
+import { CampoContrasena, inputAuthStyles } from "../../components/global/CampoContrasena";
 import { API_URL } from "../../GlobalVariables";
 
 // Entrada propia de administración (/admin/login), sin pasar por el login normal:
@@ -73,27 +73,24 @@ export default function AdminLogin() {
           align="center"
           textAlign="center"
           w={{ base: "100%", sm: "440px" }}
-          bg="rgba(255,255,255,0.06)"
-          borderRadius="30px"
-          border="1.5px solid rgba(255,255,255,0.35)"
-          boxShadow="0 0 30px rgba(255,255,255,0.14), 0 24px 70px rgba(0,0,0,0.35)"
-          sx={{ backdropFilter: "blur(10px)" }}
+          bg="transparent"
+          borderRadius="3xl"
+          border="1.5px solid #005F5F"
           px={{ base: 9, md: 12 }}
           py={{ base: 12, md: 14 }}
           gap={6}
         >
           <Text
-            color="white"
+            color="#005F5F"
             fontSize={{ base: "2xl", md: "3xl" }}
             fontWeight="700"
             letterSpacing="0.06em"
             textTransform="uppercase"
-            textShadow="0 0 16px rgba(255,255,255,0.5), 0 0 34px rgba(180,255,245,0.3)"
           >
             Acceso a administración
           </Text>
 
-          <Box w="70%" h="1px" bgGradient="linear(to-r, transparent, rgba(255,255,255,0.6), transparent)" />
+          <Box w="70%" h="1px" bgGradient="linear(to-r, transparent, #005F5F99, transparent)" />
 
           <Box w="100%">
             <Input
@@ -118,7 +115,7 @@ export default function AdminLogin() {
           </Box>
 
           {error && (
-            <Text color="#ffbdbd" fontSize="sm" fontStyle="italic" textShadow="0 0 8px rgba(255,140,140,0.4)">
+            <Text color="#b3261e" fontSize="sm" fontStyle="italic">
               {error}
             </Text>
           )}
@@ -131,19 +128,18 @@ export default function AdminLogin() {
               px={9}
               py={3}
               borderRadius="full"
-              border="1.5px solid rgba(255,255,255,0.75)"
-              bg="rgba(255,255,255,0.18)"
-              color="white"
+              border="1.5px solid #005F5F"
+              bg="#005F5F"
+              color="#F0DCC0"
               fontSize="md"
               fontWeight="700"
               letterSpacing="0.08em"
               textTransform="uppercase"
               cursor={!puede ? "not-allowed" : "pointer"}
               opacity={!puede ? 0.45 : 1}
-              boxShadow="0 0 22px rgba(255,255,255,0.35)"
               transition="all 0.2s ease"
-              _hover={!puede ? undefined : { bg: "rgba(255,255,255,0.3)", transform: "translateY(-1px)" }}
-              _focusVisible={focoAzul}
+              _hover={!puede ? undefined : { bg: "#004a4a", transform: "translateY(-1px)" }}
+              _focusVisible={{ outline: "2px solid #005F5Fcc", outlineOffset: "2px" }}
             >
               {enviando ? "Verificando…" : "Entrar"}
             </Box>
@@ -155,15 +151,15 @@ export default function AdminLogin() {
               py={3}
               borderRadius="full"
               bg="transparent"
-              border="1px solid rgba(255,255,255,0.3)"
-              color="rgba(255,255,255,0.8)"
+              border="1.5px solid #005F5F"
+              color="#005F5F"
               fontSize="md"
               fontWeight="600"
               letterSpacing="0.06em"
               cursor="pointer"
               transition="all 0.2s ease"
-              _hover={{ color: "white", borderColor: "rgba(255,255,255,0.6)" }}
-              _focusVisible={focoAzul}
+              _hover={{ bg: "#005F5F14" }}
+              _focusVisible={{ outline: "2px solid #005F5Fcc", outlineOffset: "2px" }}
             >
               Volver
             </Box>

@@ -4,13 +4,13 @@ import { useT } from "../../i18n";
 import { Box, Flex, Image, Input, SimpleGrid, Text, VStack } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
-import { API_URL, turquesa } from "../../GlobalVariables";
+import { API_URL, FONDO_PAGINA_BEIGE as BEIGE, FONDO_PAGINA_TURQUESA as T } from "../../GlobalVariables";
 import { cerrarSesionLocal } from "../../api/sesion";
 import { salirDeLaPersona, personaActiva, cabeceraPersona } from "../../api/persona";
 import { encogerFoto } from "../../utils/encogerFoto";
 import { LifeLoader } from "../../components/metodo/comicLoaders";
 
-import { inputFechaSx } from "../../components/global/CampoContrasena";
+import { inputFechaSx, inputAuthStyles } from "../../components/global/CampoContrasena";
 import { fechaDMA } from "../../utils/fechas";
 
 /** Años cumplidos a partir de la fecha (ISO), o null si no hay fecha válida.
@@ -28,31 +28,11 @@ const edadDe = (iso: string): number | null => {
 /** Un dato que se mira y no se toca: sin hover, sin halo de foco y con el cursor quieto. */
 const SOLO_LECTURA = {
   cursor: "default",
-  _hover: { border: "1px solid rgba(255,255,255,0.28)" },
-  _focus: { border: "1px solid rgba(255,255,255,0.28)", boxShadow: "0 0 10px rgba(255,255,255,0.12)", outline: "none" },
+  _hover: { border: `1.5px solid ${T}66` },
+  _focus: { border: `1.5px solid ${T}66`, boxShadow: "none", outline: "none" },
 };
 
-const inputStyles = {
-  bg: "rgba(255,255,255,0.06)",
-  border: "1px solid rgba(255,255,255,0.28)",
-  color: "white",
-  borderRadius: "full",
-  size: "lg" as const,
-  h: "62px",
-  fontSize: "xl",
-  textAlign: "center" as const,
-  fontFamily: "'EB Garamond', serif",
-  letterSpacing: "0.04em",
-  boxShadow: "0 0 10px rgba(255,255,255,0.12)",
-  _placeholder: { color: "rgba(255,255,255,0.4)" },
-  _hover: { border: "1px solid rgba(255,255,255,0.55)" },
-  _focus: {
-    border: "1px solid rgba(255,255,255,0.85)",
-    boxShadow: "0 0 0 1px rgba(255,255,255,0.25), 0 0 18px rgba(255,255,255,0.3)",
-    bg: "rgba(255,255,255,0.12)",
-    outline: "none",
-  },
-};
+const inputStyles = { ...inputAuthStyles, h: "56px" };
 
 export default function UserAccount() {
   const t = useT();
@@ -251,7 +231,7 @@ export default function UserAccount() {
   };
 
   if (loading) return (
-    <Flex minH="100vh" bg="#F0DCC0" justify="center" align="center">
+    <Flex minH="100vh" bg={BEIGE} justify="center" align="center">
       <LifeLoader />
     </Flex>
   );
@@ -264,7 +244,7 @@ export default function UserAccount() {
     fechaNacimiento !== initialRef.current.fechaNacimiento;
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg={BEIGE} fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" userImg={img} />
 
       <Box flex="1" display="flex" flexDirection="column" transform="scale(0.9)" transformOrigin="top center">
@@ -284,13 +264,12 @@ export default function UserAccount() {
         gap={{ base: 3, md: 4 }}
       >
         <Text
-          color="white"
+          color={T}
           fontSize={{ base: "4xl", md: "5xl", lg: "6xl" }}
           fontWeight="700"
           letterSpacing="0.1em"
           lineHeight="1.1"
           textTransform="uppercase"
-          textShadow="0 0 18px rgba(255,255,255,0.85), 0 0 38px rgba(255,255,255,0.55), 0 0 70px rgba(180,255,245,0.45)"
           opacity={mounted ? 1 : 0}
           transform={mounted ? "translateY(0)" : "translateY(24px)"}
           transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
@@ -319,12 +298,11 @@ export default function UserAccount() {
               h={{ base: "130px", md: "160px" }}
               borderRadius="full"
               overflow="hidden"
-              border="2px solid rgba(255,255,255,0.85)"
-              boxShadow="0 0 22px rgba(255,255,255,0.55), 0 0 50px rgba(255,255,255,0.3), 0 0 100px rgba(180,255,245,0.28)"
+              border={`2px solid ${T}`}
               cursor={uploading ? "default" : "pointer"}
               onClick={() => !uploading && fileRef.current?.click()}
-              transition="box-shadow 0.25s"
-              _hover={uploading ? {} : { boxShadow: "0 0 34px rgba(255,255,255,0.75), 0 0 70px rgba(180,255,245,0.45), 0 0 120px rgba(180,255,245,0.35)" }}
+              transition="transform 0.25s"
+              _hover={uploading ? {} : { transform: "scale(1.03)" }}
               position="relative"
             >
               {uploading && (
@@ -333,7 +311,7 @@ export default function UserAccount() {
                   h="100%"
                   align="center"
                   justify="center"
-                  bg="rgba(0,0,0,0.45)"
+                  bg={`${BEIGE}cc`}
                   position="absolute"
                   top={0}
                   left={0}
@@ -345,19 +323,18 @@ export default function UserAccount() {
               {img ? (
                 <Image src={img} w="100%" h="100%" objectFit="cover" />
               ) : (
-                <Flex w="100%" h="100%" align="center" justify="center" bg="rgba(255,255,255,0.08)">
-                  <svg xmlns="http://www.w3.org/2000/svg" height="56px" viewBox="0 -960 960 960" width="56px" fill="rgba(255,255,255,0.5)">
+                <Flex w="100%" h="100%" align="center" justify="center" bg={`${T}14`}>
+                  <svg xmlns="http://www.w3.org/2000/svg" height="56px" viewBox="0 -960 960 960" width="56px" fill={`${T}99`}>
                     <path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Z"/>
                   </svg>
                 </Flex>
               )}
             </Box>
             <Text
-              color="rgba(255,255,255,0.65)"
+              color={`${T}b3`}
               fontSize="sm"
               letterSpacing="0.06em"
               fontStyle="italic"
-              textShadow="0 0 8px rgba(255,255,255,0.3)"
             >
               {uploading ? t("cuenta.foto.subiendo") : t("cuenta.foto.tocaParaCambiar")}
             </Text>
@@ -365,8 +342,7 @@ export default function UserAccount() {
           </Flex>
 
           {/* ── Campos, en su cajita ──
-              Panel de cristal (el mismo lenguaje que la tarjeta de la creadora:
-              blanco translúcido + filo fino, sin halo claro sobre el turquesa)
+              Caja con el borde turquesa oscuro
               con los campos a DOS columnas en ordenador y UNA en móvil. La
               fecha, al ser la quinta y llevar su nota debajo, cruza las dos
               columnas: así la rejilla nunca deja un hueco cojo. */}
@@ -374,18 +350,13 @@ export default function UserAccount() {
             columns={{ base: 1, md: 2 }}
             spacingX={7}
             spacingY={5}
-            bg="rgba(255,255,255,0.05)"
-            border="1px solid rgba(255,255,255,0.14)"
+            border={`1.5px solid ${T}`}
             borderRadius="3xl"
             px={{ base: 5, md: 9 }}
             py={{ base: 7, md: 9 }}
-            // Cristal con algo más de cuerpo: un filo de luz por arriba y una
-            // sombra que lo despega del turquesa, sin halo claro alrededor.
-            boxShadow="inset 0 1px 0 rgba(255,255,255,0.16), 0 18px 44px rgba(0,0,0,0.16)"
-            sx={{ backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }}
           >
             <Box>
-              <Text color="rgba(255,255,255,0.78)" fontSize="md" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
+              <Text color={T} fontSize="md" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center">
                 {t("auth.campo.nombre")}
               </Text>
               <Input
@@ -396,7 +367,7 @@ export default function UserAccount() {
             </Box>
 
             <Box>
-              <Text color="rgba(255,255,255,0.78)" fontSize="md" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
+              <Text color={T} fontSize="md" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center">
                 {t("auth.campo.email")}
               </Text>
               <Input
@@ -408,7 +379,7 @@ export default function UserAccount() {
             </Box>
 
             <Box>
-              <Text color="rgba(255,255,255,0.78)" fontSize="md" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
+              <Text color={T} fontSize="md" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center">
                 {t("auth.campo.contrasena")}
               </Text>
               <Input
@@ -425,7 +396,7 @@ export default function UserAccount() {
             </Box>
 
             <Box>
-              <Text color="rgba(255,255,255,0.78)" fontSize="md" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
+              <Text color={T} fontSize="md" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center">
                 {t("auth.campo.telefono")}
               </Text>
               <Input
@@ -444,7 +415,7 @@ export default function UserAccount() {
                 y puede caer en dos líneas, así que las dos celdas se alinean
                 por abajo para que las cajitas queden a la misma altura. */}
             <Flex direction="column" justify="flex-end">
-              <Text color="rgba(255,255,255,0.78)" fontSize="md" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
+              <Text color={T} fontSize="md" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center">
                 {t("auth.campo.fechaNacimiento")}
               </Text>
               {soloLectura ? (
@@ -464,30 +435,29 @@ export default function UserAccount() {
             </Flex>
 
             <Flex direction="column" justify="flex-end">
-              <Text color="rgba(255,255,255,0.78)" fontSize="md" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
+              <Text color={T} fontSize="md" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center">
                 {t("cuenta.edad")}
               </Text>
               {/* Solo se mira, no se toca: la misma píldora que los campos pero
                   sin hover ni foco, para que se lea como un dato y no como un
                   hueco por rellenar. Sin fecha enseña un guion apagado. */}
               <Flex
-                h="62px"
+                h="56px"
                 align="center"
                 justify="center"
                 borderRadius="full"
-                bg="rgba(255,255,255,0.06)"
-                border="1px solid rgba(255,255,255,0.28)"
-                boxShadow="0 0 10px rgba(255,255,255,0.12)"
+                bg="#F7EBD9"
+                border={`1.5px solid ${T}66`}
               >
                 {edadDe(fechaNacimiento) !== null ? (
-                  <Text color="white" fontSize="2xl" fontWeight="600" letterSpacing="0.04em" textShadow="0 0 12px rgba(255,255,255,0.45)">
+                  <Text color={T} fontSize="2xl" fontWeight="600" letterSpacing="0.04em">
                     {edadDe(fechaNacimiento)}{" "}
-                    <Box as="span" fontSize="lg" fontWeight="400" color="rgba(255,255,255,0.6)" letterSpacing="0.06em">
+                    <Box as="span" fontSize="lg" fontWeight="400" color={`${T}99`} letterSpacing="0.06em">
                       {t("cuenta.edad.anios")}
                     </Box>
                   </Text>
                 ) : (
-                  <Text color="rgba(255,255,255,0.35)" fontSize="2xl">
+                  <Text color={`${T}55`} fontSize="2xl">
                     —
                   </Text>
                 )}
@@ -497,7 +467,7 @@ export default function UserAccount() {
             {/* Los datos de nacimiento de su carta astral: solo se ven. */}
             {nacCarta.hora && (
               <Flex direction="column" justify="flex-end">
-                <Text color="rgba(255,255,255,0.78)" fontSize="md" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
+                <Text color={T} fontSize="md" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center">
                   {t("cuenta.horaNacimiento")}
                 </Text>
                 <Input value={nacCarta.hora} {...inputStyles} isReadOnly {...SOLO_LECTURA} />
@@ -505,7 +475,7 @@ export default function UserAccount() {
             )}
             {nacCarta.lugar && (
               <Flex direction="column" justify="flex-end">
-                <Text color="rgba(255,255,255,0.78)" fontSize="md" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
+                <Text color={T} fontSize="md" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center">
                   {t("cuenta.lugarNacimiento")}
                 </Text>
                 <Input value={nacCarta.lugar} {...inputStyles} isReadOnly {...SOLO_LECTURA} />
@@ -514,13 +484,13 @@ export default function UserAccount() {
           </SimpleGrid>
 
           {error && (
-            <Text color="#ff8a8a" fontSize="sm" textAlign="center" fontStyle="italic" textShadow="0 0 8px rgba(255,140,140,0.4)">
+            <Text color="#b3261e" fontSize="sm" textAlign="center" fontStyle="italic">
               {error}
             </Text>
           )}
 
           {saved && (
-            <Text color={turquesa} fontSize="sm" textAlign="center" fontStyle="italic" style={{ textShadow: `0 0 10px ${turquesa}88, 0 0 22px ${turquesa}55` }}>
+            <Text color={T} fontSize="sm" textAlign="center" fontStyle="italic">
               ✓ {t("cuenta.cambiosGuardados")}
             </Text>
           )}
@@ -536,28 +506,22 @@ export default function UserAccount() {
               px={{ base: 10, md: 14 }}
               py={{ base: "14px", md: "16px" }}
               borderRadius="full"
-              border="1.5px solid rgba(255,255,255,0.6)"
-              bg="rgba(255,255,255,0.10)"
+              border={`1.5px solid ${T}`}
+              bg={T}
               cursor={(saving || !hayCambios) ? "not-allowed" : "pointer"}
               opacity={(saving || !hayCambios) ? 0.5 : 1}
-              boxShadow="0 0 18px rgba(255,255,255,0.36), 0 0 40px rgba(255,255,255,0.18), 0 0 70px rgba(180,255,245,0.18), 0 4px 14px rgba(0,0,0,0.18)"
-              _hover={(saving || !hayCambios) ? {} : {
-                bg: "rgba(255,255,255,0.2)",
-                borderColor: "white",
-                boxShadow: "0 0 28px rgba(255,255,255,0.55), 0 0 58px rgba(180,255,245,0.35), 0 6px 18px rgba(0,0,0,0.22)",
-                transform: "translateY(-1px)",
-              }}
+              _hover={(saving || !hayCambios) ? {} : { opacity: 0.92, transform: "translateY(-2px)" }}
+              _focusVisible={{ outline: `2px solid ${T}cc`, outlineOffset: "2px" }}
               transition="all 0.25s ease"
             >
-              <MandalaTinte h={{ base: "26px", md: "32px" }} />
+              <MandalaTinte h={{ base: "26px", md: "32px" }} color={BEIGE} />
               <Text
-                color="white"
+                color={BEIGE}
                 fontFamily="'EB Garamond', serif"
                 fontWeight="700"
                 fontSize={{ base: "md", md: "xl" }}
                 letterSpacing="0.2em"
                 textTransform="uppercase"
-                textShadow="0 0 12px rgba(255,255,255,0.65), 0 0 26px rgba(255,255,255,0.4)"
               >
                 {saving ? t("comun.guardando") : t("comun.guardar")}
               </Text>
@@ -570,16 +534,18 @@ export default function UserAccount() {
               <Text
                 as="button"
                 onClick={() => navigate("/admin")}
-                color={turquesa}
+                color={T}
                 fontSize="sm"
                 fontWeight="600"
                 letterSpacing="0.1em"
                 textTransform="uppercase"
+                textDecoration="underline"
+                textUnderlineOffset="3px"
                 bg="transparent"
                 cursor="pointer"
                 mb={2}
-                style={{ textShadow: `0 0 10px ${turquesa}88, 0 0 22px ${turquesa}44` }}
-                _hover={{ color: "white", textShadow: `0 0 14px ${turquesa}, 0 0 28px ${turquesa}88` }}
+                _hover={{ opacity: 0.75 }}
+                _focusVisible={{ outline: `2px solid ${T}cc`, outlineOffset: "2px" }}
                 transition="all 0.22s ease"
               >
                 {t("cuenta.panelAdmin")}
@@ -587,7 +553,7 @@ export default function UserAccount() {
             )}
             {/* Las dos píldoras GEMELAS: mismo ancho y misma altura, para que
                 ninguna parezca la hermana pequeña. Cambian solo los colores:
-                cerrar sesión habla en blanco y eliminar cuenta en rojo, que es
+                cerrar sesión habla en turquesa y eliminar cuenta en rojo, que es
                 su aviso. En móvil se apilan a lo ancho. */}
             <Flex
               w="100%"
@@ -605,25 +571,19 @@ export default function UserAccount() {
                 w={{ base: "100%", sm: "250px" }}
                 py="13px"
                 borderRadius="full"
-                border="1.5px solid rgba(255,255,255,0.55)"
-                bg="rgba(255,255,255,0.08)"
+                border={`1.5px solid ${T}`}
+                bg="transparent"
                 cursor="pointer"
-                boxShadow="0 0 14px rgba(255,255,255,0.22), 0 4px 12px rgba(0,0,0,0.16)"
-                _hover={{
-                  bg: "rgba(255,255,255,0.18)",
-                  borderColor: "white",
-                  boxShadow: "0 0 20px rgba(255,255,255,0.4), 0 6px 16px rgba(0,0,0,0.2)",
-                  transform: "translateY(-1px)",
-                }}
+                _hover={{ bg: `${T}14`, transform: "translateY(-1px)" }}
+                _focusVisible={{ outline: `2px solid ${T}cc`, outlineOffset: "2px" }}
                 transition="all 0.22s ease"
               >
                 <Text
-                  color="white"
+                  color={T}
                   fontWeight="600"
                   fontSize="md"
                   letterSpacing="0.12em"
                   textTransform="uppercase"
-                  textShadow="0 0 10px rgba(255,255,255,0.4)"
                 >
                   {t("cuenta.cerrarSesion")}
                 </Text>
@@ -637,25 +597,19 @@ export default function UserAccount() {
                 w={{ base: "100%", sm: "250px" }}
                 py="13px"
                 borderRadius="full"
-                border="1.5px solid rgba(255,140,140,0.55)"
-                bg="rgba(255,120,120,0.08)"
+                border="1.5px solid #b3261e"
+                bg="transparent"
                 cursor="pointer"
-                boxShadow="0 0 14px rgba(255,120,120,0.2), 0 4px 12px rgba(0,0,0,0.16)"
-                _hover={{
-                  bg: "rgba(255,120,120,0.18)",
-                  borderColor: "rgba(255,170,170,0.9)",
-                  boxShadow: "0 0 20px rgba(255,120,120,0.38), 0 6px 16px rgba(0,0,0,0.2)",
-                  transform: "translateY(-1px)",
-                }}
+                _hover={{ bg: "#b3261e14", transform: "translateY(-1px)" }}
+                _focusVisible={{ outline: "2px solid #b3261ecc", outlineOffset: "2px" }}
                 transition="all 0.22s ease"
               >
                 <Text
-                  color="rgba(255,180,180,0.95)"
+                  color="#b3261e"
                   fontWeight="600"
                   fontSize="md"
                   letterSpacing="0.12em"
                   textTransform="uppercase"
-                  textShadow="0 0 10px rgba(255,140,140,0.4)"
                 >
                   {t("cuenta.eliminarCuenta")}
                 </Text>
@@ -678,8 +632,7 @@ export default function UserAccount() {
           align="center"
           justify="center"
           zIndex={1000}
-          bg="rgba(0,0,0,0.55)"
-          backdropFilter="blur(6px)"
+          bg={`${BEIGE}d9`}
           px={5}
           onClick={cerrarConfirmDelete}
         >
@@ -689,21 +642,19 @@ export default function UserAccount() {
             textAlign="center"
             onClick={(e) => e.stopPropagation()}
             w={{ base: "100%", sm: "480px" }}
-            bgGradient="linear(to-b, #5a1522, #3d0d17)"
+            bg={BEIGE}
             borderRadius="30px"
-            border="1.5px solid rgba(226,140,140,0.5)"
-            boxShadow="0 0 34px rgba(200,70,70,0.4), 0 0 80px rgba(150,40,40,0.28), 0 24px 70px rgba(0,0,0,0.55), inset 0 0 34px rgba(255,180,180,0.06)"
+            border="1.5px solid #b3261e"
             px={{ base: 9, md: 14 }}
             py={{ base: 12, md: 16 }}
             gap={6}
           >
             <Text
-              color="rgba(255,235,235,0.98)"
+              color="#b3261e"
               fontSize={{ base: "2xl", md: "3xl" }}
               fontWeight="700"
               letterSpacing="0.04em"
               lineHeight="1.25"
-              textShadow="0 0 18px rgba(255,120,120,0.5), 0 0 40px rgba(255,90,90,0.3)"
             >
               {t("cuenta.borrar.titulo")}
             </Text>
@@ -712,16 +663,14 @@ export default function UserAccount() {
             <Box
               w={{ base: "70%", md: "60%" }}
               h="1px"
-              bgGradient="linear(to-r, transparent, rgba(255,180,180,0.65), transparent)"
-              boxShadow="0 0 10px rgba(255,150,150,0.5)"
+              bgGradient="linear(to-r, #b3261e00, #b3261e99, #b3261e00)"
             />
 
             <Text
-              color="rgba(255,225,225,0.85)"
+              color={T}
               fontSize={{ base: "md", md: "lg" }}
               lineHeight="1.75"
               fontStyle="italic"
-              textShadow="0 0 8px rgba(255,150,150,0.2)"
             >
               {t("cuenta.borrar.aviso")}
             </Text>
@@ -729,7 +678,7 @@ export default function UserAccount() {
             {/* Confirmación: contraseña + escribir la palabra BORRAR */}
             <VStack w="100%" spacing={4} align="stretch">
               <Box>
-                <Text color="rgba(255,225,225,0.82)" fontSize="sm" letterSpacing="0.14em" mb={2} fontWeight="600" textAlign="center">
+                <Text color={T} fontSize="sm" letterSpacing="0.14em" mb={2} fontWeight="600" textAlign="center">
                   {t("cuenta.borrar.tuContrasena")}
                 </Text>
                 <Input
@@ -742,9 +691,9 @@ export default function UserAccount() {
                 />
               </Box>
               <Box>
-                <Text color="rgba(255,225,225,0.82)" fontSize="sm" letterSpacing="0.14em" mb={2} fontWeight="600" textAlign="center">
+                <Text color={T} fontSize="sm" letterSpacing="0.14em" mb={2} fontWeight="600" textAlign="center">
                   {t("cuenta.borrar.escribe")}{" "}
-                  <Box as="span" fontWeight="800" color="white">{palabraBorrar}</Box>{" "}
+                  <Box as="span" fontWeight="800" color="#b3261e">{palabraBorrar}</Box>{" "}
                   {t("cuenta.borrar.paraConfirmar")}
                 </Text>
                 <Input
@@ -758,7 +707,7 @@ export default function UserAccount() {
             </VStack>
 
             {delError && (
-              <Text color="#ff8a8a" fontSize="sm" textAlign="center" fontStyle="italic" textShadow="0 0 8px rgba(255,140,140,0.4)">
+              <Text color="#b3261e" fontSize="sm" textAlign="center" fontStyle="italic">
                 {delError}
               </Text>
             )}
@@ -770,20 +719,20 @@ export default function UserAccount() {
                 as="button"
                 onClick={handleDelete}
                 disabled={!puedeBorrar || deleting}
-                color="rgba(255,225,225,0.82)"
+                color="#b3261e"
                 fontSize="md"
                 fontWeight="600"
                 letterSpacing="0.08em"
                 textTransform="uppercase"
-                bg="rgba(0,0,0,0.2)"
+                bg="transparent"
                 cursor={puedeBorrar && !deleting ? "pointer" : "not-allowed"}
                 opacity={puedeBorrar && !deleting ? 1 : 0.4}
                 px={7}
                 py={3}
                 borderRadius="full"
-                border="1px solid rgba(255,200,200,0.32)"
-                textShadow="0 0 8px rgba(0,0,0,0.4)"
-                _hover={puedeBorrar && !deleting ? { color: "white", bg: "rgba(0,0,0,0.32)", borderColor: "rgba(255,210,210,0.6)" } : undefined}
+                border="1.5px solid #b3261e"
+                _hover={puedeBorrar && !deleting ? { bg: "#b3261e14" } : undefined}
+                _focusVisible={{ outline: "2px solid #b3261ecc", outlineOffset: "2px" }}
                 transition="all 0.22s ease"
               >
                 {deleting ? t("cuenta.borrar.eliminando") : t("comun.aceptar")}
@@ -798,25 +747,19 @@ export default function UserAccount() {
                 px={10}
                 py={3}
                 borderRadius="full"
-                border="1.5px solid rgba(255,255,255,0.75)"
-                bg="rgba(255,255,255,0.18)"
+                border={`1.5px solid ${T}`}
+                bg={T}
                 cursor="pointer"
-                boxShadow="0 0 22px rgba(255,255,255,0.45), 0 0 50px rgba(255,210,210,0.32)"
-                _hover={{
-                  bg: "rgba(255,255,255,0.3)",
-                  borderColor: "white",
-                  boxShadow: "0 0 32px rgba(255,255,255,0.65), 0 0 64px rgba(255,200,200,0.45)",
-                  transform: "translateY(-1px)",
-                }}
+                _hover={{ opacity: 0.92, transform: "translateY(-1px)" }}
+                _focusVisible={{ outline: `2px solid ${T}cc`, outlineOffset: "2px" }}
                 transition="all 0.22s ease"
               >
                 <Text
-                  color="white"
+                  color={BEIGE}
                   fontSize="lg"
                   fontWeight="700"
                   letterSpacing="0.1em"
                   textTransform="uppercase"
-                  textShadow="0 0 12px rgba(255,255,255,0.7), 0 0 26px rgba(255,255,255,0.4)"
                 >
                   {t("comun.cancelar")}
                 </Text>

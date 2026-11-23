@@ -27,14 +27,13 @@ export default function AdminEditorPlaceholder() {
               <disc.Icon size={{ base: "48px", md: "60px" }} />
             </Box>
           )}
-          <Text color="white" fontSize="2xl" fontWeight="700" textTransform="capitalize">
+          <Text color="#005F5F" fontSize="2xl" fontWeight="700" textTransform="capitalize">
             {disc?.nombre ?? "Disciplina"}
           </Text>
-          <Text color="rgba(255,255,255,0.7)" fontStyle="italic">
+          <Text color="#005F5Fcc" fontStyle="italic">
             El editor de contenido de esta disciplina aún no está disponible. Lo añadiremos pronto.
           </Text>
-          <Text as="button" onClick={() => navigate(`/admin/${disc?.key ?? ""}`)} color={disc?.txt ?? "white"} mt={2}
-                _hover={{ textShadow: "0 0 10px rgba(255,255,255,0.5)" }}>
+          <Text as="button" onClick={() => navigate(`/admin/${disc?.key ?? ""}`)} color="#005F5F" textDecoration="underline" mt={2}>
             ← Volver a la lista
           </Text>
         </Flex>

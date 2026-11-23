@@ -11,7 +11,6 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { LifeLoading } from "../../components/global/LifeLoading";
 import { Reveal } from "../../components/global/Reveal";
-import { focoBlanco } from "../../components/global/foco";
 import { API_URL } from "../../GlobalVariables";
 import { dmaAIso, mascaraDMA } from "../../utils/fechas";
 import { adminHeaders, useAdminGuard } from "./useAdminGuard";
@@ -134,12 +133,11 @@ export default function AdminCrearCuenta() {
       <Flex flex="1" justify="center" px={{ base: 5, md: 10 }} pt={{ base: 8, md: 12 }} pb={{ base: 10, md: 14 }}>
         <Box w="100%" maxW="560px">
           <Reveal direction="down" distance={16}>
-            <Text color="white" fontSize={{ base: "2xl", md: "4xl" }} fontWeight="700" letterSpacing="0.08em"
-                  textTransform="uppercase" lineHeight="1.15" textAlign="center"
-                  textShadow="0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(180,255,245,0.3)">
+            <Text color="#005F5F" fontSize={{ base: "2xl", md: "4xl" }} fontWeight="700" letterSpacing="0.08em"
+                  textTransform="uppercase" lineHeight="1.15" textAlign="center">
               Crear usuario
             </Text>
-            <Text color="rgba(255,255,255,0.78)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" textAlign="center" mt={2} mb={{ base: 6, md: 8 }}>
+            <Text color="#005F5F" opacity={0.8} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" textAlign="center" mt={2} mb={{ base: 6, md: 8 }}>
               Le llegará un correo para elegir su contraseña y activarla. Empieza sin nada abierto:
               se lo abres tú desde su ficha.
             </Text>
@@ -154,20 +152,18 @@ export default function AdminCrearCuenta() {
                 px={{ base: 5, md: 8 }}
                 py={{ base: 6, md: 7 }}
                 borderRadius="28px"
-                bg="rgba(255,255,255,0.14)"
-                border="1px solid rgba(255,255,255,0.6)"
-                boxShadow="0 0 30px rgba(255,255,255,0.28), 0 0 70px rgba(180,255,245,0.16)"
+                bg="transparent"
+                border="1.5px solid #005F5F"
                 textAlign="center"
               >
                 <Flex justify="center" mb={3}>
-                  <Flex align="center" justify="center" w="44px" h="44px" borderRadius="full" bg="white" color="#008080"
-                        boxShadow="0 0 20px rgba(255,255,255,0.5)" aria-hidden>
+                  <Flex align="center" justify="center" w="44px" h="44px" borderRadius="full" bg="#005F5F" color="#F0DCC0" aria-hidden>
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M5 12.5l4.5 4.5L19 7.5" />
                     </svg>
                   </Flex>
                 </Flex>
-                <Text color={creada.ok ? "white" : "#ffe7bd"} fontSize={{ base: "lg", md: "xl" }} fontWeight="600" lineHeight="1.6">
+                <Text color={creada.ok ? "#005F5F" : "#b3261e"} fontSize={{ base: "lg", md: "xl" }} fontWeight="600" lineHeight="1.6">
                   {creada.texto}
                 </Text>
               </Box>
@@ -182,13 +178,12 @@ export default function AdminCrearCuenta() {
               px={{ base: 5, md: 9 }}
               py={{ base: 6, md: 8 }}
               borderRadius="28px"
-              bg="rgba(255,255,255,0.07)"
-              border="1px solid rgba(255,255,255,0.3)"
-              boxShadow="0 0 24px rgba(255,255,255,0.14), 0 0 60px rgba(180,255,245,0.08)"
+              bg="transparent"
+              border="1.5px solid #005F5F"
             >
               {CAMPOS.map((c, i) => (
                 <Box key={c.k} mb={5}>
-                  <Text as="label" htmlFor={`crear-${c.k}`} display="block" color="rgba(255,255,255,0.8)"
+                  <Text as="label" htmlFor={`crear-${c.k}`} display="block" color="#005F5F"
                         fontSize="sm" letterSpacing="0.14em" textTransform="uppercase" fontWeight="600" mb={2}>
                     {c.etiqueta}
                   </Text>
@@ -208,30 +203,30 @@ export default function AdminCrearCuenta() {
                     placeholder={c.ayuda}
                     h="52px"
                     fontSize="lg"
-                    bg="rgba(255,255,255,0.09)"
-                    border="1px solid rgba(255,255,255,0.34)"
-                    color="white"
+                    bg="#F7EBD9"
+                    border="1.5px solid #005F5F66"
+                    color="#005F5F"
                     borderRadius="full"
                     px={6}
                     fontFamily="'EB Garamond', serif"
-                    _placeholder={{ color: "rgba(255,255,255,0.4)" }}
-                    _hover={{ borderColor: "rgba(255,255,255,0.55)" }}
-                    // El campo con el foco se ve claro con el tabulador: borde blanco y halo.
-                    _focus={{ borderColor: "white", boxShadow: "0 0 0 2px rgba(255,255,255,0.55), 0 0 18px rgba(255,255,255,0.3)", bg: "rgba(255,255,255,0.13)", outline: "none" }}
-                    _focusVisible={{ borderColor: "white", boxShadow: "0 0 0 2px rgba(255,255,255,0.55), 0 0 18px rgba(255,255,255,0.3)", outline: "none" }}
+                    _placeholder={{ color: "#005F5F8c" }}
+                    _hover={{ borderColor: "#005F5Faa" }}
+                    // El campo con el foco: borde turquesa oscuro pleno.
+                    _focus={{ borderColor: "#005F5F", boxShadow: "none", outline: "none" }}
+                    _focusVisible={{ borderColor: "#005F5F", boxShadow: "none", outline: "none" }}
                   />
                 </Box>
               ))}
 
-              <Text color="rgba(255,255,255,0.8)" fontSize="sm" letterSpacing="0.14em" textTransform="uppercase" fontWeight="700" mt={7} mb={1}>
+              <Text color="#005F5F" fontSize="sm" letterSpacing="0.14em" textTransform="uppercase" fontWeight="700" mt={7} mb={1}>
                 Carta astral (opcional)
               </Text>
-              <Text color="rgba(255,255,255,0.7)" fontSize="sm" fontStyle="italic" mb={5}>
+              <Text color="#005F5F" opacity={0.8} fontSize="sm" fontStyle="italic" mb={5}>
                 Con la fecha de arriba. Aunque no tenga Astrología abierta, le saldrá todo rellenado.
               </Text>
               {CAMPOS_CARTA.map((c) => (
                 <Box key={c.k} mb={5}>
-                  <Text as="label" htmlFor={`crear-${c.k}`} display="block" color="rgba(255,255,255,0.8)"
+                  <Text as="label" htmlFor={`crear-${c.k}`} display="block" color="#005F5F"
                         fontSize="sm" letterSpacing="0.14em" textTransform="uppercase" fontWeight="600" mb={2}>
                     {c.etiqueta}
                   </Text>
@@ -244,22 +239,22 @@ export default function AdminCrearCuenta() {
                     placeholder={c.ayuda}
                     h="52px"
                     fontSize="lg"
-                    bg="rgba(255,255,255,0.09)"
-                    border="1px solid rgba(255,255,255,0.34)"
-                    color="white"
+                    bg="#F7EBD9"
+                    border="1.5px solid #005F5F66"
+                    color="#005F5F"
                     borderRadius="full"
                     px={6}
                     fontFamily="'EB Garamond', serif"
-                    _placeholder={{ color: "rgba(255,255,255,0.4)" }}
-                    _hover={{ borderColor: "rgba(255,255,255,0.55)" }}
-                    _focus={{ borderColor: "white", boxShadow: "0 0 0 2px rgba(255,255,255,0.55), 0 0 18px rgba(255,255,255,0.3)", bg: "rgba(255,255,255,0.13)", outline: "none" }}
-                    _focusVisible={{ borderColor: "white", boxShadow: "0 0 0 2px rgba(255,255,255,0.55), 0 0 18px rgba(255,255,255,0.3)", outline: "none" }}
+                    _placeholder={{ color: "#005F5F8c" }}
+                    _hover={{ borderColor: "#005F5Faa" }}
+                    _focus={{ borderColor: "#005F5F", boxShadow: "none", outline: "none" }}
+                    _focusVisible={{ borderColor: "#005F5F", boxShadow: "none", outline: "none" }}
                   />
                 </Box>
               ))}
 
               {error && (
-                <Text role="alert" color="#ffe7bd" fontSize="md" fontStyle="italic" textAlign="center" mb={4}>
+                <Text role="alert" color="#b3261e" fontSize="md" fontStyle="italic" textAlign="center" mb={4}>
                   {error}
                 </Text>
               )}
@@ -272,17 +267,16 @@ export default function AdminCrearCuenta() {
                   px={7}
                   py="10px"
                   borderRadius="full"
-                  bg="white"
-                  border="1.5px solid white"
-                  color="#008080"
+                  bg="#005F5F"
+                  border="1.5px solid #005F5F"
+                  color="#F0DCC0"
                   fontWeight="700"
                   fontSize="md"
                   cursor={enviando ? "wait" : "pointer"}
                   opacity={enviando ? 0.6 : 1}
-                  boxShadow="0 0 22px rgba(255,255,255,0.3)"
                   transition="all 0.2s"
-                  _hover={enviando ? undefined : { bg: "#e8fffc", transform: "translateY(-1px)" }}
-                  _focusVisible={focoBlanco}
+                  _hover={enviando ? undefined : { bg: "#004a4a", transform: "translateY(-1px)" }}
+                  _focusVisible={{ outline: "2px solid #005F5Fcc", outlineOffset: "2px" }}
                 >
                   {enviando ? "Creando…" : "Crear y mandar correo"}
                 </Box>

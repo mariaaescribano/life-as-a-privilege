@@ -9,7 +9,6 @@ import { Glifo, GlifoSigno } from "../../components/metodo/Glifo";
 import { cuerpoByKey, CUERPOS, ZODIAC_SIGNS, type CuerpoKey } from "../../components/metodo/astrologiaData";
 import { CartaAstral3D } from "../../components/metodo/CartaAstral3D/CartaAstral3D";
 import { SaberMasModal } from "../../components/metodo/Planetas";
-import { glowHeader } from "../../components/metodo/FotoBox";
 import type { CartaNatal, Aspecto } from "../../components/metodo/CartaAstral3D/types";
 import {
   infoCasa,
@@ -18,17 +17,11 @@ import {
   ASPECTO_SYMBOL,
   aspectoKey,
 } from "../../components/metodo/casasAspectos";
-import { API_URL, turquesa, astrologiaNom, astrologiaTxt } from "../../GlobalVariables";
+import { API_URL, astrologiaNom, astrologiaTxt } from "../../GlobalVariables";
 
-// Sombra/brillo blanco para texto sobre los boxes estrellados.
-const GLOW = `0 1px 3px rgba(0,0,0,0.6), 0 0 10px rgba(255,255,255,0.45), 0 0 22px ${astrologiaTxt}55`;
+const T = "#005F5F";
+const FOCO = { outline: "2px solid #005F5Fcc", outlineOffset: "2px" } as const;
 
-// Halo ÚNICO de todo el panel: el mismo de la cabecera del recorrido
-// (glowHeader). Nada de sombras negras: cajas y botones llevan este glow, y al
-// pasar por encima sube de intensidad (GLOW_CAJA_HOVER).
-const GLOW_CAJA = glowHeader(astrologiaTxt);
-const GLOW_CAJA_HOVER =
-  `0 0 22px rgba(255,255,255,0.28), 0 0 44px rgba(255,255,255,0.14), 0 0 70px rgba(180,255,245,0.16), 0 0 30px ${astrologiaTxt}2e, 0 0 62px ${astrologiaTxt}1c`;
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { disciplinaByKey } from "../../data/adminDisciplinas";
 import { AdminDisciplinaHeader } from "./AdminDisciplinaHeader";
@@ -72,10 +65,10 @@ function Trozo({ children, px = { base: 4, md: 6 }, py = { base: 4, md: 5 }, vel
 }) {
   return (
     <Box position="relative" overflow="hidden" w="100%">
-      <DisciplinaBgLayer nom={astrologiaNom} borderRadius="0" overlay={velo} talCual={!velo} />
+      {velo && <DisciplinaBgLayer nom={astrologiaNom} borderRadius="0" overlay={velo} />}
       {/* Separación horizontal con lo que va justo encima */}
       <Box position="absolute" top={0} left={0} right={0} h="1px" zIndex={2}
-           bgGradient="linear(to-r, transparent, rgba(255,255,255,0.3), transparent)" />
+           bgGradient="linear(to-r, transparent, #005F5F55, transparent)" />
       <Box position="relative" zIndex={1} px={px} py={py}>{children}</Box>
     </Box>
   );
@@ -89,22 +82,21 @@ function BotonAviso({ label, enviado, enviando, onClick }: {
   return (
     <Box as="button" onClick={enviando ? undefined : onClick}
          position="relative" overflow="hidden" flex="1 1 260px" minW="240px" textAlign="left"
-         px={{ base: 4, md: 5 }} py={3} borderRadius="xl" border={`1px solid ${astrologiaTxt}66`}
+         px={{ base: 4, md: 5 }} py={3} borderRadius="xl" border="1.5px solid #005F5F"
          cursor={enviando ? "wait" : "pointer"} opacity={enviando ? 0.7 : 1}
-         boxShadow={GLOW_CAJA} _hover={{ boxShadow: GLOW_CAJA_HOVER, transform: "translateY(-1px)" }}
+         _hover={{ bg: "#005F5F14" }} _focusVisible={FOCO}
          transition="all 0.2s">
-      <DisciplinaBgLayer nom={astrologiaNom} borderRadius="xl" talCual />
       <Flex position="relative" zIndex={1} align="flex-start" gap={2.5}>
         {/* Sobre: deja claro que esto MANDA un correo, no guarda */}
         <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="18px" h="18px"
-             fill="#ffffff" flexShrink={0} mt="2px">
+             fill="#005F5F" flexShrink={0} mt="2px">
           <path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280 320-200v-80L480-520 160-720v80l320 200Z" />
         </Box>
         <Box minW={0}>
-          <Text color="#ffffff" fontWeight="700" fontSize="sm" lineHeight="1.35" style={{ textShadow: GLOW }}>
+          <Text color="#005F5F" fontWeight="700" fontSize="sm" lineHeight="1.35">
             {enviando ? "Enviando…" : label}
           </Text>
-          <Text color={enviado ? "rgba(255,255,255,0.72)" : "rgba(255,255,255,0.5)"} fontSize="xs"
+          <Text color={enviado ? "#005F5F" : "#005F5Fb3"} fontSize="xs"
                 fontStyle="italic" mt={1}>
             {enviado ? `Enviado el ${new Date(enviado).toLocaleString("es-ES")}` : "Sin enviar"}
           </Text>
@@ -122,15 +114,17 @@ const MESES_NAC = [
   { num: "10", nombre: "Octubre" }, { num: "11", nombre: "Noviembre" }, { num: "12", nombre: "Diciembre" },
 ];
 
-/** Estilo común de los campos de nacimiento. */
+/** Estilo común de los campos (nuevo estilo: beige claro, borde turquesa oscuro). */
 const campoNac = {
-  bg: "rgba(0,0,0,0.35)",
-  border: "1px solid rgba(255,255,255,0.22)",
-  color: "white",
+  bg: "#F7EBD9",
+  border: "1.5px solid #005F5F66",
+  color: "#005F5F",
   borderRadius: "lg",
   fontFamily: "'EB Garamond', serif",
-  _placeholder: { color: "rgba(255,255,255,0.35)" },
-  _focus: { borderColor: turquesa, boxShadow: `0 0 0 1px ${turquesa}55` },
+  _placeholder: { color: "#005F5F8c" },
+  _hover: { borderColor: "#005F5Faa" },
+  _focus: { borderColor: "#005F5F", boxShadow: "none", outline: "none" },
+  _focusVisible: { borderColor: "#005F5F", boxShadow: "none", outline: "none" },
 } as const;
 
 function Desplegable({ titulo, count, open, onToggle, accion, children }: {
@@ -145,21 +139,19 @@ function Desplegable({ titulo, count, open, onToggle, accion, children }: {
   children: React.ReactNode;
 }) {
   return (
-    <Box position="relative" borderRadius="xl" border={`1px solid ${turquesa}44`} mb={5} overflow="hidden"
-         boxShadow={GLOW_CAJA}>
-      <DisciplinaBgLayer nom={astrologiaNom} borderRadius="xl" talCual />
+    <Box position="relative" borderRadius="xl" border="1.5px solid #005F5F" mb={5} overflow="hidden">
       <Flex position="relative" zIndex={1} align="center" gap={3} px={{ base: 4, md: 6 }} py={4}
-            _hover={{ bg: "rgba(255,255,255,0.05)" }} transition="background 0.15s">
+            _hover={{ bg: "#005F5F0d" }} transition="background 0.15s">
         <Flex as="button" onClick={onToggle} flex="1" minW={0} align="center" textAlign="left" cursor="pointer">
-          <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.04em" style={{ textShadow: GLOW }}>
+          <Text color="#005F5F" fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.04em">
             {titulo}
-            {count != null && <Box as="span" color="rgba(255,255,255,0.75)" fontSize="sm"> ({count})</Box>}
+            {count != null && <Box as="span" color="#005F5F" fontSize="sm"> ({count})</Box>}
           </Text>
         </Flex>
         {accion}
         <Box as="button" onClick={onToggle} flexShrink={0} cursor="pointer"
              aria-label={open ? `Plegar ${titulo}` : `Desplegar ${titulo}`}>
-          <Chevron open={open} color="#ffffff" />
+          <Chevron open={open} color="#005F5F" />
         </Box>
       </Flex>
       {/* Sin padding: el cuerpo son `Trozo`s a todo el ancho, cada uno con su
@@ -446,13 +438,13 @@ export default function AdminAstrologiaEditor() {
             {/* barra de guardar */}
             <Flex justify="flex-end" align="center" gap={3} mb={5} wrap="wrap">
               {errorRetos && (
-                <Text color="#ff9a9a" fontSize="sm" fontStyle="italic" style={{ textShadow: GLOW }}>
+                <Text color="#b3261e" fontSize="sm" fontStyle="italic">
                   {errorRetos}
                 </Text>
               )}
               {guardado && (
-                <Flex align="center" gap={1.5} color="#ffffff" fontSize="sm" fontStyle="italic" style={{ textShadow: GLOW }}>
-                  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="15px" h="15px" fill="#ffffff">
+                <Flex align="center" gap={1.5} color="#005F5F" fontSize="sm" fontStyle="italic">
+                  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="15px" h="15px" fill="#005F5F">
                     <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
                   </Box>
                   Guardado
@@ -460,11 +452,10 @@ export default function AdminAstrologiaEditor() {
               )}
               <Box as="button" onClick={guardando ? undefined : guardar}
                    position="relative" overflow="hidden"
-                   px={8} py={2.5} borderRadius="full" border={`1px solid ${astrologiaTxt}88`}
+                   px={8} py={2.5} borderRadius="full" border="1.5px solid #005F5F"
                    cursor={guardando ? "wait" : "pointer"} opacity={guardando ? 0.7 : 1}
-                   boxShadow={GLOW_CAJA} _hover={{ boxShadow: GLOW_CAJA_HOVER, transform: "translateY(-1px)" }} transition="all 0.2s">
-                <DisciplinaBgLayer nom={astrologiaNom} borderRadius="9999px" talCual />
-                <Text position="relative" zIndex={1} color="#ffffff" fontWeight="700" letterSpacing="0.06em" style={{ textShadow: GLOW }}>
+                   bg="#005F5F" _hover={{ bg: "#004a4a" }} _focusVisible={FOCO} transition="all 0.2s">
+                <Text position="relative" zIndex={1} color="#F0DCC0" fontWeight="700" letterSpacing="0.06em">
                   {guardando ? "Guardando…" : "Guardar"}
                 </Text>
               </Box>
@@ -477,14 +468,12 @@ export default function AdminAstrologiaEditor() {
                   nada. El correo de datos registrados sale solo, al enviar ella
                   sus datos; estos dos se mandan desde aquí, cuando tú quieras. */}
             {false && (
-              <Box position="relative" borderRadius="xl" border={`1px solid ${turquesa}44`} mb={5} overflow="hidden"
-                   boxShadow={GLOW_CAJA}>
-                <DisciplinaBgLayer nom={astrologiaNom} borderRadius="xl" talCual />
+              <Box position="relative" borderRadius="xl" border="1.5px solid #005F5F" mb={5} overflow="hidden">
                 <Box position="relative" zIndex={1} p={{ base: 4, md: 5 }}>
-                  <Text color="#ffffff" fontWeight="700" fontSize="md" style={{ textShadow: GLOW }}>
+                  <Text color="#005F5F" fontWeight="700" fontSize="md">
                     Avisar por email
                   </Text>
-                  <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic" mt={1}>
+                  <Text color="#005F5Fb3" fontSize="xs" fontStyle="italic" mt={1}>
                     Nada de esto se manda al guardar: solo al pulsar. El correo con sus datos de
                     nacimiento le llega automáticamente cuando los envía.
                   </Text>
@@ -508,14 +497,14 @@ export default function AdminAstrologiaEditor() {
                   </Flex>
 
                   {avisoError && (
-                    <Text color="#ff9a9a" fontSize="sm" fontStyle="italic" mt={3} style={{ textShadow: GLOW }}>
+                    <Text color="#b3261e" fontSize="sm" fontStyle="italic" mt={3}>
                       {avisoError}
                     </Text>
                   )}
                   {avisoMsg && (
-                    <Flex align="center" gap={1.5} color="#ffffff" fontSize="sm" fontStyle="italic" mt={3}
-                          style={{ textShadow: GLOW }}>
-                      <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="15px" h="15px" fill="#ffffff">
+                    <Flex align="center" gap={1.5} color="#005F5F" fontSize="sm" fontStyle="italic" mt={3}
+                         >
+                      <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="15px" h="15px" fill="#005F5F">
                         <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
                       </Box>
                       {avisoMsg}
@@ -531,7 +520,7 @@ export default function AdminAstrologiaEditor() {
                   se le manda ningún correo: los avisos son los botones de arriba. */}
             <Desplegable titulo="Datos de nacimiento" open={nacOpen} onToggle={() => setNacOpen((o) => !o)}>
               <Trozo>
-                <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic" mb={4}>
+                <Text color="#005F5Fb3" fontSize="xs" fontStyle="italic" mb={4}>
                   Con esto se calcula toda su carta. Al guardar se recalcula sola (posiciones,
                   casas y aspectos) y no se le avisa por correo. Sus lecturas escritas se
                   mantienen, pero si cambia la hora pueden cambiarle las casas y los aspectos:
@@ -540,7 +529,7 @@ export default function AdminAstrologiaEditor() {
 
                 <Flex gap={3} wrap="wrap" mb={3}>
                   <Box flex="1 1 90px" minW="80px">
-                    <Text color="rgba(255,255,255,0.7)" fontSize="xs" mb={1}>Día</Text>
+                    <Text color="#005F5F" fontSize="xs" mb={1}>Día</Text>
                     <Input
                       value={nac.dia}
                       onChange={(e) => setNac((p) => ({ ...p, dia: e.target.value.replace(/\D/g, "").slice(0, 2) }))}
@@ -548,20 +537,19 @@ export default function AdminAstrologiaEditor() {
                     />
                   </Box>
                   <Box flex="1 1 120px" minW="110px">
-                    <Text color="rgba(255,255,255,0.7)" fontSize="xs" mb={1}>Mes</Text>
+                    <Text color="#005F5F" fontSize="xs" mb={1}>Mes</Text>
                     <Box as="select"
                          value={nac.mes}
                          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNac((p) => ({ ...p, mes: e.target.value }))}
-                         w="100%" px={3} py="9px" borderRadius="lg" bg="rgba(0,0,0,0.55)" color="white"
-                         border="1px solid rgba(255,255,255,0.22)" fontFamily="'EB Garamond', serif" cursor="pointer">
+                         w="100%" px={3} py="9px" cursor="pointer" {...campoNac}>
                       <option value="">—</option>
                       {MESES_NAC.map((m) => (
-                        <option key={m.num} value={m.num} style={{ background: "#0b1020" }}>{m.nombre}</option>
+                        <option key={m.num} value={m.num} style={{ background: "#F7EBD9", color: "#005F5F" }}>{m.nombre}</option>
                       ))}
                     </Box>
                   </Box>
                   <Box flex="1 1 110px" minW="90px">
-                    <Text color="rgba(255,255,255,0.7)" fontSize="xs" mb={1}>Año</Text>
+                    <Text color="#005F5F" fontSize="xs" mb={1}>Año</Text>
                     <Input
                       value={nac.anio}
                       onChange={(e) => setNac((p) => ({ ...p, anio: e.target.value.replace(/\D/g, "").slice(0, 4) }))}
@@ -569,7 +557,7 @@ export default function AdminAstrologiaEditor() {
                     />
                   </Box>
                   <Box flex="1 1 110px" minW="90px">
-                    <Text color="rgba(255,255,255,0.7)" fontSize="xs" mb={1}>Hora (24h)</Text>
+                    <Text color="#005F5F" fontSize="xs" mb={1}>Hora (24h)</Text>
                     <Input
                       value={nac.hora}
                       onChange={(e) => setNac((p) => ({ ...p, hora: e.target.value.slice(0, 5) }))}
@@ -580,17 +568,17 @@ export default function AdminAstrologiaEditor() {
 
                 <Flex gap={3} wrap="wrap" mb={4}>
                   <Box flex="1 1 200px">
-                    <Text color="rgba(255,255,255,0.7)" fontSize="xs" mb={1}>Ciudad / pueblo</Text>
+                    <Text color="#005F5F" fontSize="xs" mb={1}>Ciudad / pueblo</Text>
                     <Input value={nac.lugar} onChange={(e) => setNac((p) => ({ ...p, lugar: e.target.value }))}
                            placeholder="Alicante" {...campoNac} />
                   </Box>
                   <Box flex="1 1 200px">
-                    <Text color="rgba(255,255,255,0.7)" fontSize="xs" mb={1}>Región / provincia</Text>
+                    <Text color="#005F5F" fontSize="xs" mb={1}>Región / provincia</Text>
                     <Input value={nac.region} onChange={(e) => setNac((p) => ({ ...p, region: e.target.value }))}
                            placeholder="Comunidad Valenciana" {...campoNac} />
                   </Box>
                   <Box flex="1 1 200px">
-                    <Text color="rgba(255,255,255,0.7)" fontSize="xs" mb={1}>País</Text>
+                    <Text color="#005F5F" fontSize="xs" mb={1}>País</Text>
                     <Input value={nac.pais} onChange={(e) => setNac((p) => ({ ...p, pais: e.target.value }))}
                            placeholder="España" {...campoNac} />
                   </Box>
@@ -599,18 +587,18 @@ export default function AdminAstrologiaEditor() {
                 <Flex align="center" gap={3} wrap="wrap">
                   <Box as="button"
                        onClick={guardandoNac ? undefined : () => void guardarNacimiento()}
-                       px={6} py={2} borderRadius="full" border={`1px solid ${astrologiaTxt}88`}
-                       color="#ffffff" fontWeight="700" fontSize="sm" letterSpacing="0.04em"
+                       px={6} py={2} borderRadius="full" border="1.5px solid #005F5F"
+                       color="#005F5F" fontWeight="700" fontSize="sm" letterSpacing="0.04em"
                        cursor={guardandoNac ? "wait" : "pointer"} opacity={guardandoNac ? 0.7 : 1}
-                       boxShadow={GLOW_CAJA} _hover={{ boxShadow: GLOW_CAJA_HOVER }} transition="all 0.2s"
-                       style={{ textShadow: GLOW }}>
+                       _hover={{ bg: "#005F5F14" }} _focusVisible={FOCO} transition="all 0.2s"
+                      >
                     {guardandoNac ? "Recalculando…" : "Guardar y recalcular la carta"}
                   </Box>
                   {nacMsg && (
-                    <Text color="#ffffff" fontSize="sm" fontStyle="italic" style={{ textShadow: GLOW }}>{nacMsg}</Text>
+                    <Text color="#005F5F" fontSize="sm" fontStyle="italic">{nacMsg}</Text>
                   )}
                   {nacError && (
-                    <Text color="#ff9a9a" fontSize="sm" fontStyle="italic" style={{ textShadow: GLOW }}>{nacError}</Text>
+                    <Text color="#b3261e" fontSize="sm" fontStyle="italic">{nacError}</Text>
                   )}
                 </Flex>
               </Trozo>
@@ -645,11 +633,11 @@ export default function AdminAstrologiaEditor() {
 
                 {/* Planetas: pulsa uno para leer su arquetipo */}
                 <Trozo>
-                  <Text color="#ffffff" fontWeight="700" fontSize="sm" letterSpacing="0.1em" textTransform="uppercase"
-                        mb={1} style={{ textShadow: GLOW }}>
+                  <Text color="#005F5F" fontWeight="700" fontSize="sm" letterSpacing="0.1em" textTransform="uppercase"
+                        mb={1}>
                     Sus planetas
                   </Text>
-                  <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic" mb={3}>
+                  <Text color="#005F5Fb3" fontSize="xs" fontStyle="italic" mb={3}>
                     Pulsa uno para leer su arquetipo (el mismo texto que lee ella).
                   </Text>
                   <Flex wrap="wrap" gap={2}>
@@ -658,22 +646,22 @@ export default function AdminAstrologiaEditor() {
                       return (
                         <Flex as="button" key={c.key} onClick={() => setSaberMasKey(c.key)}
                               align="center" gap={2} px={3} py={1.5} borderRadius="full"
-                              bg="rgba(0,0,0,0.35)" border={`1px solid ${astrologiaTxt}55`}
+                              border="1.5px solid #005F5F55"
                               cursor="pointer" transition="all 0.18s"
-                              _hover={{ borderColor: astrologiaTxt, boxShadow: GLOW_CAJA_HOVER }}>
+                              _hover={{ borderColor: T }} _focusVisible={FOCO}>
                           <Glifo symbol={c.symbol} color={c.color} size={18} />
-                          <Text color="#ffffff" fontSize="sm" fontWeight="700" style={{ textShadow: GLOW }}>{c.label}</Text>
+                          <Text color="#005F5F" fontSize="sm" fontWeight="700">{c.label}</Text>
                           {pos.signo && (
                             <>
-                              <Text color="rgba(255,255,255,0.45)" fontSize="xs">·</Text>
-                              <GlifoSigno nombre={pos.signo} color="#ffffff" size={16} />
-                              <Text color="rgba(255,255,255,0.9)" fontSize="sm">{pos.signo}</Text>
+                              <Text color="#005F5F99" fontSize="xs">·</Text>
+                              <GlifoSigno nombre={pos.signo} color="#005F5F" size={16} />
+                              <Text color="#005F5F" fontSize="sm">{pos.signo}</Text>
                             </>
                           )}
                           {c.conCasa && pos.casa != null && (
                             <>
-                              <Text color="rgba(255,255,255,0.45)" fontSize="xs">·</Text>
-                              <Text color="rgba(255,255,255,0.9)" fontSize="sm">
+                              <Text color="#005F5F99" fontSize="xs">·</Text>
+                              <Text color="#005F5F" fontSize="sm">
                                 Casa {NUMEROS_ROMANOS[pos.casa - 1]}
                               </Text>
                             </>
@@ -686,8 +674,8 @@ export default function AdminAstrologiaEditor() {
 
                 {/* Casas: signo en la cúspide y su regente */}
                 <Trozo>
-                  <Text color="#ffffff" fontWeight="700" fontSize="sm" letterSpacing="0.1em" textTransform="uppercase"
-                        mb={3} style={{ textShadow: GLOW }}>
+                  <Text color="#005F5F" fontWeight="700" fontSize="sm" letterSpacing="0.1em" textTransform="uppercase"
+                        mb={3}>
                     Sus casas
                   </Text>
                   <Flex wrap="wrap" gap={2}>
@@ -695,17 +683,17 @@ export default function AdminAstrologiaEditor() {
                       const info = cusps.length ? infoCasa(cusps, n) : null;
                       return (
                         <Flex key={n} align="center" gap={2} px={3} py={1.5} borderRadius="full"
-                              bg="rgba(0,0,0,0.3)" border="1px solid rgba(255,255,255,0.2)">
-                          <Text color="#ffffff" fontSize="sm" fontWeight="700" style={{ textShadow: GLOW }}>
+                              border="1.5px solid #005F5F55">
+                          <Text color="#005F5F" fontSize="sm" fontWeight="700">
                             {NUMEROS_ROMANOS[n - 1]}
                           </Text>
                           {info && (
                             <>
-                              <GlifoSigno nombre={info.signo.name} color="#ffffff" size={16} />
-                              <Text color="rgba(255,255,255,0.9)" fontSize="sm">{info.signo.name}</Text>
+                              <GlifoSigno nombre={info.signo.name} color="#005F5F" size={16} />
+                              <Text color="#005F5F" fontSize="sm">{info.signo.name}</Text>
                               {info.regente && (
                                 <>
-                                  <Text color="rgba(255,255,255,0.45)" fontSize="xs">reg.</Text>
+                                  <Text color="#005F5F99" fontSize="xs">reg.</Text>
                                   <Glifo symbol={info.regente.symbol} color={info.regente.color} size={16} />
                                 </>
                               )}
@@ -735,20 +723,20 @@ export default function AdminAstrologiaEditor() {
                        setRetos((p) => [...p, { id: genRetoId(), titulo: "", texto: "" }]);
                        setRetosOpen(true);
                      }}
-                     px={4} py={1.5} borderRadius="full" border={`1px solid ${astrologiaTxt}88`}
-                     color="#ffffff" fontWeight="700" fontSize="sm" letterSpacing="0.04em" flexShrink={0}
-                     cursor="pointer" boxShadow={GLOW_CAJA} _hover={{ boxShadow: GLOW_CAJA_HOVER }} transition="all 0.2s"
-                     style={{ textShadow: GLOW }}>
+                     px={4} py={1.5} borderRadius="full" border="1.5px solid #005F5F"
+                     color="#005F5F" fontWeight="700" fontSize="sm" letterSpacing="0.04em" flexShrink={0}
+                     cursor="pointer" _hover={{ bg: "#005F5F14" }} _focusVisible={FOCO} transition="all 0.2s"
+                    >
                   + Añadir punto clave
                 </Box>
               }
             >
               <Trozo py={{ base: 3, md: 4 }}>
-                <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic">
+                <Text color="#005F5Fb3" fontSize="xs" fontStyle="italic">
                   Cada punto clave aparece como una estrella en el cielo del usuario; al pulsarla lee su texto. Mínimo 1, y cada uno con título y descripción.
                 </Text>
                 {retos.length === 0 && (
-                  <Text color="rgba(255,255,255,0.55)" fontStyle="italic" fontSize="sm" mt={3}>Sin puntos clave todavía. Añade el primero.</Text>
+                  <Text color="#005F5Fb3" fontStyle="italic" fontSize="sm" mt={3}>Sin puntos clave todavía. Añade el primero.</Text>
                 )}
               </Trozo>
 
@@ -758,11 +746,11 @@ export default function AdminAstrologiaEditor() {
                     {retos.map((r, i) => (
                       <Trozo key={r.id}>
                         <Flex align="center" gap={2} mb={1.5} wrap="wrap">
-                          <Text color="#ffffff" fontWeight="700" fontSize="sm" style={{ textShadow: GLOW }}>Estrella {i + 1}</Text>
+                          <Text color="#005F5F" fontWeight="700" fontSize="sm">Estrella {i + 1}</Text>
                           <Box as="button" ml="auto"
                                onClick={() => setRetos((p) => p.filter((x) => x.id !== r.id))}
-                               color="rgba(255,180,180,0.9)" fontSize="xs" cursor="pointer"
-                               _hover={{ color: "#ff8a8a" }}>
+                               color="#b3261e" fontSize="xs" cursor="pointer"
+                               _hover={{ color: "#8f1d17" }}>
                             ✕ Borrar
                           </Box>
                         </Flex>
@@ -771,18 +759,14 @@ export default function AdminAstrologiaEditor() {
                           onChange={(e) => setRetos((p) => p.map((x) => x.id === r.id ? { ...x, titulo: e.target.value } : x))}
                           placeholder="Título del reto…"
                           mb={2}
-                          bg="rgba(0,0,0,0.35)" border="1px solid rgba(255,255,255,0.22)" color="white" borderRadius="lg"
-                          fontFamily="'EB Garamond', serif" _placeholder={{ color: "rgba(255,255,255,0.35)" }}
-                          _focus={{ borderColor: turquesa, boxShadow: `0 0 0 1px ${turquesa}55` }}
+                          {...campoNac}
                         />
                         <Textarea
                           value={r.texto}
                           onChange={(e) => setRetos((p) => p.map((x) => x.id === r.id ? { ...x, texto: e.target.value } : x))}
                           placeholder="Texto del reto…"
                           rows={4}
-                          bg="rgba(0,0,0,0.3)" border="1px solid rgba(255,255,255,0.22)" color="white" borderRadius="lg"
-                          fontFamily="'EB Garamond', serif" _placeholder={{ color: "rgba(255,255,255,0.35)" }}
-                          _focus={{ borderColor: turquesa, boxShadow: `0 0 0 1px ${turquesa}55` }}
+                          {...campoNac}
                         />
                       </Trozo>
                     ))}
@@ -792,8 +776,8 @@ export default function AdminAstrologiaEditor() {
             </Desplegable>
 
             {!carta ? (
-              <Box bg="rgba(0,0,0,0.32)" borderRadius="xl" border="1px solid rgba(255,255,255,0.18)" p={7}>
-                <Text color="rgba(255,200,200,0.9)" fontStyle="italic">
+              <Box borderRadius="xl" border="1.5px solid #005F5F55" p={7}>
+                <Text color="#b3261e" fontStyle="italic">
                   Este usuario aún no tiene carta natal calculada (no ha pedido su carta o faltan datos de nacimiento).
                 </Text>
               </Box>
@@ -807,15 +791,15 @@ export default function AdminAstrologiaEditor() {
                       return (
                         <Trozo key={n}>
                           <Flex align="center" gap={2} mb={1.5} wrap="wrap">
-                            <Text color="#ffffff" fontWeight="700" fontSize="md" style={{ textShadow: GLOW }}>Casa {NUMEROS_ROMANOS[n - 1]}</Text>
+                            <Text color="#005F5F" fontWeight="700" fontSize="md">Casa {NUMEROS_ROMANOS[n - 1]}</Text>
                             {info && (
                               <>
-                                <Text color="rgba(255,255,255,0.5)">·</Text>
-                                <GlifoSigno nombre={info.signo.name} color="#ffffff" size={18} />
-                                <Text color="#ffffff" fontSize="sm" style={{ textShadow: GLOW }}>{info.signo.name}</Text>
+                                <Text color="#005F5Fb3">·</Text>
+                                <GlifoSigno nombre={info.signo.name} color="#005F5F" size={18} />
+                                <Text color="#005F5F" fontSize="sm">{info.signo.name}</Text>
                                 {info.regente && (
                                   <Flex align="center" gap={1} ml={1}>
-                                    <Text color="rgba(255,255,255,0.5)" fontSize="xs">reg.</Text>
+                                    <Text color="#005F5Fb3" fontSize="xs">reg.</Text>
                                     <Glifo symbol={info.regente.symbol} color={info.regente.color} size={18} />
                                   </Flex>
                                 )}
@@ -827,9 +811,7 @@ export default function AdminAstrologiaEditor() {
                             onChange={(e) => setCasas((p) => ({ ...p, [String(n)]: e.target.value }))}
                             placeholder={`Lectura de la Casa ${NUMEROS_ROMANOS[n - 1]}…`}
                             rows={3}
-                            bg="rgba(0,0,0,0.3)" border="1px solid rgba(255,255,255,0.22)" color="white" borderRadius="lg"
-                            fontFamily="'EB Garamond', serif" _placeholder={{ color: "rgba(255,255,255,0.35)" }}
-                            _focus={{ borderColor: turquesa, boxShadow: `0 0 0 1px ${turquesa}55` }}
+                            {...campoNac}
                           />
                         </Trozo>
                       );
@@ -852,7 +834,7 @@ export default function AdminAstrologiaEditor() {
                         <Trozo py={{ base: 2.5, md: 3 }}>
                           <Flex align="center" gap={2}>
                             <Glifo symbol={cuerpo.symbol} color={cuerpo.color} size={22} />
-                            <Text color="#ffffff" fontSize="lg" fontWeight="700" style={{ textShadow: GLOW }}>{cuerpo.label}</Text>
+                            <Text color="#005F5F" fontSize="lg" fontWeight="700">{cuerpo.label}</Text>
                           </Flex>
                         </Trozo>
                         {items.map(({ aspecto: a, otro }, idx) => {
@@ -867,9 +849,9 @@ export default function AdminAstrologiaEditor() {
                                   perdía de vista de quién se estaba hablando. */}
                               <Flex align="center" gap={2} mb={1.5} wrap="wrap">
                                 <Glifo symbol={cuerpo.symbol} color={cuerpo.color} size={18} />
-                                <Text color="#ffffff" fontSize="md" style={{ textShadow: GLOW }}>{ASPECTO_SYMBOL[a.tipo]}{"︎"}</Text>
+                                <Text color="#005F5F" fontSize="md">{ASPECTO_SYMBOL[a.tipo]}{"︎"}</Text>
                                 {co && <Glifo symbol={co.symbol} color={co.color} size={18} />}
-                                <Text color="#ffffff" fontSize="sm" ml={1} style={{ textShadow: GLOW }}>
+                                <Text color="#005F5F" fontSize="sm" ml={1}>
                                   {cuerpo.label} {ASPECTO_LABEL[a.tipo].toLowerCase()} {co?.label}
                                 </Text>
                               </Flex>
@@ -878,9 +860,7 @@ export default function AdminAstrologiaEditor() {
                                 onChange={(e) => setAspectos((p) => ({ ...p, [key]: e.target.value }))}
                                 placeholder={`Lectura del aspecto ${cuerpo.label} ${ASPECTO_LABEL[a.tipo].toLowerCase()} ${co?.label}…`}
                                 rows={3}
-                                bg="rgba(0,0,0,0.3)" border="1px solid rgba(255,255,255,0.22)" color="white" borderRadius="lg"
-                                fontFamily="'EB Garamond', serif" _placeholder={{ color: "rgba(255,255,255,0.35)" }}
-                                _focus={{ borderColor: turquesa, boxShadow: `0 0 0 1px ${turquesa}55` }}
+                                {...campoNac}
                               />
                             </Trozo>
                           );
@@ -889,7 +869,7 @@ export default function AdminAstrologiaEditor() {
                     ))}
                     {listaAspectos.length === 0 && (
                       <Trozo>
-                        <Text color="rgba(255,255,255,0.6)" fontStyle="italic" fontSize="sm">Esta carta no tiene aspectos calculados.</Text>
+                        <Text color="#005F5Fb3" fontStyle="italic" fontSize="sm">Esta carta no tiene aspectos calculados.</Text>
                       </Trozo>
                     )}
                   </Flex>
@@ -904,11 +884,9 @@ export default function AdminAstrologiaEditor() {
                       onChange={(e) => setSintesis(e.target.value)}
                       placeholder="Lo que no debe olvidar de su carta…"
                       rows={9}
-                      bg="rgba(0,0,0,0.3)" border="1px solid rgba(255,255,255,0.22)" color="white" borderRadius="lg"
-                      fontFamily="'EB Garamond', serif" _placeholder={{ color: "rgba(255,255,255,0.35)" }}
-                      _focus={{ borderColor: turquesa, boxShadow: `0 0 0 1px ${turquesa}55` }}
+                      {...campoNac}
                     />
-                    <Text color="rgba(255,255,255,0.55)" fontSize="xs" fontStyle="italic" mt={2}>
+                    <Text color="#005F5Fb3" fontSize="xs" fontStyle="italic" mt={2}>
                       **negrita** · *cursiva* · --- una raya. Se guarda con «Guardar» y ella lo ve directamente en su camino.
                     </Text>
                   </Trozo>

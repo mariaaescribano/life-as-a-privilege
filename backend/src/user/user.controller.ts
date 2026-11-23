@@ -7,7 +7,7 @@ import { AdminGuard } from '../auth/admin.guard';
 import { OwnerGuard } from '../auth/owner.guard';
 import { AuthService } from '../auth/auth.service';
 import { Throttle } from '@nestjs/throttler';
-import { getAdminEmails, isAdminEmail, isAccesoLibreEmail, verifyAdminPassword } from '../auth/admin.util';
+import { getAdminEmails, isAdminEmail, isAccesoLibreEmail, isAntiguaEmail, verifyAdminPassword } from '../auth/admin.util';
 import { LIMITE_AUTH } from '../rate-limit';
 
 // #region user
@@ -124,6 +124,8 @@ export class UserController {
       premium_aviso_email: premium.avisoEmail,
       premium_aviso_whatsapp: premium.avisoWhatsapp,
       acceso_libre: accesoLibre,
+      // Puede entrar en la web antigua (/antigua/*).
+      antigua_email: isAntiguaEmail(email),
       // Cuenta SOLO de Premium: ha tenido el mes pagado y no es asesorada (ni «en
       // sesiones», ni con disciplinas, ni admin, ni acceso libre). Esa cuenta solo ve
       // Podcasts y Reels; la asesorada, el recorrido.

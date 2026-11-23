@@ -18,7 +18,7 @@ import { useImagesReady } from "../../hooks/useImagesReady";
 import { useAstrologiaProgreso } from "../../hooks/useAstrologiaProgreso";
 import { esMariaMirando } from "../../api/persona";
 import { Reveal } from "../../components/global/Reveal";
-import { API_URL, astrologiaBg, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
+import { API_URL, astrologiaBg, astrologiaTxt, AstrologiaIcon, FONDO_PAGINA_BEIGE } from "../../GlobalVariables";
 import { useT } from "../../i18n";
 
 // Orden visual: Luna (izq) · Sol (centro) · Ascendente (dcha). En móvil se apila.
@@ -149,7 +149,7 @@ export default function MetodoAstrologiaTrio() {
           {/* Fuera de las cajas: blanco y sin sombra. */}
           <Reveal direction="up" distance={18} delay={0.15} duration={0.7} w="100%" maxW="660px">
             {/* **Sol**, **Luna** y **Ascendente** van en negrita (mini-formato de TextoMarcado). */}
-            <TextoMarcado texto={t("metodo.astro.trio.intro", { nombre })} color="white"
+            <TextoMarcado texto={t("metodo.astro.trio.intro", { nombre })} color={FONDO_PAGINA_BEIGE}
                           fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center" fontStyle="italic" />
           </Reveal>
 

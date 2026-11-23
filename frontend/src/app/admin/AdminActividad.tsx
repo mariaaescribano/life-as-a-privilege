@@ -103,15 +103,15 @@ export default function AdminActividad() {
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10 }} py={{ base: 8, md: 12 }}>
         <Box w="100%" maxW="760px">
-          <Box as="button" onClick={() => navigate("/admin/asesorias")} color="white" fontSize="sm" mb={4}
-               opacity={0.8} _hover={{ opacity: 1 }}>
+          <Box as="button" onClick={() => navigate("/admin/asesorias")} color="#005F5F" fontSize="sm" mb={4}
+               opacity={0.8} _hover={{ opacity: 1 }} _focusVisible={{ outline: "2px solid #005F5Fcc", outlineOffset: "2px" }}>
             ← Todas las cuentas
           </Box>
-          <Text color="white" fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" letterSpacing="0.06em"
+          <Text color="#005F5F" fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" letterSpacing="0.06em"
                 textTransform="uppercase" textAlign="center">
             Intereses
           </Text>
-          <Text color="rgba(255,255,255,0.8)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
+          <Text color="#005F5Fdd" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                 textAlign="center" mt={2} mb={{ base: 6, md: 8 }}>
             {quien.name ? `${quien.name}${quien.email ? ` · ${quien.email}` : ""}` : "Lo que ha abierto de los recursos gratuitos"}
           </Text>
@@ -119,24 +119,24 @@ export default function AdminActividad() {
           {loading ? (
             <Flex justify="center" py={10}><LifeLoader /></Flex>
           ) : error ? (
-            <Text color="white" textAlign="center">No se pudo cargar su actividad.</Text>
+            <Text color="#005F5F" textAlign="center">No se pudo cargar su actividad.</Text>
           ) : filas.length === 0 ? (
-            <Text color="rgba(255,255,255,0.7)" fontStyle="italic" textAlign="center" py={8}>
+            <Text color="#005F5Fcc" fontStyle="italic" textAlign="center" py={8}>
               Todavía no ha abierto ningún recurso gratuito con la sesión iniciada.
             </Text>
           ) : (
             <>
               {ranking.length > 0 && (
-                <Box bg="rgba(0,0,0,0.12)" borderRadius="16px" p={{ base: 4, md: 5 }} mb={6}>
-                  <Text color="white" fontWeight="700" mb={3}>Lo que más le interesa</Text>
+                <Box bg="transparent" border="1.5px solid #005F5F55" borderRadius="2xl" p={{ base: 4, md: 5 }} mb={6}>
+                  <Text color="#005F5F" fontWeight="700" mb={3}>Lo que más le interesa</Text>
                   <Flex direction="column" gap={2}>
                     {ranking.map(([d, n]) => (
                       <Flex key={d} align="center" gap={3}>
-                        <Text color="white" fontSize="sm" w="120px" flexShrink={0}>{nombreDisciplina(d)}</Text>
-                        <Box flex="1" h="8px" bg="rgba(255,255,255,0.12)" borderRadius="full" overflow="hidden">
-                          <Box h="100%" w={`${(n / maximo) * 100}%`} bg="white" borderRadius="full" />
+                        <Text color="#005F5F" fontSize="sm" w="120px" flexShrink={0}>{nombreDisciplina(d)}</Text>
+                        <Box flex="1" h="8px" bg="#005F5F22" borderRadius="full" overflow="hidden">
+                          <Box h="100%" w={`${(n / maximo) * 100}%`} bg="#005F5F" borderRadius="full" />
                         </Box>
-                        <Text color="rgba(255,255,255,0.8)" fontSize="sm" w="70px" textAlign="right">
+                        <Text color="#005F5Fdd" fontSize="sm" w="70px" textAlign="right">
                           {n} {n === 1 ? "visita" : "visitas"}
                         </Text>
                       </Flex>
@@ -147,17 +147,17 @@ export default function AdminActividad() {
 
               <Flex direction="column" gap={2}>
                 {filas.map((f) => (
-                  <Flex key={f.recurso} bg="rgba(0,0,0,0.12)" borderRadius="12px" px={4} py={3}
+                  <Flex key={f.recurso} bg="transparent" border="1.5px solid #005F5F55" borderRadius="xl" px={4} py={3}
                         justify="space-between" align="center" gap={3}>
                     <Box minW={0}>
-                      <Text color="white" fontWeight="600" noOfLines={1}>{titulo(f)}</Text>
-                      <Text color="rgba(255,255,255,0.65)" fontSize="sm" noOfLines={1}>
+                      <Text color="#005F5F" fontWeight="600" noOfLines={1}>{titulo(f)}</Text>
+                      <Text color="#005F5Fb3" fontSize="sm" noOfLines={1}>
                         {TIPO_LABEL[f.tipo] ?? f.tipo} · {nombreDisciplina(f.disciplina)}
                       </Text>
                     </Box>
                     <Box textAlign="right" flexShrink={0}>
-                      <Text color="white" fontSize="sm">{f.veces} {f.veces === 1 ? "vez" : "veces"}</Text>
-                      <Text color="rgba(255,255,255,0.65)" fontSize="xs">{fecha(f.ultima_vez)}</Text>
+                      <Text color="#005F5F" fontSize="sm">{f.veces} {f.veces === 1 ? "vez" : "veces"}</Text>
+                      <Text color="#005F5Fb3" fontSize="xs">{fecha(f.ultima_vez)}</Text>
                     </Box>
                   </Flex>
                 ))}

@@ -14,7 +14,7 @@ import { useAstrologiaProgreso } from "../../hooks/useAstrologiaProgreso";
 import { useAstroLeidos } from "../../hooks/useAstroLeidos";
 import { focoBlanco } from "../../components/global/foco";
 import { esMariaMirando } from "../../api/persona";
-import { astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
+import { astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon, FONDO_PAGINA_BEIGE } from "../../GlobalVariables";
 import { useIdioma, useT } from "../../i18n";
 import type { ClaveTexto } from "../../i18n";
 
@@ -72,7 +72,7 @@ export default function MetodoAstrologiaExplicacion() {
 
           {/* Fuera de las cajas: blanco y sin sombra. */}
           <Reveal direction="up" distance={18} delay={0.15} duration={0.7} w="100%" maxW="680px">
-            <Text color="white" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center" fontStyle="italic">
+            <Text color={FONDO_PAGINA_BEIGE} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center" fontStyle="italic">
               {t("metodo.astro.explica.intro")}
             </Text>
           </Reveal>
@@ -87,7 +87,7 @@ export default function MetodoAstrologiaExplicacion() {
               <Reveal inView direction="up" distance={14} w="100%">
                 <Flex align="center" gap={4} w="100%">
                   <Box flex="1" h="1px" bg="rgba(255,255,255,0.4)" />
-                  <Text color="white" fontSize={{ base: "lg", md: "2xl" }} fontWeight="700" letterSpacing="0.16em"
+                  <Text color={FONDO_PAGINA_BEIGE} fontSize={{ base: "lg", md: "2xl" }} fontWeight="700" letterSpacing="0.16em"
                         textTransform="uppercase" textAlign="center">
                     {t(`metodo.astro.explica.${sec.clave}` as ClaveTexto)}
                   </Text>
@@ -183,7 +183,7 @@ function BarraAvance({ nombre, hechas, total }: { nombre: string; hechas: number
       >
         <Box h="100%" borderRadius="full" bg="white" w={`${pct}%`} transition="width 0.7s cubic-bezier(0.22,1,0.36,1)" />
       </Box>
-      <Text color="white" fontSize={{ base: "sm", md: "md" }} fontWeight="600" letterSpacing="0.06em"
+      <Text color={FONDO_PAGINA_BEIGE} fontSize={{ base: "sm", md: "md" }} fontWeight="600" letterSpacing="0.06em"
             minW="3.2em" textAlign="right" sx={{ fontVariantNumeric: "tabular-nums" }}>
         {hechas}/{total}
       </Text>

@@ -5,7 +5,6 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import FlorTitulo from "../../components/global/FlorTitulo";
 import { LifeLoading } from "../../components/global/LifeLoading";
-import { focoBlanco } from "../../components/global/foco";
 import { API_URL } from "../../GlobalVariables";
 import { adminHeaders, useAdminGuard } from "./useAdminGuard";
 import {
@@ -179,7 +178,7 @@ export default function AdminCorreos() {
       <Flex flex="1" justify="center" px={{ base: 4, md: 8 }} pt={{ base: 8, md: 10 }} pb={{ base: 10, md: 14 }}>
         <Box w="100%" maxW="720px">
           <FlorTitulo mandala pt={{ base: 0, md: 0 }} />
-          <Text color="white" fontSize={{ base: "2xl", md: "4xl" }} fontWeight="700" letterSpacing="0.08em" textTransform="uppercase"
+          <Text color="#005F5F" fontSize={{ base: "2xl", md: "4xl" }} fontWeight="700" letterSpacing="0.08em" textTransform="uppercase"
                 lineHeight="1.15" textAlign="center" mt={{ base: 4, md: 5 }} mb={{ base: 6, md: 8 }}>
             Correos
           </Text>
@@ -203,8 +202,8 @@ export default function AdminCorreos() {
                     return (
                       <Box key={v} as="button" type="button" onClick={() => cambiar({ fondoCorreo: v })} aria-pressed={sel}
                            px={4} py={1.5} borderRadius="full" fontSize="sm" fontWeight={700} color={TQ}
-                           bg={sel ? "rgba(255,255,255,0.75)" : "rgba(255,255,255,0.3)"}
-                           border={`2px solid ${sel ? TQ : `${TQ}44`}`} _hover={{ bg: "rgba(255,255,255,0.6)" }} _focusVisible={focoBlanco}>
+                           bg={sel ? "#ffffffb3" : "#ffffff4d"}
+                           border={`2px solid ${sel ? TQ : `${TQ}44`}`} _hover={{ bg: "#ffffff99" }} _focusVisible={{ outline: "2px solid #004f4fcc", outlineOffset: "2px" }}>
                         {nombre}
                       </Box>
                     );
@@ -238,8 +237,8 @@ export default function AdminCorreos() {
                       <Box as="img" src={f.url} alt="" w="100%" h="100%" objectFit="cover" />
                       <Box as="button" type="button" onClick={() => quitarFoto(f.id)} aria-label="Quitar foto"
                            position="absolute" top="3px" right="3px" w="22px" h="22px" borderRadius="full"
-                           bg="rgba(255,255,255,0.9)" color={TQ} fontSize="xs" fontWeight={700} lineHeight="1"
-                           _focusVisible={focoBlanco}>
+                           bg="#ffffffe6" color={TQ} fontSize="xs" fontWeight={700} lineHeight="1"
+                           _focusVisible={{ outline: "2px solid #004f4fcc", outlineOffset: "2px" }}>
                         ✕
                       </Box>
                     </Box>
@@ -248,7 +247,7 @@ export default function AdminCorreos() {
                     <Box as="button" type="button" onClick={() => entradaFotos.current?.click()}
                          w="84px" h="84px" borderRadius="lg" border={`1.5px dashed ${TQ}88`} color={TQ} fontSize="2xl"
                          display="flex" alignItems="center" justifyContent="center" aria-label="Añadir fotos"
-                         _hover={{ bg: `${TQ}14` }} _focusVisible={focoBlanco}>
+                         _hover={{ bg: `${TQ}14` }} _focusVisible={{ outline: "2px solid #004f4fcc", outlineOffset: "2px" }}>
                       +
                     </Box>
                   )}
@@ -272,7 +271,7 @@ export default function AdminCorreos() {
                       <Text noOfLines={1} wordBreak="break-all">{a.nombre}</Text>
                       <Box as="button" type="button" onClick={() => quitarPdf(a.id)} aria-label={`Quitar ${a.nombre}`}
                            w="22px" h="22px" borderRadius="full" border={`1px solid ${TQ}66`} fontSize="xs" fontWeight={700} flexShrink={0}
-                           _focusVisible={focoBlanco}>
+                           _focusVisible={{ outline: "2px solid #004f4fcc", outlineOffset: "2px" }}>
                         ✕
                       </Box>
                     </Flex>
@@ -280,7 +279,7 @@ export default function AdminCorreos() {
                   {adjuntos.length < MAX_ADJUNTOS && (
                     <Box as="button" type="button" onClick={() => entradaPdf.current?.click()}
                          px={4} py={1.5} borderRadius="full" border={`1.5px dashed ${TQ}88`} color={TQ} fontSize="sm" fontWeight={700}
-                         _hover={{ bg: `${TQ}14` }} _focusVisible={focoBlanco}>
+                         _hover={{ bg: `${TQ}14` }} _focusVisible={{ outline: "2px solid #004f4fcc", outlineOffset: "2px" }}>
                       + Adjuntar PDF
                     </Box>
                   )}
@@ -295,7 +294,7 @@ export default function AdminCorreos() {
           </Box>
 
           {estado && (
-            <Text color="white" fontSize="md" fontStyle="italic" textAlign="center" mt={4}>
+            <Text color={estado.tipo === "error" ? "#b3261e" : "#005F5F"} fontSize="md" fontStyle="italic" textAlign="center" mt={4}>
               {estado.texto}
             </Text>
           )}

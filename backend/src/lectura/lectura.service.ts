@@ -109,6 +109,43 @@ export class LecturaService {
     return data ?? [];
   }
 
+  /**
+   * María crea una carta a mano (cliente que no la pidió por la web): mismos datos de nacimiento obligatorios,
+   * mismo pedido y misma cuenta «solo carta» SIN acceso, pero sin cobro de Stripe y SIN ningún correo: el acceso lo
+   * manda ella con «Enviar acceso» cuando la carta esté escrita.
+   */
+  async crearManual(body: Partial<Record<keyof DatosLectura, unknown>>) {
+    const d = this.validar({ ...body, acepta: true });
+    const tarifa = findLectura(d.servicio)!;
+    const client = this.db.getClient();
+    const { data: ins, error } = await client
+      .from(TABLE)
+      .insert({
+        nombre: d.nombre,
+        email: d.email,
+        servicio: tarifa.servicio,
+        precio_centimos: tarifa.precioCentimos,
+        fecha_nacimiento: d.fecha,
+        hora_nacimiento: d.hora,
+        lugar_nacimiento: d.lugar,
+        pagado: false,
+      })
+      .select('id')
+      .single();
+    if (error) {
+      console.error('[lectura] no se pudo crear el pedido a mano:', error.message);
+      throw new BadRequestException('No se pudo crear la carta');
+    }
+    const id = (ins as { id: string }).id;
+    try {
+      const cuenta = await this.users.crearCuentaLectura({ name: d.nombre, email: d.email });
+      await client.from(TABLE).update({ user_id: cuenta.id }).eq('id', id);
+    } catch (err) {
+      console.error('[lectura] pedido creado pero no se pudo crear la cuenta:', err);
+    }
+    return { id };
+  }
+
   async setEstado(id: string, estado: string) {
     if (!ESTADOS_LECTURA.includes(estado as LecturaEstado)) throw new BadRequestException('Estado no válido');
     const { data, error } = await this.db.getClient().from(TABLE).update({ estado }).eq('id', id).select('id, estado').maybeSingle();

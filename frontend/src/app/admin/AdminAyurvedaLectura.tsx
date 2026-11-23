@@ -97,7 +97,7 @@ export default function AdminAyurvedaLectura() {
           <AdminDisciplinaHeader disc={disc} subtitle={`${nombre || "Usuario"}${email ? ` · ${email}` : ""}`} />
 
           {doshasConDatos.length === 0 ? (
-            <LecturaVacio txt="rgba(255,255,255,0.92)">
+            <LecturaVacio txt="#005F5F">
               Este usuario todavía no ha escrito nada en su mapa de {disc.nombre.toLowerCase()}.
             </LecturaVacio>
           ) : (
@@ -123,11 +123,10 @@ export default function AdminAyurvedaLectura() {
                 <Box key={k} mb={8}>
                   {/* Banner del dosha */}
                   <Flex align="center" gap={3} mb={4}>
-                    <Box style={{ filter: `drop-shadow(0 0 6px ${meta.color}66)` }}>
+                    <Box>
                       <meta.Icon size="34px" color={meta.color} />
                     </Box>
-                    <Text color="#ffffff" fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.06em"
-                          style={{ textShadow: `0 1px 8px rgba(0,0,0,0.4), 0 0 14px ${meta.color}88` }}>
+                    <Text color="#005F5F" fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.06em">
                       {meta.label}
                     </Text>
                   </Flex>

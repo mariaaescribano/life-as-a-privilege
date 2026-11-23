@@ -1,6 +1,5 @@
 import React from "react";
 import { Box, Text } from "@chakra-ui/react";
-import { focoBlanco } from "../../components/global/foco";
 import {
   astrologiaBg, astrologiaTxt,
   neuropsicologiaBg, neuropsicologiaTxt,
@@ -59,8 +58,8 @@ export const campo = {
   variant: "unstyled" as const,
   px: 3, py: 2,
   color: TQ,
-  bg: "rgba(255,255,255,0.45)",
-  border: `1px solid ${TQ}44`,
+  bg: "#F7EBD9",
+  border: `1.5px solid ${TQ}66`,
   borderRadius: "lg",
   fontFamily: "'EB Garamond', serif",
   _placeholder: { color: `${TQ}88`, fontStyle: "italic" },
@@ -69,19 +68,19 @@ export const campo = {
 
 export const caja = {
   borderRadius: "2xl",
-  border: "1px solid rgba(255,255,255,0.65)",
-  boxShadow: "0 0 30px rgba(255,255,255,0.28), 0 0 70px rgba(180,255,245,0.14)",
+  border: "1.5px solid #004f4f",
+  boxShadow: "0 0 18px #b08d3f44, 0 0 40px #b08d3f22",
 };
 
 export const pildora = (texto: string, onClick: () => void, activo: boolean, relleno = false) => (
   <Box as="button" type="button" onClick={onClick} disabled={!activo}
        px={{ base: 6, md: 8 }} py={2.5} borderRadius="full"
-       bg={relleno ? "white" : "transparent"} color={relleno ? "#008080" : "white"}
-       border={relleno ? "none" : "1.5px solid rgba(255,255,255,0.8)"}
+       bg={relleno ? "#005F5F" : "transparent"} color={relleno ? "#F0DCC0" : "#005F5F"}
+       border="1.5px solid #005F5F"
        fontSize={{ base: "md", md: "lg" }} fontWeight="700" letterSpacing="0.04em"
        opacity={activo ? 1 : 0.5} cursor={activo ? "pointer" : "not-allowed"} transition="all 0.2s"
-       _hover={activo ? (relleno ? { transform: "translateY(-2px)" } : { bg: "rgba(255,255,255,0.14)" }) : undefined}
-       _focusVisible={focoBlanco}>
+       _hover={activo ? (relleno ? { transform: "translateY(-2px)" } : { bg: "#005F5F14" }) : undefined}
+       _focusVisible={{ outline: "2px solid #005F5Fcc", outlineOffset: "2px" }}>
     {texto}
   </Box>
 );
@@ -95,7 +94,7 @@ export const SelectorDisciplina = ({ valor, onCambia }: { valor: string; onCambi
         <Box key={d.clave} as="button" type="button" onClick={() => onCambia(d.clave)} aria-pressed={sel}
              px={3.5} py={1.5} borderRadius="full" fontSize="sm" fontWeight={700} bg={d.bg} color={d.txt}
              border={`2px solid ${sel ? TQ : "transparent"}`}
-             opacity={sel ? 1 : 0.8} _hover={{ opacity: 1 }} _focusVisible={focoBlanco}>
+             opacity={sel ? 1 : 0.8} _hover={{ opacity: 1 }} _focusVisible={{ outline: "2px solid #005F5Fcc", outlineOffset: "2px" }}>
           {d.nombre}
         </Box>
       );

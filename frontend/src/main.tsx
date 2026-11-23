@@ -7,6 +7,7 @@ import "./api/axiosSetup"; // registra el interceptor que adjunta el token JWT
 import { ErrorBoundary } from "./components/global/ErrorBoundary";
 import { registrarRastreoGuardados } from "./utils/flushSaves";
 import { IdiomaProvider } from "./i18n";
+import { esAntigua } from "./antigua/modo";
 // Hoja global: resaltado del toque en el móvil, selección de texto, barras de
 // scroll, modo oscuro. Existía desde el principio pero NADIE la importaba, así
 // que ninguna de sus reglas llegaba al navegador (de ahí el cuadrado azul al
@@ -62,13 +63,23 @@ const theme = extendTheme({
   },
 });
 
+// La web antigua nunca se indexa.
+if (esAntigua()) {
+  const meta = document.createElement("meta");
+  meta.name = "robots";
+  meta.content = "noindex, nofollow";
+  document.head.appendChild(meta);
+}
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ChakraProvider theme={theme}>
       <IdiomaProvider>
-        <BrowserRouter>
+        {/* /antigua/*: el proyecto grande de antes, escondido (TFG). Su propio enrutador con basename, así
+            todas sus rutas internas (/home, /metodo/…) viven bajo /antigua sin tocar la web real. */}
+        <BrowserRouter basename={esAntigua() ? "/antigua" : undefined}>
           <ErrorBoundary>
-            <App />
+            <App antigua={esAntigua()} />
           </ErrorBoundary>
         </BrowserRouter>
       </IdiomaProvider>

@@ -70,3 +70,19 @@ describe('LecturaService.confirmarPago', () => {
     expect(tabla.insert).not.toHaveBeenCalled();
   });
 });
+
+describe('LecturaService.crearManual', () => {
+  it('crea el pedido sin cobro y la cuenta solo carta, sin mandar ningún correo', async () => {
+    const { service, tabla, mail, users } = montar();
+    const r = await service.crearManual({ servicio: 'plataforma', nombre: 'Ana', email: 'ana@x.com', fecha: '1990-05-17', hora: '07:30', lugar: 'Madrid, Madrid, España' });
+    expect(r).toEqual({ id: 'p1' });
+    expect(tabla.insert).toHaveBeenCalledWith(expect.objectContaining({ pagado: false, servicio: 'plataforma', email: 'ana@x.com' }));
+    expect(users.crearCuentaLectura).toHaveBeenCalledWith({ name: 'Ana', email: 'ana@x.com' });
+    expect(mail.enviarLecturaRecibida).not.toHaveBeenCalled();
+  });
+
+  it('exige los datos de nacimiento', async () => {
+    const { service } = montar();
+    await expect(service.crearManual({ servicio: 'plataforma', nombre: 'Ana', email: 'ana@x.com' })).rejects.toBeInstanceOf(BadRequestException);
+  });
+});

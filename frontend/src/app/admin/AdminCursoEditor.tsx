@@ -8,7 +8,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { LifeLoading } from "../../components/global/LifeLoading";
 import { useAdminGuard, adminHeaders } from "./useAdminGuard";
-import { API_URL } from "../../GlobalVariables";
+import { API_URL, FONDO_PAGINA_TURQUESA as T } from "../../GlobalVariables";
 import { DISCIPLINAS_CURSO, disciplinaCursoBySlug } from "../../data/disciplinasCurso";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
 import { Markdown } from "../../components/global/Markdown";
@@ -27,11 +27,33 @@ interface Curso {
 
 const genId = () => "l-" + Math.random().toString(36).slice(2, 9);
 
-const fieldStyle = {
+// Campos sobre la foto de la disciplina (translúcidos) y sobre el beige.
+const fieldFoto = {
   bg: "rgba(255,255,255,0.12)",
   border: "1px solid rgba(255,255,255,0.25)",
   _placeholder: { color: "rgba(255,255,255,0.45)" },
 } as const;
+const fieldBeige = {
+  bg: "#F7EBD9",
+  border: "1.5px solid #005F5F66",
+  color: T,
+  _placeholder: { color: "#005F5F8c" },
+  _hover: { borderColor: "#005F5Faa" },
+  _focus: { borderColor: T, boxShadow: "none" },
+  _focusVisible: { borderColor: T, boxShadow: "none" },
+} as const;
+
+const focoT = { outline: "2px solid #005F5Fcc", outlineOffset: "2px" } as const;
+// Botones sobre el beige: contorno, relleno y peligro (turquesa oscuro).
+const bSec = { color: T, border: `1.5px solid ${T}`, _hover: { bg: "#005F5F14" }, _focusVisible: focoT } as const;
+const bPri = { color: "#F0DCC0", bg: T, border: `1.5px solid ${T}`, _hover: { bg: "#004a4a" }, _focusVisible: focoT } as const;
+// Botones dentro de la caja con foto (los de siempre) o, sin foto, sobre el beige.
+const bFoto = (foto: boolean) => foto
+  ? { border: `1px solid rgba(255,255,255,0.3)`, _hover: { bg: "rgba(255,255,255,0.12)" } }
+  : { color: T, border: `1.5px solid ${T}`, _hover: { bg: "#005F5F14" }, _focusVisible: focoT };
+const bFotoPeligro = (foto: boolean) => foto
+  ? { border: "1px solid rgba(255,255,255,0.3)", _hover: { borderColor: "#ff8a8a", color: "#ff8a8a" } }
+  : { color: "#b3261e", border: "1.5px solid #b3261e", _hover: { bg: "#b3261e14" }, _focusVisible: focoT };
 
 const btn = {
   fontFamily: "'EB Garamond', serif", fontWeight: 700, letterSpacing: "0.05em",
@@ -39,22 +61,23 @@ const btn = {
 } as const;
 
 // Botones de subir/bajar para reordenar módulos o lecciones.
-function MoveBtns({ onUp, onDown, canUp, canDown }: {
-  onUp: () => void; onDown: () => void; canUp: boolean; canDown: boolean;
+function MoveBtns({ onUp, onDown, canUp, canDown, foto }: {
+  onUp: () => void; onDown: () => void; canUp: boolean; canDown: boolean; foto: boolean;
 }) {
   const base = {
     ...btn,
     w: "30px", h: "30px", display: "flex", alignItems: "center", justifyContent: "center",
-    fontSize: "md", border: "1px solid rgba(255,255,255,0.3)", flexShrink: 0,
+    fontSize: "md", flexShrink: 0,
+    ...bFoto(foto),
   } as const;
   return (
     <Flex gap={1.5} flexShrink={0}>
       <Box as="button" {...base} onClick={onUp} aria-label="Subir"
            opacity={canUp ? 1 : 0.3} pointerEvents={canUp ? "auto" : "none"}
-           _hover={canUp ? { bg: "rgba(255,255,255,0.12)" } : {}}>↑</Box>
+           _hover={canUp ? base._hover : {}}>↑</Box>
       <Box as="button" {...base} onClick={onDown} aria-label="Bajar"
            opacity={canDown ? 1 : 0.3} pointerEvents={canDown ? "auto" : "none"}
-           _hover={canDown ? { bg: "rgba(255,255,255,0.12)" } : {}}>↓</Box>
+           _hover={canDown ? base._hover : {}}>↓</Box>
     </Flex>
   );
 }
@@ -216,10 +239,10 @@ export default function AdminCursoEditor() {
       el.scrollIntoView({ behavior: "smooth", block: "center" });
       el.animate(
         [
-          { boxShadow: "0 0 0 0 rgba(255,245,150,0)" },
-          { boxShadow: "0 0 0 3px rgba(255,245,150,0.95)", offset: 0.2 },
-          { boxShadow: "0 0 0 3px rgba(255,245,150,0.95)", offset: 0.75 },
-          { boxShadow: "0 0 0 0 rgba(255,245,150,0)" },
+          { boxShadow: "0 0 0 0 rgba(0,95,95,0)" },
+          { boxShadow: "0 0 0 3px rgba(0,95,95,0.9)", offset: 0.2 },
+          { boxShadow: "0 0 0 3px rgba(0,95,95,0.9)", offset: 0.75 },
+          { boxShadow: "0 0 0 0 rgba(0,95,95,0)" },
         ],
         { duration: 2600, easing: "ease-in-out" },
       );
@@ -261,7 +284,7 @@ export default function AdminCursoEditor() {
       <Box minH="100vh" bg="#F0DCC0" display="flex" flexDirection="column" fontFamily="'EB Garamond', serif">
         <SiteHeader variant="private" />
         <Box flex="1" display="flex" alignItems="center" justifyContent="center">
-          <Text color="white" fontStyle="italic">Curso no encontrado.</Text>
+          <Text color={T} fontStyle="italic">Curso no encontrado.</Text>
         </Box>
       </Box>
     );
@@ -270,36 +293,38 @@ export default function AdminCursoEditor() {
   // Fondo de la disciplina del curso (para los boxes del editor).
   const disc = disciplinaCursoBySlug(curso.modalidad);
   const discNom = disc?.nom ?? "";
-  const color = disc?.color ?? "#ffffff";
-  const bg = disc?.bg ?? "#003535";
   const hasBg = hasDisciplinaBg(discNom);
-  // Glow brillante (blanco/aguamarina + color), como el resto de la app — sin negro.
-  const GLOW = `0 0 18px rgba(255,255,255,0.22), 0 0 45px rgba(255,255,255,0.1), 0 0 78px rgba(180,255,245,0.14), 0 0 28px ${color}40`;
-  // Sombra/brillo del texto con el color de fondo de la disciplina.
-  const TEXT_SHADOW = `0 1px 4px ${bg}, 0 0 10px ${bg}, 0 0 22px ${bg}`;
+  // Con foto de disciplina se conservan sus colores; sin foto, turquesa oscuro sobre el beige.
+  const color = hasBg ? (disc?.color ?? "#ffffff") : T;
+  const bg = disc?.bg ?? "#003535";
+  const fieldStyle = hasBg ? fieldFoto : fieldBeige;
+  // Halo con el acento de la disciplina (solo si hay foto).
+  const GLOW = hasBg ? `0 0 28px ${color}40` : "none";
+  // Sombra del texto con el color de fondo de la disciplina (solo sobre la foto).
+  const TEXT_SHADOW = hasBg ? `0 1px 4px ${bg}, 0 0 10px ${bg}, 0 0 22px ${bg}` : "none";
+  const cajaBg = hasBg ? "#05403f" : "transparent";
+  const cajaBorde = hasBg ? undefined : `1.5px solid ${T}`;
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif" color="white">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif" color={T}>
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 4, md: 10 }} py={{ base: 6, md: 10 }} sx={{ zoom: 1.15 }}>
         <Box w="100%" maxW="820px">
           {/* Barra superior */}
           <Flex justify="space-between" align="center" mb={6} gap={3} flexWrap="wrap">
-            <Box as="button" onClick={() => navigate("/admin/cursos")} {...btn} px={4} py="7px"
-                 border="1px solid rgba(255,255,255,0.35)" fontSize="sm">← Cursos</Box>
+            <Box as="button" onClick={() => navigate("/admin/cursos")} {...btn} {...bSec} px={4} py="7px" fontSize="sm">← Cursos</Box>
             <Flex gap={3} align="center">
               <Box as="button" onClick={() => window.open(`/aprendizaje/modulosPage/${curso.modalidad}/${curso.id}`, "_blank")}
-                   {...btn} px={4} py="7px" border="1px solid rgba(255,255,255,0.35)" fontSize="sm">Ver curso ↗</Box>
-              <Box as="button" onClick={guardar} {...btn} px={6} py="9px" bg="white" color="#008080"
-                   boxShadow="0 0 16px rgba(255,255,255,0.4)" opacity={guardando ? 0.6 : 1} pointerEvents={guardando ? "none" : "auto"}>
+                   {...btn} {...bSec} px={4} py="7px" fontSize="sm">Ver curso ↗</Box>
+              <Box as="button" onClick={guardar} {...btn} {...bPri} px={6} py="9px" opacity={guardando ? 0.6 : 1} pointerEvents={guardando ? "none" : "auto"}>
                 {guardando ? "Guardando…" : "Guardar"}
               </Box>
             </Flex>
           </Flex>
 
           {/* ── Datos del curso ── */}
-          <Box position="relative" overflow="hidden" bg="#05403f" borderRadius="xl" p={{ base: 5, md: 6 }} mb={6} boxShadow={GLOW} color={color} sx={{ textShadow: TEXT_SHADOW }}>
+          <Box position="relative" overflow="hidden" bg={cajaBg} border={cajaBorde} borderRadius="xl" p={{ base: 5, md: 6 }} mb={6} boxShadow={GLOW} color={color} sx={{ textShadow: TEXT_SHADOW }}>
             {hasBg && <DisciplinaBgLayer nom={discNom} borderRadius="xl" />}
             <Box position="relative" zIndex={1}>
             <Text fontSize="lg" fontWeight="700" mb={4} letterSpacing="0.04em">Datos del curso</Text>
@@ -330,9 +355,9 @@ export default function AdminCursoEditor() {
                           placeholder="Si lo dejas vacío, se usa la descripción de arriba." {...fieldStyle} />
               </Box>
               <Flex gap={6} align="center" flexWrap="wrap">
-                <Checkbox isChecked={curso.de_pago} onChange={(e) => set({ de_pago: e.target.checked })}>De pago (5 €)</Checkbox>
-                <Checkbox isChecked={curso.publicado} onChange={(e) => set({ publicado: e.target.checked })}>Publicado</Checkbox>
-                <Checkbox isChecked={curso.completado} onChange={(e) => set({ completado: e.target.checked })}>Completado</Checkbox>
+                <Checkbox colorScheme="teal" isChecked={curso.de_pago} onChange={(e) => set({ de_pago: e.target.checked })}>De pago (5 €)</Checkbox>
+                <Checkbox colorScheme="teal" isChecked={curso.publicado} onChange={(e) => set({ publicado: e.target.checked })}>Publicado</Checkbox>
+                <Checkbox colorScheme="teal" isChecked={curso.completado} onChange={(e) => set({ completado: e.target.checked })}>Completado</Checkbox>
                 <Flex align="center" gap={2}>
                   <Text fontSize="sm" opacity={0.8}>Orden</Text>
                   <Input type="number" value={curso.orden} onChange={(e) => set({ orden: Number(e.target.value) })} w="80px" {...fieldStyle} />
@@ -346,12 +371,11 @@ export default function AdminCursoEditor() {
           <Flex justify="space-between" align="center" mb={3}>
             <Text fontSize="lg" fontWeight="700" letterSpacing="0.04em">Contenido</Text>
             <Flex gap={3} align="center" flexWrap="wrap">
-              <Box as="button" onClick={addPodcastArriba} {...btn} px={5} py="8px" fontSize="sm"
-                   border="1px solid rgba(255,255,255,0.35)" _hover={{ bg: "rgba(255,255,255,0.12)" }}
+              <Box as="button" onClick={addPodcastArriba} {...btn} {...bSec} px={5} py="8px" fontSize="sm"
                    title="Crea el primer módulo con el podcast del curso (vídeo de YouTube)">
                 + Podcast arriba
               </Box>
-              <Box as="button" onClick={addModulo} {...btn} px={5} py="8px" bg="rgba(255,255,255,0.92)" color="#008080" fontSize="sm">+ Módulo</Box>
+              <Box as="button" onClick={addModulo} {...btn} {...bPri} px={5} py="8px" fontSize="sm">+ Módulo</Box>
             </Flex>
           </Flex>
 
@@ -366,22 +390,22 @@ export default function AdminCursoEditor() {
               {...fieldStyle}
             />
             {mostrarRes && busqueda.trim().length >= 2 && (
-              <Box position="absolute" top="calc(100% + 6px)" left={0} right={0} bg="#05403f"
-                   borderRadius="lg" border="1px solid rgba(255,255,255,0.25)"
-                   boxShadow="0 12px 40px rgba(0,0,0,0.45)" maxH="360px" overflowY="auto" zIndex={20}>
+              <Box position="absolute" top="calc(100% + 6px)" left={0} right={0} bg="#F0DCC0"
+                   borderRadius="lg" border={`1.5px solid ${T}`}
+                   maxH="360px" overflowY="auto" zIndex={20}>
                 {resultados.length === 0 ? (
                   <Text opacity={0.7} fontStyle="italic" px={4} py={3}>Sin resultados para «{busqueda.trim()}».</Text>
                 ) : (
                   resultados.map((r, i) => (
                     <Box key={r.lecId + "-" + i} as="button" onClick={() => saltarA(r)} display="block" textAlign="left" w="100%"
-                         px={4} py={3} borderTop={i === 0 ? undefined : "1px solid rgba(255,255,255,0.1)"}
-                         transition="background 0.15s" _hover={{ bg: "rgba(255,255,255,0.1)" }}>
+                         px={4} py={3} borderTop={i === 0 ? undefined : `1px solid ${T}33`}
+                         transition="background 0.15s" _hover={{ bg: "#005F5F14" }} _focusVisible={focoT}>
                       <Text fontSize="xs" opacity={0.65} mb={0.5}>
                         Módulo {r.mi + 1} · {r.moduloTitle} → <Box as="span" fontWeight="700">{r.leccionNom}</Box>
                       </Text>
                       <Text fontSize="sm" lineHeight="1.5" noOfLines={2}>
                         {r.antes && <Box as="span" opacity={0.7}>…{r.antes} </Box>}
-                        <Box as="span" fontWeight="700" bg="rgba(255,245,150,0.35)" px="2px" borderRadius="2px">{r.match}</Box>
+                        <Box as="span" fontWeight="700" bg="#b08d3f44" px="2px" borderRadius="2px">{r.match}</Box>
                         {r.despues && <Box as="span" opacity={0.7}> {r.despues}…</Box>}
                       </Text>
                     </Box>
@@ -397,23 +421,23 @@ export default function AdminCursoEditor() {
 
           <Flex direction="column" gap={5}>
             {curso.contenido.map((mod, mi) => (
-              <Box key={mi} position="relative" overflow="hidden" bg="#05403f" borderRadius="xl" p={{ base: 4, md: 5 }} boxShadow={GLOW} color={color} sx={{ textShadow: TEXT_SHADOW }}>
+              <Box key={mi} position="relative" overflow="hidden" bg={cajaBg} border={cajaBorde} borderRadius="xl" p={{ base: 4, md: 5 }} boxShadow={GLOW} color={color} sx={{ textShadow: TEXT_SHADOW }}>
                 {hasBg && <DisciplinaBgLayer nom={discNom} borderRadius="xl" />}
                 <Box position="relative" zIndex={1}>
                 <Flex gap={3} align="center" mb={4} flexWrap="wrap">
                   <Box fontWeight="700" fontSize="sm" opacity={0.7} flexShrink={0}>Módulo {mi + 1}</Box>
                   <Input value={mod.title} onChange={(e) => updModulo(mi, { title: e.target.value })}
                          fontWeight="700" fontSize={{ base: "md", md: "lg" }} flex="1" minW="160px" {...fieldStyle} />
-                  <MoveBtns
+                  <MoveBtns foto={hasBg}
                     onUp={() => moveModulo(mi, -1)} onDown={() => moveModulo(mi, 1)}
                     canUp={mi > 0} canDown={mi < curso.contenido.length - 1}
                   />
-                  <Box as="button" onClick={() => insertModulo(mi)} {...btn} px={3} py="6px" fontSize="xs"
-                       border="1px solid rgba(255,255,255,0.3)" _hover={{ bg: "rgba(255,255,255,0.12)" }} flexShrink={0} title="Insertar módulo debajo">
+                  <Box as="button" onClick={() => insertModulo(mi)} {...btn} {...bFoto(hasBg)} px={3} py="6px" fontSize="xs"
+                       flexShrink={0} title="Insertar módulo debajo">
                     + aquí
                   </Box>
-                  <Box as="button" onClick={() => delModulo(mi)} {...btn} px={3} py="6px" fontSize="xs"
-                       border="1px solid rgba(255,255,255,0.3)" _hover={{ borderColor: "#ff8a8a", color: "#ff8a8a" }} flexShrink={0}>
+                  <Box as="button" onClick={() => delModulo(mi)} {...btn} {...bFotoPeligro(hasBg)} px={3} py="6px" fontSize="xs"
+                       flexShrink={0}>
                     Borrar módulo
                   </Box>
                 </Flex>
@@ -423,7 +447,7 @@ export default function AdminCursoEditor() {
                     const key = lec.id;
                     const previewOn = previews[key];
                     return (
-                      <Box key={lec.id} id={`lec-${lec.id}`} bg="rgba(0,0,0,0.2)" border="1px solid rgba(255,255,255,0.12)" borderRadius="lg" p={4}>
+                      <Box key={lec.id} id={`lec-${lec.id}`} bg={hasBg ? "rgba(0,0,0,0.2)" : "transparent"} border={hasBg ? "1px solid rgba(255,255,255,0.12)" : `1.5px solid ${T}55`} borderRadius="lg" p={4}>
                         <Flex gap={3} align="center" mb={3} flexWrap="wrap">
                           <Box fontSize="xs" opacity={0.6} flexShrink={0}>{mi + 1}.{li + 1}</Box>
                           <Input value={lec.nom} onChange={(e) => updLeccion(mi, li, { nom: e.target.value })}
@@ -434,16 +458,15 @@ export default function AdminCursoEditor() {
                             <option value="video">Vídeo</option>
                             <option value="test">Test</option>
                           </Select>
-                          <MoveBtns
+                          <MoveBtns foto={hasBg}
                             onUp={() => moveLeccion(mi, li, -1)} onDown={() => moveLeccion(mi, li, 1)}
                             canUp={li > 0} canDown={li < mod.submodules.length - 1}
                           />
-                          <Box as="button" onClick={() => insertLeccion(mi, li)} {...btn} px={3} py="6px" fontSize="xs"
-                               border="1px solid rgba(255,255,255,0.3)" _hover={{ bg: "rgba(255,255,255,0.12)" }} title="Insertar lección debajo">
+                          <Box as="button" onClick={() => insertLeccion(mi, li)} {...btn} {...bFoto(hasBg)} px={3} py="6px" fontSize="xs"
+                               title="Insertar lección debajo">
                             + aquí
                           </Box>
-                          <Box as="button" onClick={() => delLeccion(mi, li)} {...btn} px={3} py="6px" fontSize="xs"
-                               border="1px solid rgba(255,255,255,0.3)" _hover={{ borderColor: "#ff8a8a", color: "#ff8a8a" }}>
+                          <Box as="button" onClick={() => delLeccion(mi, li)} {...btn} {...bFotoPeligro(hasBg)} px={3} py="6px" fontSize="xs">
                             ✕
                           </Box>
                         </Flex>
@@ -467,7 +490,7 @@ export default function AdminCursoEditor() {
                                 </Box>
                               </Box>
                             ) : (lec.video ?? "").trim() ? (
-                              <Text fontSize="xs" mt={2} color="#ffb3b3">
+                              <Text fontSize="xs" mt={2} color={hasBg ? "#ffb3b3" : "#b3261e"}>
                                 No reconozco ningún vídeo de YouTube en eso. Copia el enlace desde «Compartir» en YouTube.
                               </Text>
                             ) : null}
@@ -482,7 +505,7 @@ export default function AdminCursoEditor() {
                             <Flex justify="space-between" align="center" mb={1}>
                               <Text fontSize="xs" opacity={0.7}>Contenido (Markdown)</Text>
                               <Box as="button" onClick={() => setPreviews((p) => ({ ...p, [key]: !p[key] }))}
-                                   fontSize="xs" textDecoration="underline" cursor="pointer" opacity={0.85}>
+                                   fontSize="xs" textDecoration="underline" cursor="pointer" opacity={0.85} _focusVisible={focoT}>
                                 {previewOn ? "Editar" : "Vista previa"}
                               </Box>
                             </Flex>
@@ -490,8 +513,8 @@ export default function AdminCursoEditor() {
                               Negrita: <Box as="span" fontWeight="700">**texto**</Box> · Cursiva: <Box as="span" fontStyle="italic">*texto*</Box> o <Box as="span" fontStyle="italic">_texto_</Box> · Raya de separación: <Box as="span" fontFamily="monospace">---</Box> (en una línea aparte) · Imagen: <Box as="span" fontFamily="monospace">![](/img/cursos/mi-foto.jpg)</Box> (el archivo va en <Box as="span" fontFamily="monospace">frontend/public/</Box>)
                             </Text>
                             {previewOn ? (
-                              <Box bg="rgba(0,0,0,0.25)" borderRadius="md" p={4} minH="120px">
-                                <Markdown text={lec.contenido ?? ""} color="white" />
+                              <Box bg={hasBg ? "rgba(0,0,0,0.25)" : "#F7EBD9"} border={hasBg ? undefined : `1.5px solid ${T}55`} borderRadius="md" p={4} minH="120px">
+                                <Markdown text={lec.contenido ?? ""} color={hasBg ? "white" : T} />
                               </Box>
                             ) : (
                               <Textarea value={lec.contenido ?? ""} onChange={(e) => updLeccion(mi, li, { contenido: e.target.value })}
@@ -504,8 +527,8 @@ export default function AdminCursoEditor() {
                     );
                   })}
 
-                  <Box as="button" onClick={() => addLeccion(mi)} {...btn} alignSelf="flex-start" px={4} py="7px" fontSize="sm"
-                       border="1px dashed rgba(255,255,255,0.4)" _hover={{ bg: "rgba(255,255,255,0.08)" }}>
+                  <Box as="button" onClick={() => addLeccion(mi)} {...btn} {...bFoto(hasBg)} alignSelf="flex-start" px={4} py="7px" fontSize="sm"
+                       borderStyle="dashed">
                     + Lección
                   </Box>
                 </Flex>
@@ -516,8 +539,7 @@ export default function AdminCursoEditor() {
 
           {/* Guardar abajo también */}
           <Flex justify="flex-end" mt={8}>
-            <Box as="button" onClick={guardar} {...btn} px={8} py="11px" bg="white" color="#008080"
-                 boxShadow="0 0 16px rgba(255,255,255,0.4)" fontSize="lg"
+            <Box as="button" onClick={guardar} {...btn} {...bPri} px={8} py="11px" fontSize="lg"
                  opacity={guardando ? 0.6 : 1} pointerEvents={guardando ? "none" : "auto"}>
               {guardando ? "Guardando…" : "Guardar"}
             </Box>

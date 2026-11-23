@@ -120,7 +120,7 @@ export default function AdminPsicologiaLectura() {
           <AdminDisciplinaHeader disc={disc} subtitle={`${nombre || "Usuario"}${email ? ` · ${email}` : ""}`} />
 
           {!haleAlgo ? (
-            <LecturaVacio txt="rgba(255,255,255,0.92)">
+            <LecturaVacio txt="#005F5F">
               Este usuario todavía no ha escrito nada en su mapa de psicología.
             </LecturaVacio>
           ) : (

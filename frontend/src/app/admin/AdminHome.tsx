@@ -95,12 +95,11 @@ export default function AdminHome() {
           {/* ── Título + CREAR USUARIO ── */}
           <Flex align="center" justify="space-between" gap={4} wrap="wrap" mb={{ base: 6, md: 8 }}>
             <Box>
-              <Text color="white" fontSize={{ base: "2xl", md: "4xl" }} fontWeight="700" letterSpacing="0.08em"
-                    textTransform="uppercase" lineHeight="1.15"
-                    textShadow="0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(180,255,245,0.3)">
+              <Text color="#005F5F" fontSize={{ base: "2xl", md: "4xl" }} fontWeight="700" letterSpacing="0.08em"
+                    textTransform="uppercase" lineHeight="1.15">
                 Asesorías
               </Text>
-              <Text color="rgba(255,255,255,0.72)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}>
+              <Text color="#005F5Fcc" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}>
                 {personas.length} {personas.length === 1 ? "persona" : "personas"}
               </Text>
             </Box>
@@ -108,12 +107,12 @@ export default function AdminHome() {
           </Flex>
 
           {aviso && (
-            <Text role="status" color="#ffe7bd" fontSize="md" fontStyle="italic" textAlign="center" mb={5}>{aviso}</Text>
+            <Text role="status" color="#005F5F" fontSize="md" fontStyle="italic" textAlign="center" mb={5}>{aviso}</Text>
           )}
 
           {/* ── Lista ── */}
           {personas.length === 0 ? (
-            <Text color="rgba(255,255,255,0.8)" fontSize="lg" fontStyle="italic" textAlign="center" pt={10}>
+            <Text color="#005F5Fdd" fontSize="lg" fontStyle="italic" textAlign="center" pt={10}>
               Todavía no hay nadie. Crea la primera cuenta con el botón de arriba.
             </Text>
           ) : (
@@ -132,8 +131,8 @@ export default function AdminHome() {
                   bgImage="url('/img/fondos/marmol-bandas.webp')"
                   bgSize="cover"
                   bgPosition="center"
-                  border="1px solid rgba(255,255,255,0.65)"
-                  boxShadow="0 0 30px rgba(255,255,255,0.28), 0 0 70px rgba(180,255,245,0.14)"
+                  border="1.5px solid #004f4f"
+                  boxShadow="0 0 18px #b08d3f44, 0 0 40px #b08d3f22"
                 >
                   <Box minW={0}>
                     <Text color="#004f4f" fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.03em" noOfLines={1}>
@@ -147,7 +146,7 @@ export default function AdminHome() {
                     <BotonPildora marmol titulo={`Datos de ${p.name}`} onClick={() => navigate(`/admin/asesorias/${p.id}/datos`)}>Datos</BotonPildora>
                     <BotonPildora marmol desactivado={!conFecha.has(p.id)} titulo={conFecha.has(p.id) ? `Escribir la carta astral de ${p.name}` : `${p.name} aún no tiene fecha de carta astral`} onClick={() => navigate(`/admin/astrologia/${p.id}`)}>Carta astral</BotonPildora>
                     <BotonPildora marmol solido ocupado={entrando === p.id} titulo={`Abrir el camino de ${p.name}`} onClick={() => entrar(p)}>
-                      <MandalaTurquesa tam="22px" color="white" />
+                      <MandalaTurquesa tam="22px" color="#F0DCC0" />
                       <Text as="span" fontSize="lg" lineHeight="1" aria-hidden>→</Text>
                     </BotonPildora>
                   </Flex>
