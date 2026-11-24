@@ -7,7 +7,7 @@ import { Box } from "@chakra-ui/react";
 import Welcome from "./app/web/Welcome";
 import WelcomeAntigua from "./antigua/app/web/WelcomeAntigua";
 import GuardiaAntigua from "./antigua/GuardiaAntigua";
-import { Navigate, Route, Routes, useLocation, useParams } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation, useParams, useSearchParams } from "react-router-dom";
 import { cargarTextosMetodo } from "./i18n";
 
 /**
@@ -120,7 +120,7 @@ const CaminoPagina = lazyConMetodo(() => import("./app/metodo/CaminoPagina"));
 // (camino reducido, nov-2026) const MetodoAstrologiaCartaAstral = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaCartaAstral"));
 // (camino reducido, nov-2026) const MetodoAstrologiaPlanetas = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaPlanetas"));
 // (camino reducido, nov-2026) const MetodoAstrologiaProfundizar = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaProfundizar"));
-const MetodoAstrologiaLectura = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaLectura"));
+// (camino nuevo, nov-2026) const MetodoAstrologiaLectura = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaLectura"));
 // (camino reducido, nov-2026) const MetodoAstrologiaCasas = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaCasas"));
 // (camino reducido, nov-2026) const MetodoAstrologiaAspectos = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaAspectos"));
 const MetodoAstrologiaPdf = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaPdf"));
@@ -128,9 +128,10 @@ const MetodoAstrologiaIntroduccion = lazyConMetodo(() => import("./app/metodo/Me
 const MetodoAstrologiaArea = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaArea"));
 const MetodoAstrologiaHistoria = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaHistoria"));
 const MetodoAstrologiaExplicacion = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaExplicacion"));
-const MetodoAstrologiaTrio = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaTrio"));
+// (camino nuevo, nov-2026) const MetodoAstrologiaTrio = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaTrio"));
 // (camino reducido, nov-2026) const MetodoAstrologiaApuntes = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaApuntes"));
 const MetodoAstrologiaSintesis = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaSintesis"));
+const MetodoAstrologiaBienvenida = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaBienvenida"));
 const MetodoAstrologiaCursos = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaCursos"));
 const AdminHome = lazy(() => import("./app/admin/AdminHome"));
 const AdminInicio = lazy(() => import("./app/admin/AdminInicio"));
@@ -353,6 +354,23 @@ function IrADatosDe() {
   return <Navigate to={`/admin/asesorias/${userId}/datos`} replace />;
 }
 
+/** /admin/ver-camino/:userId[?a=/ruta]: abre el camino de esa persona (María sigue con su sesión) y va a
+ *  /camino/astrologia (o a la ruta de `a`). Sirve para cuentas que no salen en Asesorías (p. ej. «solo carta»). */
+function VerCaminoDe() {
+  const { userId } = useParams();
+  const [params] = useSearchParams();
+  const [fallo, setFallo] = React.useState(false);
+  React.useEffect(() => {
+    let vivo = true;
+    import("./api/persona")
+      .then((m) => m.abrirCaminoDe(userId ?? ""))
+      .then(() => { if (vivo) window.location.assign(params.get("a") || "/camino/astrologia"); })
+      .catch(() => { if (vivo) setFallo(true); });
+    return () => { vivo = false; };
+  }, [userId, params]);
+  return fallo ? <Box p={10}>No se pudo abrir el camino de esa cuenta.</Box> : null;
+}
+
 function AdminRoute({ children }: { children: React.ReactNode }) {
   return (
     <PrivateRoute>
@@ -488,9 +506,9 @@ export default function App({ antigua = false }: { antigua?: boolean } = {})
       {/* «Lo primero de tu carta» vive ahora DENTRO de /metodo/astrologia (una
           sola página: datos + Sol/Luna/Ascendente). La ruta vieja se conserva
           como redirección: hay migas del Mapa y marcadores apuntándole. */}
-      <Route path="/metodo/astrologia/solascendenteluna" element={<Navigate to="/metodo/astrologia/trio" replace />} />
+      <Route path="/metodo/astrologia/solascendenteluna" element={<Navigate to="/metodo/astrologia/introduccion" replace />} />
       {/* <Route path="/metodo/astrologia/cartaAstral" element={<PrivateRoute><MetodoAstrologiaCartaAstral /></PrivateRoute>} /> */}
-      <Route path="/metodo/astrologia/lectura" element={<PrivateRoute><MetodoAstrologiaLectura /></PrivateRoute>} />
+      {/* (camino nuevo, nov-2026) <Route path="/metodo/astrologia/lectura" element={<PrivateRoute><MetodoAstrologiaLectura /></PrivateRoute>} /> */}
       {/* <Route path="/metodo/astrologia/planetas" element={<PrivateRoute><MetodoAstrologiaPlanetas /></PrivateRoute>} /> */}
       {/* <Route path="/metodo/astrologia/casas" element={<PrivateRoute><MetodoAstrologiaCasas /></PrivateRoute>} /> */}
       {/* <Route path="/metodo/astrologia/aspectos" element={<PrivateRoute><MetodoAstrologiaAspectos /></PrivateRoute>} /> */}
@@ -499,8 +517,9 @@ export default function App({ antigua = false }: { antigua?: boolean } = {})
       <Route path="/metodo/astrologia/area/:n" element={<PrivateRoute><MetodoAstrologiaArea /></PrivateRoute>} />
       <Route path="/metodo/astrologia/historia" element={<PrivateRoute><MetodoAstrologiaHistoria /></PrivateRoute>} />
       <Route path="/metodo/astrologia/explicacion" element={<PrivateRoute><MetodoAstrologiaExplicacion /></PrivateRoute>} />
-      <Route path="/metodo/astrologia/trio" element={<PrivateRoute><MetodoAstrologiaTrio /></PrivateRoute>} />
+      {/* (camino nuevo, nov-2026) <Route path="/metodo/astrologia/trio" element={<PrivateRoute><MetodoAstrologiaTrio /></PrivateRoute>} /> */}
       {/* <Route path="/metodo/astrologia/apuntes" element={<PrivateRoute><MetodoAstrologiaApuntes /></PrivateRoute>} /> */}
+      <Route path="/metodo/astrologia/bienvenida" element={<PrivateRoute><MetodoAstrologiaBienvenida /></PrivateRoute>} />
       <Route path="/metodo/astrologia/sintesis" element={<PrivateRoute><MetodoAstrologiaSintesis /></PrivateRoute>} />
       <Route path="/metodo/astrologia/cursos" element={<PrivateRoute><MetodoAstrologiaCursos /></PrivateRoute>} />
       {/* <Route path="/metodo/astrologia/:planetaKey/:campo" element={<PrivateRoute><MetodoAstrologiaProfundizar /></PrivateRoute>} /> */}
@@ -512,6 +531,7 @@ export default function App({ antigua = false }: { antigua?: boolean } = {})
       <Route path="/admin/asesorias/:userId/datos" element={<AdminRoute><AdminDatosUsuario /></AdminRoute>} />
       {/* La página de «una persona» se fue: el mandala te mete en su home y todo lo suyo está en «Datos». */}
       <Route path="/admin/asesorias/:userId" element={<AdminRoute><IrADatosDe /></AdminRoute>} />
+      <Route path="/admin/ver-camino/:userId" element={<AdminRoute><VerCaminoDe /></AdminRoute>} />
       <Route path="/admin/cursos" element={<AdminRoute><AdminCursos /></AdminRoute>} />
       <Route path="/admin/cursos/:id" element={<AdminRoute><AdminCursoEditor /></AdminRoute>} />
       <Route path="/admin/astrologia-textos" element={<AdminRoute><AdminAstrologiaTextos /></AdminRoute>} />

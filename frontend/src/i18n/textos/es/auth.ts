@@ -146,5 +146,7 @@ export const auth = {
   "cumple.motivo.caducado": "Este regalo ha caducado: tenía siete días desde tu cumpleaños.",
   "cumple.motivo.usado": "Este regalo ya lo has usado. ¡Que disfrutes de tu disciplina!",
   // Entrar con el enlace del correo (cuenta solo carta, sin contraseña). Texto propuesto: pendiente de revisión de María.
+  "auth.acceso.espera": "Estamos preparando tu espacio. La primera vez la espera puede tardar hasta 1 minuto; no cierres esta página.",
+  "auth.acceso.lento": "Está tardando más de lo normal en responder. Recarga esta página dentro de un momento; si sigue igual, ponte en contacto conmigo.",
   "auth.acceso.invalido": "Este enlace no es válido. Si has perdido el correo con tu enlace de acceso, ponte en contacto conmigo.",
 } as const;

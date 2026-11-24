@@ -803,7 +803,7 @@ export class MailService {
         ])}
         <p style="font-size: 16px; line-height: 1.7; margin-top: 22px; opacity: 0.92;">
           ${conCuenta
-            ? 'Voy a escribir tu carta con calma. Muy pronto podrás entrar en tu cuenta: cuando la tenga terminada te escribiré con el enlace para entrar.'
+            ? 'Voy a escribir tu carta con calma. Cuando la tenga terminada te escribiré con el enlace para entrar a leerla.'
             : 'Voy a escribir tu carta con calma. Cuando la tenga terminada te la haré llegar por correo.'}
         </p>
         <p style="font-size: 14px; line-height: 1.6; margin-top: 14px; opacity: 0.8;">
@@ -812,6 +812,31 @@ export class MailService {
       `,
     );
     return await this.enviar(email, 'Tu registro está confirmado', html, 'lectura recibida');
+  }
+
+  /**
+   * UN CORREO CUYO TEXTO ESCRIBE MARÍA (en el momento de enviarlo): el texto sale tal cual, con el mini-formato
+   * (**negrita**, *cursiva*, `---`, línea en blanco = párrafo), sobre el mármol de la casa y SIN la firma automática
+   * (la firma ya va en lo que ella escribe). Con `boton`, una píldora al final y, debajo, el enlace en claro por si el
+   * botón no funciona. Copia oculta a María. Devuelve si el correo ha salido de verdad.
+   */
+  async enviarCorreoEditable(opts: {
+    para: string;
+    asunto: string;
+    texto: string;
+    boton?: { href: string; label: string };
+  }): Promise<boolean> {
+    const cuerpo = `
+      ${this.textoAHtml(opts.texto, TINTA_MARMOL)}
+      ${opts.boton ? `
+        <p style="margin: 28px 0;">${this.pildora(opts.boton.href, this.escaparHtml(opts.boton.label))}</p>
+        <p style="font-size: 13px; line-height: 1.6; opacity: 0.75;">
+          Si el botón no te funciona, copia esta dirección en tu navegador:<br />
+          <a href="${opts.boton.href}" style="color:${TINTA_MARMOL};text-decoration:underline;word-break:break-all;">${opts.boton.href}</a>
+        </p>` : ''}
+    `;
+    const html = this.plantillaInterna(this.escaparHtml(opts.asunto), cuerpo);
+    return await this.enviar(opts.para, opts.asunto, html, 'correo escrito por María', { copiaAdmin: true });
   }
 
   /**

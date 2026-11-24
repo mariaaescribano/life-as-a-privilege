@@ -100,6 +100,12 @@ interface IntroComicModalProps {
   luzFoto?: string;
   /** Entrada «mágica» de la foto y texto que espera a la foto (ver ComicViewer). */
   fotoMagica?: boolean;
+  /** Solo flechas: sin la X ni Escape ni clic fuera para cerrar (se pasa a ComicViewer). */
+  soloFlechas?: boolean;
+  /** Sin flechas de navegación (queda la X). Se pasa a ComicViewer. */
+  sinFlechas?: boolean;
+  /** La flecha de la izquierda de la primera viñeta lleva a otra página (se pasa a ComicViewer). */
+  alAnterior?: () => void;
   /** Contenido extra bajo el texto de cada viñeta (p.ej. el botón «Leído» de la última). Se pasa tal cual a ComicViewer. */
   pageExtra?: (index: number, api: { goNext: () => void; isLast: boolean }) => React.ReactNode;
 }
@@ -122,6 +128,9 @@ export function IntroComicModal({
   continueLabelMovil,
   onComplete,
   onBack,
+  soloFlechas,
+  sinFlechas,
+  alAnterior,
   mantenerSaltar,
   saltarTextColor,
   separarFrases,
@@ -138,7 +147,7 @@ export function IntroComicModal({
     // animación del ModalContent) se ancla al contenido en vez de al viewport
     // → en móvil la foto de fondo salía estirada sobre todo el alto del cómic
     // (mismo apaño que ElementoComicModal y compañía).
-    <Modal isOpen={isOpen} onClose={onClose} size="full" scrollBehavior="outside" motionPreset="none">
+    <Modal isOpen={isOpen} onClose={onClose} size="full" scrollBehavior="outside" motionPreset="none" closeOnEsc={!soloFlechas} closeOnOverlayClick={!soloFlechas}>
       <ModalOverlay bg="rgba(0,0,0,0.95)" sx={{ backdropFilter: "blur(24px)" }} />
       <ModalContent
         bg="transparent"
@@ -159,6 +168,9 @@ export function IntroComicModal({
           onComplete={onComplete}
           pageExtra={pageExtra}
           onBack={onBack}
+          soloFlechas={soloFlechas}
+          sinFlechas={sinFlechas}
+          alAnterior={alAnterior}
           themeColor={themeColor}
           luzFoto={luzFoto}
           fotoMagica={fotoMagica}

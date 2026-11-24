@@ -29,11 +29,19 @@ export class LecturaController {
     return await this.lectura.setEstado(body.id, body.estado);
   }
 
+  @Post('admin/borrar')
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  @HttpCode(HttpStatus.OK)
+  async borrar(@Body() body: { id?: string }) {
+    if (!body?.id) throw new BadRequestException('id requerido');
+    return await this.lectura.borrar(body.id);
+  }
+
   @Post('admin/acceso')
   @UseGuards(JwtAuthGuard, AdminGuard)
   @HttpCode(HttpStatus.OK)
-  async acceso(@Body() body: { id?: string }) {
+  async acceso(@Body() body: { id?: string; asunto?: string; texto?: string }) {
     if (!body?.id) throw new BadRequestException('id requerido');
-    return await this.lectura.darAcceso(body.id);
+    return await this.lectura.darAcceso(body.id, { asunto: body.asunto, texto: body.texto });
   }
 }

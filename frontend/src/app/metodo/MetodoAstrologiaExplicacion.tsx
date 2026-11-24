@@ -44,7 +44,7 @@ export default function MetodoAstrologiaExplicacion() {
   useEffect(() => { window.scrollTo({ top: 0, behavior: "auto" }); }, []);
 
   // «Siguiente» cerrado hasta que María abra el paso 4 (ella entra siempre).
-  const siguienteCerrado = !esMariaMirando() && cargado && bloqueada(3);
+  const siguienteCerrado = !esMariaMirando() && cargado && bloqueada(4);
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
@@ -59,7 +59,7 @@ export default function MetodoAstrologiaExplicacion() {
               bgColor={`${astrologiaBg}dd`}
               color={astrologiaTxt}
               space
-              step={{ current: 2, total: 20 }}
+              step={{ current: 3, total: 19 }}
               mb={0}
               prev={{ label: `← ${t("metodo.astro.paso.historia")}`, onClick: () => navigate("/metodo/astrologia/historia") }}
               next={{

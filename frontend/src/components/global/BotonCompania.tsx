@@ -5,6 +5,7 @@ import { AgendarLlamada } from "./AgendarLlamada";
 import { PRECIO_LLAMADA, type LlamadaTipo } from "./llamadaPrecios";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import { useT } from "../../i18n";
+import { esMariaMirando } from "../../api/persona";
 
 /* ──────────────────────────────────────────────────────────────────────────
  * BotonCompania — botón flotante REUTILIZABLE (abajo a la derecha, siempre
@@ -202,8 +203,9 @@ function BotonCompaniaInterno({
           llamada» debajo. */}
       <Flex
         position="fixed"
-        // Sube para dejar la esquina a «Notas» (MiniDiario), abajo a la derecha.
-        bottom={{ base: "78px", md: "98px" }}
+        // Sube para dejar la esquina a «Notas» (MiniDiario), abajo a la derecha; si «Notas» no sale (la persona ya no
+        // guarda notas), baja a la esquina.
+        bottom={esMariaMirando() ? { base: "78px", md: "98px" } : { base: "18px", md: "26px" }}
         right={{ base: 4, md: 6 }}
         zIndex={20}
         direction="column"

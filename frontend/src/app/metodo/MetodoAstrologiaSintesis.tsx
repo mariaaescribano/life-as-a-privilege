@@ -56,13 +56,13 @@ export default function MetodoAstrologiaSintesis() {
               bgColor={`${astrologiaBg}dd`}
               color={astrologiaTxt}
               space
-              step={{ current: 19, total: 20 }}
+              step={{ current: 18, total: 19 }}
               mb={0}
               prev={{ label: `← ${t("metodo.astro.paso.pdf")}`, onClick: () => navigate("/metodo/astrologia/pdf") }}
               next={{
                 label: `${t("metodo.astro.paso.cursos")} →`,
                 onClick: () => navigate("/metodo/astrologia/cursos"),
-                disabled: !esMariaMirando() && cargado && bloqueada(20),
+                disabled: !esMariaMirando() && cargado && bloqueada(19),
               }}
             />
           </Reveal>

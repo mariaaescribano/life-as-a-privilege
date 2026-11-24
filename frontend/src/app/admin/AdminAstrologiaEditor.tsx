@@ -172,6 +172,8 @@ export default function AdminAstrologiaEditor() {
   const [casas, setCasas] = useState<Record<string, string>>({});
   const [aspectos, setAspectos] = useState<Record<string, string>>({});
   const [sintesis, setSintesis] = useState("");
+  const [bienvenida, setBienvenida] = useState("");
+  const [areas, setAreas] = useState<Record<string, string>>({});
   const [retos, setRetos] = useState<Reto[]>([]);
   const [guardando, setGuardando] = useState(false);
   const [guardado, setGuardado] = useState(false);
@@ -198,6 +200,8 @@ export default function AdminAstrologiaEditor() {
   const [casasOpen, setCasasOpen] = useState(false);
   const [aspectosOpen, setAspectosOpen] = useState(false);
   const [sintesisOpen, setSintesisOpen] = useState(false);
+  const [bienvenidaOpen, setBienvenidaOpen] = useState(false);
+  const [areasOpen, setAreasOpen] = useState(false);
   // Box de consulta: la carta del usuario (rueda + planetas + casas). Abierto
   // por defecto para poder mirarla mientras se escribe la lectura.
   const [cartaOpen, setCartaOpen] = useState(true);
@@ -217,7 +221,7 @@ export default function AdminAstrologiaEditor() {
             casas_texto?: Record<string, string>;
             aspectos_texto?: Record<string, string>;
             retos?: Reto[];
-            data?: { aviso_proceso_at?: string; aviso_leida_at?: string; sintesis?: string };
+            data?: { aviso_proceso_at?: string; aviso_leida_at?: string; sintesis?: string; bienvenida?: string; areas?: Record<string, string> };
             fecha_nacimiento?: string | null;
             hora_nacimiento?: string | null;
             pais?: string | null;
@@ -234,6 +238,8 @@ export default function AdminAstrologiaEditor() {
         setAspectos((rowRes.data?.aspectos_texto ?? {}) as Record<string, string>);
         setRetos(Array.isArray(rowRes.data?.retos) ? rowRes.data!.retos! : []);
         setSintesis(typeof rowRes.data?.data?.sintesis === "string" ? rowRes.data.data.sintesis : "");
+        setBienvenida(typeof rowRes.data?.data?.bienvenida === "string" ? rowRes.data.data.bienvenida : "");
+        setAreas(rowRes.data?.data?.areas && typeof rowRes.data.data.areas === "object" ? rowRes.data.data.areas : {});
         setAvisadoAt({
           proceso: rowRes.data?.data?.aviso_proceso_at,
           leida: rowRes.data?.data?.aviso_leida_at,
@@ -347,6 +353,8 @@ export default function AdminAstrologiaEditor() {
           casas_texto: casas,
           aspectos_texto: aspectos,
           sintesis,
+          bienvenida,
+          areas,
           retos: conContenido.map((r) => ({ ...r, titulo: r.titulo.trim(), texto: r.texto.trim() })),
         },
         { headers: adminHeaders() },
@@ -875,14 +883,53 @@ export default function AdminAstrologiaEditor() {
                   </Flex>
                 </Desplegable>
 
+                {/* ── LAS ÁREAS (desplegable) ── el texto de cada una de las doce áreas PARA ESTA PERSONA. Sale solo, tal
+                    cual, en la página de cada área de su camino (la presentación por pasos). Una línea con --- separa bloques. */}
+                <Desplegable titulo="Las áreas" open={areasOpen} onToggle={() => setAreasOpen((o) => !o)}>
+                  {Array.from({ length: 12 }, (_, i) => i + 1).map((n) => (
+                    <Trozo key={`area-${n}`}>
+                      <Text color="#005F5F" fontWeight="700" fontSize="sm" mb={2}>Área {NUMEROS_ROMANOS[n - 1]}</Text>
+                      <Textarea
+                        value={areas[String(n)] ?? ""}
+                        onChange={(e) => setAreas((a) => ({ ...a, [String(n)]: e.target.value }))}
+                        placeholder={`El texto del Área ${NUMEROS_ROMANOS[n - 1]} para esta persona…`}
+                        rows={8}
+                        {...campoNac}
+                      />
+                      {n === 1 && (
+                        <Text color="#005F5Fb3" fontSize="xs" fontStyle="italic" mt={2}>
+                          Párrafos separados por una línea en blanco · **negrita** · *cursiva* · una línea con --- es una separación. Un párrafo que empieza por el símbolo de un planeta (☉ ☽ ♄…) sale como su definición. Se guarda con «Guardar».
+                        </Text>
+                      )}
+                    </Trozo>
+                  ))}
+                </Desplegable>
+
+                {/* ── BIENVENIDA (desplegable) ── el recibimiento a ESTA persona: sale solo, tal cual, justo después
+                    de pulsar EMPEZAR en su camino de Astrología. Sin texto, EMPEZAR sigue directo al cómic. */}
+                <Desplegable titulo="La bienvenida" open={bienvenidaOpen} onToggle={() => setBienvenidaOpen((o) => !o)}>
+                  <Trozo>
+                    <Textarea
+                      value={bienvenida}
+                      onChange={(e) => setBienvenida(e.target.value)}
+                      placeholder="Unas palabras de recibimiento para esta persona…"
+                      rows={7}
+                      {...campoNac}
+                    />
+                    <Text color="#005F5Fb3" fontSize="xs" fontStyle="italic" mt={2}>
+                      **negrita** · *cursiva* · --- una raya. Se guarda con «Guardar» y ella lo ve nada más pulsar EMPEZAR.
+                    </Text>
+                  </Trozo>
+                </Desplegable>
+
                 {/* ── SÍNTESIS (desplegable) ── lo que no debe olvidar de su carta. Sale solo, tal cual, en el
                     paso «Síntesis» de su camino de Astrología: no hay que escribirlo allí. */}
-                <Desplegable titulo="La Síntesis" open={sintesisOpen} onToggle={() => setSintesisOpen((o) => !o)}>
+                <Desplegable titulo="La despedida" open={sintesisOpen} onToggle={() => setSintesisOpen((o) => !o)}>
                   <Trozo>
                     <Textarea
                       value={sintesis}
                       onChange={(e) => setSintesis(e.target.value)}
-                      placeholder="Lo que no debe olvidar de su carta…"
+                      placeholder="Unas palabras de despedida y lo que no debe olvidar de su carta…"
                       rows={9}
                       {...campoNac}
                     />

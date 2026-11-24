@@ -5,7 +5,7 @@ import { Box, Flex, Image, Input, SimpleGrid, Text, VStack } from "@chakra-ui/re
 import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import { API_URL, FONDO_PAGINA_BEIGE as BEIGE, FONDO_PAGINA_TURQUESA as T } from "../../GlobalVariables";
-import { cerrarSesionLocal } from "../../api/sesion";
+import { cerrarSesionLocal, esSoloLectura, rutaHome } from "../../api/sesion";
 import { salirDeLaPersona, personaActiva, cabeceraPersona } from "../../api/persona";
 import { encogerFoto } from "../../utils/encogerFoto";
 import { LifeLoader } from "../../components/metodo/comicLoaders";
@@ -39,6 +39,10 @@ export default function UserAccount() {
   const navigate = useNavigate();
   const userId = localStorage.getItem("userId") ?? "";
   const token  = localStorage.getItem("token")  ?? "";
+  // La cuenta «solo carta» no tiene página de cuenta: si llega aquí (enlace, atrás…), de vuelta a su camino.
+  useEffect(() => {
+    if (esSoloLectura() && !personaActiva()) navigate(rutaHome(), { replace: true });
+  }, [navigate]);
 
   const [img, setImg] = useState<string>(localStorage.getItem("img") ?? "");
   const [name, setName] = useState("");

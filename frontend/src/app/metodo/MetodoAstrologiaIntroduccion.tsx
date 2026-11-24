@@ -7,6 +7,7 @@ import SiteFooter from "../../components/global/Footer";
 import { IndiceAstrologia } from "../../components/metodo/IndiceAstrologia";
 import { RecorridoLoading } from "../../components/metodo/RecorridoLoading";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
+import { rutaArea, tituloArea } from "../../components/metodo/astrologiaAreas";
 import { SpaceBg, SPACE_IMG } from "../../components/metodo/SpaceBg";
 import { FormularioNacimiento, type EstadoNacimiento } from "../../components/metodo/FormularioNacimiento";
 import { CartaAstral3D } from "../../components/metodo/CartaAstral3D/CartaAstral3D";
@@ -190,14 +191,14 @@ export default function MetodoAstrologiaIntroduccion() {
               color={astrologiaTxt}
               space
               dense
-              step={{ current: 3, total: 20 }}
+              step={{ current: 4, total: 19 }}
               mb={0}
               prev={{ label: `← ${t("metodo.astro.paso.explicacion")}`, onClick: () => navigate("/metodo/astrologia/explicacion") }}
               next={{
-                label: `${t("metodo.astro.paso.trio")} →`,
-                onClick: () => navigate("/metodo/astrologia/trio"),
-                // Cerrado hasta que María abra el paso 4 (ella entra siempre).
-                disabled: !mariaMirando && ((cargadoPasos && bloqueada(4)) || verFormulario),
+                label: `${tituloArea(1)} →`,
+                onClick: () => navigate(rutaArea(1)),
+                // Cerrado hasta que María abra el paso 5 (ella entra siempre).
+                disabled: !mariaMirando && ((cargadoPasos && bloqueada(5)) || verFormulario),
               }}
             />
           </Reveal>

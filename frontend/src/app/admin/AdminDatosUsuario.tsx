@@ -9,6 +9,7 @@ import { Box, Flex, Grid, Input, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { LifeLoading } from "../../components/global/LifeLoading";
+import { CorreoEditable } from "../../components/admin/CorreoEditable";
 import { Reveal } from "../../components/global/Reveal";
 import { sombraTexto } from "../../components/global/disciplinaSombras";
 import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt } from "../../GlobalVariables";
@@ -165,7 +166,6 @@ export default function AdminDatosUsuario() {
   const [cargando, setCargando] = useState(true);
   const [aviso, setAviso] = useState<string | null>(null);
   const [ocupado, setOcupado] = useState(false);
-  const [enlace, setEnlace] = useState<string | null>(null);
   // Los campos editables (la fecha se escribe día/mes/año).
   const [nombre, setNombre] = useState("");
   const [telefono, setTelefono] = useState("");
@@ -300,49 +300,8 @@ export default function AdminDatosUsuario() {
     }
   };
 
-  const reenviar = async () => {
-    if (!persona) return;
-    setOcupado(true);
-    setAviso(null);
-    try {
-      const { data } = await axios.post<{ correoEnviado: boolean }>(
-        `${API_URL}/user/admin/reenviar-invitacion`,
-        { userId: persona.id },
-        { headers: adminHeaders() },
-      );
-      setAviso(data.correoEnviado
-        ? `Correo de activación reenviado a ${persona.email}.`
-        : `El correo a ${persona.email} NO ha salido. Inténtalo de nuevo en un rato.`);
-    } catch (e: any) {
-      setAviso(e?.response?.data?.message ?? "No se pudo reenviar el correo.");
-    } finally {
-      setOcupado(false);
-    }
-  };
-
-  // El enlace del correo, para pasárselo por otra vía si el correo no le llega.
-  const copiarEnlace = async () => {
-    if (!persona) return;
-    setOcupado(true);
-    setAviso(null);
-    try {
-      const { data } = await axios.get<{ enlace: string }>(
-        `${API_URL}/user/admin/usuario/${persona.id}/activacion`,
-        { headers: adminHeaders() },
-      );
-      setEnlace(data.enlace);
-      try {
-        await navigator.clipboard.writeText(data.enlace);
-        setAviso("Enlace copiado. Vale 14 días y sirve una sola vez.");
-      } catch {
-        setAviso("No he podido copiarlo solo: cópialo del cuadro de abajo.");
-      }
-    } catch (e: any) {
-      setAviso(e?.response?.data?.message ?? "No se pudo generar el enlace.");
-    } finally {
-      setOcupado(false);
-    }
-  };
+  // El correo de acceso lo escribe María (con el usuario y la contraseña) y se manda desde aquí.
+  const [correoAbierto, setCorreoAbierto] = useState(false);
 
   const emailCoincide = !!persona && emailConfirma.trim().toLowerCase() === persona.email.trim().toLowerCase();
 
@@ -499,22 +458,20 @@ export default function AdminDatosUsuario() {
             </Box>
           </Reveal>
 
-          {/* ── Activación (solo mientras no la haya activado) ── */}
-          {pendiente && (
-            <Reveal direction="up" distance={22} delay={0.4} mb={{ base: 5, md: 7 }}>
-              <Box {...CAJA_MARMOL}>
-                <Box mb={5}>{tituloMarmol("Activación")}</Box>
-                <Flex gap={3} wrap="wrap">
-                  <PildoraMarmol off={ocupado} onClick={reenviar}>Reenviar correo de activación</PildoraMarmol>
-                  <PildoraMarmol contorno off={ocupado} onClick={copiarEnlace}>Copiar enlace de activación</PildoraMarmol>
-                </Flex>
-                {enlace && (
-                  <Input readOnly value={enlace} aria-label="Enlace de activación" onFocus={(e) => e.currentTarget.select()}
-                         mt={5} {...ESTILO_CAMPO} h="46px" fontSize="sm" />
-                )}
-              </Box>
-            </Reveal>
-          )}
+          {/* ── Acceso: el correo con su usuario y su contraseña, que escribe María ── */}
+          <Reveal direction="up" distance={22} delay={0.4} mb={{ base: 5, md: 7 }}>
+            <Box {...CAJA_MARMOL}>
+              <Box mb={5}>{tituloMarmol(pendiente ? "Activación" : "Acceso")}</Box>
+              <Text color="#005F5F" opacity={0.85} fontSize="md" fontStyle="italic" mb={4}>
+                {pendiente
+                  ? "Aún no ha entrado. La cuenta se activa cuando entre la primera vez con la contraseña que tú le pongas."
+                  : "Ya la ha activado. Puedes mandarle un correo con una contraseña nueva."}
+              </Text>
+              <Flex gap={3} wrap="wrap">
+                <PildoraMarmol off={ocupado} onClick={() => setCorreoAbierto(true)}>Escribir y enviar el correo de acceso</PildoraMarmol>
+              </Flex>
+            </Box>
+          </Reveal>
 
           {/* ── Eliminar la cuenta: al final, apartado y con confirmación ── */}
           <Reveal direction="up" distance={22} delay={0.6} mt={{ base: 9, md: 12 }}>
@@ -552,6 +509,36 @@ export default function AdminDatosUsuario() {
           </Flex>
         </Box>
       </Flex>
+
+      {persona && (
+        <CorreoEditable
+          abierto={correoAbierto}
+          titulo={`Correo para ${persona.name}`}
+          para={persona.email}
+          asuntoInicial="Tu cuenta ya está lista"
+          textoInicial={`Hola ${persona.name},
+
+Ya tienes tu cuenta. Estos son tus datos para entrar:
+
+**Usuario:** ${persona.email}
+**Contraseña:** {{contraseña}}
+
+Entra con el botón de abajo.
+
+Un abrazo,
+María`}
+          contrasenaInicial=""
+          etiquetaBoton="Entrar a mi cuenta"
+          onEnviar={async (d) => {
+            if (!d.contrasena) return { ok: false, mensaje: "Escribe la contraseña que le vas a dar." };
+            const r = await axios.post<{ correoEnviado: boolean }>(`${API_URL}/user/admin/usuario/${persona.id}/correo`, d, { headers: adminHeaders() });
+            return r.data.correoEnviado
+              ? { ok: true, mensaje: `Correo enviado a ${persona.email}.` }
+              : { ok: false, mensaje: "El correo NO ha salido. Vuelve a intentarlo en un momento." };
+          }}
+          onCerrar={() => setCorreoAbierto(false)}
+        />
+      )}
 
       <SiteFooter />
     </Box>

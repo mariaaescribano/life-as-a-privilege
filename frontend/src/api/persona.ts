@@ -21,7 +21,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 import axios from "axios";
 import { API_URL } from "../GlobalVariables";
-import { cerrarSesionLocal, esAdminDesbloqueado } from "./sesion";
+import { cerrarSesionLocal, esAdminDesbloqueado, recordarSoloLectura } from "./sesion";
 
 /** La persona cuyo camino estoy abriendo ahora mismo (si hay alguna). */
 const CLAVE_PERSONA = "persona";
@@ -33,6 +33,8 @@ export interface PersonaAbierta {
   name: string;
   email: string;
   img?: string | null;
+  /** Cuenta «solo carta»: su camino se ve sin foto, sin «Mi cuenta» y sin menú. */
+  solo_lectura?: boolean;
 }
 
 interface SesionApartada {
@@ -132,6 +134,8 @@ export async function abrirCaminoDe(userId: string): Promise<PersonaAbierta> {
   // Sin foto, la misma por defecto que pone el login normal: Home espera a que
   // `img` exista para pintar el mandala y, sin ella, se quedaría cargando siempre.
   poner("img", user.img || "/img/icono/noImg.webp");
+  // Si es una cuenta «solo carta», María la ve como ella (la marca se borra al salir: cerrarSesionLocal).
+  recordarSoloLectura(user.solo_lectura === true);
   // `isAdmin` queda sin poner: dentro del camino de una persona la web es la de la
   // persona, con lo de María añadido (esMariaMirando), no el panel.
   try {

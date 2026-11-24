@@ -37,7 +37,13 @@ interface PlanetaConCajas {
   signo: string;
   /** Una casa casi siempre; dos cuando el planeta está sobre la cúspide (ver astrologiaCasas.ts). */
   casas: number[];
+  /** Quirón y los Nodos: su texto del signo y el de la casa son el MISMO (Aries = Casa 1…), así que solo
+   *  se enseña una caja (la del signo). La casa se sigue calculando y guardando, pero no se muestra. */
+  soloSigno: boolean;
 }
+
+/** Los cuerpos con una sola caja en Arquetipos (solo esta página: en el resto no cambia nada). */
+const SOLO_SIGNO: ReadonlySet<CuerpoKey> = new Set<CuerpoKey>(["quiron", "nodoNorte", "nodoSur"]);
 
 /** Texto de un arquetipo → párrafos para el visor: primero las frases del resumen, luego el cuerpo. */
 function aParrafos(texto: string): { parrafos: string[]; destacadas: number } {
@@ -119,7 +125,7 @@ export default function MetodoAstrologiaCartaAstral() {
       const p = carta.planetas.find((x) => x.planeta === c.key);
       const signo = p ? ZODIAC_SIGNS[p.signoIdx]?.name : undefined;
       if (!p || !signo) continue;
-      out.push({ cuerpo: c, signo, casas: casasDelPlaneta(p, carta.cusps) });
+      out.push({ cuerpo: c, signo, casas: casasDelPlaneta(p, carta.cusps), soloSigno: SOLO_SIGNO.has(c.key) });
     }
     return out;
   }, [carta]);
@@ -150,7 +156,7 @@ export default function MetodoAstrologiaCartaAstral() {
   const arranque = useRef(false);
   const planetaLeido = (pl: PlanetaConCajas): boolean =>
     leidaCaja(pl.cuerpo.key, { tipo: "signo", signo: pl.signo }) &&
-    pl.casas.every((c, ci) => leidaCaja(pl.cuerpo.key, { tipo: "casa", casa: c }, ci));
+    (pl.soloSigno || pl.casas.every((c, ci) => leidaCaja(pl.cuerpo.key, { tipo: "casa", casa: c }, ci)));
   useEffect(() => {
     if (arranque.current || planetas.length === 0 || cargandoProgreso) return;
     arranque.current = true;
@@ -165,7 +171,7 @@ export default function MetodoAstrologiaCartaAstral() {
     if (abriendo) return;
     setAbriendo(true);
     const k = p.cuerpo.key;
-    const facetas: Faceta[] = [{ tipo: "signo", signo: p.signo }, ...p.casas.map((c) => ({ tipo: "casa", casa: c }) as Faceta)];
+    const facetas: Faceta[] = [{ tipo: "signo", signo: p.signo }, ...(p.soloSigno ? [] : p.casas).map((c) => ({ tipo: "casa", casa: c }) as Faceta)];
     const textos = await Promise.all(facetas.map((fa) =>
       fa.tipo === "signo" ? fetchAstroTexto(k, "signo", fa.signo) : fetchAstroTexto(k, "casa", String(fa.casa))));
     const foto = `/viñetas/astrologia/planetas/${k}.webp`;
@@ -329,7 +335,7 @@ export default function MetodoAstrologiaCartaAstral() {
                       );
                     }
                     const ci = slot - 1;
-                    const cs = pl.casas[ci];
+                    const cs = pl.soloSigno ? undefined : pl.casas[ci];
                     if (cs == null) return <Box key={`vacio-${slot}`} h={{ base: "0", md: ALTO_CAJA }} display={{ base: "none", md: "block" }} aria-hidden />;
                     return (
                       <CajaArquetipo

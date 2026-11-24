@@ -16,6 +16,8 @@ interface HousesRingProps {
   outerRadius: number;
   /** Las 12 cúspides reales (longitud eclíptica): las casas miden lo que miden. */
   cusps: number[];
+  /** Tinte del anillo (multiplica el blanco de la textura); sin él, blanco. */
+  tinte?: string;
 }
 
 /**
@@ -81,7 +83,7 @@ function buildTexture(cusps: number[]): THREE.CanvasTexture {
   return tex;
 }
 
-export function HousesRing({ innerRadius, outerRadius, cusps }: HousesRingProps) {
+export function HousesRing({ innerRadius, outerRadius, cusps, tinte }: HousesRingProps) {
   const texture = useMemo(() => buildTexture(cusps), [cusps]);
 
   const matRef = useRef<THREE.MeshBasicMaterial>(null);
@@ -101,6 +103,7 @@ export function HousesRing({ innerRadius, outerRadius, cusps }: HousesRingProps)
       <meshBasicMaterial
         ref={matRef}
         map={texture}
+        color={tinte ?? "#ffffff"}
         transparent
         opacity={0}
         side={THREE.DoubleSide}

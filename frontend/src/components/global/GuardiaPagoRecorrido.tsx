@@ -41,11 +41,12 @@ const SCOPE_POR_RUTA: [string, string][] = [
   ["/camino/cultura", "cultura"],
 ];
 
-// Astrología, aunque no esté abierta: su camino, la entrada y los dos primeros pasos (Historia y Explicación)
+// Astrología, aunque no esté abierta: su camino, la entrada y los tres primeros pasos (Bienvenida, Historia y Explicación)
 // son para todo el mundo. Lo demás lo abre María.
 const SIEMPRE_ABIERTAS = [
   "/camino/astrologia",
   "/metodo/astrologia",
+  "/metodo/astrologia/bienvenida",
   "/metodo/astrologia/historia",
   "/metodo/astrologia/explicacion",
 ];

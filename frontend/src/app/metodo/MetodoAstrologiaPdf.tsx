@@ -183,7 +183,7 @@ export default function MetodoAstrologiaPdf() {
               bgColor={`${astrologiaBg}dd`}
               color={astrologiaTxt}
               space
-              step={{ current: 18, total: 20 }}
+              step={{ current: 17, total: 19 }}
               mb={0}
               prev={{ label: `← ${tituloArea(AREAS_TOTAL)}`, onClick: () => navigate(rutaArea(AREAS_TOTAL)) }}
               next={{ label: `${t("metodo.astro.paso.sintesis")} →`, onClick: () => navigate("/metodo/astrologia/sintesis") }}

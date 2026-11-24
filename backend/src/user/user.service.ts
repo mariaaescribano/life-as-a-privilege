@@ -16,6 +16,7 @@ import {
 } from '../auth/password-reset.util';
 import { isAdminEmail } from '../auth/admin.util';
 import { crearTokenConfirmacion, leerTokenConfirmacion } from '../auth/confirmar-cuenta.util';
+import { PREFIJO_LECTURA, esIdLectura } from '../lectura/lectura-id';
 
 
 /** Las ocho disciplinas de «El Recorrido», en el orden en que se desbloquean. */
@@ -254,20 +255,19 @@ export class UserService {
         throw new ConflictException('Nombre o email no existen');
       }
 
-      // Cuenta de asesoría creada por la admin y aún sin activar: su contraseña es
-      // una aleatoria que nadie conoce, así que entrar «con la contraseña» no
-      // puede salir bien. En vez de «contraseña errónea» (que la deja sin saber
-      // qué hacer), se le dice que le falta activarla y se le ofrece otro correo.
-      let pendienteDeActivar = false;
+      // Cuenta de asesoría creada por María: la contraseña la puso ella y se la mandó en su correo. Se ACTIVA
+      // oficialmente con que entre UNA vez (aquí, al acertar la contraseña); a partir de ahí es una cuenta normal.
       for (const user of candidatas) {
         if (!user.password) continue;
         const coinciden = await comparePassword(body.password, user.password);
-        if (!coinciden) {
-          if (user.email_confirmado === false && user.en_sesiones === true) pendienteDeActivar = true;
-          continue;
+        if (!coinciden) continue;
+        if (user.email_confirmado === false && user.en_sesiones === true) {
+          const { error: eAct } = await db.from('user').update({ email_confirmado: true }).eq('id', user.id);
+          if (eAct) console.warn('[logIn] no se pudo activar la cuenta de asesoría:', eAct.message);
+          user.email_confirmado = true;
         }
-        // Solo `false` bloquea: sin la columna (undefined) o en cuentas
-        // antiguas y de Google (true) se entra como siempre.
+        // Solo `false` bloquea (cuentas registradas por su cuenta que aún no han confirmado el email): sin la
+        // columna (undefined) o en cuentas antiguas y de Google (true) se entra como siempre.
         if (user.email_confirmado === false) {
           throw new ForbiddenException({
             statusCode: 403,
@@ -281,13 +281,6 @@ export class UserService {
         return { token, user: safeUser };
       }
 
-      if (pendienteDeActivar) {
-        throw new ForbiddenException({
-          statusCode: 403,
-          code: 'EMAIL_SIN_CONFIRMAR',
-          message: 'Tu cuenta aún no está activada: elige tu contraseña con el enlace que te enviamos al correo.',
-        });
-      }
       throw new ConflictException('La contraseña es errónea');
     } catch (error) {
       console.log(error);
@@ -358,12 +351,9 @@ export class UserService {
     const user = rows?.[0] as { id: string; name: string; email: string; password: string; email_confirmado?: boolean; en_sesiones?: boolean } | undefined;
     if (!user || user.email_confirmado !== false) return;
 
-    // Cuenta creada por la admin: lo que le falta es ELEGIR contraseña, así que
-    // el correo es el de la invitación (no el de bienvenida del registro).
-    if (user.en_sesiones === true) {
-      await this.mandarInvitacion(user.id, user.email, user.name, user.password);
-      return;
-    }
+    // Cuenta creada por la admin: no hay nada que reenviar desde aquí (la contraseña y el correo los maneja María y la
+    // cuenta se activa al entrar la primera vez).
+    if (user.en_sesiones === true) return;
 
     await this.mailService.enviarBienvenidaCuenta(user.email, user.name ?? '', {
       tokenConfirmacion: crearTokenConfirmacion(user.id),
@@ -463,14 +453,10 @@ export class UserService {
   //
   // «Estoy siendo asesorado» no tiene registro propio: la cuenta la crea María
   // desde /admin/usuarios. Nace sin nada abierto (ninguna `*_suscrito`) y marcada
-  // «en sesiones»; la persona recibe un correo, elige su contraseña con el enlace
-  // (que además confirma el email: ver restablecerPassword) y entra. Las
-  // disciplinas se abren después, una a una, desde la ficha. No se cobra nada.
-  //
-  // La contraseña inicial es aleatoria y nadie la conoce: el único camino a la
-  // cuenta es el enlace del correo.
+  // «en sesiones»: María abre la ficha y le asigna la contraseña; le manda un correo (que escribe ella) con su
+  // usuario y su contraseña, y la cuenta queda activada cuando entra la primera vez (ver logIn). No se cobra nada.
   // ───────────────────────────────────────────────────────────────────────────
-  async crearCuentaAsesorada(data: { name?: string; email?: string; telefono?: string; fecha_nacimiento?: string }) {
+  async crearCuentaAsesorada(data: { name?: string; email?: string; password?: string; telefono?: string; fecha_nacimiento?: string }) {
     const name = (data?.name ?? '').trim();
     const email = normalizaEmail(data?.email);
     if (!name || !email) throw new BadRequestException('Faltan el nombre o el email');
@@ -486,9 +472,13 @@ export class UserService {
     const { emailExists } = await this.getNomEmailExist(name, email);
     if (emailExists) throw new ConflictException('Ya hay una cuenta con ese email');
 
-    const passwordHash = await hashPassword(`${randomString()}${randomString()}${randomString()}`);
+    // La contraseña la escribe María (se la manda a la persona en su correo, que también escribe ella).
+    const password = typeof data?.password === 'string' ? data.password : '';
+    if (password.length < PASSWORD_MIN) throw new BadRequestException(`La contraseña tiene que tener al menos ${PASSWORD_MIN} caracteres`);
+    if (password.length > 100) throw new BadRequestException('La contraseña es demasiado larga');
+    const passwordHash = await hashPassword(password);
     const opcionales: Record<string, unknown> = {
-      email_confirmado: false,
+      email_confirmado: false, // «sin activar» hasta que entre la primera vez
       en_sesiones: true,
       telefono: saneaTelefono(data?.telefono),
       fecha_nacimiento: saneaFechaNacimiento(data?.fecha_nacimiento),
@@ -506,8 +496,8 @@ export class UserService {
         .from('user').insert(fila).select('id, name, email');
       if (!error && rows?.length === 1) {
         const creada = rows[0] as { id: string; name: string; email: string };
-        const correoEnviado = await this.mandarInvitacion(creada.id, creada.email, creada.name, passwordHash);
-        return { id: creada.id, name: creada.name, email: creada.email, correoEnviado };
+        // El correo NO sale solo: María lo escribe (con el usuario y la contraseña) y lo manda ella.
+        return { id: creada.id, name: creada.name, email: creada.email };
       }
       if (error?.code === '23505') { id = randomString(); continue; }
       const falta = Object.keys(opcionales).find((col) => !quitadas.has(col) && String(error?.message ?? '').includes(col));
@@ -523,128 +513,110 @@ export class UserService {
   }
 
   /**
-   * La cuenta «SOLO CARTA»: la de quien únicamente ha pedido la carta de su lectura (Astrología → Adquirir).
-   * Se crea al pagar y SIN acceso: no se le manda el correo para elegir contraseña (la contraseña inicial es
-   * aleatoria y nadie la conoce) hasta que la admin se lo envíe desde /admin/lecturas, cuando la carta esté
-   * escrita (`reenviarInvitacion`). Si ya hay una cuenta con ese email, se reutiliza tal cual: no se toca.
+   * La persona de LECTURA ASTRAL: quien ha pedido (o a quien María le abre) la carta de su lectura. NO es una cuenta: es
+   * una fila de `lectura_cliente` (tabla propia, separada de `user`) con un id `lec_…`. No tiene contraseña: su único
+   * acceso es el enlace del correo que le manda María cuando la carta está escrita; `clave` es el secreto que firma ese
+   * enlace. Si ya hay una persona con ese email, se reutiliza tal cual.
    */
   async crearCuentaLectura(data: { name: string; email: string }): Promise<{ id: string; existente: boolean }> {
-    const name = (data?.name ?? '').trim().slice(0, NOMBRE_ASESORIA_MAX);
+    const nombre = (data?.name ?? '').trim().slice(0, NOMBRE_ASESORIA_MAX);
     const email = normalizaEmail(data?.email);
-    if (!name || !email) throw new BadRequestException('Faltan el nombre o el email');
+    if (!nombre || !email) throw new BadRequestException('Faltan el nombre o el email');
     const db = this.databaseService.getClient();
 
-    const { data: ya } = await db.from('user').select('id').ilike('email', email).limit(1);
+    const { data: ya } = await db.from('lectura_cliente').select('id').ilike('email', emailExacto(email)).limit(1);
     if (ya?.[0]) return { id: (ya[0] as { id: string }).id, existente: true };
 
-    const passwordHash = await hashPassword(`${randomString()}${randomString()}${randomString()}`);
-    let conColumna = true;
-    let id = randomString();
+    const clave = `${randomString()}${randomString()}${randomString()}`;
+    let id = `${PREFIJO_LECTURA}${randomString()}`;
     for (let intento = 0; intento < 6; intento++) {
-      const fila: Record<string, unknown> = { id, name, email, password: passwordHash, email_confirmado: false, comunidad_popup_visto: false };
-      if (conColumna) fila.solo_lectura = true;
-      const { data: rows, error } = await db.from('user').insert(fila).select('id');
-      if (!error && rows?.length === 1) return { id: (rows[0] as { id: string }).id, existente: false };
-      if (error?.code === '23505') { id = randomString(); continue; }
-      if (conColumna && String(error?.message ?? '').includes('solo_lectura')) {
-        console.warn('[crearCuentaLectura] falta la columna user.solo_lectura (corre backend/sql/user-solo-lectura.sql). Creo la cuenta sin ella.');
-        conColumna = false;
-        intento--;
-        continue;
-      }
-      throw error ?? new Error('El insert de usuario no devolvió la fila esperada');
+      const { error } = await db.from('lectura_cliente').insert({ id, nombre, email, clave });
+      if (!error) return { id, existente: false };
+      if (error.code === '23505') { id = `${PREFIJO_LECTURA}${randomString()}`; continue; }
+      throw error;
     }
-    throw new ConflictException('No se pudo generar un id de usuario único');
+    throw new ConflictException('No se pudo generar un id único');
   }
 
-  /** Vuelve a mandar el correo para elegir contraseña (por si caducó o no llegó). Solo si aún no la ha activado. */
-  async reenviarInvitacion(userId: string) {
-    const { data: rows } = await this.databaseService.getClient()
-      .from('user').select('id, name, email, password, email_confirmado').eq('id', userId).limit(1);
-    const u = rows?.[0] as { id: string; name: string; email: string; password: string; email_confirmado?: boolean } | undefined;
-    if (!u) throw new NotFoundException('Esa cuenta no existe');
-    if (u.email_confirmado !== false) throw new ConflictException('Esa cuenta ya está activada');
-    const correoEnviado = await this.mandarInvitacion(u.id, u.email, u.name, u.password);
-    return { id: u.id, correoEnviado };
-  }
-
-  /** El enlace para elegir contraseña (el del correo de invitación): 14 días y un solo uso. */
-  private enlaceInvitacion(userId: string, passwordHash: string): string {
-    const token = crearTokenRecuperacion(userId, passwordHash, INVITACION_TTL_MS);
-    const frontendUrl = webParaCorreos();
-    return `${frontendUrl}/recuperar?token=${encodeURIComponent(token)}`;
+  /** La persona de lectura `id` (o null). */
+  async getClienteLectura(id: string): Promise<{ id: string; nombre: string; email: string; clave: string } | null> {
+    if (!esIdLectura(id)) return null;
+    const { data } = await this.databaseService.getClient().from('lectura_cliente').select('id, nombre, email, clave').eq('id', id).maybeSingle();
+    return (data as { id: string; nombre: string; email: string; clave: string } | null) ?? null;
   }
 
   /**
-   * El enlace de activación de una cuenta aún sin activar, para que la admin se lo
-   * pase a la persona por otra vía (WhatsApp) si el correo no llega. Cada vez sale
-   * uno nuevo de 14 días; sigue valiendo uno solo (al elegir contraseña se invalida).
+   * El correo de acceso de la persona de lectura: el texto lo escribe María y el botón es la LLAVE (no hay contraseña).
+   * Devuelve si el correo ha salido de verdad; si sale, se apunta cuándo.
    */
-  async enlaceActivacion(userId: string) {
-    const { data: rows } = await this.databaseService.getClient()
-      .from('user').select('id, password, email_confirmado').eq('id', userId).limit(1);
-    const u = rows?.[0] as { id: string; password: string; email_confirmado?: boolean } | undefined;
-    if (!u) throw new NotFoundException('Esa cuenta no existe');
-    if (u.email_confirmado !== false) throw new ConflictException('Esa cuenta ya está activada');
-    return { enlace: this.enlaceInvitacion(u.id, u.password) };
-  }
-
-  /** El correo de la invitación; devuelve si salió (un fallo se anota y no tumba la creación de la cuenta). */
-  private async mandarInvitacion(userId: string, email: string, nombre: string, passwordHash: string): Promise<boolean> {
-    const enlace = this.enlaceInvitacion(userId, passwordHash);
+  async enviarAccesoLectura(id: string, datos: { asunto?: string; texto?: string }): Promise<boolean> {
+    const cliente = await this.getClienteLectura(id);
+    if (!cliente) throw new NotFoundException('Esa persona no existe');
+    const asunto = (datos?.asunto ?? '').trim();
+    const texto = (datos?.texto ?? '').trim();
+    if (!asunto || !texto) throw new BadRequestException('Faltan el asunto o el texto del correo');
+    const enlace = `${webParaCorreos()}/acceso?token=${encodeURIComponent(crearTokenAccesoLectura(cliente.id, cliente.clave))}`;
+    let salio = false;
     try {
-      // Lo que cuenta es lo que dice el servicio de correo: antes se daba por enviado
-      // siempre, aunque el envío hubiera fallado, y la admin no se enteraba.
-      return (await this.mailService.enviarInvitacionAsesoria(email, nombre ?? '', enlace)) === true;
+      salio = (await this.mailService.enviarCorreoEditable({ para: cliente.email, asunto, texto, boton: { href: enlace, label: 'Entrar a mi carta' } })) === true;
     } catch (err) {
-      console.error('[invitacion] no se pudo enviar el correo:', err);
-      return false;
+      console.error('[acceso-lectura] no se pudo enviar el correo:', err);
     }
+    if (salio) await this.databaseService.getClient().from('lectura_cliente').update({ acceso_enviado_at: new Date().toISOString() }).eq('id', cliente.id);
+    return salio;
   }
 
-  /**
-   * El correo «Tu carta ya está lista». En una cuenta «SOLO CARTA» (sin contraseña) lleva el botón-llave; en una cuenta
-   * normal, el aviso con el enlace al login.
-   * Devuelve si el correo ha salido de verdad.
-   */
-  async enviarAccesoLectura(userId: string): Promise<boolean> {
-    const { data: rows } = await this.databaseService.getClient()
-      .from("user").select("id, name, email, password, solo_lectura").eq("id", userId).limit(1);
-    const u = rows?.[0] as { id: string; name: string; email: string; password: string; solo_lectura?: boolean } | undefined;
-    if (!u) throw new NotFoundException("Esa cuenta no existe");
-    // Cuenta «solo carta» (sin contraseña): el botón del correo ES su llave. Cuenta normal (ya tiene contraseña, p. ej.
-    // alguien que ya era alumna o la propia María): el correo solo avisa y lleva al login de siempre.
-    const conLlave = u.solo_lectura === true;
-    const enlace = conLlave
-      ? `${webParaCorreos()}/acceso?token=${encodeURIComponent(crearTokenAccesoLectura(u.id, u.password))}`
-      : `${webParaCorreos()}/logIn`;
-    try {
-      return (await this.mailService.enviarAccesoLectura(u.email, u.name ?? "", enlace, conLlave)) === true;
-    } catch (err) {
-      console.error("[acceso-lectura] no se pudo enviar el correo:", err);
-      return false;
-    }
-  }
-
-  /** Entrar con el enlace del correo (cuenta «solo carta»): devuelve lo mismo que `logIn`. */
+  /** Entrar con el enlace del correo (persona de lectura): devuelve un token de sesión y lo justo de la persona. */
   async entrarConEnlaceLectura(token: string) {
     const uid = leerUserIdDeToken(token);
     const nope = () => new ForbiddenException({ statusCode: 403, code: "ENLACE_NO_VALIDO", message: "El enlace no es válido" });
-    if (!uid) throw nope();
-    const db = this.databaseService.getClient();
-    const { data: rows } = await db.from("user").select("*").eq("id", uid).limit(1);
-    const user = rows?.[0] as any;
-    // Solo las cuentas «solo carta»: con este enlace NO se entra en ninguna otra.
-    if (!user?.password || user.solo_lectura !== true || !tokenAccesoLecturaValido(token, user.password)) throw nope();
-    if (user.email_confirmado === false) {
-      await db.from("user").update({ email_confirmado: true }).eq("id", user.id);
-    }
-    const jwt = this.authService.generateToken(user.id, user.email);
-    const { password, ...safeUser } = user;
-    return { token: jwt, user: safeUser };
+    if (!uid || !esIdLectura(uid)) throw nope();
+    const cliente = await this.getClienteLectura(uid);
+    if (!cliente?.clave || !tokenAccesoLecturaValido(token, cliente.clave)) throw nope();
+    await this.databaseService.getClient().from('lectura_cliente').update({ ultimo_acceso_at: new Date().toISOString() }).eq('id', cliente.id);
+    const jwt = this.authService.generateToken(cliente.id, cliente.email);
+    return { token: jwt, user: this.perfilDeLectura(cliente) };
   }
 
-  // --------- Obtener todos los usuarios ---------
+  /** Lo que se dice de una persona de lectura donde se pide «el usuario»: sin foto, sin cuenta. */
+  perfilDeLectura(c: { id: string; nombre: string; email: string }) {
+    return { id: c.id, name: c.nombre, email: c.email, img: null, solo_lectura: true, metodo_suscrito: true };
+  }
+
+  /**
+   * El correo de acceso de una cuenta real: el texto lo escribe María (con el usuario y la contraseña) y sale con el
+   * botón «Entrar a mi cuenta». Si viene `contrasena`, se pone como la contraseña de la cuenta antes de enviar (solo en
+   * cuentas «en sesiones»): así el correo y la cuenta dicen lo mismo.
+   */
+  async enviarCorreoCuenta(userId: string, datos: { asunto?: string; texto?: string; contrasena?: string }) {
+    if (esIdLectura(userId)) throw new BadRequestException('Esa persona es de lectura: su correo se manda desde Lecturas');
+    const asunto = (datos?.asunto ?? '').trim();
+    const texto = (datos?.texto ?? '').trim();
+    if (!asunto || !texto) throw new BadRequestException('Faltan el asunto o el texto del correo');
+    const db = this.databaseService.getClient();
+    const { data: rows } = await db.from('user').select('id, email, en_sesiones').eq('id', userId).limit(1);
+    const u = rows?.[0] as { id: string; email: string; en_sesiones?: boolean } | undefined;
+    if (!u) throw new NotFoundException('Esa cuenta no existe');
+    if (typeof datos.contrasena === 'string' && datos.contrasena !== '') {
+      if (u.en_sesiones !== true) throw new ConflictException('Solo se puede cambiar la contraseña de una cuenta creada por ti');
+      if (datos.contrasena.length < PASSWORD_MIN) throw new BadRequestException(`La contraseña tiene que tener al menos ${PASSWORD_MIN} caracteres`);
+      const { error } = await db.from('user').update({ password: await hashPassword(datos.contrasena) }).eq('id', u.id);
+      if (error) throw new InternalServerErrorException('No se pudo cambiar la contraseña');
+    }
+    let correoEnviado = false;
+    try {
+      correoEnviado = (await this.mailService.enviarCorreoEditable({
+        para: u.email,
+        asunto,
+        texto,
+        boton: { href: `${webParaCorreos()}/logIn`, label: 'Entrar a mi cuenta' },
+      })) === true;
+    } catch (err) {
+      console.error('[correo-cuenta] no se pudo enviar el correo:', err);
+    }
+    return { id: u.id, correoEnviado };
+  }
+
   async getUser() {
     const { data } = await this.databaseService.getClient()
       .from('user')
@@ -812,6 +784,10 @@ export class UserService {
 
   // --------- Obtener usuario por ID ---------
   async getUserById(id: string) {
+    if (esIdLectura(id)) {
+      const c = await this.getClienteLectura(id);
+      if (c) return this.perfilDeLectura(c) as any;
+    }
     // Intento 1: con las columnas de todas las disciplinas (cabala_*/nutricion_*/
     // fisiologia_* pueden no existir todavía si está pendiente el ALTER TABLE →
     // caemos a los intentos siguientes).

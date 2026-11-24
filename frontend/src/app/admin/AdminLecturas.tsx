@@ -2,12 +2,13 @@
 // Panel de LECTURAS — los pedidos de la carta de la lectura (Astrología → Adquirir).
 //
 // Cada pedido nace cuando Stripe confirma el pago e incluye los datos de nacimiento (todos obligatorios).
-// La persona recibe un correo de «registro confirmado» y NO tiene acceso a su cuenta: cuando la carta está
-// escrita, desde aquí se le manda el correo para elegir contraseña («Enviar acceso»).
+// La persona recibe un correo de «registro confirmado» y NO tiene cuenta: es una persona de LECTURA (tablas propias,
+// aparte de `user`). Cuando la carta está escrita, desde aquí se le manda el correo con el enlace para entrar a leerla
+// («Enviar acceso»): el texto lo escribe María antes de enviarlo. Entra a un front de solo lectura, sin foto ni cuenta.
 // ─────────────────────────────────────────────────────────────────────────────
 import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Input, Modal, ModalContent, ModalOverlay, Text } from "@chakra-ui/react";
+import { Box, Flex, Input, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -16,6 +17,7 @@ import { LifeLoader } from "../../components/metodo/comicLoaders";
 import { API_URL, FONDO_PAGINA_BEIGE as BEIGE, FONDO_PAGINA_TURQUESA as T } from "../../GlobalVariables";
 import { fechaDMA, mascaraDMA, dmaAIso } from "../../utils/fechas";
 import { useAdminGuard, adminHeaders } from "./useAdminGuard";
+import { CorreoEditable } from "../../components/admin/CorreoEditable";
 import { MandalaTurquesa } from "./PildorasAdmin";
 import { Reveal } from "../../components/global/Reveal";
 
@@ -30,7 +32,8 @@ interface Pedido {
   hora_nacimiento: string;
   lugar_nacimiento: string;
   pagado: boolean;
-  user_id: string | null;
+  /** La persona de lectura (tabla `lectura_cliente`): sin ella no hay carta que escribir ni acceso que mandar. */
+  cliente_id: string | null;
   estado: "recibido" | "en_proceso" | "lista";
   acceso_enviado_at: string | null;
 }
@@ -129,16 +132,16 @@ export default function AdminLecturas() {
     setOcupado(null);
   };
 
-  const enviarAcceso = async (p: Pedido) => {
-    setConfirmando(null);
+  const borrar = async (p: Pedido) => {
+    if (!window.confirm(`¿Borrar el pedido de ${p.nombre} y, si no tiene más, también su carta y su acceso? No se puede deshacer.`)) return;
     setOcupado(p.id);
     try {
-      const r = await axios.post(`${API_URL}/lectura/admin/acceso`, { id: p.id }, { headers: adminHeaders() });
-      setAviso(r.data?.correoEnviado ? `Acceso enviado a ${p.email}.` : "El correo no ha salido. Inténtalo de nuevo.");
+      await axios.post(`${API_URL}/lectura/admin/borrar`, { id: p.id }, { headers: adminHeaders() });
+      setAviso(`Pedido de ${p.nombre} borrado.`);
       await cargar();
     } catch (e) {
       const msg = (e as { response?: { data?: { message?: string } } })?.response?.data?.message;
-      setAviso(msg ?? "No se pudo enviar el acceso.");
+      setAviso(msg ?? "No se pudo borrar.");
     }
     setOcupado(null);
   };
@@ -291,7 +294,10 @@ export default function AdminLecturas() {
                     {p.acceso_enviado_at ? (
                       <Text fontSize="sm" fontStyle="italic">Acceso enviado el {fechaDMA(p.acceso_enviado_at) ?? ""}</Text>
                     ) : null}
-                    <Box as="button" onClick={() => setConfirmando(p)} disabled={ocupado === p.id || !p.user_id} {...pildora(false)} opacity={p.user_id ? 1 : 0.5}>
+                    <Box as="button" onClick={() => borrar(p)} disabled={ocupado === p.id} {...pildora(false)}>
+                      Borrar
+                    </Box>
+                    <Box as="button" onClick={() => setConfirmando(p)} disabled={ocupado === p.id || !p.cliente_id} {...pildora(false)} opacity={p.cliente_id ? 1 : 0.5}>
                       {p.acceso_enviado_at ? "Reenviar acceso" : "Enviar acceso"}
                     </Box>
                   </Flex>
@@ -301,8 +307,8 @@ export default function AdminLecturas() {
                   <Box
                     as="button"
                     type="button"
-                    onClick={() => navigate(`/admin/astrologia/${p.user_id}`)}
-                    disabled={!p.user_id}
+                    onClick={() => navigate(`/admin/astrologia/${p.cliente_id}`)}
+                    disabled={!p.cliente_id}
                     aria-label="Escribir la carta"
                     title="Escribir la carta"
                     flexShrink={0}
@@ -313,10 +319,10 @@ export default function AdminLecturas() {
                     bg={T}
                     color={BEIGE}
                     fontSize={{ base: "3xl", md: "4xl" }}
-                    cursor={p.user_id ? "pointer" : "not-allowed"}
-                    opacity={p.user_id ? 1 : 0.4}
+                    cursor={p.cliente_id ? "pointer" : "not-allowed"}
+                    opacity={p.cliente_id ? 1 : 0.4}
                     transition="all 0.2s"
-                    _hover={p.user_id ? { opacity: 0.9, w: { base: "72px", md: "112px" } } : {}}
+                    _hover={p.cliente_id ? { opacity: 0.9, w: { base: "72px", md: "112px" } } : {}}
                     _focusVisible={{ outline: `2px solid ${BEIGE}`, outlineOffset: "-6px" }}
                   >
                     →
@@ -337,43 +343,23 @@ export default function AdminLecturas() {
 
       <SiteFooter />
 
-      {/* Confirmar el envío del acceso: popup con el mármol de la casa (filo turquesa oscuro y halo dorado). */}
-      <Modal isOpen={!!confirmando} onClose={() => setConfirmando(null)} isCentered motionPreset="scale">
-        <ModalOverlay bg={`${BEIGE}cc`} />
-        <ModalContent
-          mx={4}
-          maxW="460px"
-          borderRadius="3xl"
-          overflow="hidden"
-          bgColor="#efe5cf"
-          bgImage="url('/img/fondos/marmol-bandas.webp')"
-          bgSize="cover"
-          bgPosition="center"
-          border="1.5px solid #004f4f"
-          boxShadow="0 0 26px #b08d3f66, 0 0 56px #b08d3f33"
-          fontFamily="'EB Garamond', serif"
-          color="#004f4f"
-        >
-          <Flex direction="column" align="center" textAlign="center" gap={5} px={{ base: 6, md: 9 }} py={{ base: 8, md: 10 }}>
-            <MandalaTurquesa tam="48px" />
-            <Text fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.3">
-              ¿Mandar a {confirmando?.nombre} el correo para entrar en su cuenta?
-            </Text>
-            <Box h="1px" w="56px" bg="linear-gradient(to right, transparent, #004f4f99, transparent)" />
-            <Text fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.6">
-              Hazlo cuando su carta esté escrita.
-            </Text>
-            <Flex gap={3} mt={1} wrap="wrap" justify="center">
-              <Box as="button" type="button" onClick={() => setConfirmando(null)} {...pildora(false)} px={7} py="10px" fontSize={{ base: "md", md: "lg" }}>
-                Cancelar
-              </Box>
-              <Box as="button" type="button" onClick={() => confirmando && enviarAcceso(confirmando)} {...pildora(true)} px={7} py="10px" fontSize={{ base: "md", md: "lg" }}>
-                Enviar
-              </Box>
-            </Flex>
-          </Flex>
-        </ModalContent>
-      </Modal>
+      {/* El correo de acceso: lo escribe María (con su texto de siempre ya puesto) y sale con el botón-llave. */}
+      {confirmando && (
+        <CorreoEditable
+          abierto
+          titulo={`Correo para ${confirmando.nombre}`}
+          para={confirmando.email}
+          asuntoInicial="Tu carta ya está lista"
+          textoInicial={`Hola ${confirmando.nombre},\n\nTu carta ya está lista. Entra con el botón de abajo para leerla. No necesitas contraseña: este correo es tu llave, así que no lo pierdas.\n\nUn abrazo,\nMaría`}
+          etiquetaBoton="Entrar a mi carta"
+          onEnviar={async (d) => {
+            const r = await axios.post<{ correoEnviado: boolean }>(`${API_URL}/lectura/admin/acceso`, { id: confirmando.id, ...d }, { headers: adminHeaders() });
+            if (r.data?.correoEnviado) { await cargar(); return { ok: true, mensaje: `Acceso enviado a ${confirmando.email}.` }; }
+            return { ok: false, mensaje: "El correo no ha salido. Inténtalo de nuevo." };
+          }}
+          onCerrar={() => setConfirmando(null)}
+        />
+      )}
     </Box>
   );
 }

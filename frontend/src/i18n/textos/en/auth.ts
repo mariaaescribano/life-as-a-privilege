@@ -147,5 +147,7 @@ export const auth = {
   "cumple.motivo.otraCuenta": "This gift belongs to another account. Log in with the account the email went to.",
   "cumple.motivo.caducado": "This gift has expired: it lasted seven days from your birthday.",
   "cumple.motivo.usado": "You've already used this gift. Enjoy your discipline!",
+  "auth.acceso.espera": "We are getting your space ready. The first time, the wait can take up to 1 minute; please do not close this page.",
+  "auth.acceso.lento": "It is taking longer than usual to respond. Reload this page in a moment; if it stays the same, please get in touch with me.",
   "auth.acceso.invalido": "This link is not valid. If you have lost the email with your access link, please get in touch with me.",
 };

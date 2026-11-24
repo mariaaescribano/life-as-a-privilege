@@ -1,3 +1,4 @@
+import { esIdLectura } from '../lectura/lectura-id';
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '../database.service';
 
@@ -54,6 +55,7 @@ export class ActividadService {
   }
 
   async registrar(userId: string, body: ActividadInput): Promise<void> {
+    if (esIdLectura(userId)) return; // la persona de lectura no es una cuenta: no se le apunta actividad
     const d = this.limpiar(body);
     if (!d) return;
     const db = this.databaseService.getClient();

@@ -1,15 +1,16 @@
 // Alta de una cuenta de asesoría (/admin/asesorias/nueva). Las personas asesoradas
-// NO se registran: las da de alta la admin, y a la persona le llega un correo para
-// elegir su contraseña (eso activa la cuenta). Empieza sin nada abierto; las
+// NO se registran: las da de alta la admin, LE PONE LA CONTRASEÑA y le manda un correo (que escribe ella, con
+// el usuario y la contraseña); la cuenta se activa cuando entra la primera vez. Empieza sin nada abierto; las
 // disciplinas se abren luego. Es una página (no un popup) para poder recorrerla
 // con el tabulador: campos y botones van en el orden en que se leen.
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Box, Flex, Input, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { LifeLoading } from "../../components/global/LifeLoading";
+import { CorreoEditable } from "../../components/admin/CorreoEditable";
 import { Reveal } from "../../components/global/Reveal";
 import { API_URL } from "../../GlobalVariables";
 import { dmaAIso, mascaraDMA } from "../../utils/fechas";
@@ -18,11 +19,12 @@ import { adminHeaders, useAdminGuard } from "./useAdminGuard";
 /** Teléfono con prefijo de país: «+34 600 11 22 33» (el + y entre 6 y 15 cifras). */
 const telefonoConPrefijo = (t: string) => /^\+\d{6,15}$/.test(t.replace(/[\s().-]/g, ""));
 
-type Campo = "name" | "email" | "telefono" | "fecha_nacimiento" | "hora" | "lugar" | "region" | "pais";
+type Campo = "name" | "email" | "password" | "telefono" | "fecha_nacimiento" | "hora" | "lugar" | "region" | "pais";
 
 const CAMPOS: { k: Campo; etiqueta: string; tipo: string; auto: string; ayuda?: string }[] = [
   { k: "name", etiqueta: "Nombre", tipo: "text", auto: "off" },
   { k: "email", etiqueta: "Email", tipo: "email", auto: "off" },
+  { k: "password", etiqueta: "Contraseña", tipo: "text", auto: "off", ayuda: "La eliges tú (mínimo 6 caracteres); se la mandas en el correo" },
   { k: "telefono", etiqueta: "Teléfono (opcional)", tipo: "tel", auto: "off", ayuda: "Con prefijo, por ejemplo +34 600 11 22 33" },
   { k: "fecha_nacimiento", etiqueta: "Fecha de nacimiento (opcional)", tipo: "text", auto: "off", ayuda: "dd/mm/aaaa" },
 ];
@@ -36,7 +38,7 @@ const CAMPOS_CARTA: { k: Campo; etiqueta: string; ayuda?: string }[] = [
   { k: "pais", etiqueta: "País" },
 ];
 
-const VACIO: Record<Campo, string> = { name: "", email: "", telefono: "", fecha_nacimiento: "", hora: "", lugar: "", region: "", pais: "" };
+const VACIO: Record<Campo, string> = { name: "", email: "", password: "", telefono: "", fecha_nacimiento: "", hora: "", lugar: "", region: "", pais: "" };
 
 export default function AdminCrearCuenta() {
   const navigate = useNavigate();
@@ -44,16 +46,19 @@ export default function AdminCrearCuenta() {
   const [nuevo, setNuevo] = useState(VACIO);
   const [error, setError] = useState<string | null>(null);
   const [enviando, setEnviando] = useState(false);
-  // Con la cuenta ya creada: el texto de la confirmación y si el correo salió.
-  const [creada, setCreada] = useState<{ texto: string; ok: boolean } | null>(null);
-  const salida = useRef<number | undefined>(undefined);
-  useEffect(() => () => window.clearTimeout(salida.current), []);
+  // Con la cuenta ya creada: el texto de la confirmación y los datos para escribirle el correo.
+  const [creada, setCreada] = useState<{ texto: string; id: string; nombre: string; email: string; password: string } | null>(null);
+  const [correoAbierto, setCorreoAbierto] = useState(false);
 
   const crear = async (e?: React.FormEvent) => {
     e?.preventDefault();
     if (enviando) return;
     if (!nuevo.name.trim() || !nuevo.email.trim()) {
       setError("Faltan el nombre o el email.");
+      return;
+    }
+    if (nuevo.password.length < 6) {
+      setError("La contraseña tiene que tener al menos 6 caracteres.");
       return;
     }
     if (nuevo.telefono.trim() && !telefonoConPrefijo(nuevo.telefono)) {
@@ -85,9 +90,9 @@ export default function AdminCrearCuenta() {
     setEnviando(true);
     setError(null);
     try {
-      const { data } = await axios.post<{ id: string; email: string; correoEnviado: boolean }>(
+      const { data } = await axios.post<{ id: string; name: string; email: string }>(
         `${API_URL}/user/admin/crear`,
-        { name: nuevo.name, email: nuevo.email, telefono: nuevo.telefono, fecha_nacimiento: nacimiento },
+        { name: nuevo.name, email: nuevo.email, password: nuevo.password, telefono: nuevo.telefono, fecha_nacimiento: nacimiento },
         { headers: adminHeaders() },
       );
       // Los datos de la carta, por la vía de admin: no manda ningún correo ni abre nada.
@@ -108,14 +113,11 @@ export default function AdminCrearCuenta() {
           cartaTexto = " Los datos de la carta NO se han guardado: inténtalo desde su ficha.";
         }
       }
-      const aviso = (data.correoEnviado
-        ? `Cuenta creada. Le he mandado a ${data.email} el correo para que elija su contraseña.`
-        : `Cuenta creada, pero el correo a ${data.email} NO ha salido. Ábrele «Datos personales» y pulsa «Reenviar correo de activación».`) + cartaTexto;
-      // La confirmación sale AQUÍ, a la vista, y no se va hasta que se ha podido leer: antes
-      // saltaba directo a la lista y el aviso (una línea pequeña) pasaba sin verse.
-      setCreada({ texto: aviso, ok: data.correoEnviado });
+      // La cuenta ya existe y NO se ha mandado ningún correo: ahora lo escribe María (con su usuario y su contraseña).
+      const aviso = `Cuenta creada. Todavía no le ha llegado nada: escribe el correo con su usuario y su contraseña y mándaselo.${cartaTexto}`;
+      setCreada({ texto: aviso, id: data.id, nombre: data.name, email: data.email, password: nuevo.password });
+      setCorreoAbierto(true);
       window.scrollTo({ top: 0, behavior: "smooth" });
-      salida.current = window.setTimeout(() => navigate("/admin/asesorias", { state: { aviso } }), 5000);
     } catch (err: any) {
       setError(err?.response?.data?.message ?? "No se pudo crear la cuenta.");
       setEnviando(false);
@@ -138,8 +140,8 @@ export default function AdminCrearCuenta() {
               Crear usuario
             </Text>
             <Text color="#005F5F" opacity={0.8} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" textAlign="center" mt={2} mb={{ base: 6, md: 8 }}>
-              Le llegará un correo para elegir su contraseña y activarla. Empieza sin nada abierto:
-              se lo abres tú desde su ficha.
+              Le pones tú la contraseña y le mandas un correo con sus datos. La cuenta se activa cuando entra
+              la primera vez. Empieza sin nada abierto: se lo abres tú desde su ficha.
             </Text>
           </Reveal>
 
@@ -163,9 +165,15 @@ export default function AdminCrearCuenta() {
                     </svg>
                   </Flex>
                 </Flex>
-                <Text color={creada.ok ? "#005F5F" : "#b3261e"} fontSize={{ base: "lg", md: "xl" }} fontWeight="600" lineHeight="1.6">
+                <Text color="#005F5F" fontSize={{ base: "lg", md: "xl" }} fontWeight="600" lineHeight="1.6">
                   {creada.texto}
                 </Text>
+                <Flex justify="center" gap={3} wrap="wrap" mt={5}>
+                  <Box as="button" type="button" onClick={() => setCorreoAbierto(true)} px={7} py="10px" borderRadius="full" bg="#005F5F" border="1.5px solid #005F5F" color="#F0DCC0" fontWeight={700}
+                       _hover={{ bg: "#004a4a" }} _focusVisible={{ outline: "2px solid #005F5Fcc", outlineOffset: "2px" }}>Escribir el correo</Box>
+                  <Box as="button" type="button" onClick={() => navigate("/admin/asesorias")} px={7} py="10px" borderRadius="full" border="1.5px solid #005F5F" color="#005F5F" fontWeight={600}
+                       _hover={{ bg: "#005F5F12" }} _focusVisible={{ outline: "2px solid #005F5Fcc", outlineOffset: "2px" }}>Ir a Asesorías</Box>
+                </Flex>
               </Box>
             </Reveal>
           )}
@@ -278,13 +286,32 @@ export default function AdminCrearCuenta() {
                   _hover={enviando ? undefined : { bg: "#004a4a", transform: "translateY(-1px)" }}
                   _focusVisible={{ outline: "2px solid #005F5Fcc", outlineOffset: "2px" }}
                 >
-                  {enviando ? "Creando…" : "Crear y mandar correo"}
+                  {enviando ? "Creando…" : "Crear usuario"}
                 </Box>
               </Flex>
             </Box>
           </Reveal>
         </Box>
       </Flex>
+
+      {creada && (
+        <CorreoEditable
+          abierto={correoAbierto}
+          titulo={`Correo para ${creada.nombre}`}
+          para={creada.email}
+          asuntoInicial="Tu cuenta ya está lista"
+          textoInicial={`Hola ${creada.nombre},\n\nYa tienes tu cuenta. Estos son tus datos para entrar:\n\n**Usuario:** ${creada.email}\n**Contraseña:** ${creada.password}\n\nEntra con el botón de abajo.\n\nUn abrazo,\nMaría`}
+          contrasenaInicial={creada.password}
+          etiquetaBoton="Entrar a mi cuenta"
+          onEnviar={async (d) => {
+            const r = await axios.post<{ correoEnviado: boolean }>(`${API_URL}/user/admin/usuario/${creada.id}/correo`, d, { headers: adminHeaders() });
+            return r.data.correoEnviado
+              ? { ok: true, mensaje: `Correo enviado a ${creada.email}.` }
+              : { ok: false, mensaje: "El correo NO ha salido. Vuelve a intentarlo en un momento." };
+          }}
+          onCerrar={() => setCorreoAbierto(false)}
+        />
+      )}
 
       <SiteFooter />
     </Box>

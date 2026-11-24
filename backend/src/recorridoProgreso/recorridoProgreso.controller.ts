@@ -63,7 +63,7 @@ export class RecorridoProgresoController {
   @Get('admin/:userId')
   @UseGuards(JwtAuthGuard, AdminGuard)
   async getDeUsuaria(@Param('userId') userId: string) {
-    return await this.service.getTodo(userId);
+    return await this.service.getTodoAdmin(userId);
   }
 
   @Post('admin/:userId/:disciplina')

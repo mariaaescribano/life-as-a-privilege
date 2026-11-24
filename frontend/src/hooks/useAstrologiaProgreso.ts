@@ -17,9 +17,9 @@ export function useAstrologiaProgreso(userIdProp?: string | null, activo = true)
 
   // Mientras no ha cargado NO bloqueamos (permisivo), para no marcar por error
   // como cerrada una página que sí está abierta durante ese instante.
-  // Historia y Explicación (pasos 1 y 2) están abiertas para todo el mundo desde el principio; del 3 en
+  // Bienvenida, Historia y Explicación (pasos 1, 2 y 3) están abiertas para todo el mundo desde el principio; del 4 en
   // adelante, hasta donde llegue el techo que abre María.
-  const PASOS_SIEMPRE_ABIERTOS = 2;
+  const PASOS_SIEMPRE_ABIERTOS = 3;
   const bloqueada = (n: number): boolean => cargado && n > Math.max(pasoMax, PASOS_SIEMPRE_ABIERTOS);
 
   return { bloqueada, cargado, recargar, pasoMax, fijar };

@@ -3,7 +3,7 @@ import { MandalaTinte } from "./MandalaTinte";
 import React, { useEffect, useState } from "react";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { cerrarSesionLocal, esAdminDesbloqueado, rutaHome } from "../../api/sesion";
+import { cerrarSesionLocal, esAdminDesbloqueado, esSoloLectura, rutaHome } from "../../api/sesion";
 import { salirDeLaPersona, personaActiva, esMariaMirando } from "../../api/persona";
 // (Premium aparcado) import { getUserMe } from "../../api/userMe";
 import { useT } from "../../i18n";
@@ -206,6 +206,9 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   // camino de una persona (María en el de ella) cerrar sesión la echaría del
   // todo: lo que toca es volver a Asesorías, que cierra ese camino.
   const enCaminoDePersona = personaActiva() !== null;
+  // La cuenta «solo carta» NO es una cuenta de verdad, es un espacio prestado para leer su carta: ni foto, ni «Mi cuenta»,
+  // ni menú. María, abriendo su camino, lo ve igual (solo con su salida «Volver a Asesorías» en el menú).
+  const sinCuenta = esSoloLectura();
   const itemSalir: ItemMenu = enCaminoDePersona
     ? { etiqueta: t("header.volverAsesorias"), onSelect: () => salirDeLaPersona() }
     : { etiqueta: t("cuenta.cerrarSesion"), onSelect: () => { cerrarSesionLocal(); navigate("/welcome"); } };
@@ -222,8 +225,10 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
 
   const items: ItemMenu[] = dentro
     ? [
-        { etiqueta: t("header.home"),     onSelect: () => navigate(homeTarget),     activo: path === "/home" },
-        { etiqueta: t("header.miCuenta"), onSelect: () => navigate("/user/account"), activo: isCuentaPage },
+        ...(sinCuenta ? [] : [
+          { etiqueta: t("header.home"),     onSelect: () => navigate(homeTarget),     activo: path === "/home" },
+          { etiqueta: t("header.miCuenta"), onSelect: () => navigate("/user/account"), activo: isCuentaPage },
+        ]),
         itemSalir,
       ]
     : isPrivate
@@ -252,7 +257,8 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
     : [
         ...itemsWeb,
         // Contáctame aparcado: { etiqueta: t("header.contacto"), onSelect: () => navigate("/contacto"), activo: isContactoPage },
-        { etiqueta: t("header.iniciarSesion"), onSelect: () => navigate("/logIn") },
+        // «Entra a tu cuenta» QUITADO del menú público (nov-2026): a las cuentas se entra desde el correo que María les manda;
+        // la ruta /logIn sigue existiendo. { etiqueta: t("header.iniciarSesion"), onSelect: () => navigate("/logIn") },
       ];
 
   return (
@@ -399,7 +405,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
       <Flex align="center" gap={{ base: 3, md: 5 }}>
         <SelectorIdioma compact={compact} />
 
-        {isPrivate && (
+        {isPrivate && !sinCuenta && (
           <Box
             as="button"
             onClick={() => navigate("/user/account")}
@@ -428,12 +434,15 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
           </Box>
         )}
 
-        <MenuHamburguesa
-          abierto={menuAbierto}
-          onToggle={() => setMenuAbierto((v) => !v)}
-          onClose={() => setMenuAbierto(false)}
-          items={items}
-        />
+        {/* La cuenta «solo carta» va FOCALIZADA: sin menú, solo el camino (el mandala de la izquierda siempre vuelve a él). */}
+        {(!sinCuenta || enCaminoDePersona) && (
+          <MenuHamburguesa
+            abierto={menuAbierto}
+            onToggle={() => setMenuAbierto((v) => !v)}
+            onClose={() => setMenuAbierto(false)}
+            items={items}
+          />
+        )}
       </Flex>
     </Flex>
   );

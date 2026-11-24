@@ -1,3 +1,4 @@
+import { esIdLectura } from '../lectura/lectura-id';
 import { BadRequestException, Controller, Get, Post, Patch, Body, Param, Delete, UseGuards, Req, ForbiddenException, HttpCode, HttpStatus } from '@nestjs/common';
 import { UserService, DISCIPLINAS_ORDEN } from './user.service';
 import type { DisciplinaKey } from './user.service';
@@ -101,6 +102,16 @@ export class UserController {
         email: req.user.email,
         admin_email: true,
         is_admin: req.user.admin === true,
+      };
+    }
+    // La persona de LECTURA no es una cuenta (vive en `lectura_cliente`): solo se dice quién es y que tiene Astrología.
+    if (esIdLectura(req.user?.userId)) {
+      const c = await this.usersService.getClienteLectura(req.user.userId);
+      return {
+        ...(c ? this.usersService.perfilDeLectura(c) : { id: req.user.userId, name: '', email: req.user?.email, img: null, solo_lectura: true, metodo_suscrito: true }),
+        en_sesiones: false,
+        admin_email: false,
+        is_admin: false,
       };
     }
     const [user, extra, premium] = await Promise.all([
@@ -234,31 +245,27 @@ export class UserController {
   }
 
   // ── Cuentas de asesoría: las crea la admin ───────────────────────────────
-  // «Estoy siendo asesorado» no tiene registro: María da de alta a la persona,
-  // le llega un correo para elegir contraseña y no tiene nada abierto hasta que
-  // se lo abra desde la ficha (`admin/acceso`).
+  // «Estoy siendo asesorado» no tiene registro: María da de alta a la persona Y LE PONE LA CONTRASEÑA. Luego le manda un
+  // correo (que escribe ella, con el usuario y la contraseña) desde `admin/usuario/:id/correo`; la cuenta se activa
+  // cuando la persona entra la primera vez. No tiene nada abierto hasta que se lo abra desde la ficha (`admin/acceso`).
   @Post("admin/crear")
   @UseGuards(JwtAuthGuard, AdminGuard)
   async crearCuentaAsesorada(
-    @Body() body: { name?: string; email?: string; telefono?: string; fecha_nacimiento?: string },
+    @Body() body: { name?: string; email?: string; password?: string; telefono?: string; fecha_nacimiento?: string },
   ) {
     return await this.usersService.crearCuentaAsesorada(body);
   }
 
-  // El enlace de activación de una cuenta sin activar, para dárselo a mano.
-  @Get("admin/usuario/:id/activacion")
-  @UseGuards(JwtAuthGuard, AdminGuard)
-  async enlaceActivacion(@Param("id") id: string) {
-    if (!id?.trim()) throw new BadRequestException('id requerido');
-    return await this.usersService.enlaceActivacion(id);
-  }
-
-  @Post("admin/reenviar-invitacion")
+  // El correo de acceso de una cuenta real, con el texto que escribe María (y, si viene, la contraseña nueva de la cuenta).
+  @Post("admin/usuario/:id/correo")
   @UseGuards(JwtAuthGuard, AdminGuard)
   @HttpCode(HttpStatus.OK)
-  async reenviarInvitacion(@Body() body: { userId?: string }) {
-    if (!body?.userId) throw new BadRequestException('userId requerido');
-    return await this.usersService.reenviarInvitacion(body.userId);
+  async enviarCorreoCuenta(
+    @Param("id") id: string,
+    @Body() body: { asunto?: string; texto?: string; contrasena?: string },
+  ) {
+    if (!id?.trim()) throw new BadRequestException('id requerido');
+    return await this.usersService.enviarCorreoCuenta(id, body ?? {});
   }
 
   // Marca (o desmarca) que esa persona está haciendo sesiones: es lo que hace
@@ -283,7 +290,9 @@ export class UserController {
     console.log(
       `[persona] ${req.user?.email} abre el camino de ${user.email} (${user.id}) — ${new Date().toISOString()}`,
     );
-    return { user: { id: user.id, name: user.name, email: user.email, img: user.img ?? null } };
+    // `solo_lectura`: para que María vea el camino de esa cuenta tal como lo ve la persona (sin foto, sin «Mi cuenta», sin menú).
+    const extra: any = esIdLectura(user.id) ? { solo_lectura: true } : await this.usersService.getPerfilExtra(user.id);
+    return { user: { id: user.id, name: user.name, email: user.email, img: user.img ?? null, solo_lectura: extra?.solo_lectura === true } };
   }
 
   // Borrar una cuenta entera desde el panel (irreversible: se va la cuenta y

@@ -1,3 +1,4 @@
+import { esIdLectura } from '../lectura/lectura-id';
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '../database.service';
 
@@ -38,6 +39,8 @@ export class RecorridoProgresoService {
    * abre y no puede permitirse una petición por disciplina.
    */
   async getTodo(userId: string): Promise<Record<string, number>> {
+    // La persona de LECTURA no tiene progreso guardado (no es una cuenta): su camino se abre entero y sin barra.
+    if (esIdLectura(userId)) return {};
     const { data, error } = await this.databaseService.getClient()
       .from('recorrido_progreso')
       .select('disciplina, paso_max')
@@ -54,9 +57,17 @@ export class RecorridoProgresoService {
     return salida;
   }
 
+  /** Lo que ve María de una persona: igual que `getTodo`, pero una cuenta «solo carta» tiene Astrología (`metodo`) abierta del todo. */
+  async getTodoAdmin(userId: string): Promise<Record<string, number>> {
+    // La persona de lectura (sin cuenta) tiene Astrología abierta del todo y nada más.
+    if (esIdLectura(userId)) return { metodo: 99 };
+    return await this.getTodo(userId);
+  }
+
   async getPasoMax(userId: string, disciplina: string): Promise<number> {
-    // La cuenta «solo carta» (pidió la carta de su lectura) tiene TODO Astrología abierto, para empezar por donde quiera.
+    // La persona de LECTURA (sin cuenta) tiene TODO Astrología abierto, para empezar por donde quiera, y nada más.
     // Se resuelve aquí y no escribiendo un techo: así su barra de avance no sale ya completa.
+    if (esIdLectura(userId)) return disciplina === 'metodo' ? 99 : 1;
     if (disciplina === 'metodo') {
       const { data: u } = await this.databaseService.getClient().from('user').select('solo_lectura').eq('id', userId).maybeSingle();
       if ((u as { solo_lectura?: boolean } | null)?.solo_lectura === true) return 99;
@@ -104,6 +115,7 @@ export class RecorridoProgresoService {
    * Si la tabla `camino_visto` aún no existe (SQL sin correr) devuelve {} sin romper nada.
    */
   async getVistos(userId: string): Promise<Record<string, string[]>> {
+    if (esIdLectura(userId)) return {}; // sin cuenta no hay nada guardado en el servidor (los ticks quedan en el navegador)
     const { data, error } = await this.databaseService.getClient()
       .from('camino_visto')
       .select('disciplina, ruta')
@@ -119,6 +131,7 @@ export class RecorridoProgresoService {
 
   /** Apunta que ha visto una página (repetirlo no hace nada). */
   async marcarVisto(userId: string, disciplina: string, ruta: string): Promise<void> {
+    if (esIdLectura(userId)) return;
     const { error } = await this.databaseService.getClient()
       .from('camino_visto')
       .upsert({ user_id: userId, disciplina, ruta }, { onConflict: 'user_id,disciplina,ruta', ignoreDuplicates: true });

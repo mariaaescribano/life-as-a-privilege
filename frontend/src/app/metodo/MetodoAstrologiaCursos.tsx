@@ -108,7 +108,7 @@ export default function MetodoAstrologiaCursos() {
               bgColor={`${astrologiaBg}dd`}
               color={astrologiaTxt}
               space
-              step={{ current: 20, total: 20 }}
+              step={{ current: 19, total: 19 }}
               mb={0}
               prev={{ label: `← ${t("metodo.astro.paso.sintesis")}`, onClick: () => navigate("/metodo/astrologia/sintesis") }}
               next={{

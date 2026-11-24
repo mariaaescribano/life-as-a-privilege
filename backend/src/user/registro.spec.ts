@@ -179,8 +179,8 @@ describe('3 · Entrar sin confirmar', () => {
 });
 
 // ═════════════════════════════════════════════════════════════════════════════
-describe('3b · Cuenta de asesoría creada por la admin, sin activar', () => {
-  const alta = { name: 'eva', email: 'eva@x.com', telefono: '+34 600 11 22 33' };
+describe('3b · Cuenta de asesoría creada por la admin: la contraseña la pone ella y se activa al entrar', () => {
+  const alta = { name: 'eva', email: 'eva@x.com', password: 'clave-de-eva', telefono: '+34 600 11 22 33' };
 
   it('dos asesoradas con el mismo nombre y distinto email → se crean; con el mismo email, no', async () => {
     const { service, filas } = montar();
@@ -190,14 +190,30 @@ describe('3b · Cuenta de asesoría creada por la admin, sin activar', () => {
     await expect(service.crearCuentaAsesorada({ ...alta, name: 'otra eva' })).rejects.toBeInstanceOf(ConflictException);
   });
 
-  it('la admin puede sacar el enlace de activación (y solo mientras esté sin activar)', async () => {
+  it('la contraseña la pone la admin (se guarda hasheada) y sin ella no se crea', async () => {
     const { service, filas } = montar();
-    const { id } = await service.crearCuentaAsesorada(alta);
-    const { enlace } = await service.enlaceActivacion(id);
-    expect(enlace).toContain('/recuperar?token=');
-    filas[0].email_confirmado = true;
-    await expect(service.enlaceActivacion(id)).rejects.toBeInstanceOf(ConflictException);
-    await expect(service.enlaceActivacion('no-existe')).rejects.toBeInstanceOf(NotFoundException);
+    await service.crearCuentaAsesorada(alta);
+    expect(filas[0].password).not.toBe('clave-de-eva');
+    expect(await bcrypt.compare('clave-de-eva', filas[0].password)).toBe(true);
+    expect(filas[0]).toMatchObject({ en_sesiones: true, email_confirmado: false });
+    await expect(service.crearCuentaAsesorada({ ...alta, email: 'x@x.com', password: '' })).rejects.toBeInstanceOf(BadRequestException);
+    await expect(service.crearCuentaAsesorada({ ...alta, email: 'y@x.com', password: '123' })).rejects.toBeInstanceOf(BadRequestException);
+  });
+
+  it('crear la cuenta NO manda ningún correo: lo escribe y lo manda María', async () => {
+    const { service, mail } = montar();
+    await service.crearCuentaAsesorada(alta);
+    expect(mail.enviarInvitacionAsesoria).not.toHaveBeenCalled();
+    expect(mail.enviarBienvenidaCuenta).not.toHaveBeenCalled();
+  });
+
+  it('la cuenta se ACTIVA al entrar la primera vez con la contraseña que puso María', async () => {
+    const { service, filas } = montar();
+    await service.crearCuentaAsesorada(alta);
+    expect(filas[0].email_confirmado).toBe(false);
+    const r: any = await service.logIn({ name: 'eva@x.com', password: 'clave-de-eva' });
+    expect(r.token).toBe('jwt-de-test');
+    expect(filas[0].email_confirmado).toBe(true);
   });
 
   it('la persona asesorada cambia su nombre, email, teléfono y contraseña, pero no los datos de su carta', async () => {
@@ -214,7 +230,7 @@ describe('3b · Cuenta de asesoría creada por la admin, sin activar', () => {
 
   it('el teléfono es opcional: sin él se crea igual', async () => {
     const { service, filas } = montar();
-    const res: any = await service.crearCuentaAsesorada({ name: 'eva', email: 'eva@x.com' });
+    const res: any = await service.crearCuentaAsesorada({ name: 'eva', email: 'eva@x.com', password: 'clave-de-eva' });
     expect(res.id).toBeTruthy();
     expect(filas).toHaveLength(1);
     expect(filas[0]).toMatchObject({ telefono: null });
@@ -227,29 +243,32 @@ describe('3b · Cuenta de asesoría creada por la admin, sin activar', () => {
     expect(filas).toHaveLength(0);
   });
 
-  it('al entrar antes de activar se le dice que la active (no «contraseña errónea»)', async () => {
-    const { service } = montar();
+  it('con una contraseña errónea no entra ni se activa', async () => {
+    const { service, filas } = montar();
     await service.crearCuentaAsesorada(alta);
     const err: any = await service.logIn({ name: 'eva', password: 'lo-que-sea' }).catch((e) => e);
-    expect(err).toBeInstanceOf(ForbiddenException);
-    expect(err.getResponse().code).toBe('EMAIL_SIN_CONFIRMAR');
+    expect(err).toBeInstanceOf(ConflictException);
+    expect(filas[0].email_confirmado).toBe(false);
   });
 
-  it('si el correo de invitación NO sale, la respuesta lo dice (correoEnviado false) y la cuenta se crea igual', async () => {
-    const { service, mail } = montar();
-    mail.enviarInvitacionAsesoria.mockResolvedValueOnce(false);
-    const r: any = await service.crearCuentaAsesorada(alta);
-    expect(r.correoEnviado).toBe(false);
-    expect(r.email).toBe('eva@x.com');
+  it('el correo de acceso lo escribe María: sale con su texto y el botón al login; con contraseña nueva, la cambia', async () => {
+    const { service, mail, filas } = montar();
+    mail.enviarCorreoEditable = jest.fn().mockResolvedValue(true);
+    const { id } = await service.crearCuentaAsesorada(alta);
+    const r = await service.enviarCorreoCuenta(id, { asunto: 'Tu cuenta', texto: 'Hola Eva\n\nUsuario: eva@x.com', contrasena: 'otra-clave-1' });
+    expect(r).toEqual({ id, correoEnviado: true });
+    expect(mail.enviarCorreoEditable).toHaveBeenCalledWith(expect.objectContaining({ para: 'eva@x.com', asunto: 'Tu cuenta', texto: 'Hola Eva\n\nUsuario: eva@x.com', boton: expect.objectContaining({ href: expect.stringContaining('/logIn') }) }));
+    expect(await bcrypt.compare('otra-clave-1', filas[0].password)).toBe(true);
+    await expect(service.enviarCorreoCuenta(id, { asunto: '', texto: 'x' })).rejects.toBeInstanceOf(BadRequestException);
+    await expect(service.enviarCorreoCuenta('no-existe', { asunto: 'a', texto: 'b' })).rejects.toBeInstanceOf(NotFoundException);
   });
 
-  it('«envíamelo otra vez» manda la invitación para elegir contraseña, no la bienvenida del registro', async () => {
+  it('«envíamelo otra vez» de una cuenta de asesoría no manda nada (no hay enlace que elegir)', async () => {
     const { service, mail } = montar();
     await service.crearCuentaAsesorada(alta);
-    mail.enviarInvitacionAsesoria.mockClear();
     await service.reenviarConfirmacion('eva@x.com');
-    expect(mail.enviarInvitacionAsesoria).toHaveBeenCalledTimes(1);
     expect(mail.enviarBienvenidaCuenta).not.toHaveBeenCalled();
+    expect(mail.enviarInvitacionAsesoria).not.toHaveBeenCalled();
   });
 });
 

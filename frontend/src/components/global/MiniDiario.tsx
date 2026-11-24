@@ -199,6 +199,8 @@ export function MiniDiario() {
   // No mostramos el bloc sin sesión (las notas son de una persona), ni a la admin
   // sin persona abierta (`userId` «admin»: no hay a quién escribirle).
   if (!userId || userId === "admin") return null;
+  // Las notas ya no las guarda la persona: «Notas» solo lo ve María (en su camino, para escribirle a la persona).
+  if (!esMariaMirando()) return null;
   // «Notas» está en /home y dentro de El Recorrido (/metodo/...), siempre en el
   // mismo sitio. En la web pública y el panel /admin no se muestra.
   if (!/^\/(home|metodo)(\/|$)/i.test(pathname)) return null;

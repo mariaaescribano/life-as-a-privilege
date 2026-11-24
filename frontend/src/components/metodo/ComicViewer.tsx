@@ -181,6 +181,13 @@ interface ComicViewerProps {
    *  (el color de fondo de la disciplina), igual que el botón de continuar que
    *  tiene al lado; si no, la letra oscura no se leería sobre el chip negro. */
   cerrarColor?: string;
+  /** Solo se navega con las FLECHAS: sin la X de cerrar, y la flecha de la derecha de la última viñeta sigue siendo una
+   *  flecha (no el tick). Va con `alAnterior`, para que la de la izquierda de la primera viñeta también lleve a algún sitio. */
+  soloFlechas?: boolean;
+  /** Sin flechas de navegación (queda la X): para un cómic de una sola viñeta que se abre al pulsar algo. */
+  sinFlechas?: boolean;
+  /** Si se define, la flecha de la izquierda de la PRIMERA viñeta lo llama (en vez de estar apagada). */
+  alAnterior?: () => void;
   /** @deprecated El botón «Saltar» se eliminó de todos los cómics. Se mantiene el
    *  prop (no-op) solo para no romper los llamadores que aún lo pasan. */
   sinSaltar?: boolean;
@@ -354,6 +361,9 @@ export function ComicViewer({
   onClose,
   onComplete,
   onBack,
+  soloFlechas,
+  sinFlechas,
+  alAnterior,
   themeColor = astrologiaTxt,
   disciplinaBgImage,
   disciplinaBgColor,
@@ -516,7 +526,7 @@ export function ComicViewer({
   const isLast = index === total - 1;
   // En modo circular no hay «primera» ni «última»: la flecha de atrás nunca se
   // apaga y la de adelante nunca se convierte en el tick de terminar.
-  const noPrev = isFirst && !circular;
+  const noPrev = isFirst && !circular && !alAnterior;
   const esUltima = isLast && !circular;
   // Página bloqueada: no se puede avanzar hasta cumplir su requisito (p.ej.
   // responder el mini-test embebido). Sí se puede retroceder.
@@ -611,6 +621,9 @@ export function ComicViewer({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index, total, imgReserva]);
 
+  const indexRef = useRef(index);
+  indexRef.current = index;
+
   const handleComplete = () => {
     if (onComplete) onComplete();
     else onClose();
@@ -629,6 +642,7 @@ export function ComicViewer({
           return i + 1;
         });
       } else if (e.key === "ArrowLeft") {
+        if (indexRef.current === 0 && alAnterior && !circular) { alAnterior(); return; }
         setIndex((i) => (circular ? (i - 1 + total) % total : Math.max(i - 1, 0)));
       } else if (e.key === "Escape" && onBack) {
         onBack();
@@ -637,9 +651,12 @@ export function ComicViewer({
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [total, onBack, bloqueado, circular]);
+  }, [total, onBack, bloqueado, circular, alAnterior]);
 
-  const goPrev = () => setIndex((i) => (circular ? (i - 1 + total) % total : Math.max(i - 1, 0)));
+  const goPrev = () => {
+    if (index === 0 && alAnterior && !circular) { alAnterior(); return; }
+    setIndex((i) => (circular ? (i - 1 + total) % total : Math.max(i - 1, 0)));
+  };
   const goNext = () => setIndex((i) => (circular ? (i + 1) % total : Math.min(i + 1, total - 1)));
 
   const onTouchStart = (e: React.TouchEvent) => {
@@ -742,7 +759,7 @@ export function ComicViewer({
       _focus={{ boxShadow: blocked ? "none" : "0 2px 14px rgba(0,0,0,0.45)" }}
       _focusVisible={{ boxShadow: blocked ? "none" : "0 2px 14px rgba(0,0,0,0.45)" }}
       icon={
-        esUltima ? (
+        esUltima && !soloFlechas ? (
           <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "24px", md: "32px" }} h={{ base: "24px", md: "32px" }} fill={FONDO_PAGINA_BEIGE}
             style={{ filter: `drop-shadow(0 0 6px ${themeColor}) drop-shadow(0 1px 2px rgba(0,0,0,0.85))` }}>
             <path d="M382-200 154-428l57-57 171 171 367-367 57 57-424 424Z" />
@@ -822,7 +839,7 @@ export function ComicViewer({
           continuar que lleva al lado.
           zIndex 12: por encima del loader de espera de fondo (11) para poder
           cerrar aunque la foto aún no haya cargado. */}
-      {fondoDeDisciplina(disciplinaBgColor) && txtDeDisciplina(disciplinaBgColor) ? (
+      {!soloFlechas && (fondoDeDisciplina(disciplinaBgColor) && txtDeDisciplina(disciplinaBgColor) ? (
         // Fisiología y Nutrición: la X de la casa (acuarela de la disciplina,
         // borde y X en su Txt).
         <BotonCerrarDisciplina onClose={onClose} bg={disciplinaBgColor!} txt={cerrarColor ?? txtDeDisciplina(disciplinaBgColor)!} zIndex={12} />
@@ -860,7 +877,7 @@ export function ComicViewer({
           </Box>
         }
       />
-      )}
+      ))}
 
       {/* Espera de la foto de fondo (`esperarFondo`): loader a pantalla completa
           sobre un fondo del color de la disciplina, hasta que la foto cargue del
@@ -902,8 +919,8 @@ export function ComicViewer({
 
       {/* Flechas de navegación fijas a los bordes del viewport (modo por defecto).
           Con `flechasEnBox` se pintan dentro del box (más abajo) y aquí no. */}
-      {!flechasEnBox && prevArrow}
-      {!flechasEnBox && nextArrow}
+      {!flechasEnBox && !sinFlechas && prevArrow}
+      {!flechasEnBox && !sinFlechas && nextArrow}
 
       {/* Contenido: ocupa la pantalla justa y NUNCA la desborda, así que el
           cómic no saca barra de scroll de página (no aportaba nada: el texto ya
@@ -1081,8 +1098,8 @@ export function ComicViewer({
 
           {/* Flechas pegadas a los bordes del box (centradas en su altura). Solo
               con `flechasEnBox`; en el modo normal van fijas al viewport. */}
-          {flechasEnBox && prevArrow}
-          {flechasEnBox && nextArrow}
+          {flechasEnBox && !sinFlechas && prevArrow}
+          {flechasEnBox && !sinFlechas && nextArrow}
 
           {/* Área de contenido: foto + texto.
               Escritorio: foto FIJA a la izquierda (centrada) y texto a la

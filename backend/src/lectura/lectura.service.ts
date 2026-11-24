@@ -107,7 +107,7 @@ export class LecturaService {
     if (tarifa.servicio === 'plataforma') {
       try {
         const cuenta = await this.users.crearCuentaLectura({ name: m.nombre, email: m.email });
-        await client.from(TABLE).update({ user_id: cuenta.id }).eq('id', id);
+        await client.from(TABLE).update({ cliente_id: cuenta.id }).eq('id', id);
         this.precargarCarta(cuenta.id, { fecha: m.fecha, hora: m.hora, lugar: m.lugar });
       } catch (err) {
         console.error('[lectura] pedido guardado pero no se pudo crear la cuenta:', err);
@@ -162,7 +162,7 @@ export class LecturaService {
     if (tarifa.servicio === 'plataforma') {
       try {
         const cuenta = await this.users.crearCuentaLectura({ name: d.nombre, email: d.email });
-        await client.from(TABLE).update({ user_id: cuenta.id }).eq('id', id);
+        await client.from(TABLE).update({ cliente_id: cuenta.id }).eq('id', id);
         this.precargarCarta(cuenta.id, { fecha: d.fecha, hora: d.hora, lugar: d.lugar });
       } catch (err) {
         console.error('[lectura] pedido creado pero no se pudo crear la cuenta:', err);
@@ -179,14 +179,35 @@ export class LecturaService {
     return data;
   }
 
-  /** Cuando la carta está escrita: se le manda el correo con el botón para entrar en su cuenta (sin contraseña; ver `enviarAccesoLectura`). */
-  async darAcceso(id: string) {
+  /** Borra un pedido y, si la persona de lectura se queda sin pedidos, también a ella (su carta, sus textos y su acceso). */
+  async borrar(id: string) {
     const client = this.db.getClient();
-    const { data } = await client.from(TABLE).select('id, user_id').eq('id', id).maybeSingle();
-    const pedido = data as { id: string; user_id: string | null } | null;
+    const { data } = await client.from(TABLE).select('id, cliente_id').eq('id', id).maybeSingle();
+    const pedido = data as { id: string; cliente_id: string | null } | null;
     if (!pedido) throw new NotFoundException('Ese pedido no existe');
-    if (!pedido.user_id) throw new BadRequestException('Este pedido no tiene cuenta asociada');
-    const correoEnviado = await this.users.enviarAccesoLectura(pedido.user_id);
+    const { error } = await client.from(TABLE).delete().eq('id', id);
+    if (error) throw new BadRequestException('No se pudo borrar el pedido');
+    if (pedido.cliente_id) {
+      const { data: otros } = await client.from(TABLE).select('id').eq('cliente_id', pedido.cliente_id).limit(1);
+      if (!otros?.length) {
+        await client.from('lectura_astrologia').delete().eq('user_id', pedido.cliente_id);
+        await client.from('lectura_cliente').delete().eq('id', pedido.cliente_id);
+      }
+    }
+    return { ok: true };
+  }
+
+  /**
+   * Cuando la carta está escrita: se le manda el correo con el botón para entrar a leerla (sin contraseña ni cuenta; ver
+   * `UserService.enviarAccesoLectura`). El asunto y el texto del correo los escribe María antes de enviarlo.
+   */
+  async darAcceso(id: string, datos: { asunto?: string; texto?: string }) {
+    const client = this.db.getClient();
+    const { data } = await client.from(TABLE).select('id, cliente_id').eq('id', id).maybeSingle();
+    const pedido = data as { id: string; cliente_id: string | null } | null;
+    if (!pedido) throw new NotFoundException('Ese pedido no existe');
+    if (!pedido.cliente_id) throw new BadRequestException('Este pedido no tiene espacio de lectura asociado');
+    const correoEnviado = await this.users.enviarAccesoLectura(pedido.cliente_id, datos ?? {});
     if (correoEnviado) {
       await client.from(TABLE).update({ estado: 'lista', acceso_enviado_at: new Date().toISOString() }).eq('id', id);
     }

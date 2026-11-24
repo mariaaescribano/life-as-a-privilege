@@ -484,6 +484,43 @@ create table if not exists public.lectura_pedido (
 );
 create index if not exists lectura_pedido_created_at_idx on public.lectura_pedido (created_at desc);
 
+-- ── Personas de LECTURA ASTRAL (sin cuenta): tablas propias, separadas de `user` ──
+-- (backend/sql/lectura-separada.sql crea esto Y mueve a las que ya existían como «cuenta solo carta»)
+alter table public.lectura_pedido add column if not exists cliente_id text;
+create index if not exists lectura_pedido_cliente_idx on public.lectura_pedido (cliente_id);
+create table if not exists public.lectura_cliente (
+  id text primary key,
+  created_at timestamptz not null default now(),
+  nombre text not null,
+  email text not null,
+  clave text not null,
+  acceso_enviado_at timestamptz,
+  ultimo_acceso_at timestamptz
+);
+create unique index if not exists lectura_cliente_email_idx on public.lectura_cliente (lower(email));
+create table if not exists public.lectura_astrologia (
+  user_id text not null,
+  aviso_visto boolean default false not null,
+  fecha_nacimiento date,
+  hora_nacimiento time,
+  pais text,
+  lugar text,
+  region text,
+  solicitud_enviada_at timestamptz,
+  link_carta text,
+  data jsonb not null,
+  updated_at timestamptz default now() not null,
+  latitud numeric,
+  longitud numeric,
+  timezone text,
+  carta_natal_json jsonb,
+  casas_texto jsonb,
+  aspectos_texto jsonb,
+  retos jsonb not null,
+  intro_visto boolean default false not null,
+  primary key (user_id)
+);
+
 -- ── RLS: activado en TODAS las tablas, sin políticas (solo entra el backend) ──
 do $$
 declare t record;

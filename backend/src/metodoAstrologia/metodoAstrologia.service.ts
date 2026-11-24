@@ -1,3 +1,4 @@
+import { esIdLectura } from '../lectura/lectura-id';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { DatabaseService } from '../database.service';
 import { MailService } from '../mail/mail.service';
@@ -48,6 +49,8 @@ export interface TextosCarta {
   link_carta?: string | null; // link del PDF (Google Drive)
   retos?: Reto[];             // lista de retos (estrellas del cielo)
   sintesis?: string;          // la Síntesis (paso 11): vive en `data.sintesis`, sin columna nueva
+  bienvenida?: string;        // el recibimiento de María a ESA persona (tras EMPEZAR): vive en `data.bienvenida`
+  areas?: Record<string, string>; // el texto de cada ÁREA (1-12) para ESA persona: vive en `data.areas`
 }
 
 @Injectable()
@@ -59,10 +62,18 @@ export class MetodoAstrologiaService {
     private readonly cartaNatalService: CartaNatalService,
   ) {}
 
+  /**
+   * La tabla de la carta de `userId`: una cuenta real guarda la suya en `metodo_astrologia`; la persona de LECTURA (id
+   * `lec_…`, sin cuenta) en `lectura_astrologia`, que tiene las mismas columnas pero NO cuelga de `user`.
+   */
+  private tabla(userId: string): 'metodo_astrologia' | 'lectura_astrologia' {
+    return esIdLectura(userId) ? 'lectura_astrologia' : 'metodo_astrologia';
+  }
+
   // ── GET completo ──
   async getMetodoAstrologia(userId: string) {
     const { data, error } = await this.databaseService.getClient()
-      .from('metodo_astrologia')
+      .from(this.tabla(userId))
       .select('*')
       .eq('user_id', userId)
       .maybeSingle();
@@ -147,16 +158,30 @@ export class MetodoAstrologiaService {
       update.retos = Array.isArray(textos.retos) ? textos.retos : [];
     }
 
-    if (textos.sintesis !== undefined) {
-      // Dentro de `data` (JSONB), fusionada con lo que ya hay (leídos, planetas, avisos…).
-      const texto = typeof textos.sintesis === 'string' ? textos.sintesis.trim() : '';
+    if (textos.sintesis !== undefined || textos.bienvenida !== undefined || textos.areas !== undefined) {
+      // Dentro de `data` (JSONB), fusionadas con lo que ya hay (leídos, planetas, avisos…).
       const datos = { ...((row.data ?? {}) as Record<string, any>) };
-      if (texto) datos.sintesis = texto; else delete datos.sintesis;
+      for (const campo of ['sintesis', 'bienvenida'] as const) {
+        if (textos[campo] === undefined) continue;
+        const texto = typeof textos[campo] === 'string' ? textos[campo]!.trim() : '';
+        if (texto) datos[campo] = texto; else delete datos[campo];
+      }
+      // Los textos de las áreas (1-12): se fusionan por clave; un texto vacío borra el de esa área.
+      if (textos.areas && typeof textos.areas === 'object') {
+        const areas: Record<string, string> = { ...((datos.areas ?? {}) as Record<string, string>) };
+        for (let n = 1; n <= 12; n++) {
+          const crudo = (textos.areas as Record<string, unknown>)[String(n)];
+          if (crudo === undefined) continue;
+          const t = typeof crudo === 'string' ? crudo.trim() : '';
+          if (t) areas[String(n)] = t; else delete areas[String(n)];
+        }
+        if (Object.keys(areas).length) datos.areas = areas; else delete datos.areas;
+      }
       update.data = datos;
     }
 
     const { error } = await this.databaseService.getClient()
-      .from('metodo_astrologia')
+      .from(this.tabla(userId))
       .update(update)
       .eq('user_id', userId);
 
@@ -209,7 +234,7 @@ export class MetodoAstrologiaService {
     const campo = tipo === 'proceso' ? 'aviso_proceso_at' : 'aviso_leida_at';
     const data = { ...((row.data ?? {}) as Record<string, any>), [campo]: avisado_at };
     const { error } = await this.databaseService.getClient()
-      .from('metodo_astrologia')
+      .from(this.tabla(userId))
       .update({ data, updated_at: avisado_at })
       .eq('user_id', userId);
     // El email ya ha salido: si el registro falla, no lo damos por fallido.
@@ -301,7 +326,7 @@ export class MetodoAstrologiaService {
 
     const update = { ...filtered, updated_at: new Date().toISOString() };
     const { error } = await this.databaseService.getClient()
-      .from('metodo_astrologia')
+      .from(this.tabla(userId))
       .upsert({ user_id: userId, ...update }, { onConflict: 'user_id' });
 
     if (error) {
@@ -403,7 +428,7 @@ export class MetodoAstrologiaService {
       : existingData;
 
     const { error } = await this.databaseService.getClient()
-      .from('metodo_astrologia')
+      .from(this.tabla(userId))
       .upsert(
         {
           user_id: userId,
@@ -504,7 +529,7 @@ export class MetodoAstrologiaService {
     if (carta_natal_json) fila.carta_natal_json = carta_natal_json;
 
     const { error } = await this.databaseService.getClient()
-      .from('metodo_astrologia')
+      .from(this.tabla(userId))
       .upsert(fila, { onConflict: 'user_id' });
 
     if (error) {
@@ -588,7 +613,7 @@ export class MetodoAstrologiaService {
     }
 
     const { error } = await this.databaseService.getClient()
-      .from('metodo_astrologia')
+      .from(this.tabla(userId))
       .update({ carta_natal_json: carta, updated_at: new Date().toISOString() })
       .eq('user_id', userId);
 
@@ -612,7 +637,7 @@ export class MetodoAstrologiaService {
       });
       const data = this.cartaNatalService.mergeWithCartaData(row.data ?? null, carta);
       await this.databaseService.getClient()
-        .from('metodo_astrologia')
+        .from(this.tabla(userId))
         .update({ carta_natal_json: carta, data, updated_at: new Date().toISOString() })
         .eq('user_id', userId);
       return carta;

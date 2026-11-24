@@ -25,6 +25,8 @@ interface ZodiacRingProps {
   innerRadius: number;
   outerRadius: number;
   cusps: number[];
+  /** Tinte del anillo (multiplica el blanco de la textura); sin él, blanco. */
+  tinte?: string;
 }
 
 // El anillo pinta los signos DIBUJADOS, con los mismos trazos que el resto de
@@ -130,7 +132,7 @@ function buildTexture(cusps: number[], innerRatio: number): THREE.CanvasTexture 
   return tex;
 }
 
-export function ZodiacRing({ innerRadius, outerRadius, cusps }: ZodiacRingProps) {
+export function ZodiacRing({ innerRadius, outerRadius, cusps, tinte }: ZodiacRingProps) {
   const texture = useMemo(
     () => buildTexture(cusps, innerRadius / outerRadius),
     [cusps, innerRadius, outerRadius],
@@ -161,6 +163,7 @@ export function ZodiacRing({ innerRadius, outerRadius, cusps }: ZodiacRingProps)
       <meshBasicMaterial
         ref={matRef}
         map={texture}
+        color={tinte ?? "#ffffff"}
         transparent
         opacity={0}
         side={THREE.DoubleSide}

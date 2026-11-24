@@ -1,16 +1,17 @@
-import React, { useEffect } from "react";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Navigate, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { Box, Flex } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
-import { CajaTextoScroll } from "../../components/metodo/CajaTextoScroll";
 import { AREAS_TEXTO, AREAS_TOTAL, pasoDeArea, rutaArea, tituloArea } from "../../components/metodo/astrologiaAreas";
 import { useAstrologiaProgreso } from "../../hooks/useAstrologiaProgreso";
 import { esMariaMirando } from "../../api/persona";
 import { ASTROLOGIA_TOTAL } from "../../components/metodo/astrologiaRecorrido";
 import { Reveal } from "../../components/global/Reveal";
-import { astrologiaBg, astrologiaTxt, AstrologiaIcon, FONDO_PAGINA_TURQUESA as T } from "../../GlobalVariables";
+import { AreaCasa } from "../../components/metodo/AreaCasa";
+import { API_URL, astrologiaBg, astrologiaTxt, AstrologiaIcon, FONDO_PAGINA_TURQUESA as T } from "../../GlobalVariables";
 import { useIdioma } from "../../i18n";
 
 /**
@@ -22,14 +23,28 @@ export default function MetodoAstrologiaArea() {
   const { t, segunIdioma } = useIdioma();
   const navigate = useNavigate();
   const { n: nParam } = useParams<{ n: string }>();
+  const [params] = useSearchParams();
   const n = Number(nParam);
   const valida = Number.isInteger(n) && n >= 1 && n <= AREAS_TOTAL;
 
   useEffect(() => { window.scrollTo({ top: 0, behavior: "auto" }); }, [n]);
+
+  // El texto de ESTA persona para cada área (lo escribe María en el editor de su carta, `data.areas`). null = aún leyéndose.
+  const [propios, setPropios] = useState<Record<string, string> | null>(null);
+  useEffect(() => {
+    const userId = localStorage.getItem("userId");
+    if (!userId) { setPropios({}); return; }
+    let vivo = true;
+    axios.get<{ data?: { areas?: Record<string, string> } } | null>(`${API_URL}/metodo-astrologia/${userId}`)
+      .then((r) => { if (vivo) setPropios(r.data?.data?.areas && typeof r.data.data.areas === "object" ? r.data.data.areas : {}); })
+      .catch(() => { if (vivo) setPropios({}); });
+    return () => { vivo = false; };
+  }, []);
   if (!valida) return <Navigate to={rutaArea(1)} replace />;
 
-  const texto = AREAS_TEXTO[n] ? segunIdioma({ es: AREAS_TEXTO[n].es, en: AREAS_TEXTO[n].en }) : "";
-  const pct = Math.round((n / AREAS_TOTAL) * 100);
+  const global = AREAS_TEXTO[n] ? segunIdioma({ es: AREAS_TEXTO[n].es, en: AREAS_TEXTO[n].en }) : "";
+  const propio = typeof propios?.[String(n)] === "string" ? propios[String(n)].trim() : "";
+  const texto = propio || global;
   const titulo = tituloArea(n);
   const { bloqueada, cargado } = useAstrologiaProgreso();
 
@@ -50,7 +65,7 @@ export default function MetodoAstrologiaArea() {
               mb={0}
               prev={n > 1
                 ? { label: `← ${tituloArea(n - 1)}`, onClick: () => navigate(rutaArea(n - 1)) }
-                : { label: `← ${t("metodo.astro.paso.puntosClave")}`, onClick: () => navigate("/metodo/astrologia/lectura") }}
+                : { label: `← ${t("metodo.astro.paso.introduccion")}`, onClick: () => navigate("/metodo/astrologia/introduccion") }}
               next={{
                 label: `${n < AREAS_TOTAL ? tituloArea(n + 1) : t("metodo.astro.paso.pdf")} →`,
                 onClick: () => navigate(n < AREAS_TOTAL ? rutaArea(n + 1) : "/metodo/astrologia/pdf"),
@@ -59,33 +74,17 @@ export default function MetodoAstrologiaArea() {
             />
           </Reveal>
 
-          {/* La barra de progreso: turquesa oscuro, sin brillo. */}
-          <Reveal direction="up" distance={12} duration={0.6} delay={0.2} w="100%" display="flex" justifyContent="center">
-            <Flex align="center" gap={4} w={{ base: "86%", md: "460px" }} maxW="100%">
-              <Box
-                role="progressbar" aria-label={titulo} aria-valuemin={0} aria-valuemax={AREAS_TOTAL} aria-valuenow={n}
-                flex="1" h="8px" borderRadius="full" bg={`${T}33`} overflow="hidden"
-              >
-                <Box h="100%" w={`${pct}%`} borderRadius="full" bg={T} transition="width 0.9s cubic-bezier(0.22,1,0.36,1)" />
-              </Box>
-              <Text color={T} fontSize={{ base: "md", md: "lg" }} fontWeight="700" minW="3.4em" textAlign="right" lineHeight="1"
-                    sx={{ fontVariantNumeric: "tabular-nums" }}>
-                {n}/{AREAS_TOTAL}
-              </Text>
-            </Flex>
-          </Reveal>
-
+          {/* Las doce áreas, con la misma presentación (AreaCasa): bajo el header la fila de planetas de la casa; después
+              la barra de progreso y la raya; y el texto grande y por pasos, sin scroll. `?demo` rellena con texto y
+              planetas de ejemplo para ver el diseño sin tener nada escrito. */}
+          <AreaCasa
+            n={n} texto={texto} pendiente={t("metodo.astro.area.pendiente")} demo={params.has("demo")} cargandoTexto={propios === null}
+            medio={(<>
           {/* La raya: turquesa oscuro. */}
           <Box w="100%" h="1px" bgGradient={`linear(to-r, ${T}00, ${T}99, ${T}00)`} />
 
-          {/* La caja de texto inicial, con scroll vertical. */}
-          <Reveal direction="up" distance={18} duration={0.8} delay={0.35} w="100%">
-            <CajaTextoScroll>
-              {texto.trim()
-                ? texto.split(/\n\s*\n/).map((p, i) => <Text key={i} mb={i < texto.split(/\n\s*\n/).length - 1 ? 4 : 0}>{p}</Text>)
-                : <Text fontStyle="italic" opacity={0.75}>{t("metodo.astro.area.pendiente")}</Text>}
-            </CajaTextoScroll>
-          </Reveal>
+            </>)}
+          />
         </Flex>
       </Flex>
 
