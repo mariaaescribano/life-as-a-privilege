@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Box } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useT } from "../../i18n";
+import { esSoloLectura } from "../../api/sesion";
 
 // ─────────────────────────────────────────────────────────────────────────
 // «← Volver al Mapa»: la miga de pan del recorrido.
@@ -77,7 +78,8 @@ export function olvidarOrigenCurso(): void {
 export function useVolverAlMapa(urlOverride?: string | null) {
   const navigate = useNavigate();
   const t = useT();
-  const url = urlOverride ?? origenCurso();
+  // La persona de lectura no tiene Mapa al que volver: ni botón en el header ni botón flotante.
+  const url = esSoloLectura() ? null : (urlOverride ?? origenCurso());
 
   const volver = () => {
     if (!url) return;

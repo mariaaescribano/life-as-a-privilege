@@ -473,3 +473,7 @@ vez de número) que lleva al primer paso.
   con el icono de Astrología, que se dibuja, entra con muelle y respira. Las cajitas del camino siguen quietas.
 - **Camino en ordenador:** `zoom: 1.1` desde 768 px. En móvil, una columna con las cajas a todo el ancho.
 - **Portada del PDF:** marca a la izquierda, ASTROLOGÍA a la derecha, «Tu Carta Astral» en medio; el resto de páginas, sin decoración arriba.
+- **Orden de las Casas (ilustración y lectura):** una sola fila. Hacia delante: ilustración I → lectura I → ilustración II → lectura II…
+  Hacia atrás, igual a la inversa: desde una lectura, el «←» del header abre la ilustración de esa misma Casa; desde esa
+  ilustración, la flecha izquierda lleva a la lectura de la Casa anterior (sin su ilustración) o, en la primera, a Tu Carta Astral.
+- **PDF:** la portada ya no lleva «EL MAPA». **Cursos:** la persona de lectura no ve «Volver al Mapa» (ni en el header ni el flotante).

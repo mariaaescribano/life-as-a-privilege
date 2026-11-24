@@ -614,10 +614,6 @@ async function pintarPortada(d: DatosPdfCarta): Promise<HTMLCanvasElement> {
     ctx.fillText(partes.join("   ·   "), W / 2, H * 0.9);
   }
 
-  ctx.fillStyle = "rgba(240,220,192,0.5)";
-  ctx.font = `400 ${Math.round(W * 0.017)}px 'EB Garamond', Georgia, serif`;
-  ctx.fillText("E L   M A P A", W / 2, H * 0.945);
-
   return canvas;
 }
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Navigate, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { Navigate, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { Box, Flex } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -25,6 +25,10 @@ export default function MetodoAstrologiaArea() {
   const navigate = useNavigate();
   const { n: nParam } = useParams<{ n: string }>();
   const [params] = useSearchParams();
+  // «Hacia atrás» desde la ilustración de la siguiente Área se llega aquí sin abrir la ilustración de ésta.
+  const sinComicAlEntrar = !!(useLocation().state as { sinComic?: boolean } | null)?.sinComic;
+  // El «←» del header, estando en la lectura, vuelve a la ilustración de ESTA Área (no salta de página).
+  const [reabrir, setReabrir] = useState(0);
   const n = Number(nParam);
   const valida = Number.isInteger(n) && n >= 1 && n <= AREAS_TOTAL;
 
@@ -70,8 +74,8 @@ export default function MetodoAstrologiaArea() {
               step={{ current: pasoDeArea(n), total: ASTROLOGIA_TOTAL }}
               mb={0}
               prev={n > 1
-                ? { label: `← ${tituloArea(n - 1)}`, onClick: () => navigate(rutaArea(n - 1)) }
-                : { label: `← ${t("metodo.astro.paso.introduccion")}`, onClick: () => navigate("/metodo/astrologia/introduccion") }}
+                ? { label: `← ${tituloArea(n - 1)}`, onClick: () => setReabrir((x) => x + 1) }
+                : { label: `← ${t("metodo.astro.paso.introduccion")}`, onClick: () => setReabrir((x) => x + 1) }}
               next={{
                 label: `${n < AREAS_TOTAL ? tituloArea(n + 1) : t("metodo.astro.paso.pdf")} →`,
                 onClick: () => navigate(n < AREAS_TOTAL ? rutaArea(n + 1) : "/metodo/astrologia/pdf"),
@@ -84,7 +88,7 @@ export default function MetodoAstrologiaArea() {
               la barra de progreso y la raya; y el texto grande y por pasos, sin scroll. `?demo` rellena con texto y
               planetas de ejemplo para ver el diseño sin tener nada escrito. */}
           <AreaCasa
-            n={n} texto={texto} pendiente={t("metodo.astro.area.pendiente")} demo={params.has("demo")} cargandoTexto={propios === null} alCambiarComic={setComicAbierto}
+            n={n} texto={texto} pendiente={t("metodo.astro.area.pendiente")} demo={params.has("demo")} cargandoTexto={propios === null} alCambiarComic={setComicAbierto} sinComicAlEntrar={sinComicAlEntrar} reabrirComic={reabrir}
           />
         </Flex>
       </Flex>

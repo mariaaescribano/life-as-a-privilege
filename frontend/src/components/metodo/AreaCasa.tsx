@@ -64,10 +64,14 @@ const DEMO_TEXTO = [
   "Cada «---» abre una caja nueva, con la foto de fondo puesta otra vez, y el texto se lee bajando por la página.",
 ].join("\n\n");
 
-export function AreaCasa({ n, texto, pendiente, demo = false, medio, cargandoTexto = false, alCambiarComic }: {
+export function AreaCasa({ n, texto, pendiente, demo = false, medio, cargandoTexto = false, alCambiarComic, sinComicAlEntrar = false, reabrirComic = 0 }: {
   n: number; texto: string; pendiente: string; demo?: boolean;
   /** Avisa de si el cómic de entrada está abierto (la página no enseña su pie hasta que se cierra). */
   alCambiarComic?: (abierto: boolean) => void;
+  /** Se llega a esta Área «hacia atrás» (desde la ilustración de la siguiente): se ve su lectura, sin abrir su ilustración. */
+  sinComicAlEntrar?: boolean;
+  /** Cada vez que sube, se vuelve a abrir la ilustración de esta Área (el «atrás» desde su lectura). */
+  reabrirComic?: number;
   /** Se está leyendo el texto de esta persona: no enseñar aún el aviso de «pendiente». */
   cargandoTexto?: boolean;
   /** Lo que va entre la fila de círculos y el texto (la barra de progreso y la raya, que pone la página). */
@@ -87,8 +91,11 @@ export function AreaCasa({ n, texto, pendiente, demo = false, medio, cargandoTex
   };
 
   // 0 · la ilustración inmersiva de la casa: sale cada vez que se entra en el área.
-  const [comicAbierto, setComicAbierto] = useState(true);
-  useEffect(() => { setComicAbierto(true); }, [n]);
+  // El camino es una sola fila: ilustración 1 → lectura 1 → ilustración 2 → lectura 2… y hacia atrás igual
+  // (lectura 2 → ilustración 2 → lectura 1 → ilustración 1…).
+  const [comicAbierto, setComicAbierto] = useState(!sinComicAlEntrar);
+  useEffect(() => { setComicAbierto(!sinComicAlEntrar); }, [n, sinComicAlEntrar]);
+  useEffect(() => { if (reabrirComic > 0) setComicAbierto(true); }, [reabrirComic]);
   useEffect(() => { alCambiarComic?.(comicAbierto); }, [comicAbierto]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // 2 · el texto, en cajas seguidas (una por sección), leyéndolo bajando por la página.
@@ -104,10 +111,10 @@ export function AreaCasa({ n, texto, pendiente, demo = false, medio, cargandoTex
         vinetas={VINETAS_CASAS[n - 1] ? [VINETAS_CASAS[n - 1]] : []}
         themeColor={astrologiaTxt}
         loader={<AstrologiaLoader color={astrologiaTxt} />}
-        // Sin X: solo flechas. La de la izquierda vuelve a la página anterior (el área anterior, o Tu Carta Astral);
-        // la de la derecha sigue a lo que viene: el resto de esta área.
+        // Sin X: solo flechas. La de la izquierda vuelve atrás: a la LECTURA del área anterior (sin su ilustración) o, en
+  // la primera, a Tu Carta Astral; la de la derecha sigue a la lectura de esta área.
         soloFlechas
-        alAnterior={() => navigate(n > 1 ? rutaArea(n - 1) : "/metodo/astrologia/introduccion")}
+        alAnterior={() => navigate(n > 1 ? rutaArea(n - 1) : "/metodo/astrologia/introduccion", n > 1 ? { state: { sinComic: true } } : undefined)}
         onClose={() => setComicAbierto(false)}
         onComplete={() => setComicAbierto(false)}
       />
