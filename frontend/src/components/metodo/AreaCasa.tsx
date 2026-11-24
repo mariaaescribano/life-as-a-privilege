@@ -3,9 +3,9 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Reveal, Pop } from "../global/Reveal";
-import { PalabrasVivas } from "../global/PalabrasVivas";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
 import { Glifo } from "./Glifo";
+import { TextoPorSecciones, construirSecciones } from "./TextoPorSecciones";
 import { IntroComicModal } from "./IntroComicModal";
 import { VINETAS_CASAS, VINETAS_PLANETAS } from "./ComicAstrologiaModal";
 import { AstrologiaLoader } from "./comicLoaders";
@@ -16,7 +16,7 @@ import { CUERPOS, ZODIAC_SIGNS, type Cuerpo } from "./astrologiaData";
 import { casasDelPlaneta } from "./astrologiaCasas";
 import { useNombresAstro } from "./astrologiaNombres";
 import type { CartaNatal } from "./CartaAstral3D/types";
-import { API_URL, astrologiaNom, astrologiaTxt, AstrologiaIcon, FONDO_PAGINA_TURQUESA as T } from "../../GlobalVariables";
+import { API_URL, astrologiaNom, astrologiaTxt, FONDO_PAGINA_TURQUESA as T } from "../../GlobalVariables";
 
 /**
  * EL CUERPO DE UNA ÁREA (la presentación nueva, probada en el Área I):
@@ -31,66 +31,6 @@ import { API_URL, astrologiaNom, astrologiaTxt, AstrologiaIcon, FONDO_PAGINA_TUR
 
 type Colocado = { cuerpo: Cuerpo; signo: string; grado: number };
 type DeLaCasa = { planetas: Colocado[]; carta: CartaNatal | null };
-
-/** Los símbolos de planeta/punto: un párrafo que EMPIEZA por uno es la definición de ese planeta. */
-const GLIFOS: Record<string, string> = Object.fromEntries(CUERPOS.filter((c) => c.key !== "ascendente").map((c) => [c.symbol, c.color]));
-
-/** Aclara un color hacia el blanco (los colores oscuros de algunos planetas no se leen sobre el cielo). */
-function aclarar(hex: string, k = 0.4): string {
-  const n = parseInt(hex.slice(1), 16);
-  const m = (v: number) => Math.round(v + (255 - v) * k);
-  return `rgb(${m((n >> 16) & 255)}, ${m((n >> 8) & 255)}, ${m(n & 255)})`;
-}
-
-/**
- * El texto → secciones. Una línea «---» separa SECCIONES: cada una va en su propia caja, con la foto de fondo puesta de
- * nuevo, para que el fondo no se estire con un texto largo. Dentro de cada una, los párrafos se leen seguidos.
- */
-function construirSecciones(texto: string): string[][] {
-  return texto.replace(/\r/g, "").split(/^[ \t]*-{3,}[ \t]*$/m)
-    .map((sec) => sec.split(/\n\s*\n/).map((x) => x.trim()).filter(Boolean))
-    .filter((ps) => ps.length > 0);
-}
-
-/**
- * Un párrafo del texto. Sus palabras se desvelan una a una (PalabrasVivas), cada párrafo un poco después del anterior.
- * Si es la definición de un planeta, va en cursiva, con su símbolo (en su color) delante, que asoma primero.
- */
-function Parrafo({ texto, ultimo, retraso }: { texto: string; ultimo: boolean; retraso: number }) {
-  const letras = Array.from(texto.trimStart());
-  const simbolo = letras[0];
-  if (GLIFOS[simbolo]) {
-    const resto = letras.slice(1).join("").trimStart();
-    return (
-      <Flex gap={3} align="flex-start" mb={ultimo ? 0 : 4} fontStyle="italic" opacity={0.92}>
-        <Reveal inView direction="none" scaleFrom={0.5} blur duration={0.8} delay={retraso} flexShrink={0} mt="0.1em" display="flex">
-          <Glifo symbol={simbolo} color={aclarar(GLIFOS[simbolo])} size={22} />
-        </Reveal>
-        <Text><PalabrasVivas texto={resto} cursivas retraso={retraso + 0.15} /></Text>
-      </Flex>
-    );
-  }
-  return <Text mb={ultimo ? 0 : 4}><PalabrasVivas texto={texto} cursivas retraso={retraso} /></Text>;
-}
-
-/**
- * La separación entre dos cajas («---»): una línea turquesa fina sobre el beige con un disco de cielo y el icono de
- * Astrología en el medio, que tapa un poco el borde de las dos cajas. Después de ella, la caja siguiente trae su fondo
- * puesto de nuevo.
- */
-function Separador() {
-  return (
-    <Reveal inView amount={0.6} direction="none" scaleFrom={0.9} blur duration={0.9} w="100%" position="relative" zIndex={2}
-            h={{ base: "26px", md: "32px" }} display="flex" alignItems="center" justifyContent="center">
-      <Box position="absolute" left={0} right={0} top="50%" h="1px" bgGradient={`linear(to-r, ${T}00, ${T}99, ${T}00)`} />
-      <Flex position="relative" align="center" justify="center" overflow="hidden" borderRadius="full"
-            w={{ base: "46px", md: "54px" }} h={{ base: "46px", md: "54px" }}>
-        <DisciplinaBgLayer nom={astrologiaNom} borderRadius="full" />
-        <Box position="relative" zIndex={1} display="flex"><AstrologiaIcon size={{ base: "24px", md: "28px" }} /></Box>
-      </Flex>
-    </Reveal>
-  );
-}
 
 /** La casa `n` de esta persona: su carta (para dibujar la casa) y los planetas que hay en ella (los que están sobre una cúspide cuentan en las dos). */
 function useLaCasa(n: number, demo: boolean): DeLaCasa {
@@ -219,25 +159,7 @@ export function AreaCasa({ n, texto, pendiente, demo = false, medio, cargandoTex
       {!comicAbierto && (<>
       {/* 2 · el texto: una caja por sección (las separa «---»), cada una con su foto de fondo, todo el ancho, sin scroll propio */}
       {hay ? (
-        <Flex direction="column" w="100%">
-          {secciones.map((parrafos, si) => (
-            <React.Fragment key={si}>
-              {/* Cada «---»: línea horizontal con el icono en el medio, y la caja siguiente con su fondo puesto de nuevo. */}
-              {si > 0 && <Separador />}
-              <Reveal inView amount={0.1} direction="up" distance={34} scaleFrom={0.96} blur duration={0.95} delay={si === 0 ? 0.35 : 0} w="100%" display="flex">
-                <Flex position="relative" direction="column" w="100%" borderRadius="2xl" overflow="hidden">
-                  <DisciplinaBgLayer nom={astrologiaNom} borderRadius="2xl" />
-                  <Box position="relative" zIndex={1} px={{ base: 5, md: 10 }} pt={{ base: si > 0 ? 9 : 6, md: si > 0 ? 11 : 8 }} pb={{ base: si < secciones.length - 1 ? 9 : 6, md: si < secciones.length - 1 ? 11 : 8 }}
-                       color={astrologiaTxt} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7" letterSpacing="0.005em">
-                    {parrafos.map((p, k, arr) => (
-                      <Parrafo key={k} texto={p} ultimo={k === arr.length - 1} retraso={(si === 0 ? 0.75 : 0.35) + Math.min(k * 0.3, 2.4)} />
-                    ))}
-                  </Box>
-                </Flex>
-              </Reveal>
-            </React.Fragment>
-          ))}
-        </Flex>
+        <TextoPorSecciones secciones={secciones} />
       ) : (
         <Reveal direction="up" distance={26} duration={0.8} delay={0.45} w="100%" display="flex">
           <Flex position="relative" direction="column" w="100%" borderRadius="2xl" overflow="hidden">

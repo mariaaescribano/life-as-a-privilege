@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
-import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { IndiceAstrologia } from "../../components/metodo/IndiceAstrologia";
@@ -10,14 +9,12 @@ import { MetodoStepHeader, glowHeaderDisciplina } from "../../components/metodo/
 import { CursoCardDetalle } from "../../components/aprendizaje/CursoCardDetalle";
 import { CursosGrid } from "../../components/aprendizaje/CursosGrid";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
-import { PagoPsicologiaModal } from "../../components/metodo/PagoPsicologiaModal";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
 import { useCursosData } from "../../data/cursosApi";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon, FONDO_PAGINA_TURQUESA } from "../../GlobalVariables";
 import { useT } from "../../i18n";
-import { irAPagoDisciplina } from "../../components/metodo/pagoDisciplinaLink";
 
 // Contenido del popup «¿Qué es esto?» (botón flotante, encima del de la
 // llamada): explica esta página del recorrido. Edítalo libremente.
@@ -60,43 +57,9 @@ export default function MetodoAstrologiaCursos() {
   const t = useT();
   const navigate = useNavigate();
   const { cursosData, loading } = useCursosData();
-  // null = aún no se sabe (ver MetodoAyurvedaDoshaCursos): nunca se confunde
-  // «todavía no ha contestado el servidor» con «no lo ha pagado».
-  const [psicologiaSuscrito, setPsicologiaSuscrito] = useState<boolean | null>(null);
-  const [pagoPsicoOpen, setPagoPsicoOpen] = useState(false);
-  const [pagoPsicoLoading, setPagoPsicoLoading] = useState(false);
-  const [pagoPsicoError, setPagoPsicoError] = useState<string | null>(null);
-
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
-    const token = localStorage.getItem("token");
-    if (!token) return;
-    getUserMe()
-      .then((res) => setPsicologiaSuscrito(!!res.data?.psicologia_suscrito))
-      .catch(() => {});
   }, []);
-
-  const pagarPsicologia = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) { navigate("/welcome"); return; }
-    setPagoPsicoLoading(true);
-    setPagoPsicoError(null);
-    // Todas las disciplinas se cobran por separado, pero comparten el mismo
-    // Payment Link: el scope y el userId viajan en el client_reference_id
-    // para que, al volver a /home, el verify sepa qué desbloquear.
-    const errPago = irAPagoDisciplina("psicologia");
-    if (errPago) {
-      setPagoPsicoError(errPago);
-      setPagoPsicoLoading(false);
-    }
-  };
-
-  // El botón "Psicología →" del header se desbloquea al pagar Psicología.
-  // Mientras no esté pagada, el clic abre el pago (en vez de quedar inerte).
-  const onPsicologia = () => {
-    if (psicologiaSuscrito === false) { /* pago desactivado */ }
-    else navigate("/metodo/psicologia");
-  };
 
   // Cursos de Astrología ordenados por fecha de publicación (recientes primero),
   // igual que en la página de Cursos de la disciplina.
@@ -135,25 +98,6 @@ export default function MetodoAstrologiaCursos() {
               step={{ current: 19, total: 19 }}
               mb={0}
               prev={{ label: `← ${t("metodo.astro.paso.sintesis")}`, onClick: () => navigate("/metodo/astrologia/sintesis") }}
-              next={{
-                label: `${t("disciplina.psicologia")} →`,
-                onClick: onPsicologia,
-                // Mismo estilo que el resto de botones del header (Astrología),
-                // sin el color de la disciplina de destino.
-                icon: psicologiaSuscrito !== false ? undefined : (
-                  <Box
-                    as="svg"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 -960 960 960"
-                    w={{ base: "16px", md: "20px" }}
-                    h={{ base: "16px", md: "20px" }}
-                    fill={astrologiaTxt}
-                    flexShrink={0}
-                  >
-                    <path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm296.5-143.5Q560-327 560-360t-23.5-56.5Q513-440 480-440t-56.5 23.5Q400-393 400-360t23.5 56.5Q447-280 480-280t56.5-23.5ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80ZM240-160v-400 400Z" />
-                  </Box>
-                ),
-              }}
             />
           </Reveal>
 
@@ -204,7 +148,11 @@ export default function MetodoAstrologiaCursos() {
                   color: astrologiaTxt,
                   bgColor: astrologiaBg,
                   nom: astrologiaNom,
+                  // Las fotos de los planetas son cuadradas: se ven enteras, sin recortar arriba y abajo.
+                  proporcionFoto: "1 / 1",
+                  sinAccesoLibre: true,
                 }))}
+                columnas={{ base: 2, md: 3, lg: 4 }}
               />
             )
           ) : (
@@ -239,14 +187,6 @@ export default function MetodoAstrologiaCursos() {
         </Flex>
       </Flex>
 
-
-      <PagoPsicologiaModal
-        isOpen={pagoPsicoOpen}
-        onClose={() => { setPagoPsicoOpen(false); setPagoPsicoError(null); }}
-        onPagar={pagarPsicologia}
-        loading={pagoPsicoLoading}
-        error={pagoPsicoError}
-      />
 
       <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom}
                      llamadaTitulo={t("metodo.astro.reservaLlamada")} queEsEsto={QUE_ES_ESTO} />

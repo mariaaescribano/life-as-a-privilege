@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Box, Flex } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
-import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
-import { TextoMarcado } from "../../components/global/TextoMarcado";
-import { glowHeader } from "../../components/metodo/FotoBox";
+import { TextoPorSecciones, construirSecciones } from "../../components/metodo/TextoPorSecciones";
 import { AstrologiaLoading } from "../../components/metodo/comicLoaders";
 import { Reveal } from "../../components/global/Reveal";
-import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
+import { API_URL, astrologiaBg, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
 import { useT } from "../../i18n";
 
 /**
@@ -21,22 +19,25 @@ import { useT } from "../../i18n";
 export default function MetodoAstrologiaBienvenida() {
   const t = useT();
   const navigate = useNavigate();
+  // Si se llega «hacia atrás» (desde la Historia) y no hay texto, no se salta a la Historia otra vez: se sigue hacia atrás.
+  const vieneDeAtras = !!(useLocation().state as { atras?: boolean } | null)?.atras;
+  const sinTexto = vieneDeAtras ? "/metodo/astrologia/origen" : "/metodo/astrologia/historia";
   const [texto, setTexto] = useState<string | null>(null);
 
   useEffect(() => { window.scrollTo({ top: 0, behavior: "auto" }); }, []);
 
   useEffect(() => {
     const userId = localStorage.getItem("userId");
-    if (!userId) { navigate("/metodo/astrologia/historia", { replace: true }); return; }
+    if (!userId) { navigate(sinTexto, { replace: true }); return; }
     let vivo = true;
     axios.get<{ data?: { bienvenida?: string } } | null>(`${API_URL}/metodo-astrologia/${userId}`)
       .then((r) => {
         const b = typeof r.data?.data?.bienvenida === "string" ? r.data.data.bienvenida.trim() : "";
         if (!vivo) return;
-        if (!b) navigate("/metodo/astrologia/historia", { replace: true });
+        if (!b) navigate(sinTexto, { replace: true });
         else setTexto(b);
       })
-      .catch(() => { if (vivo) navigate("/metodo/astrologia/historia", { replace: true }); });
+      .catch(() => { if (vivo) navigate(sinTexto, { replace: true }); });
     return () => { vivo = false; };
   }, [navigate]);
 
@@ -61,20 +62,8 @@ export default function MetodoAstrologiaBienvenida() {
             />
           </Reveal>
 
-          <Reveal direction="up" distance={24} delay={0.15} duration={0.8} w="100%">
-            <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={glowHeader(astrologiaTxt)}>
-              <DisciplinaBgLayer nom={astrologiaNom} borderRadius="2xl" />
-              <Box position="relative" zIndex={1} px={{ base: 5, md: 9 }} py={{ base: 7, md: 9 }}>
-                <TextoMarcado
-                  texto={texto}
-                  colorRaya={`${astrologiaTxt}66`}
-                  color={astrologiaTxt}
-                  fontSize={{ base: "lg", md: "xl" }}
-                  lineHeight="1.85"
-                />
-              </Box>
-            </Box>
-          </Reveal>
+          {/* Mismo texto y separadores que las Áreas: cada «---» es una línea con el icono de Astrología en medio. */}
+          <TextoPorSecciones secciones={construirSecciones(texto)} retraso={0.2} />
         </Flex>
       </Flex>
 

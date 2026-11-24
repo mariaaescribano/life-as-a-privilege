@@ -467,3 +467,9 @@ vez de número) que lleva al primer paso.
   Astral») y número de página abajo a la derecha. Los símbolos y emojis del texto se pintan como imagen.
 - **Rueda de la carta:** anillos, signos y casas en beige.
 - **Cursos del último paso:** de momento llevan la foto de su planeta; los que no son de un planeta no salen.
+- **Cajas de texto (Áreas, Bienvenida, Despedida):** un solo componente (`TextoPorSecciones`). El fondo de cada sección es el
+  **cielo vivo del header de Astrología** (`SpaceBg`/`CieloVivo`): estrellas que titilan cada una a su ritmo, retraso, brillo y
+  tamaño, con reparto propio por sección (`semilla`) y dos estrellas fugaces. El separador `---` es una línea de borde a borde
+  con el icono de Astrología, que se dibuja, entra con muelle y respira. Las cajitas del camino siguen quietas.
+- **Camino en ordenador:** `zoom: 1.1` desde 768 px. En móvil, una columna con las cajas a todo el ancho.
+- **Portada del PDF:** marca a la izquierda, ASTROLOGÍA a la derecha, «Tu Carta Astral» en medio; el resto de páginas, sin decoración arriba.

@@ -15,6 +15,10 @@ export interface CursoGridItem {
   color: string;
   bgColor: string;
   nom: string;
+  /** Proporción de la foto de cada tarjeta (por defecto 16 / 9). */
+  proporcionFoto?: string;
+  /** No escribir «Acceso Libre» en la tarjeta (cuando todos los cursos lo son). */
+  sinAccesoLibre?: boolean;
 }
 
 // Reveal por scroll: cada tarjeta se enciende al entrar en el viewport, así los
@@ -63,17 +67,17 @@ function CursoRevealCell({ it, i }: { it: CursoGridItem; i: number }) {
         transition="transform 0.45s cubic-bezier(0.22,1,0.36,1), box-shadow 0.45s ease"
         _hover={{ transform: "translateY(-6px)", boxShadow: "0 18px 40px rgba(0,0,0,0.22)" }}
       >
-        <CursoCardDetalle curso={it.curso} bgColor={it.bgColor} color={it.color} nom={it.nom} prioritaria={i < FILAS_PRIORITARIAS * 3} />
+        <CursoCardDetalle curso={it.curso} bgColor={it.bgColor} color={it.color} nom={it.nom} prioritaria={i < FILAS_PRIORITARIAS * 3} proporcionFoto={it.proporcionFoto} sinAccesoLibre={it.sinAccesoLibre} />
       </Box>
     </Box>
   );
 }
 
-export function CursosGrid({ items }: { items: CursoGridItem[] }) {
+export function CursosGrid({ items, columnas = { base: 1, md: 2, lg: 3 } }: { items: CursoGridItem[]; columnas?: { base: number; md: number; lg: number } }) {
   return (
     <SimpleGrid
       w="100%"
-      columns={{ base: 1, md: 2, lg: 3 }}
+      columns={columnas}
       spacing={{ base: 4, md: 4 }}
       alignItems="start"
     >

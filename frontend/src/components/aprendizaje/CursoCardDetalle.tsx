@@ -32,6 +32,8 @@ export function CursoCardDetalle({
   bgColor,
   nom,
   prioritaria = true,
+  proporcionFoto = "16 / 9",
+  sinAccesoLibre = false,
 }: {
   curso: Curso;
   color: string;
@@ -40,6 +42,10 @@ export function CursoCardDetalle({
   /** ¿Está en la primera pantalla? Si no, su portada espera a acercarse
    *  (`loading="lazy"`) en vez de bajar con las demás. */
   prioritaria?: boolean;
+  /** Proporción de la foto de arriba (por defecto apaisada, 16 / 9). «1 / 1» enseña una foto cuadrada entera. */
+  proporcionFoto?: string;
+  /** No escribir «Acceso Libre» (cuando todos los cursos lo son): solo queda el botón. */
+  sinAccesoLibre?: boolean;
 }) {
   const t = useT();
   const { idioma } = useIdioma();
@@ -105,7 +111,7 @@ export function CursoCardDetalle({
         w="100%"
         flexShrink={0}
         overflow="hidden"
-        sx={{ aspectRatio: "16 / 9" }}
+        sx={{ aspectRatio: proporcionFoto }}
       >
         {hayFoto ? (
           <>
@@ -240,7 +246,8 @@ export function CursoCardDetalle({
 
         {/* Precio (izquierda) + botón Comenzar/Pagar (derecha) — secundarios,
             compactos: el protagonista es la foto. */}
-        <Flex align="center" justify="space-between" gap={3} mt="auto" pt={1} flexWrap="wrap">
+        <Flex align="center" justify={sinAccesoLibre && curso.precio === null ? "center" : "space-between"} gap={3} mt="auto" pt={1} flexWrap="wrap">
+          {!(sinAccesoLibre && curso.precio === null) && (
           <Text
             color={color}
             fontSize={{ base: "lg", md: "xl" }}
@@ -250,6 +257,7 @@ export function CursoCardDetalle({
           >
             {formatPrecio(curso.precio)}
           </Text>
+          )}
           <Box
             as="button"
             onClick={handleAcceder}

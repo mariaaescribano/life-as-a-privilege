@@ -252,54 +252,12 @@ function filete(doc: jsPDF, y: number, color: [number, number, number]) {
   doc.line(MARGEN_X, y, MARGEN_X + ANCHO_TEXTO, y);
 }
 
-/** El nombre de la persona, para el encabezado de cada página. Lo fija `generarPdfCarta`. */
-let nombrePdf = "";
+/** El trazado del icono de Astrología (el de los headers de la web), en un lienzo «0 -960 960 960». */
+const ICONO_ASTRO_PATH =
+  "m354-287 126-76 126 77-33-144 111-96-146-13-58-136-58 135-146 13 111 97-33 143ZM233-120l65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Zm457-560 21-89-71-59 94-8 36-84 36 84 94 8-71 59 21 89-80-47-80 47ZM480-481Z";
 
-/** El icono de Astrología (el de los headers de la web) en un PNG beige. */
-let iconoAstro: string | null = null;
-function iconoAstrologia(): string {
-  if (iconoAstro) return iconoAstro;
-  const S = 128;
-  const c = document.createElement("canvas");
-  c.width = S;
-  c.height = S;
-  const ctx = c.getContext("2d")!;
-  // El trazado viene en un lienzo de 960 con el origen abajo (viewBox «0 -960 960 960»).
-  ctx.setTransform(S / 960, 0, 0, S / 960, 0, S);
-  ctx.fillStyle = "#F0DCC0";
-  ctx.fill(new Path2D("m354-287 126-76 126 77-33-144 111-96-146-13-58-136-58 135-146 13 111 97-33 143ZM233-120l65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Zm457-560 21-89-71-59 94-8 36-84 36 84 94 8-71 59 21 89-80-47-80 47ZM480-481Z"));
-  iconoAstro = c.toDataURL("image/png");
-  return iconoAstro;
-}
-
-/**
- * El encabezado de cada página (la portada no lleva): arriba a la izquierda el nombre de la persona y, debajo, «con
- * María Escribano»; arriba a la derecha el icono de Astrología y «Tu Carta Astral».
- */
-function encabezado(doc: jsPDF) {
-  const marca = traducir("header.marca").toLowerCase().replace(/(^|\s)\p{L}/gu, (m) => m.toUpperCase());
-  doc.setTextColor(...TINTA);
-  if (nombrePdf) {
-    doc.setFont("times", "bold");
-    doc.setFontSize(10.5);
-    doc.text(latin1(nombrePdf).toUpperCase(), MARGEN_X, 12.5, { charSpace: 0.5 });
-  }
-  doc.setFont("times", "italic");
-  doc.setFontSize(8.5);
-  doc.text(latin1(`${traducir("header.con")} ${marca}`), MARGEN_X, 17);
-
-  const titulo = latin1(traducir("metodo.astro.paso.introduccion"));
-  doc.setFont("times", "bold");
-  doc.setFontSize(10.5);
-  doc.text(titulo, A4_W - MARGEN_X, 13.5, { align: "right" });
-  const lado = 6.2;
-  const x = A4_W - MARGEN_X - doc.getTextWidth(titulo) - 2.2 - lado;
-  doc.addImage(iconoAstrologia(), "PNG", x, 13.5 - lado * 0.82, lado, lado, "icono-astro", "FAST");
-}
-
-/** El pie de cada página: el encabezado y, abajo a la derecha, el número de página. */
+/** El pie de cada página: solo el número, abajo a la derecha. Arriba no hay decoración (solo la lleva la portada). */
 function pie(doc: jsPDF, pagina: number, _seccion: string) {
-  encabezado(doc);
   doc.setFont("times", "normal");
   doc.setFontSize(9);
   doc.setTextColor(...TINTA);
@@ -585,32 +543,65 @@ async function pintarPortada(d: DatosPdfCarta): Promise<HTMLCanvasElement> {
   ctx.fillStyle = velo;
   ctx.fillRect(0, 0, W, H);
 
-  // Arriba, el mandala de la marca (donde antes iba el nombre escrito).
+  const BEIGE = "#F0DCC0";
+  const mm = W / A4_W; // píxeles por milímetro
+  const margenX = 20 * mm;
+  const arriba = 14 * mm;
+  const px = (pt: number) => Math.round(pt * PT * mm); // puntos de letra → píxeles
+
+  // Arriba a la izquierda: el mandala (en beige), el nombre de la persona y, debajo, «con María Escribano».
+  const lado = 14 * mm;
   try {
     const mandala = await cargarImagen(IMG_MANDALA);
-    const lado = W * 0.072;
-    ctx.save();
-    ctx.shadowColor = "rgba(240,220,192,0.45)";
-    ctx.shadowBlur = W * 0.014;
-    ctx.drawImage(mandala, (W - lado) / 2, H * 0.075 - lado / 2, lado, lado);
-    ctx.restore();
+    const tinte = document.createElement("canvas");
+    tinte.width = Math.round(lado);
+    tinte.height = Math.round(lado);
+    const t = tinte.getContext("2d")!;
+    t.drawImage(mandala, 0, 0, tinte.width, tinte.height);
+    t.globalCompositeOperation = "source-in";
+    t.fillStyle = BEIGE;
+    t.fillRect(0, 0, tinte.width, tinte.height);
+    ctx.drawImage(tinte, margenX, arriba, lado, lado);
   } catch {
-    /* sin mandala: la portada arranca directamente en el título */
+    /* sin mandala: queda solo el nombre */
   }
+  const xTexto = margenX + lado + 3.6 * mm;
+  const marca = traducir("header.marca").toLowerCase().replace(/(^|\s)\p{L}/gu, (m) => m.toUpperCase());
+  ctx.textAlign = "left";
+  ctx.textBaseline = "alphabetic";
+  ctx.fillStyle = BEIGE;
+  ctx.font = `600 ${px(11.5)}px 'EB Garamond', Georgia, serif`;
+  (ctx as unknown as { letterSpacing: string }).letterSpacing = `${(px(11.5) * 0.18).toFixed(1)}px`;
+  if (d.nombre) ctx.fillText(d.nombre.toUpperCase(), xTexto, arriba + lado * 0.45);
+  ctx.font = `italic 500 ${px(9)}px 'EB Garamond', Georgia, serif`;
+  (ctx as unknown as { letterSpacing: string }).letterSpacing = `${(px(9) * 0.06).toFixed(1)}px`;
+  ctx.fillText(`${traducir("header.con")} ${marca}`, xTexto, arriba + lado * 0.45 + px(9) * 1.55);
 
+  // Arriba a la derecha: el icono de Astrología y ASTROLOGÍA.
+  ctx.textAlign = "right";
+  ctx.font = `600 ${px(11.5)}px 'EB Garamond', Georgia, serif`;
+  (ctx as unknown as { letterSpacing: string }).letterSpacing = `${(px(11.5) * 0.18).toFixed(1)}px`;
+  const yAstro = arriba + 3 * mm + 8 * mm * 0.62;
+  ctx.fillText(traducir("disciplina.astrologia").toUpperCase(), W - margenX, yAstro);
+  const anchoAstro = ctx.measureText(traducir("disciplina.astrologia").toUpperCase()).width;
+  (ctx as unknown as { letterSpacing: string }).letterSpacing = "0px";
+  ctx.save();
+  const lIcono = 8 * mm;
+  ctx.translate(W - margenX - anchoAstro - 2.6 * mm - lIcono, arriba + 3 * mm);
+  ctx.scale(lIcono / 960, lIcono / 960);
+  ctx.translate(0, 960);
+  ctx.fillStyle = BEIGE;
+  ctx.fill(new Path2D(ICONO_ASTRO_PATH));
+  ctx.restore();
+
+  // En medio: «Tu Carta Astral», al tamaño de siempre.
   ctx.textAlign = "center";
-  ctx.fillStyle = "#F0DCC0";
+  ctx.fillStyle = BEIGE;
   ctx.font = `600 ${Math.round(W * 0.062)}px 'EB Garamond', Georgia, serif`;
   ctx.shadowColor = "rgba(240,220,192,0.5)";
   ctx.shadowBlur = W * 0.02;
-  ctx.fillText("Tu carta astral", W / 2, H * 0.14);
+  ctx.fillText(traducir("metodo.astro.paso.introduccion"), W / 2, H * 0.165);
   ctx.shadowBlur = 0;
-
-  if (d.nombre) {
-    ctx.fillStyle = "#F0DCC0";
-    ctx.font = `500 ${Math.round(W * 0.032)}px 'EB Garamond', Georgia, serif`;
-    ctx.fillText(d.nombre, W / 2, H * 0.182);
-  }
 
   dibujarRuedaCarta(ctx, d.carta, W / 2, H * 0.535, W * 0.86);
 
@@ -640,7 +631,6 @@ export async function generarPdfCarta(
   d: DatosPdfCarta,
   onPaso?: (hecho: number, total: number) => void,
 ): Promise<Blob> {
-  nombrePdf = d.nombre || "";
   const bloques = construirBloques(d);
   const doc = new jsPDF({ unit: "mm", format: "a4", orientation: "portrait", compress: true });
 

@@ -292,6 +292,7 @@ export const metodo = {
   "metodo.astro.paso.astrologia": "Astrología",
   "metodo.astro.paso.introduccion": "Tu Carta Astral",
   "metodo.astro.sinDisciplina": "Tienes que abrir la disciplina de Astrología.",
+  "metodo.camino.astro.lectura": "{nombre}, esta es una lectura del plan que tu alma diseñó para ti.",
   "metodo.astro.intro.cartaTexto": "{nombre}, esta es tu Carta Astral, tu mapa diseñado por tu alma para guiarte en esta vida. Juntos vamos a ir desglosándola.",
   "metodo.astro.intro.datosTexto": "{nombre}, para poder leer tu Carta Astral, busca muy bien la hora y la ciudad en la que naciste. Cuanto más preciso sea, mejor saldrá la lectura.",
   "metodo.astro.intro.apuntes1": "No hace falta que tomes apuntes,",
@@ -308,7 +309,7 @@ export const metodo = {
   "metodo.astro.area.9.nombre": "Tu sentido",
   "metodo.astro.area.10.nombre": "Tu vocación",
   "metodo.astro.area.11.nombre": "Tus amistades",
-  "metodo.astro.area.12.nombre": "Tu subconsciente",
+  "metodo.astro.area.12.nombre": "Tu transgeneracional",
   "metodo.astro.area.titulo": "Área {n}",
   // PROVISIONAL: aviso mientras un Área no tenga su texto (se escribe en components/metodo/astrologiaAreas.ts).
   "metodo.astro.area.pendiente": "El texto de esta área está pendiente.",

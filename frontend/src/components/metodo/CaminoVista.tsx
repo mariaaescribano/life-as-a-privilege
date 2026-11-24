@@ -70,7 +70,8 @@ interface Props {
 const ANCHO_FLECHA = 56;
 /** Ancho de una caja con `columnas` por fila: lo que queda tras las flechas, a partes iguales. */
 const anchoCaja = (columnas: number): string =>
-  columnas <= 1 ? "min(84vw, 320px)" : `calc((100% - ${(columnas - 1) * ANCHO_FLECHA}px) / ${columnas})`;
+  // Móvil: una columna con las cajas a TODO el ancho (lo deja el margen de la página).
+  columnas <= 1 ? "100%" : `calc((100% - ${(columnas - 1) * ANCHO_FLECHA}px) / ${columnas})`;
 /** Ancho máximo del camino en varias columnas (cajas de 208 px como siempre). */
 const ANCHO_MAX_CAMINO = 1000;
 
@@ -155,6 +156,8 @@ function Caja({
   const puedeAbrir = !!admin && cerrado && admin.aplicaA(paso.n, seccion);
   // En Astrología el número del paso va pequeño en un círculo arriba a la derecha (el título manda).
   const numeroEnEsquina = nom === astrologiaNom;
+  // En Astrología, «Casa I - Tu nacimiento» se pinta en dos líneas: «Casa I» y el nombre debajo.
+  const casaPartida = numeroEnEsquina ? /^((?:Casa|House) [IVX]+) - (.+)$/.exec(paso.titulo) : null;
 
   const abrirHasta = async () => {
     if (!admin || abriendo) return;
@@ -245,8 +248,15 @@ function Caja({
           noOfLines={3}
           style={{ textShadow: sombraSoloContraste(nom) }}
         >
-          {paso.titulo}
+          {casaPartida ? casaPartida[1] : paso.titulo}
         </Text>
+        {/* «Casa I» y, debajo, el nombre del área: más pequeño y en cursiva. */}
+        {casaPartida && (
+          <Text color={txt} fontStyle="italic" fontWeight="500" fontSize={{ base: "sm", md: "md" }} lineHeight="1.2" mt="-6px"
+                textAlign="center" noOfLines={2} style={{ textShadow: sombraSoloContraste(nom) }}>
+            {casaPartida[2]}
+          </Text>
+        )}
       </Flex>
       {/* Astrología: el número del paso, pequeño y en un círculo, arriba a la derecha. */}
       {numeroEnEsquina && !paso.inicio && (

@@ -95,7 +95,9 @@ export default function CaminoPagina() {
   // entra por su cuenta).
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
+    // En ordenador, el camino se ve como con un 110 % de zoom (todo un pelín más grande); en móvil, a su tamaño.
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif"
+         sx={{ "@media (min-width: 768px)": { zoom: 1.1 } }}>
       {/* Mientras carga, la MISMA pantalla que la descarga de la página (header + loader). */}
       {!listo && <Box position="fixed" inset={0} zIndex={5}><CaminoCargando txt={disc?.txt} /></Box>}
       <SiteHeader variant="private" />
@@ -113,6 +115,15 @@ export default function CaminoPagina() {
               color={disc.txt}
               mb={0}
             />
+          </Reveal>
+        )}
+
+        {/* La persona de lectura: una frase bajo el header, con aire por encima y por debajo. Fuera de las cajas: turquesa oscuro. */}
+        {listo && sinProgreso && disciplina === "astrologia" && fase >= 1 && (
+          <Reveal direction="up" distance={14} duration={0.6} w="100%" maxW="680px" mt={{ base: 8, md: 10 }} mb={{ base: 10, md: 14 }}>
+            <Text color={FONDO_PAGINA_TURQUESA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center" fontStyle="italic">
+              {t("metodo.camino.astro.lectura", { nombre: (localStorage.getItem("name") ?? "").trim().split(/\s+/)[0] ?? "" })}
+            </Text>
           </Reveal>
         )}
 

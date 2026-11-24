@@ -23,12 +23,8 @@ export default function MetodoAstrologiaHistoria() {
   // «Siguiente» cerrado hasta que María abra el paso 3 (ella entra siempre).
   const siguienteCerrado = !esMariaMirando() && cargado && bloqueada(3);
 
-  // Atrás = de donde se venía (la Bienvenida, o el cómic de EMPEZAR si no hay Bienvenida); sin historial, el camino.
-  const atras = () => {
-    const idx = (window.history.state as { idx?: number } | null)?.idx ?? 0;
-    if (idx > 0) navigate(-1);
-    else navigate("/camino/astrologia");
-  };
+  // Atrás = el paso anterior del camino: la Bienvenida (si no tiene texto, ella misma lleva al cómic de EMPEZAR).
+  const atras = () => navigate("/metodo/astrologia/bienvenida", { state: { atras: true } });
 
   return (
     <Box minH="100vh" bg={FONDO_PAGINA_BEIGE}>

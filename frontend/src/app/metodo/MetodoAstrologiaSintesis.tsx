@@ -6,14 +6,12 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { IndiceAstrologia } from "../../components/metodo/IndiceAstrologia";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
-import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
-import { TextoMarcado } from "../../components/global/TextoMarcado";
-import { glowHeader } from "../../components/metodo/FotoBox";
+import { TextoPorSecciones, construirSecciones } from "../../components/metodo/TextoPorSecciones";
 import { Reveal } from "../../components/global/Reveal";
 import { AstrologiaLoading } from "../../components/metodo/comicLoaders";
 import { useAstrologiaProgreso } from "../../hooks/useAstrologiaProgreso";
 import { esMariaMirando } from "../../api/persona";
-import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon, FONDO_PAGINA_TURQUESA } from "../../GlobalVariables";
+import { API_URL, astrologiaBg, astrologiaTxt, AstrologiaIcon, FONDO_PAGINA_TURQUESA } from "../../GlobalVariables";
 import { useT } from "../../i18n";
 
 /**
@@ -80,22 +78,8 @@ export default function MetodoAstrologiaSintesis() {
             </Text>
           </Reveal>
 
-          {sintesis && (
-            <Reveal direction="up" distance={24} delay={0.25} duration={0.8} w="100%">
-              <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={glowHeader(astrologiaTxt)}>
-                <DisciplinaBgLayer nom={astrologiaNom} borderRadius="2xl" />
-                <Box position="relative" zIndex={1} px={{ base: 5, md: 9 }} py={{ base: 7, md: 9 }}>
-                  <TextoMarcado
-                    texto={sintesis}
-                    colorRaya={`${astrologiaTxt}66`}
-                    color={astrologiaTxt}
-                    fontSize={{ base: "lg", md: "xl" }}
-                    lineHeight="1.85"
-                  />
-                </Box>
-              </Box>
-            </Reveal>
-          )}
+          {/* Mismo texto y separadores que las Áreas: cada «---» es una línea con el icono de Astrología en medio. */}
+          {sintesis && <TextoPorSecciones secciones={construirSecciones(sintesis)} retraso={0.25} />}
         </Flex>
       </Flex>
 
