@@ -350,7 +350,7 @@ export default function AdminLecturas() {
           titulo={`Correo para ${confirmando.nombre}`}
           para={confirmando.email}
           asuntoInicial="Tu carta ya está lista"
-          textoInicial={`Hola ${confirmando.nombre},\n\nTu carta ya está lista. Entra con el botón de abajo para leerla. No necesitas contraseña: este correo es tu llave, así que no lo pierdas.\n\nUn abrazo,\nMaría`}
+          textoInicial={`Hola ${confirmando.nombre},\n\nTu carta ya está lista. Entra con el botón de abajo para leerla. No necesitas contraseña: este correo es tu llave, así que no lo pierdas, por favor 😊\n\nUn abrazo,\nMaría`}
           etiquetaBoton="Entrar a mi carta"
           onEnviar={async (d) => {
             const r = await axios.post<{ correoEnviado: boolean }>(`${API_URL}/lectura/admin/acceso`, { id: confirmando.id, ...d }, { headers: adminHeaders() });
