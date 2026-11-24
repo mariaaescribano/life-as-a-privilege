@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { API_URL } from "../GlobalVariables";
+import { esSoloLectura } from "../api/sesion";
 
 /* ────────────────────────────────────────────────────────────────────────
  * useAstroLeidos — recuerda qué puntos clave / casas / aspectos ha LEÍDO el
@@ -53,7 +54,8 @@ export function useAstroLeidos(tipo: "retos" | "casas" | "aspectos" | "explicaci
     let cancelado = false;
     const userId = localStorage.getItem("userId");
     const token = localStorage.getItem("token");
-    if (!userId || !token) { setCargado(true); return; }
+    // La persona de lectura no marca nada como leído: ni tick ni llamada al servidor.
+    if (!userId || !token || esSoloLectura()) { setCargado(true); return; }
     if (cacheDe !== userId) {
       for (const k of Object.keys(cache)) delete cache[k];
       cacheDe = userId;
@@ -78,6 +80,7 @@ export function useAstroLeidos(tipo: "retos" | "casas" | "aspectos" | "explicaci
 
   const marcarLeido = useCallback(
     (id: string) => {
+      if (esSoloLectura()) return;
       if (leidosRef.current.has(id)) return;
       const next = new Set(leidosRef.current);
       next.add(id);

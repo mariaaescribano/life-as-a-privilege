@@ -1,118 +1,48 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react";
-import SiteHeader from "../../components/global/SiteHeader";
-import SiteFooter from "../../components/global/Footer";
-import { IndiceAstrologia } from "../../components/metodo/IndiceAstrologia";
-import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
-import { FotoBox } from "../../components/metodo/FotoBox";
+import { Box } from "@chakra-ui/react";
 import { IntroComicModal } from "../../components/metodo/IntroComicModal";
-import { ReelInmersivo } from "../../components/metodo/VideoMateriaModal";
-import { SPACE_IMG } from "../../components/metodo/SpaceBg";
+import { AstrologiaLoader } from "../../components/metodo/comicLoaders";
 import { HISTORIA_ASTROLOGIA } from "../../components/metodo/comicHistoriaAstrologia";
-import { REELS_ASTROLOGIA } from "../../hardCoded/metodo/reelsAstrologia";
 import { useComic } from "../../i18n/comics";
-import { Reveal } from "../../components/global/Reveal";
 import { useAstrologiaProgreso } from "../../hooks/useAstrologiaProgreso";
 import { esMariaMirando } from "../../api/persona";
-import { astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon, FONDO_PAGINA_TURQUESA } from "../../GlobalVariables";
-import { useT } from "../../i18n";
+import { astrologiaTxt, FONDO_PAGINA_BEIGE } from "../../GlobalVariables";
 
 /**
- * Paso 2 del recorrido de Astrología: la Historia. UNA caja del camino con las dos
- * formas de ver lo mismo: el cómic (siempre) y el reel (cuando tenga enlace en
- * hardCoded/metodo/reelsAstrologia.ts; sin enlace, esa tarjeta no sale).
+ * Paso 2 del recorrido de Astrología: la Historia. Ya no hay página: al entrar se abre directamente el cómic de las
+ * ilustraciones, sin X (solo flechas). La flecha de la izquierda de la primera viñeta vuelve al paso anterior; la de la
+ * derecha de la última sigue a la Explicación (o, si María aún no ha abierto ese paso, al camino).
  */
 export default function MetodoAstrologiaHistoria() {
-  const t = useT();
   const navigate = useNavigate();
   const vinetas = useComic("astrologia-historia", HISTORIA_ASTROLOGIA);
-  const [comicOpen, setComicOpen] = useState(false);
-  const [reelOpen, setReelOpen] = useState(false);
   const { bloqueada, cargado } = useAstrologiaProgreso();
-  const reel = REELS_ASTROLOGIA.historia;
-
   useEffect(() => { window.scrollTo({ top: 0, behavior: "auto" }); }, []);
 
   // «Siguiente» cerrado hasta que María abra el paso 3 (ella entra siempre).
   const siguienteCerrado = !esMariaMirando() && cargado && bloqueada(3);
 
+  // Atrás = de donde se venía (la Bienvenida, o el cómic de EMPEZAR si no hay Bienvenida); sin historial, el camino.
+  const atras = () => {
+    const idx = (window.history.state as { idx?: number } | null)?.idx ?? 0;
+    if (idx > 0) navigate(-1);
+    else navigate("/camino/astrologia");
+  };
+
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
-      <SiteHeader variant="private" />
-
-      <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 28, md: 36 }}>
-        <Flex direction="column" align="center" w="100%" maxW="850px" gap={{ base: 8, md: 10 }}>
-          <Reveal direction="down" distance={16} duration={0.6} w="100%">
-            <MetodoStepHeader
-              icon={<AstrologiaIcon size={{ base: "40px", md: "52px" }} />}
-              title={t("metodo.astro.paso.historia")}
-              bgColor={`${astrologiaBg}dd`}
-              color={astrologiaTxt}
-              space
-              step={{ current: 2, total: 19 }}
-              mb={0}
-              next={{
-                label: `${t("metodo.astro.paso.explicacion")} →`,
-                onClick: () => navigate("/metodo/astrologia/explicacion"),
-                disabled: siguienteCerrado,
-              }}
-            />
-          </Reveal>
-
-          {/* Fuera de las cajas: turquesa oscuro y sin sombra. */}
-          <Reveal direction="up" distance={18} delay={0.4} duration={1} blur w="100%" maxW="680px">
-            <Text color={FONDO_PAGINA_TURQUESA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center" fontStyle="italic">
-              {t("metodo.astro.historia.intro")}
-            </Text>
-          </Reveal>
-
-          {/* Con reel: dos tarjetas lado a lado. Sin reel: el cómic solo, centrado. */}
-          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 6, md: 8 }} w="100%" maxW="720px">
-            <Reveal inView direction="up" distance={30} scaleFrom={0.95} delay={0.5} duration={0.9}>
-              <Box h="100%">
-                <FotoBox
-                  titulo={t("metodo.astro.historia.leer")}
-                  foto={vinetas[0]?.src}
-                  nom={astrologiaNom}
-                  tinta={astrologiaTxt}
-                  bg={astrologiaBg}
-                  aspect={1}
-                  onClick={() => setComicOpen(true)}
-                  vivo
-                />
-              </Box>
-            </Reveal>
-            {/* Las dos opciones salen siempre. Sin enlace de reel aún, la tarjeta queda
-                apagada y no hace nada. */}
-            <Reveal inView direction="up" distance={30} scaleFrom={0.95} delay={0.68} duration={0.9}>
-              <Box h="100%" opacity={reel ? 1 : 0.55} cursor={reel ? "pointer" : "not-allowed"}>
-                <FotoBox
-                  titulo={t("metodo.astro.historia.reel")}
-                  foto={vinetas[0]?.src}
-                  nom={astrologiaNom}
-                  tinta={astrologiaTxt}
-                  bg={astrologiaBg}
-                  aspect={1}
-                  onClick={reel ? () => setReelOpen(true) : undefined}
-                  vivo={!!reel}
-                />
-              </Box>
-            </Reveal>
-          </SimpleGrid>
-        </Flex>
-      </Flex>
-
+    <Box minH="100vh" bg={FONDO_PAGINA_BEIGE}>
       <IntroComicModal
-        isOpen={comicOpen}
+        isOpen
         vinetas={vinetas}
-        onClose={() => setComicOpen(false)}
-        onComplete={() => setComicOpen(false)}
+        themeColor={astrologiaTxt}
+        loader={<AstrologiaLoader color={astrologiaTxt} />}
+        soloFlechas
+        siguienteArriba
+        alAnterior={atras}
+        onClose={() => { /* sin X: no se cierra */ }}
+        onComplete={() => navigate(siguienteCerrado ? "/camino/astrologia" : "/metodo/astrologia/explicacion")}
       />
-      {reelOpen && reel && <ReelInmersivo url={reel} fondo={SPACE_IMG} onClose={() => setReelOpen(false)} />}
-
-      <IndiceAstrologia />
-      <SiteFooter />
     </Box>
   );
 }

@@ -184,6 +184,9 @@ interface ComicViewerProps {
   /** Solo se navega con las FLECHAS: sin la X de cerrar, y la flecha de la derecha de la última viñeta sigue siendo una
    *  flecha (no el tick). Va con `alAnterior`, para que la de la izquierda de la primera viñeta también lleve a algún sitio. */
   soloFlechas?: boolean;
+  /** Un botón GRANDE con una flecha arriba a la derecha (donde iría la X) que salta a la SIGUIENTE PANTALLA (termina el
+   *  cómic, en cualquier viñeta); las viñetas se mueven con las flechas de los lados. Va con `soloFlechas`, que quita la X. */
+  siguienteArriba?: boolean;
   /** Sin flechas de navegación (queda la X): para un cómic de una sola viñeta que se abre al pulsar algo. */
   sinFlechas?: boolean;
   /** Si se define, la flecha de la izquierda de la PRIMERA viñeta lo llama (en vez de estar apagada). */
@@ -362,6 +365,7 @@ export function ComicViewer({
   onComplete,
   onBack,
   soloFlechas,
+  siguienteArriba,
   sinFlechas,
   alAnterior,
   themeColor = astrologiaTxt,
@@ -878,6 +882,38 @@ export function ComicViewer({
         }
       />
       ))}
+
+      {siguienteArriba && (
+        <IconButton
+          aria-label="Siguiente pantalla"
+          onClick={blocked ? undefined : handleComplete}
+          isDisabled={blocked}
+          position="fixed"
+          top={{ base: 3, md: 5 }}
+          right={{ base: 3, md: 5 }}
+          zIndex={12}
+          variant="ghost"
+          borderRadius="full"
+          w={{ base: "56px", md: "68px" }}
+          h={{ base: "56px", md: "68px" }}
+          minW={{ base: "56px", md: "68px" }}
+          bg="rgba(0,0,0,0.5)"
+          border={`1px solid ${themeColor}aa`}
+          boxShadow="0 2px 12px rgba(0,0,0,0.45)"
+          opacity={blocked ? 0.3 : 1}
+          sx={sinParcheAlPulsar}
+          _hover={blocked ? {} : { bg: "rgba(0,0,0,0.7)", borderColor: themeColor }}
+          _focus={{ boxShadow: "0 2px 12px rgba(0,0,0,0.45)" }}
+          _focusVisible={{ boxShadow: "0 2px 12px rgba(0,0,0,0.45)" }}
+          icon={
+            <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "34px", md: "42px" }} h={{ base: "34px", md: "42px" }}
+              fill={FONDO_PAGINA_BEIGE}
+              style={{ filter: `drop-shadow(0 0 5px ${themeColor}) drop-shadow(0 1px 2px rgba(0,0,0,0.8))` }}>
+              <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z" />
+            </Box>
+          }
+        />
+      )}
 
       {/* Espera de la foto de fondo (`esperarFondo`): loader a pantalla completa
           sobre un fondo del color de la disciplina, hasta que la foto cargue del

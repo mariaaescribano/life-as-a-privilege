@@ -40,6 +40,7 @@ export default function AccesoLectura() {
           localStorage.setItem("token", data.token);
           localStorage.setItem("img", "/img/icono/noImg.webp");
           olvidarPersona(); // una entrada nueva nunca mira a otra persona
+          try { localStorage.removeItem("isAdmin"); } catch { /* modo privado */ } // si el navegador era de María, entra como la persona, no como admin
           recordarSoloLectura(true);
           // Directo a SU Astrología (nunca pasa por /home): todo el recorrido está abierto para empezar por donde quiera.
           navigate("/camino/astrologia", { replace: true });

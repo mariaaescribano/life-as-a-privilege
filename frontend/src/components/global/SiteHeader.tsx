@@ -219,7 +219,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   // espacio de nadie no cuenta: tiene el suyo.
   const dentro = isPrivate && !isAdminPage && !premiumSolo && !esAdminDesbloqueado();
   // El nombre que María asignó a la cuenta, para la marca de dentro (nunca en el panel ni con el panel desbloqueado).
-  const nombrePersona = isPrivate && !isAdminPage && !esAdminDesbloqueado()
+  const nombrePersona = isPrivate && !isAdminPage && (!esAdminDesbloqueado() || sinCuenta)
     ? (localStorage.getItem("name") ?? "").trim().replace(/\s+/g, " ")
     : "";
 
@@ -403,7 +403,8 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
           identidad y tiene que verse siempre. El botón del menú va el último,
           pegado al margen derecho. */}
       <Flex align="center" gap={{ base: 3, md: 5 }}>
-        <SelectorIdioma compact={compact} />
+        {/* La persona de lectura (sin cuenta) no cambia de idioma: sin «ES · EN». */}
+        {!sinCuenta && <SelectorIdioma compact={compact} />}
 
         {isPrivate && !sinCuenta && (
           <Box

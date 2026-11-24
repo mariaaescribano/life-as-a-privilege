@@ -22,6 +22,8 @@ export const lectura = {
   "lectura.responsabilidad":
     "Si la hora de nacimiento que indico no es la correcta, la lectura saldrá distinta de la real y no me podré hacer responsable del resultado.",
   "lectura.acepto": "He leído el aviso y lo entiendo",
+  "lectura.consentimiento": "Doy mi consentimiento para que se traten mis datos de contacto y de nacimiento con el fin de elaborar mi carta astral.",
+  "lectura.error.consentimiento": "Tienes que dar tu consentimiento para continuar.",
   "lectura.pagar": "Continuar al pago →",
   "lectura.enviando": "Un momento…",
   "lectura.cancelado": "Has cancelado el pago. No se ha cobrado nada ni se ha enviado tu pedido.",

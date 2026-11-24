@@ -14,6 +14,7 @@ import { useAstrologiaProgreso } from "../../hooks/useAstrologiaProgreso";
 import { useAstroLeidos } from "../../hooks/useAstroLeidos";
 import { BotonLeido } from "../../components/metodo/BotonLeido";
 import { esMariaMirando } from "../../api/persona";
+import { esSoloLectura } from "../../api/sesion";
 import { astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon, FONDO_PAGINA_TURQUESA } from "../../GlobalVariables";
 import { useIdioma, useT } from "../../i18n";
 import type { ClaveTexto } from "../../i18n";
@@ -95,12 +96,6 @@ export default function MetodoAstrologiaExplicacion() {
                 </Flex>
               </Reveal>
 
-              <BarraAvance
-                nombre={t(`metodo.astro.explica.${sec.clave}` as ClaveTexto)}
-                hechas={sec.tarjetas.filter((c) => leidos.has(idLeido(sec, c.clave))).length}
-                total={sec.tarjetas.length}
-              />
-
               <Flex wrap="wrap" justify="center" gap={`${HUECO}px`} w="100%">
                 {sec.tarjetas.map((c, i) => (
                   <Reveal key={c.clave} inView amount={0.15} direction="up" distance={26} scaleFrom={0.95}
@@ -134,6 +129,7 @@ export default function MetodoAstrologiaExplicacion() {
         initialIndex={abierto?.i ?? 0}
         // «Leído», abajo de cada viñeta: marca esa mini ilustración y su tick sale en la tarjeta de fuera.
         pageExtra={(index) => {
+          if (esSoloLectura()) return null; // sin «Leído» para la persona de lectura
           const tarjeta = abierto?.sec.tarjetas[index];
           if (!abierto || !tarjeta) return null;
           const id = idLeido(abierto.sec, tarjeta.clave);
@@ -151,27 +147,5 @@ export default function MetodoAstrologiaExplicacion() {
       <IndiceAstrologia />
       <SiteFooter />
     </Box>
-  );
-}
-
-/**
- * La barra de avance de una sección: cuánto lleva leído («3/12»). Fuera de las cajas, así que en blanco y sin
- * sombra; fina y con la parte hecha rellenándose con suavidad al ir leyendo.
- */
-function BarraAvance({ nombre, hechas, total }: { nombre: string; hechas: number; total: number }) {
-  const pct = total > 0 ? Math.round((hechas / total) * 100) : 0;
-  return (
-    <Flex align="center" gap={4} w="100%" maxW="360px" mt={{ base: -3, md: -4 }}>
-      <Box
-        role="progressbar" aria-label={nombre} aria-valuemin={0} aria-valuemax={total} aria-valuenow={hechas}
-        flex="1" h="6px" borderRadius="full" bg={`${FONDO_PAGINA_TURQUESA}33`} overflow="hidden"
-      >
-        <Box h="100%" borderRadius="full" bg={FONDO_PAGINA_TURQUESA} w={`${pct}%`} transition="width 0.7s cubic-bezier(0.22,1,0.36,1)" />
-      </Box>
-      <Text color={FONDO_PAGINA_TURQUESA} fontSize={{ base: "sm", md: "md" }} fontWeight="600" letterSpacing="0.06em"
-            minW="3.2em" textAlign="right" sx={{ fontVariantNumeric: "tabular-nums" }}>
-        {hechas}/{total}
-      </Text>
-    </Flex>
   );
 }

@@ -15,6 +15,7 @@ import { useT } from "../../i18n";
 import { Casilla } from "../metodo/PagoDisciplinaModal";
 import { darConsentimientoSalud, tieneConsentimientoSalud } from "../../api/consentimientoSalud";
 import { personaActiva, esMariaMirando } from "../../api/persona";
+import { esSoloLectura } from "../../api/sesion";
 
 const BG = "#004a4a";
 const TXT = "#ffffff";
@@ -31,6 +32,8 @@ export function PuertaConsentimientoSalud() {
     // En el camino de María no se pregunta: el consentimiento solo puede darlo la
     // propia persona (el servidor también lo rechaza).
     if (personaActiva()) return;
+    // La persona de lectura astral (sin cuenta) solo lee su carta natal: no es un dato de salud y no se le pide nada.
+    if (esSoloLectura()) return;
     // María con el panel desbloqueado tampoco: el consentimiento es de las personas, no suyo.
     if (esMariaMirando()) return;
     let vivo = true;

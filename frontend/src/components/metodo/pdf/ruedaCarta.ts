@@ -6,14 +6,17 @@
 // pero usando las MISMAS piezas para que salga la misma carta:
 //   · gradoAVisualRad  → la geometría estándar (Ascendente a la izquierda, zodíaco uniforme)
 //   · SIGNO_TRAZOS     → los signos dibujados a trazo (nada de caracteres ♈)
-//   · COLOR_ASPECTO    → el color de cada tipo de aspecto
+//   · TODO en beige (el del fondo de la web): ni planetas ni aspectos llevan color
 //
 // Los planetas SÍ van con su símbolo (☉ ☽ ♀…): esos se ven bien y el canvas los
 // rasteriza tal cual antes de entrar en el PDF.
 // ─────────────────────────────────────────────────────────────────────────
 import { CUERPOS } from "../astrologiaData";
 import { SIGNO_TRAZOS, SIGNOS_ORDEN } from "../signosIconos";
-import { COLOR_ASPECTO, gradoAVisualRad, type CartaNatal } from "../CartaAstral3D/types";
+import { gradoAVisualRad, type CartaNatal } from "../CartaAstral3D/types";
+
+/** El beige de la web: el único color de la rueda. */
+const BEIGE = "#F0DCC0";
 
 /** Fuentes con los símbolos de planetas (las mismas que usa el resto de la app). */
 export const FUENTE_SIMBOLOS =
@@ -104,10 +107,10 @@ export function dibujarRuedaCarta(
     ctx.arc(cx, cy, r, 0, Math.PI * 2);
     ctx.stroke();
   };
-  circulo(rZodiacoExt, "rgba(255,255,255,0.62)", size * 0.0022);
-  circulo(rZodiacoInt, "rgba(255,255,255,0.42)", size * 0.0014);
-  circulo(rCasasInt, "rgba(255,255,255,0.5)", size * 0.0018);
-  circulo(rAspectos, "rgba(255,255,255,0.16)", size * 0.001);
+  circulo(rZodiacoExt, "rgba(240,220,192,0.62)", size * 0.0022);
+  circulo(rZodiacoInt, "rgba(240,220,192,0.42)", size * 0.0014);
+  circulo(rCasasInt, "rgba(240,220,192,0.5)", size * 0.0018);
+  circulo(rAspectos, "rgba(240,220,192,0.16)", size * 0.001);
 
   // ── Divisiones de signo + su glifo dibujado ──
   const inicioSigno: number[] = [];
@@ -117,7 +120,7 @@ export function dibujarRuedaCarta(
     const a = inicioSigno[i];
     const p1 = punto(cx, cy, a, rZodiacoInt);
     const p2 = punto(cx, cy, a, rZodiacoExt);
-    ctx.strokeStyle = "rgba(255,255,255,0.34)";
+    ctx.strokeStyle = "rgba(240,220,192,0.34)";
     ctx.lineWidth = size * 0.0012;
     ctx.beginPath();
     ctx.moveTo(p1.x, p1.y);
@@ -140,7 +143,7 @@ export function dibujarRuedaCarta(
     const escala = ladoGlifo / 24;
     ctx.scale(escala, escala);
     ctx.lineWidth = (size * 0.0026) / escala;
-    ctx.strokeStyle = "rgba(255,255,255,0.92)";
+    ctx.strokeStyle = "rgba(240,220,192,0.92)";
     ctx.translate(-12, -12);
     for (const d of SIGNO_TRAZOS[SIGNOS_ORDEN[i]] ?? []) ctx.stroke(new Path2D(d));
     ctx.restore();
@@ -153,7 +156,7 @@ export function dibujarRuedaCarta(
     const angular = h === 0 || h === 3 || h === 6 || h === 9; // AC, IC, DC, MC
     const p1 = punto(cx, cy, a, angular ? 0 : rCasasInt);
     const p2 = punto(cx, cy, a, rCasasInt + (rZodiacoInt - rCasasInt));
-    ctx.strokeStyle = angular ? "rgba(255,255,255,0.5)" : "rgba(255,255,255,0.22)";
+    ctx.strokeStyle = angular ? "rgba(240,220,192,0.5)" : "rgba(240,220,192,0.22)";
     ctx.lineWidth = angular ? size * 0.0016 : size * 0.001;
     ctx.beginPath();
     ctx.moveTo(p1.x, p1.y);
@@ -162,7 +165,7 @@ export function dibujarRuedaCarta(
   }
 
   ctx.font = `500 ${Math.round(size * 0.026)}px ${FUENTE_SERIF}`;
-  ctx.fillStyle = "rgba(255,255,255,0.6)";
+  ctx.fillStyle = "rgba(240,220,192,0.6)";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
   for (let h = 0; h < 12; h++) {
@@ -188,7 +191,7 @@ export function dibujarRuedaCarta(
     if (a1 == null || a2 == null) continue;
     const p1 = punto(cx, cy, a1, rAspectos);
     const p2 = punto(cx, cy, a2, rAspectos);
-    ctx.strokeStyle = COLOR_ASPECTO[asp.tipo] ?? "rgba(255,255,255,0.5)";
+    ctx.strokeStyle = BEIGE;
     ctx.globalAlpha = 0.72;
     ctx.lineWidth = size * 0.0016;
     ctx.beginPath();
@@ -212,7 +215,7 @@ export function dibujarRuedaCarta(
     // Marca del grado exacto, pegada al aro de las casas.
     const m1 = punto(cx, cy, real, rMarcaFuera);
     const m2 = punto(cx, cy, real, rMarcaDentro);
-    ctx.strokeStyle = cuerpo.color;
+    ctx.strokeStyle = BEIGE;
     ctx.globalAlpha = 0.9;
     ctx.lineWidth = size * 0.0018;
     ctx.beginPath();
@@ -233,8 +236,8 @@ export function dibujarRuedaCarta(
     }
 
     ctx.globalAlpha = 1;
-    ctx.fillStyle = cuerpo.color;
-    ctx.shadowColor = cuerpo.color;
+    ctx.fillStyle = BEIGE;
+    ctx.shadowColor = BEIGE;
     ctx.shadowBlur = size * 0.012;
     ctx.fillText(cuerpo.symbol, p.x, p.y);
     ctx.shadowBlur = 0;

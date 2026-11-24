@@ -46,6 +46,7 @@ const SCOPE_POR_RUTA: [string, string][] = [
 const SIEMPRE_ABIERTAS = [
   "/camino/astrologia",
   "/metodo/astrologia",
+  "/metodo/astrologia/origen",
   "/metodo/astrologia/bienvenida",
   "/metodo/astrologia/historia",
   "/metodo/astrologia/explicacion",

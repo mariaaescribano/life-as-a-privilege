@@ -153,6 +153,8 @@ function Caja({
   const cerrado = paso.bloqueado;
   const pulsable = !cerrado || entraAunCerrado;
   const puedeAbrir = !!admin && cerrado && admin.aplicaA(paso.n, seccion);
+  // En Astrología el número del paso va pequeño en un círculo arriba a la derecha (el título manda).
+  const numeroEnEsquina = nom === astrologiaNom;
 
   const abrirHasta = async () => {
     if (!admin || abriendo) return;
@@ -214,6 +216,7 @@ function Caja({
         opacity={cerrado ? 0.62 : 1}
         style={cerrado ? { filter: "saturate(0.6)" } : undefined}
       >
+        {(paso.inicio || !numeroEnEsquina) && (
         <Flex
           align="center"
           justify="center"
@@ -231,6 +234,7 @@ function Caja({
             <svg width="16" height="16" viewBox="0 0 24 24" fill={txt} aria-hidden><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z" /></svg>
           ) : paso.n}
         </Flex>
+        )}
         <Text
           color={txt}
           fontWeight="700"
@@ -244,14 +248,22 @@ function Caja({
           {paso.titulo}
         </Text>
       </Flex>
+      {/* Astrología: el número del paso, pequeño y en un círculo, arriba a la derecha. */}
+      {numeroEnEsquina && !paso.inicio && (
+        <Flex position="absolute" top="10px" right="10px" zIndex={2} align="center" justify="center"
+              w="26px" h="26px" borderRadius="full" border={`1.5px solid ${txt}`} color={txt}
+              fontSize="xs" fontWeight="700" lineHeight="1" aria-hidden>
+          {paso.n}
+        </Flex>
+      )}
       {cerrado && (
-        <Box position="absolute" top="12px" right="12px" zIndex={2} style={{ filter: `drop-shadow(0 0 4px ${bg})` }}>
+        <Box position="absolute" top="12px" {...(numeroEnEsquina ? { left: "12px" } : { right: "12px" })} zIndex={2} style={{ filter: `drop-shadow(0 0 4px ${bg})` }}>
           <Candado color={txt} />
         </Box>
       )}
       {/* Visto: el tick va en el mismo sitio que el candado. */}
       {!cerrado && paso.visto && !paso.inicio && (
-        <Box position="absolute" top="10px" right="10px" zIndex={2}>
+        <Box position="absolute" top="10px" {...(numeroEnEsquina ? { left: "10px" } : { right: "10px" })} zIndex={2}>
           <MarcaLeido tinta={txt} bg={bg} inline transparente />
         </Box>
       )}

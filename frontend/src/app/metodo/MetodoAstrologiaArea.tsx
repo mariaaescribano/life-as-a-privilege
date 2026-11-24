@@ -10,8 +10,9 @@ import { useAstrologiaProgreso } from "../../hooks/useAstrologiaProgreso";
 import { esMariaMirando } from "../../api/persona";
 import { ASTROLOGIA_TOTAL } from "../../components/metodo/astrologiaRecorrido";
 import { Reveal } from "../../components/global/Reveal";
+import { AstrologiaLoading } from "../../components/metodo/comicLoaders";
 import { AreaCasa } from "../../components/metodo/AreaCasa";
-import { API_URL, astrologiaBg, astrologiaTxt, AstrologiaIcon, FONDO_PAGINA_TURQUESA as T } from "../../GlobalVariables";
+import { API_URL, astrologiaBg, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
 import { useIdioma } from "../../i18n";
 
 /**
@@ -30,6 +31,8 @@ export default function MetodoAstrologiaArea() {
   useEffect(() => { window.scrollTo({ top: 0, behavior: "auto" }); }, [n]);
 
   // El texto de ESTA persona para cada área (lo escribe María en el editor de su carta, `data.areas`). null = aún leyéndose.
+  // Con el cómic de entrada abierto no se enseña el pie (si no, asoma antes que el contenido).
+  const [comicAbierto, setComicAbierto] = useState(true);
   const [propios, setPropios] = useState<Record<string, string> | null>(null);
   useEffect(() => {
     const userId = localStorage.getItem("userId");
@@ -47,6 +50,9 @@ export default function MetodoAstrologiaArea() {
   const texto = propio || global;
   const titulo = tituloArea(n);
   const { bloqueada, cargado } = useAstrologiaProgreso();
+
+  // Mientras se lee el texto de esta persona, solo el loader (nunca la página a medias con el pie a la vista).
+  if (propios === null) return <AstrologiaLoading />;
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
@@ -78,17 +84,12 @@ export default function MetodoAstrologiaArea() {
               la barra de progreso y la raya; y el texto grande y por pasos, sin scroll. `?demo` rellena con texto y
               planetas de ejemplo para ver el diseño sin tener nada escrito. */}
           <AreaCasa
-            n={n} texto={texto} pendiente={t("metodo.astro.area.pendiente")} demo={params.has("demo")} cargandoTexto={propios === null}
-            medio={(<>
-          {/* La raya: turquesa oscuro. */}
-          <Box w="100%" h="1px" bgGradient={`linear(to-r, ${T}00, ${T}99, ${T}00)`} />
-
-            </>)}
+            n={n} texto={texto} pendiente={t("metodo.astro.area.pendiente")} demo={params.has("demo")} cargandoTexto={propios === null} alCambiarComic={setComicAbierto}
           />
         </Flex>
       </Flex>
 
-      <SiteFooter />
+      {!comicAbierto && <SiteFooter />}
     </Box>
   );
 }

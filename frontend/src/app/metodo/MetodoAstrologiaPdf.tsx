@@ -28,7 +28,6 @@ import {
   nombreArchivoPdf,
   resumenPdf,
   type DatosPdfCarta,
-  type RetoPdf,
 } from "../../components/metodo/pdf/pdfCartaAstral";
 import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon, FONDO_PAGINA_TURQUESA } from "../../GlobalVariables";
 import { useT } from "../../i18n";
@@ -42,15 +41,13 @@ const DescargaIcon = () => (
 );
 
 interface Row {
-  link_carta?: string | null;
-  aspectos_texto?: Record<string, string> | null;
-  casas_texto?: Record<string, string> | null;
-  retos?: RetoPdf[] | null;
   fecha_nacimiento?: string | null;
   hora_nacimiento?: string | null;
   lugar?: string | null;
   region?: string | null;
   pais?: string | null;
+  /** Lo que María escribe para esa persona: la bienvenida, las Áreas (casas) y la despedida. */
+  data?: { bienvenida?: string; areas?: Record<string, string>; sintesis?: string } | null;
 }
 
 /** «1998-03-27» → «27 de marzo de 1998» (y si no es una fecha, se deja igual). */
@@ -90,14 +87,15 @@ export default function MetodoAstrologiaPdf() {
         const cabeceras = { headers: { Authorization: `Bearer ${token}` } };
         const rowRes = await axios.get<Row | null>(`${API_URL}/metodo-astrologia/${userId}`, cabeceras);
 
-        // Igual que el resto del recorrido: si la carta no está procesada
-        // (ni PDF de María ni puntos clave), aquí no hay nada que descargar.
-        const retos = Array.isArray(rowRes.data?.retos) ? rowRes.data!.retos! : [];
-        if (!rowRes.data?.link_carta && retos.length === 0) {
+        // Solo cuenta lo que María ha escrito para esta persona: sin textos suyos, no hay nada que descargar.
+        const d = rowRes.data?.data;
+        const hayTexto = !!d?.bienvenida?.trim() || !!d?.sintesis?.trim()
+          || Object.values(d?.areas ?? {}).some((x) => typeof x === "string" && x.trim());
+        if (!hayTexto) {
           navigate("/metodo/astrologia/introduccion");
           return;
         }
-        setRow({ ...rowRes.data, retos });
+        setRow(rowRes.data ?? null);
 
         const cartaRes = await axios.get<CartaNatal | null>(
           `${API_URL}/metodo-astrologia/carta-natal/${userId}`,
@@ -121,9 +119,9 @@ export default function MetodoAstrologiaPdf() {
     return {
       nombre: localStorage.getItem("name") ?? "",
       carta,
-      retos: (row?.retos ?? []).filter((r) => r?.texto?.trim()),
-      casasTexto: row?.casas_texto ?? {},
-      aspectosTexto: row?.aspectos_texto ?? {},
+      bienvenida: row?.data?.bienvenida ?? "",
+      areas: row?.data?.areas ?? {},
+      despedida: row?.data?.sintesis ?? "",
       nacimiento: {
         fecha: fechaBonita(row?.fecha_nacimiento),
         hora: row?.hora_nacimiento ?? null,

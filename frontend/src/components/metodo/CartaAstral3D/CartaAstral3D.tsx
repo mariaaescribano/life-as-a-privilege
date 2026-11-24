@@ -55,6 +55,9 @@ const CAM_Z = 7.3;
 // Aplica la posición de la cámara de forma REACTIVA. La prop `camera` de <Canvas>
 // solo se lee al montar, así que un cambio de CAM_Z no se reflejaba con HMR (y
 // tampoco si se quisiera animar). Este rig la fija en un efecto → siempre aplica.
+// La rueda (signos, casas y sus rayas) se dibuja en el beige del fondo de la página.
+const TINTE_RUEDA = "#F0DCC0";
+
 function CameraRig({ z }: { z: number }) {
   const camera = useThree((s) => s.camera);
   useEffect(() => {
@@ -374,11 +377,13 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
             innerRadius={R_ZODIAC_INNER}
             outerRadius={R_ZODIAC_OUTER}
             cusps={carta.cusps}
+            tinte={TINTE_RUEDA}
           />
           <HousesRing
             innerRadius={R_HOUSES_INNER}
             outerRadius={R_HOUSES_OUTER}
             cusps={carta.cusps}
+            tinte={TINTE_RUEDA}
           />
           <PlanetTicks marcas={marcas} radioMarca={R_HOUSES_INNER} delay={0.6} />
           <Aspects

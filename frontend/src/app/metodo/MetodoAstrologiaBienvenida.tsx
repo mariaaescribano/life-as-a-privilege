@@ -4,7 +4,6 @@ import { Box, Flex } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import { BotonPaso } from "../../components/metodo/BotonPaso";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { TextoMarcado } from "../../components/global/TextoMarcado";
@@ -75,16 +74,6 @@ export default function MetodoAstrologiaBienvenida() {
                 />
               </Box>
             </Box>
-          </Reveal>
-
-          <Reveal inView direction="up" distance={14} duration={0.6} w="100%">
-            <BotonPaso
-              label={t("metodo.astro.paso.historia")}
-              onClick={() => navigate("/metodo/astrologia/historia")}
-              nom={astrologiaNom}
-              color={astrologiaTxt}
-              bg={astrologiaBg}
-            />
           </Reveal>
         </Flex>
       </Flex>

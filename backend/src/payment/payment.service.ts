@@ -1110,6 +1110,7 @@ export class PaymentService {
         fecha: datos.fecha,
         hora: datos.hora,
         lugar: datos.lugar,
+        consentimiento: new Date().toISOString(), // cuándo marcó la casilla del consentimiento de datos (queda en Stripe)
       },
       success_url: `${frontendUrl}/astrologia/pedir?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${frontendUrl}/astrologia/pedir?servicio=${datos.servicio}&cancelado=1`,

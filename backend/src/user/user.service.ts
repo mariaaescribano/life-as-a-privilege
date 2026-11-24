@@ -496,6 +496,10 @@ export class UserService {
         .from('user').insert(fila).select('id, name, email');
       if (!error && rows?.length === 1) {
         const creada = rows[0] as { id: string; name: string; email: string };
+        // Si la crea María, el consentimiento de salud se da por hecho: se apunta ya, para que a la persona no le salga el popup.
+        const { error: errConsent } = await this.databaseService.getClient()
+          .from('recorrido_progreso').insert({ user_id: creada.id, disciplina: 'consentimiento-salud', paso_max: 1, updated_at: new Date().toISOString() });
+        if (errConsent) console.error('[crearCuentaAsesorada] no se pudo apuntar el consentimiento:', errConsent.message);
         // El correo NO sale solo: María lo escribe (con el usuario y la contraseña) y lo manda ella.
         return { id: creada.id, name: creada.name, email: creada.email };
       }

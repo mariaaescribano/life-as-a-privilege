@@ -132,6 +132,7 @@ const MetodoAstrologiaExplicacion = lazyConMetodo(() => import("./app/metodo/Met
 // (camino reducido, nov-2026) const MetodoAstrologiaApuntes = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaApuntes"));
 const MetodoAstrologiaSintesis = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaSintesis"));
 const MetodoAstrologiaBienvenida = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaBienvenida"));
+const MetodoAstrologiaOrigen = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaOrigen"));
 const MetodoAstrologiaCursos = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaCursos"));
 const AdminHome = lazy(() => import("./app/admin/AdminHome"));
 const AdminInicio = lazy(() => import("./app/admin/AdminInicio"));
@@ -519,6 +520,7 @@ export default function App({ antigua = false }: { antigua?: boolean } = {})
       <Route path="/metodo/astrologia/explicacion" element={<PrivateRoute><MetodoAstrologiaExplicacion /></PrivateRoute>} />
       {/* (camino nuevo, nov-2026) <Route path="/metodo/astrologia/trio" element={<PrivateRoute><MetodoAstrologiaTrio /></PrivateRoute>} /> */}
       {/* <Route path="/metodo/astrologia/apuntes" element={<PrivateRoute><MetodoAstrologiaApuntes /></PrivateRoute>} /> */}
+      <Route path="/metodo/astrologia/origen" element={<PrivateRoute><MetodoAstrologiaOrigen /></PrivateRoute>} />
       <Route path="/metodo/astrologia/bienvenida" element={<PrivateRoute><MetodoAstrologiaBienvenida /></PrivateRoute>} />
       <Route path="/metodo/astrologia/sintesis" element={<PrivateRoute><MetodoAstrologiaSintesis /></PrivateRoute>} />
       <Route path="/metodo/astrologia/cursos" element={<PrivateRoute><MetodoAstrologiaCursos /></PrivateRoute>} />

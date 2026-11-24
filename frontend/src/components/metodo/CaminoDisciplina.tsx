@@ -188,7 +188,7 @@ export default function CaminoDisciplina({ clave, userId, esAdmin = false, onCar
       secciones={secciones}
       // Todas las disciplinas empiezan con la casilla EMPEZAR (START): lleva a la entrada de la
       // disciplina (su cómic de origen). En Astrología, al saltarlo desemboca en la Introducción.
-      conInicio={clave === "metodo" ? "/metodo/astrologia/bienvenida" : CAMINO[clave].ruta}
+      conInicio={clave === "metodo" ? "/metodo/astrologia/origen" : CAMINO[clave].ruta}
       entraAunCerrado={esAdmin}
       admin={admin}
       onIr={async (ruta) => {

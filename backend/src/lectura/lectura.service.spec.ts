@@ -3,7 +3,7 @@ import { LecturaService } from './lectura.service';
 
 // La carta de la lectura: lo obligatorio del formulario y que confirmar el pago sea idempotente
 // (el verify y el webhook de Stripe llegan los dos y solo debe salir UN pedido, UNA cuenta y UN correo).
-const OK = { servicio: 'pdf_completo', nombre: 'Ana', email: 'Ana@X.com', fecha: '1990-05-17', hora: '07:30', lugar: 'Madrid', acepta: true };
+const OK = { servicio: 'pdf_completo', nombre: 'Ana', email: 'Ana@X.com', fecha: '1990-05-17', hora: '07:30', lugar: 'Madrid', acepta: true, consentimiento: true };
 
 function montar(opciones: { previo?: any; insertError?: any } = {}) {
   const tabla: any = {
@@ -35,6 +35,7 @@ describe('LecturaService.validar', () => {
   });
   it('exige aceptar el aviso de la hora', () => {
     expect(() => service.validar({ ...OK, acepta: false })).toThrow(BadRequestException);
+    expect(() => service.validar({ ...OK, consentimiento: false })).toThrow(BadRequestException);
   });
   it('rechaza servicio desconocido, hora mal escrita y fecha futura', () => {
     expect(() => service.validar({ ...OK, servicio: 'gratis' })).toThrow(BadRequestException);

@@ -28,6 +28,28 @@ const QUE_ES_ESTO = {
   ],
 };
 
+// POR AHORA los cursos de esta página no llevan su portada: llevan la foto de SU planeta (la misma de las ilustraciones),
+// y los cursos que no son de un planeta no salen (están comentados en esta lista). Clave = título del curso, sin acentos.
+const FOTO_PLANETA_DE_CURSO: Record<string, string> = {
+  "sol": "sol",
+  "la luna": "luna",
+  "mercurio": "mercurio",
+  "venus": "venus",
+  "marte": "marte",
+  "jupiter": "jupiter",
+  "saturno": "saturno",
+  "urano": "urano",
+  "neptuno": "neptuno",
+  "pluton": "pluton",
+  "quiron": "quiron",
+  "lilith": "lilith",
+  "los nodos": "nodoNorte",
+  // Sin planeta, no salen por ahora:
+  // "los signos y las casas"
+  // "los ascendentes"
+};
+const sinAcentos = (t: string) => t.normalize("NFD").replace(/[̀-ͯ]/g, "").trim().toLowerCase();
+
 /**
  * Última pantalla del Recorrido de Astrología: los cursos de Astrología, para
  * que el usuario los tenga a mano y pueda profundizar. Va después de la pantalla
@@ -78,9 +100,11 @@ export default function MetodoAstrologiaCursos() {
 
   // Cursos de Astrología ordenados por fecha de publicación (recientes primero),
   // igual que en la página de Cursos de la disciplina.
-  const cursos = [...(cursosData[astrologiaNom]?.cursos ?? [])].sort(
-    (a, b) => (b.createdAt ?? "").localeCompare(a.createdAt ?? ""),
-  );
+  const cursos = [...(cursosData[astrologiaNom]?.cursos ?? [])]
+    .sort((a, b) => (b.createdAt ?? "").localeCompare(a.createdAt ?? ""))
+    // Solo los de un planeta, y con la foto de ese planeta en vez de su portada.
+    .filter((c) => !!FOTO_PLANETA_DE_CURSO[sinAcentos(c.titulo ?? "")])
+    .map((c) => ({ ...c, foto: `/viñetas/astrologia/planetas/${FOTO_PLANETA_DE_CURSO[sinAcentos(c.titulo ?? "")]}.webp` }));
   // No mostramos la página hasta que las portadas de los cursos estén
   // descargadas, para que las tarjetas no se rellenen de golpe después.
   const fotosListas = usePrecargarImagenes(cursos.map((c) => c.foto));

@@ -17,7 +17,8 @@ import SiteFooter from "../../components/global/Footer";
 import { CaminoCargando } from "../../components/metodo/CaminoCargando";
 import { Contador, Reveal } from "../../components/global/Reveal";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
-import { rutaHome } from "../../api/sesion";
+import { esSoloLectura, rutaHome } from "../../api/sesion";
+import { useT } from "../../i18n";
 import { esMariaMirando, personaActiva } from "../../api/persona";
 import { claveDeSlug, porcentajeCamino } from "../../data/camino";
 import { disciplinaByKey } from "../../data/adminDisciplinas";
@@ -58,16 +59,20 @@ function BarraAvance({ pct, color }: { pct: number; color: string }) {
 export default function CaminoPagina() {
   const { disciplina } = useParams();
   const clave = claveDeSlug(disciplina);
+  const t = useT();
   const [cargando, setCargando] = useState(true);
   // Por dónde va la persona (el mismo progreso que mide «Tu camino» de /home).
   const [progreso, setProgreso] = useState<Record<string, number> | null>(null);
+  // La persona de lectura no tiene progreso que medir: ni barra ni llamada al servidor.
+  const sinProgreso = esSoloLectura();
   useEffect(() => {
+    if (sinProgreso) { setProgreso({}); return; }
     let cancel = false;
     axios.get<Record<string, number>>(`${API_URL}/recorrido-progreso`)
       .then((r) => { if (!cancel) setProgreso(r.data ?? {}); })
       .catch(() => { if (!cancel) setProgreso({}); });
     return () => { cancel = true; };
-  }, [disciplina]);
+  }, [disciplina, sinProgreso]);
 
   const listo = !cargando && progreso !== null;
   // EL ORDEN DE ENTRADA, uno detrás de otro: 0 = el header; 1 = la barra (cuando el header ha
@@ -101,7 +106,8 @@ export default function CaminoPagina() {
           <Reveal direction="down" distance={18} duration={0.7} w="100%" maxW="850px">
             <MetodoStepHeader
               icon={<disc.Icon size={{ base: "40px", md: "52px" }} />}
-              title={disc.nombre}
+              // La persona de lectura ve en el título a qué ha venido: «Astrología: Tu Carta Astral».
+              title={disciplina === "astrologia" && esSoloLectura() ? `${disc.nombre} - ${t("metodo.astro.paso.introduccion")}` : disc.nombre}
               nom={disc.nombre}
               bgColor={`${disc.bg}dd`}
               color={disc.txt}
@@ -111,7 +117,7 @@ export default function CaminoPagina() {
         )}
 
         {/* La barra de avance. Fuera de las cajas: turquesa oscuro y sin sombra de texto. */}
-        {listo && fase >= 1 && <Reveal direction="up" distance={14} duration={0.45} w="100%" display="flex" justifyContent="center"
+        {listo && !sinProgreso && fase >= 1 && <Reveal direction="up" distance={14} duration={0.45} w="100%" display="flex" justifyContent="center"
                 mt={{ base: 7, md: 9 }} mb={{ base: 9, md: 12 }}>
           <Flex align="center" gap={4} w={{ base: "86%", md: "460px" }} maxW="100%">
             <Box flex="1" minW={0}><BarraAvance pct={pct} color={FONDO_PAGINA_TURQUESA} /></Box>

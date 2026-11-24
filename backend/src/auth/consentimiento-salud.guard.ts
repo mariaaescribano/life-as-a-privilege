@@ -5,6 +5,7 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { DatabaseService } from '../database.service';
+import { esIdLectura } from '../lectura/lectura-id';
 
 /** Fila reservada de `recorrido_progreso` donde queda apuntado el consentimiento. */
 const CONSENTIMIENTO_SALUD = 'consentimiento-salud';
@@ -34,6 +35,10 @@ export class ConsentimientoSaludGuard implements CanActivate {
 
     const userId: string | undefined = req.user?.userId;
     if (!userId) throw new ForbiddenException('No autenticado');
+
+    // La persona de lectura astral (sin cuenta) solo guarda su carta natal, que no es un dato de salud, y no tiene fila en
+    // `recorrido_progreso` donde apuntar un consentimiento: no se le pide.
+    if (esIdLectura(userId)) return true;
 
     const { data, error } = await this.databaseService
       .getClient()

@@ -66,6 +66,7 @@ export default function PedirLectura() {
   const [region, setRegion] = useState("");
   const [ciudad, setCiudad] = useState("");
   const [acepta, setAcepta] = useState(false);
+  const [consiente, setConsiente] = useState(false);
   const [enviando, setEnviando] = useState(false);
   const [error, setError] = useState<string | null>(null);
   // Vuelta del pago: "cargando" | "ok" | "error"
@@ -94,10 +95,11 @@ export default function PedirLectura() {
     const fechaIso = dmaAIso(fecha);
     if (!fechaIso) { setError(t("lectura.error.datos")); return; }
     if (!acepta) { setError(t("lectura.error.aviso")); return; }
+    if (!consiente) { setError(t("lectura.error.consentimiento")); return; }
     setEnviando(true);
     try {
       const r = await axios.post(`${API_URL}/payment/lectura/checkout`, {
-        servicio, nombre: nombre.trim(), email: email.trim(), fecha: fechaIso, hora, lugar: [ciudad, region, pais].map((v) => v.trim()).join(", "), acepta,
+        servicio, nombre: nombre.trim(), email: email.trim(), fecha: fechaIso, hora, lugar: [ciudad, region, pais].map((v) => v.trim()).join(", "), acepta, consentimiento: consiente,
       });
       if (r.data?.url) { window.location.href = r.data.url; return; }
       setError(t("lectura.error.generico"));
@@ -207,6 +209,10 @@ export default function PedirLectura() {
                   <Flex as="label" align="center" gap={3} mt={4} cursor="pointer" fontWeight="600">
                     <input type="checkbox" checked={acepta} onChange={(e) => setAcepta(e.target.checked)} style={{ width: 18, height: 18, accentColor: T }} />
                     <Text as="span" fontSize={{ base: "md", md: "lg" }}>{t("lectura.acepto")}</Text>
+                  </Flex>
+                  <Flex as="label" align="center" gap={3} mt={3} cursor="pointer" fontWeight="600">
+                    <input type="checkbox" checked={consiente} onChange={(e) => setConsiente(e.target.checked)} style={{ width: 18, height: 18, accentColor: T }} />
+                    <Text as="span" fontSize={{ base: "md", md: "lg" }}>{t("lectura.consentimiento")}</Text>
                   </Flex>
                 </Box>
               </Reveal>

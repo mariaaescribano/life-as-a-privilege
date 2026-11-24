@@ -447,3 +447,23 @@ quien ya ha entrado). Arriba el header de la casa (icono + nombre con la foto de
 bajo él la barra de avance (`BarraAvance`: se llena con muelle, un brillo la recorre, el % cuenta con
 `Contador`); misma medida que «Tu camino». Astrología (`conInicio`) abre el camino con una casilla **START** (punta de «play» en
 vez de número) que lleva al primer paso.
+
+## 15. Astrología para la persona de lectura (nov-2026)
+
+- **Cómics de EMPEZAR (Origen, 13 viñetas) y de Historia:** visor inmersivo directo, sin página alrededor y **sin X**
+  (`soloFlechas`). Un botón grande con flecha arriba a la derecha (`siguienteArriba`) salta a la **siguiente pantalla**;
+  las flechas de los lados mueven las viñetas. La izquierda de la primera viñeta vuelve atrás (`alAnterior`).
+- **Áreas (casas):** el texto va todo seguido (letra `md/lg`), sin pasos ni scroll propio. Cada `---` abre una **caja
+  nueva con su fondo** y un separador (línea + disco con el icono de Astrología) que tapa un poco el borde de las dos
+  cajas. Entrada con `Reveal` (bruma + escala) y `PalabrasVivas`; el contenido se monta al cerrar el cómic de entrada.
+  Título: «Casa I - Tu nacimiento».
+- **Camino de Astrología:** el número del paso va pequeño en un círculo **arriba a la derecha** de cada cajita
+  (`numeroEnEsquina`); candado y tick pasan arriba a la izquierda. La persona de lectura no ve barra de progreso ni
+  ticks (ni se guardan).
+- **Pie:** `SiteFooter` asoma con un fundido tras ~1,8 s; mientras una página carga, solo se ve el fondo. En las Áreas no
+  se monta hasta cerrar el cómic.
+- **PDF de la carta:** solo lleva lo que María escribe para esa persona (bienvenida, casas, despedida). Todo en beige
+  (`#F0DCC0`), sin colores por planeta; encabezado en cada página (nombre + «con María Escribano» / icono + «Tu Carta
+  Astral») y número de página abajo a la derecha. Los símbolos y emojis del texto se pintan como imagen.
+- **Rueda de la carta:** anillos, signos y casas en beige.
+- **Cursos del último paso:** de momento llevan la foto de su planeta; los que no son de un planeta no salen.

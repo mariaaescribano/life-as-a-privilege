@@ -1,67 +1,39 @@
 // ─────────────────────────────────────────────────────────────────────────
-// «Toda mi carta» en un PDF que el usuario se lleva para siempre.
+// «Toda mi carta» en un PDF que la persona se lleva para siempre.
 //
-// Cómo está montado y por qué:
-//
-//  · PORTADA → un canvas (mapa de bits) con la foto del cielo de fondo y la
-//    rueda de la carta dibujada encima. La foto es CUADRADA y el A4 no, así que
-//    se pinta DOS VECES —la de abajo espejada— en vez de estirarla: se aprovecha
-//    entera y no se deforma nada.
-//  · EL RESTO DE PÁGINAS lleva la MISMA foto de fondo, doblada igual y con un
-//    velo oscuro encima para que el texto se lea. Se rasteriza UNA sola vez y se
-//    coloca en cada página con el mismo `alias`: jsPDF entonces la incrusta una
-//    única vez y las 60 páginas solo la referencian (si no, el archivo pesaría
-//    sesenta veces más).
-//  · EL TEXTO es texto de PDF de verdad (no imágenes). Así se puede buscar,
-//    copiar y se imprime nítido. Siempre en BLANCO: es lo único que se lee bien
-//    sobre la foto en todas las páginas.
-//
-//  · Una lectura por página, en el orden del cómic de los planetas: Ascendente,
-//    Sol, Luna, Mercurio… y de cada uno primero su signo y luego su casa. Si un
-//    texto no cabe en una página, sigue en la siguiente marcada «(continúa)»:
-//    nunca se corta ni se mezcla con la lectura siguiente.
-//  · Una ÚNICA línea horizontal por página, larga, justo debajo del título. Nada
-//    más corta el texto.
-//  · DELANTE del título va el SÍMBOLO del planeta de esa lectura (dos, en los
-//    aspectos), con su color y un poco de brillo; el título toma ese mismo color
-//    cuando hay un planeta solo. Va delante y no detrás porque así se lee como
-//    se nombra: el icono de la Luna y después «Luna en la Casa 7». El símbolo se
-//    rasteriza en un canvas porque los tipos internos del PDF no tienen glifo
-//    para ☉ ☽ ♀ — igual que en la rueda.
-//
-//  · MEDIR Y PINTAR SON EL MISMO CÓDIGO (`cabecera`, `repartirBloque`) llamado
-//    con `dibujar` a false o a true. Es lo que hace que los números del índice
-//    sean exactos: con dos cálculos separados, en cuanto uno se desviara un
-//    milímetro el índice empezaría a mentir.
-//
-//  · Los tipos de letra son los internos del PDF (Times), que solo entienden
-//    Latin-1: por eso `latin1()` traduce lo que se salga de ahí (comillas
-//    tipográficas, flechas, símbolos). Sin eso saldrían caracteres raros.
-//  · Del texto escrito a mano se respeta el **negrita** de Markdown: se pinta en
-//    negrita de verdad, y los asteriscos sueltos no se imprimen nunca. Como una
-//    misma línea mezcla redonda y negrita, las líneas se parten a mano midiendo
-//    palabra por palabra (`lineasDe`) en vez de con `splitTextToSize`.
+//  · SOLO lleva lo que María ha escrito para ella: la bienvenida, el texto de cada Casa y la despedida.
+//  · TODO en beige (el de la web): el texto, los símbolos de los planetas que haya dentro del texto, los emojis
+//    (a color, como son) y la rueda de la portada, sin colores por planeta ni por aspecto.
+//  · PORTADA → un canvas con la foto del cielo de fondo y la rueda de la carta dibujada encima (la foto se pinta dos
+//    veces, la de abajo espejada, para no deformarla). Las demás páginas llevan la misma foto con un velo oscuro,
+//    incrustada UNA sola vez (mismo `alias`).
+//  · EL TEXTO es texto de PDF de verdad (se puede buscar y copiar). Una lectura por página; si no cabe, sigue en la
+//    siguiente marcada «(continúa)». Una línea «---» del texto es una separación (un respiro, no se imprime).
+//  · MEDIR Y PINTAR SON EL MISMO CÓDIGO (`cabecera`, `repartirBloque`) llamado con `dibujar` a false o a true: así los
+//    números del índice son exactos.
+//  · Los tipos de letra son los internos del PDF (Times), que solo entienden Latin-1: `latin1()` traduce lo que se
+//    salga de ahí, y los símbolos (☉ ☽ ♄…) y emojis se pintan como imagen pequeña en la misma línea.
+//  · Se respeta el **negrita** del texto; los asteriscos sueltos no se imprimen.
 // ─────────────────────────────────────────────────────────────────────────
 import jsPDF from "jspdf";
-import { CUERPOS, ZODIAC_SIGNS, cuerpoByKey, type Cuerpo } from "../astrologiaData";
-import { textoEstatico } from "../../../data/astrologiaTextosApi";
-import { cargarOverridesRemotos } from "../../../data/astrologiaOverridesRemotos";
-import { ASPECTO_LABEL, aspectoKey, infoCasa } from "../casasAspectos";
-import type { Aspecto, CartaNatal } from "../CartaAstral3D/types";
-import { FUENTE_SIMBOLOS, dibujarRuedaCarta } from "./ruedaCarta";
+import type { CartaNatal } from "../CartaAstral3D/types";
+import { dibujarRuedaCarta } from "./ruedaCarta";
+import { rasterGlifo } from "../../../utils/pdf/glifosTexto";
+import { traducir } from "../../../i18n";
+import { AREAS_TOTAL, tituloArea } from "../astrologiaAreas";
 
-export interface RetoPdf {
-  id: string;
-  titulo: string;
-  texto: string;
-}
-
+/**
+ * Lo ÚNICO que lleva el PDF es lo que María escribe para esa persona en su editor: la bienvenida, el texto de cada
+ * Casa y la despedida. Nada se coge de otro sitio (ni arquetipos, ni puntos clave, ni textos de casas o aspectos).
+ */
 export interface DatosPdfCarta {
   nombre: string;
+  /** Solo para dibujar la rueda de la portada. */
   carta: CartaNatal;
-  retos: RetoPdf[];
-  casasTexto: Record<string, string>;
-  aspectosTexto: Record<string, string>;
+  bienvenida?: string;
+  /** El texto de cada Casa (1-12). */
+  areas: Record<string, string>;
+  despedida?: string;
   nacimiento?: { fecha?: string | null; hora?: string | null; lugar?: string | null };
   /** Foto del cielo para la portada y para el fondo de todas las páginas. */
   imgFondo?: string;
@@ -79,9 +51,9 @@ const MARGEN_INF = 20;
 const ANCHO_TEXTO = A4_W - MARGEN_X * 2;
 const Y_TOPE = A4_H - MARGEN_INF - 6;
 
-// ── Paleta: cielo de noche de fondo y TODO el texto en blanco ─────────────
+// ── Paleta: cielo de noche de fondo y TODO el texto (y los símbolos) en el beige de la web ──
 const FONDO: [number, number, number] = [7, 11, 26];
-const BLANCO: [number, number, number] = [255, 255, 255];
+const TINTA: [number, number, number] = [240, 220, 192];
 
 const INTERLINEA = 5.5;
 const TAM_CUERPO = 10.5;
@@ -89,16 +61,14 @@ const INTERLINEA_RESUMEN = 5.8;
 /** De puntos de tipografía a milímetros (72 pt = 1 pulgada = 25,4 mm). */
 const PT = 25.4 / 72;
 
-type Seccion = "Arquetipos" | "Puntos clave" | "Casas" | "Aspectos";
+type Seccion = "Bienvenida" | "Casas" | "Despedida";
 
 interface Bloque {
   seccion: Seccion;
   titulo: string;
-  /** Frase-resumen que el popup del recorrido muestra arriba, si la hay. */
+  /** Frase-resumen que se muestra arriba, si la hay (no se usa: solo va lo que escribe María). */
   resumen?: string;
   texto: string;
-  /** Planetas cuyo símbolo va al lado del título (dos, en los aspectos). */
-  cuerpos: string[];
   /** Página en la que empieza. Se rellena al paginar. */
   pagina?: number;
 }
@@ -110,9 +80,15 @@ type Estilo = "cuerpo" | "resumen";
 interface Ficha {
   t: string;
   bold: boolean;
+  /** Símbolo (☉ ☽ ♄…) o emoji: se pinta como imagen pequeña en la misma línea. */
+  glifo?: boolean;
 }
 /** Una línea ya colocada: sus fichas, o un hueco en blanco. */
 type Linea = { tipo: Estilo; fichas: Ficha[] } | { tipo: "hueco"; alto: number };
+
+/** Símbolos de planeta/punto y emojis. */
+const GLIFO = /[☉☽☾☿♀♁♂♃♄♅♆♇⚷⚸☊☋⚳⚴⚵⚶]|\p{Extended_Pictographic}/u;
+const GLIFO_PARTIR = /([☉☽☾☿♀♁♂♃♄♅♆♇⚷⚸☊☋⚳⚴⚵⚶]|\p{Extended_Pictographic})/u;
 
 /**
  * Traduce a Latin-1 lo que los tipos internos del PDF no saben pintar. Lo que no
@@ -128,17 +104,8 @@ function latin1(s: string): string {
   return s
     .replace(/[‘’“”–—… •→←↑↓✓✗]/g,
       (c) => mapa[c] ?? "")
-    // Fuera del Latin-1 imprimible no hay glifo posible: se descarta.
-    .replace(/[^\t\n\r\x20-\x7E¡-ÿ]/g, "");
-}
-
-/** Parte «resumen --- texto» en sus dos mitades (el popup usa ese separador). */
-function partirResumen(t: string): { resumen?: string; cuerpo: string } {
-  const trozos = t.split(/^[ \t]*---[ \t]*$/m);
-  if (trozos.length >= 2) {
-    return { resumen: trozos[0].trim() || undefined, cuerpo: trozos.slice(1).join("\n").trim() };
-  }
-  return { cuerpo: t.trim() };
+    // Fuera del Latin-1 imprimible no hay letra posible: se descarta, salvo los símbolos y emojis, que se pintan como imagen.
+    .replace(/[^\t\n\r\x20-\x7E¡-ÿ]/gu, (c) => (GLIFO.test(c) ? c : ""));
 }
 
 /**
@@ -161,7 +128,12 @@ function fichasDe(texto: string): Ficha[] {
   const fichas: Ficha[] = [];
   for (const tramo of tramos) {
     for (const p of tramo.t.replace(/\*/g, "").split(/(\s+)/)) {
-      if (p !== "") fichas.push({ t: p, bold: tramo.bold });
+      if (p === "") continue;
+      if (/^\s+$/.test(p)) { fichas.push({ t: p, bold: tramo.bold }); continue; }
+      for (const trozo of p.split(GLIFO_PARTIR)) {
+        if (trozo === "") continue;
+        fichas.push(GLIFO.test(trozo) ? { t: trozo, bold: tramo.bold, glifo: true } : { t: trozo, bold: tramo.bold });
+      }
     }
   }
   return fichas;
@@ -177,6 +149,9 @@ function fuente(doc: jsPDF, estilo: Estilo, bold: boolean) {
     doc.setFontSize(TAM_CUERPO);
   }
 }
+
+/** El lado (mm) de un símbolo o emoji metido en una línea: lo que mide la letra de ese momento. */
+const ladoGlifo = (doc: jsPDF) => doc.getFontSize() * PT * 1.1;
 
 /**
  * Parte las fichas en líneas que caben en `ancho`. Hace a mano lo que haría
@@ -195,7 +170,7 @@ function lineasDe(doc: jsPDF, fichas: Ficha[], estilo: Estilo, ancho: number): F
       continue;
     }
     fuente(doc, estilo, f.bold);
-    const w = doc.getTextWidth(f.t);
+    const w = f.glifo ? ladoGlifo(doc) : doc.getTextWidth(f.t);
     let wEsp = 0;
     if (espacio) {
       fuente(doc, estilo, espacio.bold);
@@ -222,137 +197,37 @@ function pintarLinea(doc: jsPDF, fichas: Ficha[], estilo: Estilo, y: number) {
   let x = MARGEN_X;
   for (const f of fichas) {
     fuente(doc, estilo, f.bold);
+    if (f.glifo) {
+      const lado = ladoGlifo(doc);
+      doc.addImage(rasterGlifo(f.t, TINTA), "PNG", x, y - lado * 0.82, lado, lado, `g-${f.t}`, "FAST");
+      x += lado;
+      continue;
+    }
     if (f.t.trim() !== "") {
-      doc.setTextColor(...BLANCO);
+      doc.setTextColor(...TINTA);
       doc.text(f.t, x, y);
     }
     x += doc.getTextWidth(f.t);
   }
 }
 
-// ── Color de cada planeta, subido de luz para que se lea sobre el cielo ────
-
-/** Mezcla el color con blanco hasta que tenga luz suficiente sobre el fondo. */
-function aclarar(hex: string): [number, number, number] {
-  const n = hex.replace("#", "");
-  const c = [0, 2, 4].map((i) => parseInt(n.slice(i, i + 2), 16));
-  const lum = (0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]) / 255;
-  const minimo = 0.62;
-  if (lum >= minimo) return [c[0], c[1], c[2]];
-  const k = (minimo - lum) / (1 - lum);
-  return c.map((v) => Math.round(v + (255 - v) * k)) as [number, number, number];
-}
-
-const aHex = ([r, g, b]: [number, number, number]) =>
-  `#${[r, g, b].map((v) => v.toString(16).padStart(2, "0")).join("")}`;
-
-/**
- * El símbolo del planeta rasterizado en un PNG con su brillo. Va en mapa de bits
- * porque los tipos internos del PDF no tienen glifo para ☉ ☽ ♀ ♂ — los mismos
- * símbolos y la misma fuente que la rueda de la portada.
- */
-function glifoPlaneta(cuerpo: Cuerpo): string {
-  const S = 128;
-  const canvas = document.createElement("canvas");
-  canvas.width = S;
-  canvas.height = S;
-  const ctx = canvas.getContext("2d")!;
-  const color = aHex(aclarar(cuerpo.color));
-
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-  ctx.font = `${Math.round(S * 0.66)}px ${FUENTE_SIMBOLOS}`;
-  ctx.shadowColor = color;
-  ctx.shadowBlur = S * 0.16;
-  ctx.fillStyle = color;
-  // Dos pasadas: la segunda asienta el brillo sin quemar el trazo.
-  ctx.fillText(cuerpo.symbol, S / 2, S * 0.52);
-  ctx.fillText(cuerpo.symbol, S / 2, S * 0.52);
-  return canvas.toDataURL("image/png");
-}
-
-/** Los glifos ya rasterizados de esta tirada (uno por planeta, no por página). */
-const glifos = new Map<string, string>();
-
 // ── Qué entra en el documento y en qué orden ───────────────────────────────
 
+/** Bienvenida, las doce Casas (en orden) y despedida: solo lo que María ha escrito para esa persona. */
 function construirBloques(d: DatosPdfCarta): Bloque[] {
   const bloques: Bloque[] = [];
+  const limpio = (t?: string | null) => (typeof t === "string" ? t.replace(/\r/g, "").trim() : "");
 
-  // Arquetipos: el orden de CUERPOS es el del cómic (Ascendente, Sol, Luna…) y
-  // de cada cuerpo va primero su signo y después su casa.
-  for (const cuerpo of CUERPOS) {
-    const pos = d.carta.planetas?.find((p) => p.planeta === cuerpo.key);
-    if (!pos) continue;
+  const bienvenida = limpio(d.bienvenida);
+  if (bienvenida) bloques.push({ seccion: "Bienvenida", titulo: traducir("metodo.astro.paso.bienvenida"), texto: bienvenida });
 
-    const signo = ZODIAC_SIGNS[pos.signoIdx]?.name;
-    if (signo) {
-      const t = textoEstatico(cuerpo.key, "signo", signo);
-      if (t?.trim()) {
-        const { resumen, cuerpo: body } = partirResumen(t);
-        bloques.push({
-          seccion: "Arquetipos",
-          titulo: `${cuerpo.label} en ${signo}`,
-          resumen,
-          texto: body,
-          cuerpos: [cuerpo.key],
-        });
-      }
-    }
-
-    if (cuerpo.conCasa && pos.casa) {
-      const t = textoEstatico(cuerpo.key, "casa", String(pos.casa));
-      if (t?.trim()) {
-        const { resumen, cuerpo: body } = partirResumen(t);
-        bloques.push({
-          seccion: "Arquetipos",
-          titulo: `${cuerpo.label} en la Casa ${pos.casa}`,
-          resumen,
-          texto: body,
-          cuerpos: [cuerpo.key],
-        });
-      }
-    }
+  for (let n = 1; n <= AREAS_TOTAL; n++) {
+    const texto = limpio(d.areas?.[String(n)]);
+    if (texto) bloques.push({ seccion: "Casas", titulo: tituloArea(n), texto });
   }
 
-  // Puntos clave: los escribe la administradora para esta carta concreta.
-  for (const reto of d.retos ?? []) {
-    if (!reto?.texto?.trim()) continue;
-    bloques.push({
-      seccion: "Puntos clave",
-      titulo: reto.titulo?.trim() || "Punto clave",
-      texto: reto.texto.trim(),
-      cuerpos: [],
-    });
-  }
-
-  // Casas.
-  for (let n = 1; n <= 12; n++) {
-    const texto = (d.casasTexto?.[String(n)] ?? "").trim();
-    if (!texto) continue;
-    const signo = infoCasa(d.carta.cusps ?? [], n)?.signo?.name;
-    bloques.push({
-      seccion: "Casas",
-      titulo: signo ? `Casa ${n} en ${signo}` : `Casa ${n}`,
-      texto,
-      cuerpos: [],
-    });
-  }
-
-  // Aspectos.
-  const nombreCuerpo = (k: string) => CUERPOS.find((c) => c.key === k)?.label ?? k;
-  for (const asp of d.carta.aspectos ?? []) {
-    const texto = (d.aspectosTexto?.[aspectoKey(asp as Aspecto)] ?? "").trim();
-    if (!texto) continue;
-    const etiqueta = ASPECTO_LABEL[asp.tipo] ?? "Aspecto";
-    bloques.push({
-      seccion: "Aspectos",
-      titulo: `${nombreCuerpo(asp.a)} ${etiqueta.toLowerCase()} ${nombreCuerpo(asp.b)}`,
-      texto,
-      cuerpos: [asp.a, asp.b],
-    });
-  }
-
+  const despedida = limpio(d.despedida);
+  if (despedida) bloques.push({ seccion: "Despedida", titulo: traducir("metodo.astro.paso.sintesis"), texto: despedida });
   return bloques;
 }
 
@@ -377,19 +252,58 @@ function filete(doc: jsPDF, y: number, color: [number, number, number]) {
   doc.line(MARGEN_X, y, MARGEN_X + ANCHO_TEXTO, y);
 }
 
-function pie(doc: jsPDF, pagina: number, seccion: string) {
-  doc.setFont("times", "normal");
-  doc.setFontSize(8);
-  doc.setTextColor(...BLANCO);
-  doc.text(latin1(seccion), MARGEN_X, A4_H - 10);
-  doc.text(String(pagina), A4_W - MARGEN_X, A4_H - 10, { align: "right" });
+/** El nombre de la persona, para el encabezado de cada página. Lo fija `generarPdfCarta`. */
+let nombrePdf = "";
+
+/** El icono de Astrología (el de los headers de la web) en un PNG beige. */
+let iconoAstro: string | null = null;
+function iconoAstrologia(): string {
+  if (iconoAstro) return iconoAstro;
+  const S = 128;
+  const c = document.createElement("canvas");
+  c.width = S;
+  c.height = S;
+  const ctx = c.getContext("2d")!;
+  // El trazado viene en un lienzo de 960 con el origen abajo (viewBox «0 -960 960 960»).
+  ctx.setTransform(S / 960, 0, 0, S / 960, 0, S);
+  ctx.fillStyle = "#F0DCC0";
+  ctx.fill(new Path2D("m354-287 126-76 126 77-33-144 111-96-146-13-58-136-58 135-146 13 111 97-33 143ZM233-120l65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Zm457-560 21-89-71-59 94-8 36-84 36 84 94 8-71 59 21 89-80-47-80 47ZM480-481Z"));
+  iconoAstro = c.toDataURL("image/png");
+  return iconoAstro;
 }
 
-/** El color del título: el del planeta si la lectura es de uno solo. */
-function colorTitulo(b: Bloque): [number, number, number] {
-  if (b.cuerpos.length !== 1) return BLANCO;
-  const c = cuerpoByKey(b.cuerpos[0]);
-  return c ? aclarar(c.color) : BLANCO;
+/**
+ * El encabezado de cada página (la portada no lleva): arriba a la izquierda el nombre de la persona y, debajo, «con
+ * María Escribano»; arriba a la derecha el icono de Astrología y «Tu Carta Astral».
+ */
+function encabezado(doc: jsPDF) {
+  const marca = traducir("header.marca").toLowerCase().replace(/(^|\s)\p{L}/gu, (m) => m.toUpperCase());
+  doc.setTextColor(...TINTA);
+  if (nombrePdf) {
+    doc.setFont("times", "bold");
+    doc.setFontSize(10.5);
+    doc.text(latin1(nombrePdf).toUpperCase(), MARGEN_X, 12.5, { charSpace: 0.5 });
+  }
+  doc.setFont("times", "italic");
+  doc.setFontSize(8.5);
+  doc.text(latin1(`${traducir("header.con")} ${marca}`), MARGEN_X, 17);
+
+  const titulo = latin1(traducir("metodo.astro.paso.introduccion"));
+  doc.setFont("times", "bold");
+  doc.setFontSize(10.5);
+  doc.text(titulo, A4_W - MARGEN_X, 13.5, { align: "right" });
+  const lado = 6.2;
+  const x = A4_W - MARGEN_X - doc.getTextWidth(titulo) - 2.2 - lado;
+  doc.addImage(iconoAstrologia(), "PNG", x, 13.5 - lado * 0.82, lado, lado, "icono-astro", "FAST");
+}
+
+/** El pie de cada página: el encabezado y, abajo a la derecha, el número de página. */
+function pie(doc: jsPDF, pagina: number, _seccion: string) {
+  encabezado(doc);
+  doc.setFont("times", "normal");
+  doc.setFontSize(9);
+  doc.setTextColor(...TINTA);
+  doc.text(String(pagina), A4_W - MARGEN_X, A4_H - 10, { align: "right" });
 }
 
 /**
@@ -397,53 +311,21 @@ function colorTitulo(b: Bloque): [number, number, number] {
  * altura: medir y pintar comparten este código a propósito.
  */
 function cabecera(doc: jsPDF, b: Bloque, continua: boolean, dibujar: boolean): number {
-  // Arriba va el título y nada más: ni sección ni antetítulo (la sección ya está
-  // en el pie y en el índice).
+  // Arriba va el título y nada más (la sección ya está en el pie y en el índice).
   let y = MARGEN_SUP + 4;
-  const color = colorTitulo(b);
-
   const tam = continua ? 15 : 19;
   doc.setFont("times", "bold");
   doc.setFontSize(tam);
 
-  // Los símbolos van DELANTE del título: primero el icono de la Luna y después
-  // «Luna en la Casa 7». Se lee como se nombra.
-  //
-  // El cálculo va aquí ARRIBA, fuera del `if (dibujar)`, y no es un detalle: el
-  // hueco de los iconos le quita ancho al título, así que puede cambiar en
-  // cuántas líneas se parte. Si solo lo supiera la pasada que pinta, la que mide
-  // devolvería otra altura y los números del índice empezarían a mentir.
-  const lado = tam * PT * 1.15;
-  const presentes = b.cuerpos.filter((k) => glifos.has(k));
-  const hueco = lado * 0.18;
-  // `glifoPlaneta` dibuja el símbolo en el 66% central de su cuadro, así que cada
-  // cuadro trae un 17% de aire a cada lado. Se descuenta las dos veces: el cuadro
-  // se corre a la izquierda para que sea el DIBUJO —y no su caja— el que cuadre
-  // con el margen de la página, y el título se pega al dibujo, no a la caja.
-  const aire = lado * 0.17;
-  const anchoDibujado = presentes.length * lado + (presentes.length - 1) * hueco - aire * 2;
-  // Separación entre el último icono y la primera letra: un espacio y pico.
-  const anchoGlifos = presentes.length ? anchoDibujado + lado * 0.25 : 0;
-
   const titulo = latin1(continua ? `${b.titulo} (continúa)` : b.titulo);
-  const lineas: string[] = doc.splitTextToSize(titulo, ANCHO_TEXTO - anchoGlifos);
+  const lineas: string[] = doc.splitTextToSize(titulo, ANCHO_TEXTO);
   if (dibujar) {
-    doc.setTextColor(...color);
-    // Si el título se parte en dos, la segunda línea arranca donde la primera
-    // (no debajo del icono): el icono queda colgando a la izquierda del bloque.
-    doc.text(lineas, MARGEN_X + anchoGlifos, y);
-
-    let x = MARGEN_X - aire;
-    for (const k of presentes) {
-      // Alto del cuadro: el 82% por encima de la línea base deja el dibujo
-      // óptimamente centrado con las mayúsculas del título.
-      doc.addImage(glifos.get(k)!, "PNG", x, y - lado * 0.82, lado, lado, `glifo-${k}`, "FAST");
-      x += lado + hueco;
-    }
+    doc.setTextColor(...TINTA);
+    doc.text(lineas, MARGEN_X, y);
   }
   y += lineas.length * (continua ? 6.5 : 8);
 
-  if (dibujar) filete(doc, y, color);
+  if (dibujar) filete(doc, y, TINTA);
   // Aire generoso entre la raya y la primera línea: la página respira.
   return y + 16;
 }
@@ -468,6 +350,11 @@ function repartirBloque(doc: jsPDF, b: Bloque): { continua: boolean; lineas: Lin
     .map((p) => p.replace(/\n/g, " ").trim())
     .filter(Boolean);
   parrafos.forEach((p, i) => {
+    // Una línea «---» del texto es una separación: no se imprime, deja un respiro más grande.
+    if (/^-{3,}$/.test(p)) {
+      cola.push({ tipo: "hueco", alto: INTERLINEA * 1.6 });
+      return;
+    }
     for (const l of lineasDe(doc, fichasDe(latin1(p)), "cuerpo", ANCHO_TEXTO)) {
       cola.push({ tipo: "cuerpo", fichas: l });
     }
@@ -542,11 +429,11 @@ function indice(
     doc.setFont("times", "bold");
     doc.setFontSize(22);
     if (dibujar) {
-      doc.setTextColor(...BLANCO);
+      doc.setTextColor(...TINTA);
       doc.text(latin1("Índice"), MARGEN_X, y);
     }
     y += 5;
-    if (dibujar) filete(doc, y, BLANCO);
+    if (dibujar) filete(doc, y, TINTA);
     y += 9;
   };
 
@@ -571,7 +458,7 @@ function indice(
       if (dibujar) {
         doc.setFont("times", "bold");
         doc.setFontSize(11);
-        doc.setTextColor(...BLANCO);
+        doc.setTextColor(...TINTA);
         doc.text(latin1(b.seccion.toUpperCase()), MARGEN_X, y);
       }
       y += 5.6;
@@ -580,7 +467,7 @@ function indice(
     if (dibujar) {
       doc.setFont("times", "normal");
       doc.setFontSize(10);
-      doc.setTextColor(...BLANCO);
+      doc.setTextColor(...TINTA);
       const titulo = latin1(b.titulo);
       const num = String(b.pagina ?? "");
       doc.text(titulo, MARGEN_X + 4, y);
@@ -703,7 +590,7 @@ async function pintarPortada(d: DatosPdfCarta): Promise<HTMLCanvasElement> {
     const mandala = await cargarImagen(IMG_MANDALA);
     const lado = W * 0.072;
     ctx.save();
-    ctx.shadowColor = "rgba(255,255,255,0.45)";
+    ctx.shadowColor = "rgba(240,220,192,0.45)";
     ctx.shadowBlur = W * 0.014;
     ctx.drawImage(mandala, (W - lado) / 2, H * 0.075 - lado / 2, lado, lado);
     ctx.restore();
@@ -712,15 +599,15 @@ async function pintarPortada(d: DatosPdfCarta): Promise<HTMLCanvasElement> {
   }
 
   ctx.textAlign = "center";
-  ctx.fillStyle = "#ffffff";
+  ctx.fillStyle = "#F0DCC0";
   ctx.font = `600 ${Math.round(W * 0.062)}px 'EB Garamond', Georgia, serif`;
-  ctx.shadowColor = "rgba(255,255,255,0.5)";
+  ctx.shadowColor = "rgba(240,220,192,0.5)";
   ctx.shadowBlur = W * 0.02;
   ctx.fillText("Tu carta astral", W / 2, H * 0.14);
   ctx.shadowBlur = 0;
 
   if (d.nombre) {
-    ctx.fillStyle = "#ffd97d";
+    ctx.fillStyle = "#F0DCC0";
     ctx.font = `500 ${Math.round(W * 0.032)}px 'EB Garamond', Georgia, serif`;
     ctx.fillText(d.nombre, W / 2, H * 0.182);
   }
@@ -731,12 +618,12 @@ async function pintarPortada(d: DatosPdfCarta): Promise<HTMLCanvasElement> {
     .map((p) => (p ?? "").trim())
     .filter(Boolean);
   if (partes.length) {
-    ctx.fillStyle = "rgba(255,255,255,0.84)";
+    ctx.fillStyle = "rgba(240,220,192,0.84)";
     ctx.font = `400 ${Math.round(W * 0.023)}px 'EB Garamond', Georgia, serif`;
     ctx.fillText(partes.join("   ·   "), W / 2, H * 0.9);
   }
 
-  ctx.fillStyle = "rgba(255,255,255,0.5)";
+  ctx.fillStyle = "rgba(240,220,192,0.5)";
   ctx.font = `400 ${Math.round(W * 0.017)}px 'EB Garamond', Georgia, serif`;
   ctx.fillText("E L   M A P A", W / 2, H * 0.945);
 
@@ -753,21 +640,9 @@ export async function generarPdfCarta(
   d: DatosPdfCarta,
   onPaso?: (hecho: number, total: number) => void,
 ): Promise<Blob> {
-  // Los textos editados desde /admin viven en la BD: que el PDF lleve los últimos.
-  await cargarOverridesRemotos();
-
+  nombrePdf = d.nombre || "";
   const bloques = construirBloques(d);
   const doc = new jsPDF({ unit: "mm", format: "a4", orientation: "portrait", compress: true });
-
-  // El símbolo de cada planeta que aparezca, rasterizado una sola vez.
-  glifos.clear();
-  for (const b of bloques) {
-    for (const k of b.cuerpos) {
-      if (glifos.has(k)) continue;
-      const cuerpo = cuerpoByKey(k);
-      if (cuerpo) glifos.set(k, glifoPlaneta(cuerpo));
-    }
-  }
 
   // 1) Paginación en seco (sin dibujar nada): cuántas páginas ocupa el índice y
   //    en qué página empieza cada lectura.

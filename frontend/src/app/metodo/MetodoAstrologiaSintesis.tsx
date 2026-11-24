@@ -10,6 +10,7 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { TextoMarcado } from "../../components/global/TextoMarcado";
 import { glowHeader } from "../../components/metodo/FotoBox";
 import { Reveal } from "../../components/global/Reveal";
+import { AstrologiaLoading } from "../../components/metodo/comicLoaders";
 import { useAstrologiaProgreso } from "../../hooks/useAstrologiaProgreso";
 import { esMariaMirando } from "../../api/persona";
 import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon, FONDO_PAGINA_TURQUESA } from "../../GlobalVariables";
@@ -33,15 +34,20 @@ export default function MetodoAstrologiaSintesis() {
 
   // La Síntesis de su carta (escrita en el editor de la carta, guardada en `data.sintesis`).
   const [sintesis, setSintesis] = useState("");
+  const [listo, setListo] = useState(false);
   useEffect(() => {
     const userId = localStorage.getItem("userId");
-    if (!userId) return;
+    if (!userId) { setListo(true); return; }
     let vivo = true;
     axios.get<{ data?: { sintesis?: string } } | null>(`${API_URL}/metodo-astrologia/${userId}`)
       .then((r) => { if (vivo) setSintesis(typeof r.data?.data?.sintesis === "string" ? r.data.data.sintesis.trim() : ""); })
-      .catch(() => { /* sin datos, sin caja */ });
+      .catch(() => { /* sin datos, sin caja */ })
+      .finally(() => { if (vivo) setListo(true); });
     return () => { vivo = false; };
   }, []);
+
+  // Hasta tener su texto, solo el loader (nunca la página a medias con el pie a la vista).
+  if (!listo) return <AstrologiaLoading />;
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">

@@ -9,6 +9,7 @@
 // línea en blanco. Mientras un área no tenga texto, su página enseña el aviso «pendiente».
 // ─────────────────────────────────────────────────────────────────────────
 import { traducir } from "../../i18n";
+import { palabraCasa } from "./astrologiaNombres";
 import type { ClaveTexto } from "../../i18n";
 
 export const AREAS_TOTAL = 12;
@@ -38,6 +39,6 @@ export const rutaArea = (n: number) => `/metodo/astrologia/area/${n}`;
 /** El número de paso del camino que le toca al área `n` (la 1 es el paso 5). */
 export const pasoDeArea = (n: number) => PASOS_ANTES_DE_AREAS + n;
 
-/** «I Mi nacimiento»: el número romano a la izquierda y el nombre, sin la palabra «Área» ni punto, en el idioma activo. */
+/** «Casa I - Tu nacimiento»: la casa (en romano) y el nombre del área, en el idioma activo. */
 export const tituloArea = (n: number): string =>
-  `${ROMANOS[n - 1]} ${traducir(`metodo.astro.area.${n}.nombre` as ClaveTexto)}`;
+  `${palabraCasa()} ${ROMANOS[n - 1]} - ${traducir(`metodo.astro.area.${n}.nombre` as ClaveTexto)}`;

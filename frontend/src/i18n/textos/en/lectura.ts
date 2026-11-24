@@ -19,6 +19,8 @@ export const lectura = {
   "lectura.responsabilidad":
     "If the time of birth I give is not the correct one, the reading will differ from the real one and I will not be able to take responsibility for the result.",
   "lectura.acepto": "I have read the notice and I understand it",
+  "lectura.consentimiento": "I consent to my contact and birth details being processed in order to prepare my birth chart.",
+  "lectura.error.consentimiento": "You need to give your consent to continue.",
   "lectura.pagar": "Continue to payment →",
   "lectura.enviando": "One moment…",
   "lectura.cancelado": "You cancelled the payment. Nothing has been charged and your order has not been sent.",

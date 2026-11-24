@@ -43,7 +43,7 @@ export class LecturaService {
   }
 
   /** Valida lo que manda el formulario (TODOS los datos de nacimiento son obligatorios) y lo deja limpio. */
-  validar(body: Partial<Record<keyof DatosLectura | 'acepta', unknown>>): DatosLectura {
+  validar(body: Partial<Record<keyof DatosLectura | 'acepta' | 'consentimiento', unknown>>): DatosLectura {
     const txt = (v: unknown, max: number) => (typeof v === 'string' ? v.trim().slice(0, max) : '');
     const servicio = txt(body?.servicio, 40);
     const nombre = txt(body?.nombre, 120);
@@ -67,6 +67,8 @@ export class LecturaService {
     }
     if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(hora)) throw new BadRequestException('La hora de nacimiento no es válida');
     if (body?.acepta !== true) throw new BadRequestException('Tienes que aceptar el aviso sobre la hora de nacimiento');
+    // Casilla del consentimiento para tratar sus datos: sin ella no se pide la carta. (Si la crea María a mano se da por hecho.)
+    if (body?.consentimiento !== true) throw new BadRequestException('Tienes que dar tu consentimiento para tratar tus datos');
     return { servicio, nombre, email, fecha, hora, lugar };
   }
 
@@ -78,6 +80,7 @@ export class LecturaService {
     const m = session.metadata ?? {};
     const tarifa = findLectura(m.servicio);
     if (!tarifa || !m.nombre || !m.email || !m.fecha || !m.hora || !m.lugar) return { ok: false };
+    // El consentimiento de datos quedó apuntado en la propia sesión de Stripe al marcar la casilla (metadata `consentimiento`).
 
     const client = this.db.getClient();
     const { data: previo } = await client.from(TABLE).select('id, nombre').eq('stripe_session_id', session.id).maybeSingle();
@@ -137,7 +140,7 @@ export class LecturaService {
    * manda ella con «Enviar acceso» cuando la carta esté escrita.
    */
   async crearManual(body: Partial<Record<keyof DatosLectura, unknown>>) {
-    const d = this.validar({ ...body, acepta: true });
+    const d = this.validar({ ...body, acepta: true, consentimiento: true });
     const tarifa = findLectura(d.servicio)!;
     const client = this.db.getClient();
     const { data: ins, error } = await client

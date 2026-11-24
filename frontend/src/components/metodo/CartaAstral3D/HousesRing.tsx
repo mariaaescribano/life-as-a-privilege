@@ -38,7 +38,7 @@ function buildTexture(cusps: number[]): THREE.CanvasTexture {
 
   ctx.clearRect(0, 0, size, size);
 
-  ctx.strokeStyle = "rgba(255,255,255,0.30)";
+  ctx.strokeStyle = "rgba(255,255,255,0.8)";
   ctx.lineWidth = 1.2;
   ctx.beginPath();
   ctx.arc(cx, cy, outerR, 0, Math.PI * 2);
@@ -52,7 +52,7 @@ function buildTexture(cusps: number[]): THREE.CanvasTexture {
   for (let i = 0; i < 12; i++) {
     const a = ang[i];
     const isAngular = i === 0 || i === 3 || i === 6 || i === 9;
-    ctx.strokeStyle = isAngular ? "rgba(255,255,255,0.7)" : "rgba(255,255,255,0.22)";
+    ctx.strokeStyle = isAngular ? "rgba(255,255,255,1)" : "rgba(255,255,255,0.5)";
     ctx.lineWidth = isAngular ? 2 : 1;
     ctx.beginPath();
     ctx.moveTo(cx + Math.cos(a) * innerR, cy - Math.sin(a) * innerR);
@@ -73,7 +73,7 @@ function buildTexture(cusps: number[]): THREE.CanvasTexture {
     const y = cy - Math.sin(mid) * midR;
     ctx.shadowColor = "rgba(255,255,255,0.35)";
     ctx.shadowBlur = 4;
-    ctx.fillStyle = "rgba(255,255,255,0.55)";
+    ctx.fillStyle = "rgba(255,255,255,0.95)";
     ctx.fillText(String(i + 1), x, y);
   }
 

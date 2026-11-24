@@ -61,7 +61,7 @@ function buildTexture(cusps: number[], innerRatio: number): THREE.CanvasTexture 
 
   ctx.clearRect(0, 0, size, size);
 
-  ctx.strokeStyle = "rgba(255,255,255,0.55)";
+  ctx.strokeStyle = "rgba(255,255,255,0.95)";
   ctx.lineWidth = 2;
   ctx.beginPath();
   ctx.arc(cx, cy, outerR, 0, Math.PI * 2);
@@ -83,7 +83,7 @@ function buildTexture(cusps: number[], innerRatio: number): THREE.CanvasTexture 
     const y1 = cy - Math.sin(a) * innerR;
     const x2 = cx + Math.cos(a) * outerR;
     const y2 = cy - Math.sin(a) * outerR;
-    ctx.strokeStyle = "rgba(255,255,255,0.32)";
+    ctx.strokeStyle = "rgba(255,255,255,0.6)";
     ctx.lineWidth = 1.2;
     ctx.beginPath();
     ctx.moveTo(x1, y1);
@@ -114,7 +114,7 @@ function buildTexture(cusps: number[], innerRatio: number): THREE.CanvasTexture 
     ctx.translate(0, GLYPH_INNER_OFFSET);
     ctx.shadowColor = "rgba(255,255,255,0.14)";
     ctx.shadowBlur = 1.5;
-    ctx.strokeStyle = "rgba(255,255,255,0.4)";
+    ctx.strokeStyle = "rgba(255,255,255,1)";
     // El icono viene en un lienzo de 24×24: se escala y se centra en el punto.
     const escala = ICONO_LADO / 24;
     ctx.scale(escala, escala);

@@ -19,6 +19,12 @@ const SiteFooter = () => {
   return (
     <Box
       as="footer"
+      // El pie asoma un poco DESPUÉS de la página: mientras el contenido carga o entra, solo se ve el fondo.
+      sx={{
+        animation: "pieAsoma 0.7s ease 1.8s both",
+        "@keyframes pieAsoma": { from: { opacity: 0 }, to: { opacity: 1 } },
+        "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+      }}
       borderTop={`1px solid ${T}26`}
       px={{ base: 6, md: 16 }}
       py={{ base: 8, md: 10 }}

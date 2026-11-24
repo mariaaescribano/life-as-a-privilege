@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { API_URL } from "../GlobalVariables";
 import { rutaVista, type CaminoKey } from "../data/camino";
+import { esSoloLectura } from "../api/sesion";
 
 // Las páginas del camino que la persona ya ha visto (el tick de las cajitas).
 // Viven en la tabla `camino_visto`; además cada navegador las recuerda en localStorage, para
@@ -18,6 +19,8 @@ const apuntadas = new Set<string>(); // lo ya enviado en esta sesión
 
 /** Apunta que la persona ha visto esta página. Llamar desde un efecto de ruta. */
 export function marcarVisto(clave: CaminoKey, pathname: string): void {
+  // La persona de lectura no deja rastro de lo que ha visto: ni tick ni llamada al servidor.
+  if (esSoloLectura()) return;
   const ruta = rutaVista(pathname);
   const id = `${localStorage.getItem("userId")}|${clave}|${ruta}`;
   if (apuntadas.has(id)) return;
@@ -32,8 +35,9 @@ export function marcarVisto(clave: CaminoKey, pathname: string): void {
 
 /** Rutas vistas de una disciplina. `userId`: la persona que mira María (sin él, la sesión propia). */
 export function useCaminoVistos(clave: CaminoKey, userId?: string): Set<string> {
-  const [vistas, setVistas] = useState<Set<string>>(() => new Set(userId ? [] : (leerLocal()[clave] ?? [])));
+  const [vistas, setVistas] = useState<Set<string>>(() => new Set(userId || esSoloLectura() ? [] : (leerLocal()[clave] ?? [])));
   useEffect(() => {
+    if (esSoloLectura()) return; // sin ticks, sin llamada al servidor
     let cancel = false;
     axios.get<Record<string, string[]>>(`${API_URL}/recorrido-progreso/vistos`)
       .then((r) => {

@@ -102,6 +102,8 @@ interface IntroComicModalProps {
   fotoMagica?: boolean;
   /** Solo flechas: sin la X ni Escape ni clic fuera para cerrar (se pasa a ComicViewer). */
   soloFlechas?: boolean;
+  /** Botón grande con una flecha arriba a la derecha para pasar a la siguiente (se pasa a ComicViewer). */
+  siguienteArriba?: boolean;
   /** Sin flechas de navegación (queda la X). Se pasa a ComicViewer. */
   sinFlechas?: boolean;
   /** La flecha de la izquierda de la primera viñeta lleva a otra página (se pasa a ComicViewer). */
@@ -129,6 +131,7 @@ export function IntroComicModal({
   onComplete,
   onBack,
   soloFlechas,
+  siguienteArriba,
   sinFlechas,
   alAnterior,
   mantenerSaltar,
@@ -169,6 +172,7 @@ export function IntroComicModal({
           pageExtra={pageExtra}
           onBack={onBack}
           soloFlechas={soloFlechas}
+          siguienteArriba={siguienteArriba}
           sinFlechas={sinFlechas}
           alAnterior={alAnterior}
           themeColor={themeColor}
