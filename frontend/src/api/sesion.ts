@@ -61,8 +61,24 @@ export function recordarSoloLectura(si: boolean): void {
     else localStorage.removeItem("soloLectura");
   } catch { /* modo privado */ }
 }
+/**
+ * ¿Es esta sesión la de una persona de LECTURA astral (sin cuenta, sin menú, sin ES · EN)?
+ *
+ * Se deduce de QUIÉN es la sesión, no de una marca suelta que se pueda quedar puesta: el id de una persona de lectura
+ * empieza por «lec_», y María mirando el camino de una de ellas lo lleva guardado en `persona`. Así el resto de
+ * cuentas (admin, usuarias en asesoría, quien entra a la plataforma) nunca pierden el menú ni el idioma, aunque
+ * antes se hubiera entrado en ese mismo navegador con el enlace de una lectura.
+ */
 export function esSoloLectura(): boolean {
-  try { return localStorage.getItem("soloLectura") === "1"; } catch { return false; }
+  try {
+    if ((localStorage.getItem("userId") ?? "").startsWith("lec_")) return true;
+    const crudo = localStorage.getItem("persona");
+    if (crudo) {
+      const persona = JSON.parse(crudo) as { id?: string; solo_lectura?: boolean } | null;
+      if (persona?.solo_lectura === true || (persona?.id ?? "").startsWith("lec_")) return true;
+    }
+    return false;
+  } catch { return false; }
 }
 
 /**

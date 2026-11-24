@@ -91,6 +91,8 @@ export default function AdminLecturas() {
   const [lista, setLista] = useState<Pedido[]>([]);
   const [loading, setLoading] = useState(true);
   const [q, setQ] = useState("");
+  // Qué se ve: todas, las que faltan por hacer o las que ya están listas.
+  const [ver, setVer] = useState<"todas" | "porHacer" | "listas">("todas");
   const [aviso, setAviso] = useState<string | null>(null);
   const [ocupado, setOcupado] = useState<string | null>(null);
   // El pedido al que se va a mandar el acceso (popup de confirmación).
@@ -181,7 +183,13 @@ export default function AdminLecturas() {
   };
 
   const t = q.trim().toLowerCase();
-  const filtrados = !t ? lista : lista.filter((p) => `${p.nombre} ${p.email} ${p.lugar_nacimiento}`.toLowerCase().includes(t));
+  const porHacer = lista.filter((p) => p.estado !== "lista").length;
+  const listas = lista.length - porHacer;
+  const filtrados = lista
+    .filter((p) => !t || `${p.nombre} ${p.email} ${p.lugar_nacimiento}`.toLowerCase().includes(t))
+    .filter((p) => ver === "todas" || (ver === "listas" ? p.estado === "lista" : p.estado !== "lista"))
+    // Primero las que faltan por hacer (las más recientes arriba); las listas, al final.
+    .sort((a, b) => Number(a.estado === "lista") - Number(b.estado === "lista") || b.created_at.localeCompare(a.created_at));
 
   if (verificando) return <LifeLoading variant="private" />;
 
@@ -258,6 +266,12 @@ export default function AdminLecturas() {
             _focus={{ borderColor: T, boxShadow: "none" }}
           />
 
+          {/* De un vistazo: cuántas faltan y cuántas están ya hechas; pulsando se filtra. */}
+          <Flex gap={2} wrap="wrap" mb={3} align="center">
+            <Box as="button" type="button" onClick={() => setVer("todas")} {...pildora(ver === "todas")}>Todas · {lista.length}</Box>
+            <Box as="button" type="button" onClick={() => setVer("porHacer")} {...pildora(ver === "porHacer")}>Por hacer · {porHacer}</Box>
+            <Box as="button" type="button" onClick={() => setVer("listas")} {...pildora(ver === "listas")}>Listas · {listas}</Box>
+          </Flex>
           <Text color={T} opacity={0.8} fontSize="sm" mb={3}>
             {filtrados.length} {filtrados.length === 1 ? "pedido" : "pedidos"}
           </Text>
@@ -268,10 +282,18 @@ export default function AdminLecturas() {
           ) : (
             <Flex direction="column" gap={4}>
               {filtrados.map((p) => (
-                <Flex key={p.id} align="stretch" borderRadius="2xl" border={`1.5px solid ${T}55`} color={T} overflow="hidden">
+                <Flex key={p.id} align="stretch" borderRadius="2xl" border={p.estado === "lista" ? `2px solid ${T}` : `1.5px solid ${T}55`} bg={p.estado === "lista" ? `${T}0d` : "transparent"} color={T} overflow="hidden">
                   <Box flex="1" minW={0} px={{ base: 5, md: 6 }} py={5}>
                   <Flex justify="space-between" align="baseline" gap={3} wrap="wrap">
-                    <Text fontWeight="700" fontSize={{ base: "lg", md: "xl" }}>{p.nombre}</Text>
+                    <Flex align="center" gap={3} wrap="wrap">
+                      <Text fontWeight="700" fontSize={{ base: "lg", md: "xl" }}>{p.nombre}</Text>
+                      {/* La marca de que ya está hecha (y, si no, en qué punto va). */}
+                      {p.estado === "lista" ? (
+                        <Text px={3} py="2px" borderRadius="full" bg={T} color={BEIGE} fontSize="sm" fontWeight="700" letterSpacing="0.04em">✓ Lista</Text>
+                      ) : (
+                        <Text px={3} py="2px" borderRadius="full" border={`1.5px solid ${T}`} fontSize="sm" fontWeight="700">{p.estado === "en_proceso" ? "En proceso" : "Recibido"}</Text>
+                      )}
+                    </Flex>
                     <Text fontSize="sm" opacity={0.75}>{fechaDMA(p.created_at) ?? ""}</Text>
                   </Flex>
                   <Text fontSize={{ base: "md", md: "lg" }}>{p.email}</Text>

@@ -566,7 +566,11 @@ export class UserService {
     } catch (err) {
       console.error('[acceso-lectura] no se pudo enviar el correo:', err);
     }
-    if (salio) await this.databaseService.getClient().from('lectura_cliente').update({ acceso_enviado_at: new Date().toISOString() }).eq('id', cliente.id);
+    if (salio) {
+      await this.databaseService.getClient().from('lectura_cliente').update({ acceso_enviado_at: new Date().toISOString() }).eq('id', cliente.id);
+      // Si le manda el acceso es que la carta está hecha: su pedido pasa a «Lista» (en /admin/lecturas se ve de un vistazo).
+      await this.databaseService.getClient().from('lectura_pedido').update({ estado: 'lista' }).eq('cliente_id', cliente.id);
+    }
     return salio;
   }
 
