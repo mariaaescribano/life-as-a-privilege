@@ -44,6 +44,12 @@ async function bootstrap() {
   // objeto ya parseado no podríamos verificarla.
   const app = await NestFactory.create<NestExpressApplication>(AppModule, { rawBody: true });
 
+  // LÍMITE DEL CUERPO JSON. Express corta por defecto en 100 KB y responde 413. El editor de interpretaciones de la
+  // carta (/admin/astrologia-textos) manda el conjunto ENTERO de textos en cada guardado y ya pasaba de 100 KB
+  // (~108 KB con 93 textos): el admin solo decía «No se pudo guardar». Con rawBody el webhook de Stripe sigue igual.
+  app.useBodyParser('json', { limit: '10mb' });
+  app.useBodyParser('urlencoded', { limit: '10mb', extended: true });
+
   // CONFIAR EN EL PROXY. Imprescindible para que el límite por IP funcione: en
   // Render la petición llega a través de su balanceador, así que sin esto todas
   // las peticiones parecen venir de la MISMA IP (la del proxy) y el límite se
