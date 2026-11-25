@@ -18,6 +18,7 @@ export const ORBE_CUSPIDE = 3;
  */
 export function casasDelPlaneta(p: PosicionPlaneta, cusps?: number[]): number[] {
   const casa = p.casa;
+  if (p.soloCasa) return [casa]; // fijado a mano por María en esa carta
   if (!Array.isArray(cusps) || cusps.length < 12 || !(casa >= 1 && casa <= 12)) return [casa];
   const siguiente = cusps[casa % 12];
   const distancia = (((siguiente - p.grado) % 360) + 360) % 360;

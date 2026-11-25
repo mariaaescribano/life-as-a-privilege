@@ -14,6 +14,8 @@ export interface PosicionPlaneta {
   grado: number;
   signoIdx: number;
   casa: number;
+  /** María lo fija a mano: se lee SOLO en `casa`, sin la regla de la cúspide cercana (astrologiaCasas.ts). */
+  soloCasa?: boolean;
 }
 
 export interface Aspecto {

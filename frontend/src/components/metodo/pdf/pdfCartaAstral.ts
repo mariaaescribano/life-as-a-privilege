@@ -8,7 +8,7 @@
 //    veces, la de abajo espejada, para no deformarla). Las demás páginas llevan la misma foto con un velo oscuro,
 //    incrustada UNA sola vez (mismo `alias`).
 //  · EL TEXTO es texto de PDF de verdad (se puede buscar y copiar). Una lectura por página; si no cabe, sigue en la
-//    siguiente marcada «(continúa)». Una línea «---» del texto es una separación (un respiro, no se imprime).
+//    siguiente SIN título ni raya (el texto continúa tal cual). Una línea «---» del texto es una separación (un respiro, no se imprime).
 //  · MEDIR Y PINTAR SON EL MISMO CÓDIGO (`cabecera`, `repartirBloque`) llamado con `dibujar` a false o a true: así los
 //    números del índice son exactos.
 //  · Los tipos de letra son los internos del PDF (Times), que solo entienden Latin-1: `latin1()` traduce lo que se
@@ -269,19 +269,21 @@ function pie(doc: jsPDF, pagina: number, _seccion: string) {
  * altura: medir y pintar comparten este código a propósito.
  */
 function cabecera(doc: jsPDF, b: Bloque, continua: boolean, dibujar: boolean): number {
+  // Una página que CONTINÚA no lleva título ni raya: el texto sigue tal cual desde arriba.
+  if (continua) return MARGEN_SUP + 8;
+
   // Arriba va el título y nada más (la sección ya está en el pie y en el índice).
   let y = MARGEN_SUP + 4;
-  const tam = continua ? 15 : 19;
   doc.setFont("times", "bold");
-  doc.setFontSize(tam);
+  doc.setFontSize(19);
 
-  const titulo = latin1(continua ? `${b.titulo} (continúa)` : b.titulo);
+  const titulo = latin1(b.titulo);
   const lineas: string[] = doc.splitTextToSize(titulo, ANCHO_TEXTO);
   if (dibujar) {
     doc.setTextColor(...TINTA);
     doc.text(lineas, MARGEN_X, y);
   }
-  y += lineas.length * (continua ? 6.5 : 8);
+  y += lineas.length * 8;
 
   if (dibujar) filete(doc, y, TINTA);
   // Aire generoso entre la raya y la primera línea: la página respira.
