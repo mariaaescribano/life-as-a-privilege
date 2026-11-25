@@ -487,7 +487,9 @@ function rightAscension(lonDeg: number, epsDeg: number): number {
 function eclipticFromRA(raDeg: number, epsDeg: number): number {
   const ra = raDeg * D2R;
   const eps = epsDeg * D2R;
-  const lon = Math.atan2(Math.sin(ra) * Math.cos(eps) + Math.tan(0) * Math.sin(eps), Math.cos(ra)) * R2D;
+  // tan(lon) = tan(ra) / cos(ε). (Antes estaba al revés, sin·cosε / cos, y las cúspides 2, 3, 11 y 12 salían
+  // desplazadas unos 3°: casas mal puestas, p. ej. la Luna en la 10 en vez de la 11.)
+  const lon = Math.atan2(Math.sin(ra), Math.cos(ra) * Math.cos(eps)) * R2D;
   return norm360(lon);
 }
 
