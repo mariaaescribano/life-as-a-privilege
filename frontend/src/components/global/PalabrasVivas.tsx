@@ -1,6 +1,22 @@
 import React from "react";
 import { useVistoConEspera } from "../../hooks/useVistoConEspera";
 
+// Los emojis (😊 ☺️ 🥰) se pintan SIEMPRE como carita en color, con una fuente de emojis, y no como el icono de texto
+// de la fuente de la página. Los símbolos de planeta (☉ ☽ ♀ ♂ ♄…) se quedan como letra: no son emojis.
+const EMOJI_FUENTE = '"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';
+const SIMBOLOS_ASTRO = /[☉☽☾☿♀♁♂♃♄♅♆♇⚷⚸☊☋⚳⚴⚵⚶]/u;
+const EMOJI = /(\p{Extended_Pictographic}️?)/u;
+
+function conEmojis(p: string): React.ReactNode {
+  if (!EMOJI.test(p)) return p;
+  return p.split(EMOJI).map((trozo, i) => {
+    if (!trozo || !EMOJI.test(trozo) || SIMBOLOS_ASTRO.test(trozo)) return trozo;
+    // VS16 (U+FE0F) pide la versión emoji de caracteres que también existen como símbolo de texto (☺).
+    const emoji = trozo.endsWith("️") ? trozo : trozo + "️";
+    return <span key={i} style={{ fontFamily: EMOJI_FUENTE, fontStyle: "normal" }}>{emoji}</span>;
+  });
+}
+
 /**
  * Párrafo que se REVELA palabra a palabra: cada palabra sube unos píxeles, se
  * enfoca y se enciende en su turno, de izquierda a derecha, y el conjunto se
@@ -95,7 +111,7 @@ export function PalabrasVivas({
                 ...(negrita ? { fontWeight: 700, ...(colorNegrita ? { color: colorNegrita } : {}), ...(sombraNegrita ? { textShadow: sombraNegrita } : {}) } : {}),
               }}
             >
-              {p}
+              {conEmojis(p)}
             </span>
           );
         })}

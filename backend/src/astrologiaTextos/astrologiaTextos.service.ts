@@ -93,11 +93,9 @@ export class AstrologiaTextosService {
 
     // Y una copia en el proyecto (solo en local): el privado en su respaldo y el público en su copia de seguridad.
     const archivoLocal = await this.escribirArchivoLocal(limpio, destino);
-    if (destino !== 'publico') return { success: true, archivoLocal };
-
-    // Lo público se traduce solo al inglés (solo las celdas nuevas o cambiadas). Si falla, lo español ya está guardado.
-    const trad = await this.traducirPublico(limpio);
-    return { success: true, archivoLocal, ...trad };
+    // Traducción automática al inglés APARCADA (2026-11-25): por ahora basta con guardar la copia.
+    // Para reactivarla: `const trad = await this.traducirPublico(limpio);` y devolver `...trad` (hace falta ANTHROPIC_API_KEY).
+    return { success: true, archivoLocal };
   }
 
   // ── Traducción automática de lo público al inglés ───────────────────────────
