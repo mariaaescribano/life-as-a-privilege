@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { promises as fs } from 'fs';
+import { promises as fs, existsSync } from 'fs';
 import * as path from 'path';
 import { DatabaseService } from '../database.service';
 import type { ArquetiposOverrides } from './astrologiaTextos.types';
@@ -7,7 +7,14 @@ import type { ArquetiposOverrides } from './astrologiaTextos.types';
 // Rutas a los archivos del frontend que guardan una copia de los overrides. El back y el
 // front conviven en el mismo repo; en local el proceso del back corre desde
 // `backend/`, así que subimos un nivel hasta la raíz del proyecto.
-const CARPETA_METODO = path.resolve(process.cwd(), '..', 'frontend', 'src', 'components', 'metodo');
+// Se prueba desde `backend/` (lo normal) y desde la raíz del repo, por si el servidor se arranca desde ahí.
+const CARPETA_METODO =
+  [
+    path.resolve(process.cwd(), '..', 'frontend', 'src', 'components', 'metodo'),
+    path.resolve(process.cwd(), 'frontend', 'src', 'components', 'metodo'),
+    path.resolve(__dirname, '..', '..', '..', 'frontend', 'src', 'components', 'metodo'),
+    path.resolve(__dirname, '..', '..', '..', '..', 'frontend', 'src', 'components', 'metodo'),
+  ].find((p) => existsSync(p)) ?? path.resolve(process.cwd(), '..', 'frontend', 'src', 'components', 'metodo');
 /** PRIVADO: el respaldo que la web lee mientras no haya nada en la BD. */
 const OVERRIDES_PATH = path.resolve(CARPETA_METODO, 'astrologiaTextos.overrides.ts');
 /** PÚBLICO: copia de seguridad commiteada de lo que ven los usuarios. La web no la lee. */

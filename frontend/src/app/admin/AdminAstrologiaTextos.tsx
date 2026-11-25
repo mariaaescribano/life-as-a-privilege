@@ -45,6 +45,22 @@ const contarOverrides = (o: ArquetiposOverrides): number => {
   return n;
 };
 
+/** Nombres de las celdas nuevas, cambiadas o borradas entre dos conjuntos: «Sol en Géminis», «Luna en Casa 7». */
+const celdasCambiadas = (antes: ArquetiposOverrides, despues: ArquetiposOverrides): string[] => {
+  const nombres: string[] = [];
+  for (const f of ["signo", "casa"] as const) {
+    const claves = new Set([...Object.keys(antes[f] ?? {}), ...Object.keys(despues[f] ?? {})]);
+    for (const ck of claves) {
+      const label = CUERPOS.find((c) => c.key === ck)?.label ?? ck;
+      const valores = new Set([...Object.keys(antes[f]?.[ck] ?? {}), ...Object.keys(despues[f]?.[ck] ?? {})]);
+      for (const v of valores) {
+        if (antes[f]?.[ck]?.[v] !== despues[f]?.[ck]?.[v]) nombres.push(`${label} en ${f === "casa" ? `Casa ${v}` : v}`);
+      }
+    }
+  }
+  return nombres;
+};
+
 export default function AdminAstrologiaTextos() {
   const { verificando } = useAdminGuard();
   const toast = useToast();
@@ -226,24 +242,19 @@ export default function AdminAstrologiaTextos() {
         { destino: "publico" as const, datos: publicos, ref: guardadoPub },
       ].filter((l) => JSON.stringify(l.datos) !== l.ref.current);
       for (const l of lados) {
+        const cambiadas = celdasCambiadas(JSON.parse(l.ref.current) as ArquetiposOverrides, l.datos);
         const res = await guardarOverrides(l.datos, l.destino);
         if (res.success) {
           l.ref.current = JSON.stringify(l.datos);
+          const avisos = [
+            l.destino === "publico" && res.errorTraduccion ? `Traducción al inglés: no se pudo (${res.errorTraduccion}).` : "",
+            res.archivoLocal === false ? "En la base de datos, pero NO se pudo escribir en el código (¿backend en producción?)." : "",
+          ].filter(Boolean).join(" ");
           toast({
-            title: l.destino === "publico" ? "Público guardado" : "Privado guardado",
-            description: l.destino === "publico"
-              ? `Ya lo ven los usuarios en el recorrido.${res.archivoLocal ? " Copia en el archivo del proyecto (commitéalo)." : ""}${
-                  res.errorTraduccion
-                    ? ` Traducción al inglés: no se pudo (${res.errorTraduccion}).`
-                    : res.traducidas
-                      ? ` Traducidos al inglés: ${res.traducidas}.`
-                      : ""
-                }`
-              : res.archivoLocal
-                ? "En la base de datos y en el archivo del proyecto (commitéalo). Solo lo ves tú."
-                : "En la base de datos. Solo lo ves tú.",
-            status: "success",
-            duration: 2600,
+            title: `Guardado ${cambiadas.length ? cambiadas.join(", ") : "sin cambios"}`,
+            description: avisos || undefined,
+            status: avisos ? "warning" : "success",
+            duration: avisos ? 6000 : 2600,
             isClosable: true,
           });
         } else {
