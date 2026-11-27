@@ -1,6 +1,9 @@
 import axios from "axios";
 import { cerrarSesionLocal, esZonaDeCuenta } from "./sesion";
-import { personaActiva } from "./persona";
+import { limpiarRastroDeLectura, personaActiva } from "./persona";
+
+// Carga directa de una página pública: limpiar el rastro de lectura ANTES de que se pinte nada.
+limpiarRastroDeLectura();
 
 /**
  * DÓNDE VIVE LA SESIÓN — token, userId, name, img e isAdmin se guardan en

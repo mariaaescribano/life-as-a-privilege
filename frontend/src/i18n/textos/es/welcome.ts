@@ -13,10 +13,10 @@ export const welcome = {
   // ── Cabecera de la portada (frase + formulario + foto) ──
   "welcome.perspectivas.subtitulo": "Juntos abordaremos…",
   "welcome.perspectivas.titular": "Lo importante eres tú, las perspectivas se adaptan a ti.",
-  "welcome.persp.1.titulo": "Cómo se construyó tu mente",
+  "welcome.persp.1.titulo": "Tu historia y tu psicología",
   "welcome.persp.2.titulo": "Tu filosofía esencial",
   "welcome.persp.3.titulo": "Tu ser desde la tradición",
-  "welcome.persp.4.titulo": "El funcionamiento de tu cuerpo",
+  "welcome.persp.4.titulo": "Tu cuerpo y su funcionamiento",
   "welcome.hero.pedirCita": "Reserva tu primera sesión sin coste",
   "welcome.hero.nombre": "Tu nombre",
   // Las tres ideas de fondo (segunda sección, WelcomePilares)

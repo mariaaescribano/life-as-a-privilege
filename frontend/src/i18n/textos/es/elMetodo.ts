@@ -80,7 +80,7 @@ export const elMetodo = {
    *  Van en dos claves porque se pintan con estilos distintos. */
   /** Cabecera de El Mapa: la frase principal y la secundaria, en cursiva. */
   "elMetodo.hero.principal": "Te acompaño a integrar tu historia, crear tu filosofía y vivir desde tu potencial",
-  "elMetodo.hero.secundaria": "No tienes mente ni cuerpo de repuesto. Entiende tu pasado para aprender a cuidarte.\n**Tu futuro se sostiene en ti**",
+  "elMetodo.hero.secundaria": "**Integra tu pasado. Habita tu presente. Sostén tu futuro.**\nNo tienes mente ni cuerpo de repuesto.",
   "elMetodo.hero.tituloAntes": "Para cambiar,",
   "elMetodo.hero.tituloPide": "pregúntate",
   "elMetodo.hero.titulo": "¿Qué te ha pasado?",

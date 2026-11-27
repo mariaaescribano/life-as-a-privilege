@@ -166,3 +166,35 @@ export function salirDeLaPersona(destino = "/admin/asesorias") {
   }
   window.location.assign(mio && token ? destino : "/logIn");
 }
+
+/**
+ * La PLATAFORMA pública (portada, Asesoría, Quién soy, disciplinas, libros…) no es una cuenta: nunca puede
+ * mostrarse ni actuar como una persona. Si al entrar en ella queda guardado el rastro de una cuenta de LECTURA
+ * astral (su sesión, o María mirando su camino), se limpia AQUÍ, sin navegar:
+ *   · María mirando el camino de alguien: se cierra ese camino y se le devuelve lo suyo (su token y sus datos).
+ *   · Sesión de una persona de lectura (`lec_…`): se cierra su sesión (vuelve entrando con el enlace de su correo).
+ * Las cuentas en sesión de verdad (la persona asesorada, María en su panel) no se tocan. No hace nada dentro de
+ * la zona de cuentas ni en /admin. Devuelve true si limpió algo.
+ */
+export function limpiarRastroDeLectura(): boolean {
+  if (esZonaDeCuenta() || window.location.pathname.startsWith("/admin")) return false;
+  const persona = personaActiva();
+  if (persona) {
+    const mio = leerJson<SesionApartada>(CLAVE_ADMIN);
+    const token = leer("token");
+    cerrarSesionLocal();
+    if (mio && token) {
+      poner("token", token);
+      poner("userId", mio.userId);
+      poner("name", mio.name);
+      poner("img", mio.img);
+      poner("isAdmin", mio.isAdmin);
+    }
+    return true;
+  }
+  if ((leer("userId") ?? "").startsWith("lec_") || leer("soloLectura") === "1") {
+    cerrarSesionLocal();
+    return true;
+  }
+  return false;
+}

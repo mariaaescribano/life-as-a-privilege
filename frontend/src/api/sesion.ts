@@ -62,14 +62,6 @@ export function recordarSoloLectura(si: boolean): void {
   } catch { /* modo privado */ }
 }
 /**
- * ¿Es esta sesión la de una persona de LECTURA astral (sin cuenta, sin menú, sin ES · EN)?
- *
- * Se deduce de QUIÉN es la sesión, no de una marca suelta que se pueda quedar puesta: el id de una persona de lectura
- * empieza por «lec_», y María mirando el camino de una de ellas lo lleva guardado en `persona`. Así el resto de
- * cuentas (admin, usuarias en asesoría, quien entra a la plataforma) nunca pierden el menú ni el idioma, aunque
- * antes se hubiera entrado en ese mismo navegador con el enlace de una lectura.
- */
-/**
  * ¿Estoy en la zona de las CUENTAS (la de la persona en sesión o la de lectura: su Home, su camino, su espacio)?
  * Todo lo demás es la PLATAFORMA (portada, Asesoría, Quién soy, disciplinas, materiales…), que no es una
  * cuenta: ahí no cuenta ninguna persona abierta ni ninguna marca de «solo lectura», aunque se hayan quedado
@@ -82,6 +74,14 @@ export function esZonaDeCuenta(): boolean {
   );
 }
 
+/**
+ * ¿Es esta sesión la de una persona de LECTURA astral (sin cuenta, sin menú, sin ES · EN)?
+ *
+ * Se deduce de QUIÉN es la sesión, no de una marca suelta que se pueda quedar puesta: el id de una persona de lectura
+ * empieza por «lec_», y María mirando el camino de una de ellas lo lleva guardado en `persona`. Así el resto de
+ * cuentas (admin, usuarias en asesoría, quien entra a la plataforma) nunca pierden el menú ni el idioma, aunque
+ * antes se hubiera entrado en ese mismo navegador con el enlace de una lectura.
+ */
 export function esSoloLectura(): boolean {
   if (!esZonaDeCuenta()) return false;
   try {

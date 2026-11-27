@@ -305,6 +305,7 @@ import { RegistroActividad } from "./components/global/RegistroActividad";
 import { LifeLoading } from "./components/global/LifeLoading";
 import { aplicarConsentimientoGuardado } from "./components/global/cookies";
 import TituloPestana from "./components/global/TituloPestana";
+import LimpiarRastroLectura from "./components/global/LimpiarRastroLectura";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -403,6 +404,7 @@ export default function App({ antigua = false }: { antigua?: boolean } = {})
     <>
     <ScrollToTop />
     {/* El nombre de la pestaña dice en qué recurso está la persona. */}
+    <LimpiarRastroLectura />
     <TituloPestana />
     {/* Apunta por dónde va el usuario dentro del Mapa, para que los cursos y
         los materiales puedan devolverle exactamente a ese paso. */}
