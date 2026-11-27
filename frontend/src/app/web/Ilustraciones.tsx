@@ -3,6 +3,7 @@ import { FONDO_PAGINA_TURQUESA as T } from "../../GlobalVariables";
 import { Box, Flex, Grid, Text } from "@chakra-ui/react";
 import TituloSeccion from "../../components/global/TituloSeccion";
 import { repartirCienciaTradicion } from "../../data/cienciaTradicion";
+import { ILUSTRACIONES_APARCADAS } from "../../data/aparcadoContenido";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import FlorTitulo from "../../components/global/FlorTitulo";
@@ -43,7 +44,8 @@ export default function Ilustraciones() {
   const entradas = useMemo(
     () => (disciplina
       ? ILUSTRACIONES.filter((e) => e.disciplina === disciplina.ilustracionesLabel)
-      : ILUSTRACIONES_GALERIA),
+      : ILUSTRACIONES_GALERIA
+    ).filter((e) => !ILUSTRACIONES_APARCADAS.has(e.disciplina)), // aparcadas: Cábala e Hinduismo
     [disciplina],
   );
   const [mounted, setMounted] = useState(false);

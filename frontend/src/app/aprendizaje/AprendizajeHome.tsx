@@ -11,6 +11,7 @@ import { LifeLoader } from "../../components/metodo/comicLoaders";
 import { useT } from "../../i18n";
 import TituloSeccion from "../../components/global/TituloSeccion";
 import { repartirCienciaTradicion } from "../../data/cienciaTradicion";
+import { CURSOS_APARCADOS } from "../../data/aparcadoContenido";
 // Cuántas portadas de curso se piden por adelantado: las dos primeras filas de
 // la cuadrícula (3 columnas en escritorio). El resto baja al acercarse.
 const PORTADAS_PRIMERA_PANTALLA = 6;
@@ -28,6 +29,7 @@ export const AprendizajeHome = () => {
   // El tipo se deduce del propio `cursosData`; antes venía de NuevosCursosPage
   // (la página de «Vídeos»), que se eliminó junto con la sección de YouTube.
   const allCourses = Object.values(cursosData)
+    .filter((modalidad) => !CURSOS_APARCADOS.has(modalidad.nom)) // aparcados: Cábala
     .flatMap((modalidad) => modalidad.cursos.map((curso) => ({ curso, modalidad })))
     .sort((a, b) => (b.curso.createdAt ?? "").localeCompare(a.curso.createdAt ?? ""));
 

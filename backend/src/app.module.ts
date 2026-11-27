@@ -18,6 +18,7 @@ import { FitoterapiaModule } from './fitoterapia/fitoterapia.module';
 import { TcmModule } from './tcm/tcm.module';
 import { AstrologiaModule } from './astrologia/astrologia.module';
 import { ContactModule } from './contact/contact.module';
+import { CartaGratisModule } from './carta-gratis/carta-gratis.module';
 import { CabalaModule } from './cabala/cabala.module';
 import { NutricionModule } from './nutricion/nutricion.module';
 import { AyurvedaModule } from './ayurveda/ayurveda.module';
@@ -71,6 +72,7 @@ export const uploadFolder = join(process.cwd(), 'img');
     TcmModule,
     AstrologiaModule,
     ContactModule,
+    CartaGratisModule,
     CabalaModule,
     NutricionModule,
     AyurvedaModule,

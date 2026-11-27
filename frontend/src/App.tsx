@@ -80,9 +80,9 @@ const TestDoshasPage = lazyConMetodo(() => import("./app/aprendizaje/TestDoshasP
 const EspacioHome = lazy(() => import("./app/espacio/main/EspacioHome"));
 const ExpandablePage = lazyConMetodo(() => import("./app/espacio/main/ThemePreguntas"));
 const QuienSoy = lazy(() => import("./app/web/QuienSoy"));
-const AstrologiaVision = lazy(() => import("./app/web/AstrologiaVision"));
 const ReservarCita = lazy(() => import("./app/web/ReservarCita"));
 const PedirLectura = lazy(() => import("./app/web/PedirLectura"));
+const CartaGratis = lazy(() => import("./app/web/CartaGratis"));
 const AdminLecturas = lazy(() => import("./app/admin/AdminLecturas"));
 const Productos = lazy(() => import("./app/web/Productos"));
 const Asesoria = lazy(() => import("./app/web/Asesoria"));
@@ -100,7 +100,7 @@ const LibrosPage = lazy(() => import("./app/web/LibrosPage"));
 const DescargarLibroPage = lazy(() => import("./app/web/DescargarLibroPage"));
 // const Contacto = lazy(() => import("./app/web/Contacto"));
 const CumpleRegalo = lazy(() => import("./app/web/CumpleRegalo"));
-// const ContactoFormulario = lazy(() => import("./app/web/ContactoFormulario"));
+const ContactoFormulario = lazy(() => import("./app/web/ContactoFormulario"));
 const Opiniones = lazy(() => import("./app/web/Opiniones"));
 const MaterialesGratuitos = lazy(() => import("./app/web/MaterialesGratuitos"));
 // const ProgramasPage = lazy(() => import("./app/web/ProgramasPage"));
@@ -293,7 +293,6 @@ const AvisoLegal = lazy(() => import("./app/legal/AvisoLegal"));
 const Privacidad = lazy(() => import("./app/legal/Privacidad"));
 const Cookies = lazy(() => import("./app/legal/Cookies"));
 const Terminos = lazy(() => import("./app/legal/Terminos"));
-import AvisoCookies from "./components/global/AvisoCookies";
 // Solo se pinta si la admin ha «entrado como» otra persona (api/persona.ts).
 import BarraPersona from "./components/global/BarraPersona";
 import { MigaDelMapa } from "./components/global/VolverAlMapa";
@@ -303,7 +302,6 @@ import { RegistroActividad } from "./components/global/RegistroActividad";
 // Va EAGER a propósito: es justo lo que hay que poder pintar antes de que llegue
 // lo demás.
 import { LifeLoading } from "./components/global/LifeLoading";
-import { aplicarConsentimientoGuardado } from "./components/global/cookies";
 import TituloPestana from "./components/global/TituloPestana";
 import LimpiarRastroLectura from "./components/global/LimpiarRastroLectura";
 
@@ -396,10 +394,6 @@ function AdminRoute({ children }: { children: React.ReactNode }) {
 
 export default function App({ antigua = false }: { antigua?: boolean } = {})
 {
-  // Si en una visita anterior se aceptaron las cookies analíticas, se cargan
-  // ahora. Si no, no se carga nada hasta que se pulse «Aceptar» en el aviso.
-  useEffect(() => { aplicarConsentimientoGuardado(); }, []);
-
   return (
     <>
     <ScrollToTop />
@@ -416,7 +410,6 @@ export default function App({ antigua = false }: { antigua?: boolean } = {})
     <RegistroActividad />
     {!antigua && <ExitIntentSubscribeModal />}
     <MiniDiario />
-    <AvisoCookies />
     <BarraPersona />
     {/* Suspense: cada pagina viaja en su propio fichero y se descarga solo
         cuando se entra en ella. Mientras llega, se ve la pantalla de carga de la
@@ -455,9 +448,10 @@ export default function App({ antigua = false }: { antigua?: boolean } = {})
       <Route path="/terminos" element={<Terminos />} />
       <Route path="/home" element={<PrivateRoute>{antigua ? <HomeAntigua /> : <Home />}</PrivateRoute>} />
       <Route path="/quienSoy" element={<QuienSoy />} />
-      <Route path="/astrologia" element={<AstrologiaVision />} />
+      <Route path="/astrologia" element={<Navigate to="/disciplina/astrologia" replace />} />
       <Route path="/reservar-cita" element={<ReservarCita />} />
       <Route path="/astrologia/pedir" element={<PedirLectura />} />
+      <Route path="/astrologia/carta-gratis" element={<CartaGratis />} />
       <Route path="/asesoria" element={<Asesoria />} />
       <Route path="/baja" element={<BajaLista />} />
       {/* Premium (público) APARCADO: rutas comentadas, el código sigue en el repo.
@@ -481,7 +475,9 @@ export default function App({ antigua = false }: { antigua?: boolean } = {})
           manda a /logIn con ?next= para volver aquí con el enlace. */}
       <Route path="/cumple" element={<CumpleRegalo />} />
       {/* El formulario, en su propia página: se llega desde la tarjeta «Escríbeme». */}
-      {/* Contáctame APARCADO: <Route path="/contacto/escribir" element={<ContactoFormulario />} /> */}
+      <Route path="/contacto/escribir" element={<ContactoFormulario />} />
+      {/* La página de tarjetas de contacto sigue aparcada: /contacto lleva directo al formulario. */}
+      <Route path="/contacto" element={<Navigate to="/contacto/escribir" replace />} />
       <Route path="/opiniones" element={<Opiniones />} />
       {/* /elMetodo ya no existe (la página se borró), pero hay QR impresos que apuntan
           aquí: llevan a la portada. */}

@@ -1,6 +1,13 @@
 /** Pedir la carta de la lectura (Astrología → Adquirir) y su confirmación. */
 export const lectura = {
   "lectura.titulo": "Tu carta",
+  "cartaGratis.titulo": "Solicitar mi carta gratis",
+  "cartaGratis.subtitulo": "Déjame tus datos de nacimiento y te escribo.",
+  "cartaGratis.chiste": "No le preguntes a tu madre, ya tenía suficiente con estar pariendo.",
+  "cartaGratis.enviar": "Enviar",
+  "cartaGratis.enviado": "Solicitud enviada",
+  "cartaGratis.enviadoTexto": "Gracias. He recibido tus datos y te escribiré al correo que me has dejado.",
+  "cartaGratis.error": "No se pudo enviar. Inténtalo de nuevo en un momento.",
   "lectura.nombre": "Tu nombre",
   "lectura.email": "Tu email",
   "lectura.fecha": "Fecha de nacimiento",

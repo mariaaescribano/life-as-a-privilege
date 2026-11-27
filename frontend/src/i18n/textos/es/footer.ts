@@ -2,6 +2,7 @@
 export const footer = {
   "footer.derechos": "© 2026 María Escribano · Todos los derechos reservados",
   "footer.quienSoy": "Quién soy",
+  "footer.contactar": "Contactar",
   "footer.donar": "Donar",
   "footer.avisoLegal": "Aviso legal",
   "footer.privacidad": "Privacidad",

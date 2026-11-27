@@ -37,7 +37,7 @@ export function cacheDeOtraCuenta(clave: string): boolean {
 }
 
 /** Claves que NO son de sesión y sobreviven al cierre. */
-const PREFERENCIAS = ["cookieConsent", "idioma"];
+const PREFERENCIAS = ["cookieConsent", "idioma"]; // `cookieConsent` ya no se crea (se quitó el aviso de cookies); se conserva por si quedara en algún navegador
 
 /**
  * ¿Esta sesión tiene el panel de administración DESBLOQUEADO?

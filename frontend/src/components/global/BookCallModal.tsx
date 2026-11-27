@@ -15,8 +15,8 @@ interface BookCallModalProps {
 }
 
 const DAYS_AHEAD = 14;
-const SLOT_START_HOUR = 8;
-const SLOT_END_HOUR = 21; // último slot empieza a las 20:30
+const SLOT_START_HOUR = 15; // solo por la tarde
+const SLOT_END_HOUR = 18; // último slot empieza a las 17:30
 const SLOT_MINUTES = 30;
 const MIN_LEAD_HOURS = 2; // no permitir reservas con menos de 2h de antelación
 

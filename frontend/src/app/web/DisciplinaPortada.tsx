@@ -10,7 +10,12 @@ import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/Disc
 import { presentacionPorKey, type PresentacionDisciplina } from "../../data/presentacionDisciplinas";
 import { AprendizajeIcon, FONDO_PAGINA_TURQUESA } from "../../GlobalVariables";
 import FotoDisciplina from "../../components/web/FotoDisciplina";
-import ServiciosAstrologia from "../../components/web/ServiciosAstrologia";import WelcomeCabecera from "../../components/welcome/WelcomeCabecera";
+import LineaTiempoAstrologia from "../../components/web/LineaTiempoAstrologia";
+import QueEsCartaAstral from "../../components/web/QueEsCartaAstral";
+import AutoresAstrologia from "../../components/web/AutoresAstrologia";
+import ArteAstrologia from "../../components/web/ArteAstrologia";
+import { AUTORES_ASTROLOGIA, CRITICOS_ASTROLOGIA } from "../../data/autoresAstrologia";
+import WelcomeCabecera from "../../components/welcome/WelcomeCabecera";
 import { useCabeceraEscribiendo } from "../../components/global/cabeceraEntrada";
 import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
 import { getUserMe } from "../../api/userMe";
@@ -201,7 +206,7 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
       <SiteHeader variant="auto" />
 
       {/* ── CABECERA: mandala, nombre de la disciplina, su frase y la línea con el mandala pequeño ── */}
-      <WelcomeCabecera activo={mounted} titulo={nombreDe(d.nom)} subtitulo={segunIdioma(d.gancho)} mayusculas sinSeparador={esAstro} />
+      <WelcomeCabecera activo={mounted} titulo={nombreDe(d.nom)} subtitulo={esAstro ? t("astroVision.frase") : segunIdioma(d.gancho)} mayusculas sinSeparador={esAstro} />
 
       {/* Psicología, Cuerpo (Fisiología) y Filosofía (Cultura): todavía sin contenido. Solo la cabecera y el aviso. */}
       {NO_DISPONIBLES.has(d.key) ? (
@@ -222,26 +227,12 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
       {/* ── BANDA CON LA FOTO DE LA DISCIPLINA DE FONDO (como el mármol, pero con su foto) ──
           A la izquierda, su foto cuadrada; a la derecha, las puertas apiladas con el mismo
           alto que la foto. */}
-      <Box flex={1} position="relative" mt={{ base: 2, md: 4 }} mb={{ base: "56px", md: "88px" }} pt={{ base: "104px", md: "110px" }} pb={{ base: "116px", md: "120px" }}>
-        <Box
-          position="absolute"
-          inset={0}
-          pointerEvents="none"
-          opacity={banda ? 1 : 0}
-          transition="opacity 0.5s ease"
-          sx={{
-            // Borde en ARCO y no en línea recta: una elipse ancha que se funde poco a poco hacia fuera,
-            // más pronto en las esquinas y más tarde en el centro (nunca un corte horizontal seco).
-            WebkitMaskImage: "radial-gradient(ellipse 150% 50% at 50% 50%, #000 62%, rgba(0,0,0,0.6) 78%, rgba(0,0,0,0.22) 90%, transparent 100%)",
-            maskImage: "radial-gradient(ellipse 150% 50% at 50% 50%, #000 62%, rgba(0,0,0,0.6) 78%, rgba(0,0,0,0.22) 90%, transparent 100%)",
-          }}
-        >
-          <DisciplinaBgLayer nom={d.nom} borderRadius="0" />
-        </Box>
+      <Box flex={1} position="relative" mt={{ base: 8, md: 14 }} mb={{ base: "40px", md: "88px" }} pt={{ base: esAstro ? "72px" : "104px", md: "110px" }} pb={{ base: esAstro ? "72px" : "116px", md: "120px" }}>
+        <FondoBanda nom={d.nom} visible={banda} />
 
         {esAstro ? (
           <Box position="relative" zIndex={1} w="100%" maxW="1320px" mx="auto" px={{ base: 5, md: 10, lg: 14 }}>
-            <ServiciosAstrologia activo={banda} />
+            <LineaTiempoAstrologia activo={banda} />
           </Box>
         ) : (
           <Box position="relative" zIndex={1} w="100%" maxW="1040px" mx="auto" px={{ base: 5, md: 10, lg: 16 }}>
@@ -345,6 +336,72 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
 
         )}
       </Box>
+      {/* Fuera de la banda de estrellas (que era solo para la línea del tiempo): «¿Qué es una carta astral?», sobre el beige. */}
+      {esAstro && (
+        <Box pb={{ base: 20, md: 28 }}>
+          <QueEsCartaAstral activo={banda} />
+        </Box>
+      )}
+      {/* Tercera sección, con OTRO fondo de estrellas: los autores de la historia de la Astrología, de dos en dos. */}
+      {esAstro && (
+        <Box position="relative" mb={{ base: "40px", md: "88px" }} pt={{ base: "64px", md: "96px" }} pb={{ base: "64px", md: "96px" }}>
+          <FondoBanda nom={d.nom} visible={banda} />
+          <Box position="relative" zIndex={1} w="100%" px={{ base: 5, md: 10, lg: 14 }}>
+            <AutoresAstrologia lista={AUTORES_ASTROLOGIA} titulo="astroAutores.defensores" />
+          </Box>
+        </Box>
+      )}
+      {/* Bajo la banda de los autores, ya sobre el beige: la frase de las críticas. */}
+      {esAstro && (
+        <Flex justify="center" px={{ base: 6, md: 10 }} pb={{ base: 12, md: 16 }}>
+          <Text
+            maxW="820px"
+            textAlign="center"
+            color={FONDO_PAGINA_TURQUESA}
+            fontFamily="'EB Garamond', serif"
+            fontSize={{ base: "lg", md: "2xl" }}
+            lineHeight="1.6"
+            letterSpacing="0.01em"
+          >
+            {t("astroAutores.critica")}
+          </Text>
+        </Flex>
+      )}
+      {/* Segundo box de autores, con otro fondo de estrellas: los CRÍTICOS. */}
+      {esAstro && (
+        <Box position="relative" mb={{ base: "40px", md: "88px" }} pt={{ base: "64px", md: "96px" }} pb={{ base: "64px", md: "96px" }}>
+          <FondoBanda nom={d.nom} visible={banda} />
+          <Box position="relative" zIndex={1} w="100%" px={{ base: 5, md: 10, lg: 14 }}>
+            <AutoresAstrologia lista={CRITICOS_ASTROLOGIA} titulo="astroAutores.criticos" />
+          </Box>
+        </Box>
+      )}
+      {/* Tras los críticos, ya sobre el beige: mi posición. */}
+      {esAstro && (
+        <Flex justify="center" px={{ base: 6, md: 10 }} pb={{ base: 20, md: 28 }}>
+          <Text
+            maxW="820px"
+            textAlign="center"
+            color={FONDO_PAGINA_TURQUESA}
+            fontFamily="'EB Garamond', serif"
+            fontSize={{ base: "lg", md: "2xl" }}
+            lineHeight="1.6"
+            letterSpacing="0.01em"
+          >
+            {t("astroAutores.acuerdo")}
+          </Text>
+        </Flex>
+      )}
+      {/* Último apartado, con otro fondo de estrellas: Astrología en el arte (casi todo imágenes). */}
+      {esAstro && (
+        <Box position="relative" mb={{ base: "40px", md: "88px" }} pt={{ base: "64px", md: "96px" }} pb={{ base: "64px", md: "96px" }}>
+          <FondoBanda nom={d.nom} visible={banda} />
+          <Box position="relative" zIndex={1} w="100%" px={{ base: 5, md: 10, lg: 14 }}>
+            <ArteAstrologia />
+          </Box>
+        </Box>
+      )}
+      {/* Los cuatro boxes de servicios (ServiciosAstrologia) están quitados de esta página por ahora; el componente sigue en components/web. */}
       </>
       )}
 
@@ -363,6 +420,23 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
       )}
 
       <SiteFooter />
+    </Box>
+  );
+}
+
+/** Capa de fondo de una banda: la foto (o el cielo estrellado) de la disciplina, con un difuminado CORTO arriba y abajo (55 px), el mismo de las bandas de Welcome. */
+function FondoBanda({ nom, visible }: { nom: string; visible: boolean }) {
+  const mascara = "linear-gradient(to bottom, transparent 0, #000 55px, #000 calc(100% - 55px), transparent 100%)";
+  return (
+    <Box
+      position="absolute"
+      inset={0}
+      pointerEvents="none"
+      opacity={visible ? 1 : 0}
+      transition="opacity 0.5s ease"
+      sx={{ WebkitMaskImage: mascara, maskImage: mascara }}
+    >
+      <DisciplinaBgLayer nom={nom} borderRadius="0" />
     </Box>
   );
 }

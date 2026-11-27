@@ -1,5 +1,12 @@
 export const lectura = {
   "lectura.titulo": "Your chart",
+  "cartaGratis.titulo": "Request my free chart",
+  "cartaGratis.subtitulo": "Leave me your birth details and I will write to you.",
+  "cartaGratis.chiste": "Don't ask your mother, she already had enough going on giving birth.",
+  "cartaGratis.enviar": "Send",
+  "cartaGratis.enviado": "Request sent",
+  "cartaGratis.enviadoTexto": "Thank you. I have received your details and I will write to the email you left me.",
+  "cartaGratis.error": "It could not be sent. Please try again in a moment.",
   "lectura.nombre": "Your name",
   "lectura.email": "Your email",
   "lectura.fecha": "Date of birth",

@@ -116,12 +116,6 @@ export const web = {
   "consentimiento.volver": "Ahora no",
   "consentimiento.error": "No se ha podido guardar. Prueba otra vez en un momento.",
 
-  // ── Aviso de cookies (la barra de abajo, no la página legal) ───────────
-  "cookies.aviso":
-    "Usamos cookies para que la web funcione y mantener tu sesión iniciada. Nos gustaría usar también cookies de Google Analytics para mejorar el sitio, pero **solo si tú lo autorizas**.",
-  "cookies.masInfo": "Más información",
-  "cookies.rechazar": "Rechazar",
-  "cookies.aceptar": "Aceptar",
 
   // ── Pantalla de error (ErrorBoundary) ──────────────────────────────────
   "error.titulo": "Algo se ha torcido por un momento",

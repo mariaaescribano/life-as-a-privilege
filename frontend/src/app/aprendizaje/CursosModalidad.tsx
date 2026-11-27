@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { CURSOS_APARCADOS } from "../../data/aparcadoContenido";
 import {
   Box, Flex, Text,
   Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton,
@@ -168,7 +169,7 @@ export default function CursosModalidad() {
   }
 
   // Cursos ordenados por fecha de publicación: los más recientes, primero.
-  const cursos = [...modalidad.cursos].sort(
+  const cursos = (CURSOS_APARCADOS.has(modalidad.nom) ? [] : [...modalidad.cursos]).sort(
     (a, b) => (b.createdAt ?? "").localeCompare(a.createdAt ?? ""),
   );
 

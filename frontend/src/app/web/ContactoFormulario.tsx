@@ -7,12 +7,15 @@
  */
 import React, { useState, useEffect, useRef } from "react";
 import {
-  Box, Flex, Image, Text, Input, Textarea,
+  Box, Flex, Text, Input, Textarea,
 } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import { API_URL } from "../../GlobalVariables";
 import SiteFooter from "../../components/global/Footer";
-import FlorTitulo from "../../components/global/FlorTitulo";
+import WelcomeCabecera from "../../components/welcome/WelcomeCabecera";
+import TrasCabecera from "../../components/global/TrasCabecera";
+import { MandalaTinte } from "../../components/global/MandalaTinte";
+import { FONDO_PAGINA_TURQUESA as T } from "../../GlobalVariables";
 import { useT } from "../../i18n";
 
 const useReveal = (threshold = 0.15) => {
@@ -32,22 +35,16 @@ const useReveal = (threshold = 0.15) => {
 };
 
 const inputStyle = {
-  bg: "rgba(255,255,255,0.06)",
-  border: "1px solid rgba(255,255,255,0.28)",
-  color: "white",
+  bg: "transparent",
+  border: `1.5px solid ${T}66`,
+  color: T,
   borderRadius: "full",
   textAlign: "center" as const,
   fontFamily: "'EB Garamond', serif",
   letterSpacing: "0.04em",
-  boxShadow: "0 0 10px rgba(255,255,255,0.12)",
-  _placeholder: { color: "rgba(255,255,255,0.4)" },
-  _hover: { borderColor: "rgba(255,255,255,0.55)" },
-  _focus: {
-    borderColor: "rgba(255,255,255,0.85)",
-    boxShadow: "0 0 0 1px rgba(255,255,255,0.25), 0 0 18px rgba(255,255,255,0.3)",
-    bg: "rgba(255,255,255,0.12)",
-    outline: "none",
-  },
+  _placeholder: { color: `${T}80` },
+  _hover: { borderColor: `${T}b3` },
+  _focus: { borderColor: T, bg: `${T}0d`, outline: "none", boxShadow: "none" },
   fontSize: { base: "md", md: "lg" },
   px: 5,
   py: 3,
@@ -116,49 +113,12 @@ const ContactoFormulario = () => {
       {/* ── HEADER ── */}
       <SiteHeader variant="auto" />
 
-      {/* ── FLOR DE LA VIDA sobre el título ── */}
-      <FlorTitulo activo={mounted} />
-
-      {/* ── TÍTULO ── */}
-      <Flex
-        direction="column"
-        align="center"
-        textAlign="center"
-        px={{ base: 5, md: 10 }}
-        pt={{ base: 8, md: 10 }}
-        gap={{ base: 3, md: 4 }}
-      >
-        <Text
-          color="white"
-          fontSize={{ base: "4xl", md: "6xl", lg: "7xl" }}
-          fontWeight="700"
-          letterSpacing="0.1em"
-          lineHeight="1.1"
-          textTransform="uppercase"
-          textShadow="0 0 18px rgba(255,255,255,0.6), 0 0 38px rgba(255,255,255,0.39), 0 0 70px rgba(180,255,245,0.32)"
-          opacity={mounted ? 1 : 0}
-          transform={mounted ? "translateY(0)" : "translateY(24px)"}
-          transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
-        >
-          {t("contacto.titulo")}
-        </Text>
-        <Text
-          color="rgba(255,255,255,0.88)"
-          fontSize={{ base: "md", md: "lg" }}
-          lineHeight="1.7"
-          letterSpacing="0.03em"
-          maxW={{ base: "100%", md: "560px" }}
-          textShadow="0 0 10px rgba(255,255,255,0.34), 0 0 22px rgba(255,255,255,0.17)"
-          opacity={mounted ? 1 : 0}
-          transform={mounted ? "translateY(0)" : "translateY(16px)"}
-          transition="opacity 0.85s ease 0.5s, transform 0.85s ease 0.5s"
-        >
-          {t("contacto.formSubtitulo")}
-        </Text>
-      </Flex>
+      {/* ── Mandala, título y frase (la cabecera de la casa) ── */}
+      <WelcomeCabecera activo={mounted} titulo={t("contacto.titulo")} subtitulo={t("contacto.formSubtitulo")} mayusculas sinSeparador />
 
       {/* ── FORMULARIO (sin caja) ── */}
-      <Flex flex="1" justify="center" px={{ base: 5, md: 10 }} pt={{ base: 12, md: 16 }} pb={{ base: 24, md: 32 }}>
+      <TrasCabecera flex="1" display="flex" flexDirection="column">
+      <Flex flex="1" justify="center" px={{ base: 5, md: 10 }} pt={{ base: 8, md: 12 }} pb={{ base: 24, md: 32 }}>
         <Flex
           ref={formReveal.ref}
           direction="column"
@@ -171,7 +131,7 @@ const ContactoFormulario = () => {
           {status === "ok" ? (
             <Flex direction="column" align="center" textAlign="center" py={8} gap={5} w="80%" mx="auto">
               <Box
-                color="white"
+                color={T}
                 sx={{
                   animation: "heartbeat 1.2s ease-in-out infinite",
                   "@keyframes heartbeat": {
@@ -179,7 +139,6 @@ const ContactoFormulario = () => {
                     "50%": { transform: "scale(1.18)" },
                   },
                   display: "inline-block",
-                  filter: "drop-shadow(0 0 14px rgba(255,180,180,0.8)) drop-shadow(0 0 30px rgba(255,180,180,0.4))",
                 }}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" height="72px" viewBox="0 -960 960 960" width="72px" fill="currentColor">
@@ -187,18 +146,16 @@ const ContactoFormulario = () => {
                 </svg>
               </Box>
               <Text
-                color="white"
+                color={T}
                 fontSize={{ base: "2xl", md: "3xl" }}
                 fontWeight="700"
                 letterSpacing="0.05em"
-                textShadow="0 0 14px rgba(255,255,255,0.45), 0 0 30px rgba(255,255,255,0.22)"
               >
                 {t("contacto.enviado")}
               </Text>
               <Text
-                color="rgba(255,255,255,0.85)"
+                color={T}
                 fontSize={{ base: "md", md: "lg" }}
-                textShadow="0 0 10px rgba(255,255,255,0.26)"
               >
                 {t("contacto.responder")}
               </Text>
@@ -211,21 +168,18 @@ const ContactoFormulario = () => {
                 px={{ base: 6, md: 8 }}
                 py={{ base: "10px", md: "12px" }}
                 borderRadius="full"
-                border="1px solid rgba(255,255,255,0.55)"
-                bg="rgba(255,255,255,0.08)"
+                border={`1px solid ${T}`}
+                bg="transparent"
                 cursor="pointer"
-                color="white"
+                color={T}
                 fontFamily="'EB Garamond', serif"
                 fontWeight="600"
                 fontSize={{ base: "sm", md: "md" }}
                 letterSpacing="0.16em"
                 textTransform="uppercase"
-                boxShadow="0 0 14px rgba(255,255,255,0.3), 0 0 30px rgba(255,255,255,0.15)"
-                textShadow="0 0 10px rgba(255,255,255,0.41), 0 0 22px rgba(255,255,255,0.22)"
                 _hover={{
-                  bg: "rgba(255,255,255,0.18)",
-                  borderColor: "rgba(255,255,255,0.9)",
-                  boxShadow: "0 0 24px rgba(255,255,255,0.5), 0 0 48px rgba(180,255,245,0.3)",
+                  bg: `${T}14`,
+                  borderColor: T,
                   transform: "translateY(-1px)",
                 }}
                 transition="all 0.25s ease"
@@ -238,7 +192,7 @@ const ContactoFormulario = () => {
             <Flex as="form" onSubmit={handleSubmit} direction="column" gap={5} w="80%" mx="auto">
 
               <Box>
-                <Text color="rgba(255,255,255,0.78)" fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.26)">
+                <Text color={T} fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.26)">
                   {t("contacto.campo.nombre")}
                 </Text>
                 <Input
@@ -252,7 +206,7 @@ const ContactoFormulario = () => {
               </Box>
 
               <Box>
-                <Text color="rgba(255,255,255,0.78)" fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.26)">
+                <Text color={T} fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.26)">
                   {t("contacto.campo.email")}
                 </Text>
                 <Input
@@ -267,7 +221,7 @@ const ContactoFormulario = () => {
               </Box>
 
               <Box>
-                <Text color="rgba(255,255,255,0.78)" fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.26)">
+                <Text color={T} fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.26)">
                   {t("contacto.campo.titulo")}
                 </Text>
                 <Input
@@ -281,7 +235,7 @@ const ContactoFormulario = () => {
               </Box>
 
               <Box>
-                <Text color="rgba(255,255,255,0.78)" fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.26)">
+                <Text color={T} fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.26)">
                   {t("contacto.campo.mensaje")}
                 </Text>
                 <Textarea
@@ -297,13 +251,13 @@ const ContactoFormulario = () => {
               </Box>
 
               {serverSlow && status === "idle" && (
-                <Text color="rgba(255,220,100,0.9)" fontSize="sm" textAlign="center" textShadow="0 0 8px rgba(255,220,100,0.4)">
+                <Text color={T} fontSize="sm" textAlign="center" textShadow="0 0 8px rgba(255,220,100,0.4)">
                   {t("contacto.servidorLento")}
                 </Text>
               )}
 
               {status === "error" && (
-                <Text color="rgba(255,150,150,0.9)" fontSize="sm" textAlign="center" textShadow="0 0 8px rgba(255,150,150,0.4)">
+                <Text color="#b3261e" fontSize="sm" textAlign="center" textShadow="0 0 8px rgba(255,150,150,0.4)">
                   {t("contacto.error")}
                 </Text>
               )}
@@ -320,36 +274,26 @@ const ContactoFormulario = () => {
                   py={{ base: "14px", md: "16px" }}
                   flexShrink={0}
                   borderRadius="full"
-                  border="1.5px solid rgba(255,255,255,0.6)"
-                  bg="rgba(255,255,255,0.10)"
+                  border={`1.5px solid ${T}`}
+                  bg="transparent"
                   cursor={status === "sending" ? "not-allowed" : "pointer"}
                   opacity={status === "sending" ? 0.55 : 1}
-                  boxShadow="0 0 18px rgba(255,255,255,0.36), 0 0 40px rgba(255,255,255,0.18), 0 0 70px rgba(180,255,245,0.18), 0 4px 14px rgba(0,0,0,0.18)"
                   _hover={status === "sending" ? {} : {
-                    bg: "rgba(255,255,255,0.2)",
-                    borderColor: "white",
-                    boxShadow: "0 0 28px rgba(255,255,255,0.55), 0 0 58px rgba(180,255,245,0.35), 0 6px 18px rgba(0,0,0,0.22)",
+                    bg: `${T}14`,
+                    borderColor: T,
                     transform: "translateY(-1px)",
                   }}
                   transition="all 0.25s ease"
                   pointerEvents={status === "sending" ? "none" : "auto"}
                 >
-                  <Image
-                    src="/img/icono/life.webp"
-                    alt=""
-                    h={{ base: "20px", md: "32px" }}
-                    objectFit="contain"
-                    flexShrink={0}
-                    style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.52)) drop-shadow(0 0 20px rgba(255,255,255,0.26))" }}
-                  />
+                  <MandalaTinte h={{ base: "20px", md: "32px" }} />
                   <Text
-                    color="white"
+                    color={T}
                     fontFamily="'EB Garamond', serif"
                     fontWeight="700"
                     fontSize={{ base: "sm", md: "xl" }}
                     letterSpacing={{ base: "0.12em", md: "0.2em" }}
                     textTransform="uppercase"
-                    textShadow="0 0 12px rgba(255,255,255,0.49), 0 0 26px rgba(255,255,255,0.3)"
                     whiteSpace="nowrap"
                   >
                     {status === "sending" ? t("comun.enviando") : t("contacto.enviar")}
@@ -362,8 +306,10 @@ const ContactoFormulario = () => {
         </Flex>
       </Flex>
 
+      </TrasCabecera>
+
       {/* ── FOOTER ── */}
-      <SiteFooter />
+      <TrasCabecera><SiteFooter /></TrasCabecera>
 
     </Box>
   );

@@ -19,6 +19,21 @@ export const disciplinasPagina = {
   /** Títulos de sección de /ilustraciones y de los cursos. */
   "seccion.ciencia": "Ciencia",
   "seccion.tradicion": "Tradición",
+  /** Astrología · «¿Qué es una carta astral?». Formato: **x** negrita, *x* cursiva. */
+  "astroCarta.titulo": "¿QUÉ ES UNA CARTA ASTRAL?",
+  "astroCarta.t1": "Una **carta astral** ofrece una **versión** de las circunstancias y las personas que han podido darte forma, de cómo vives cada área y de lo que te encuentras en ellas.",
+  "astroCarta.t2": "Es una invitación a observar los *vínculos, patrones y experiencias* que forman parte de tu historia, para preguntarte cuáles reconoces en ti y cómo quieres relacionarte con ellos.",
+  "astroCarta.t3": "**No es una ciencia**. Su valor es simbólico y nos ayuda a reflexionar sobre nosotros. Tú decides qué conclusiones te sirven y cuáles descartas.",
+  "astroCarta.ejemplo": "Esta podría ser tu Carta Astral",
+  "astroCarta.casa": "Cada **Casa**, un *área* distinta.",
+  "astroCarta.signo": "Cada **Signo**, unas *características*.",
+  "astroCarta.planeta": "Cada **Planeta**, una serie de *verbos*.",
+  "astroCarta.boton": "Solicita tu lectura individualizada inicial",
+  "astroAutores.critica": "También hubo muchos autores que la criticaron, sobre todo porque las personas buscaban justificar con la Astrología sus actos en lugar de asumir la responsabilidad de sus acciones.",
+  "astroAutores.defensores": "DEFENSORES",
+  "astroAutores.criticos": "CRÍTICOS",
+  "astroAutores.acuerdo": "Yo estoy de acuerdo con la defensa de la responsabilidad, cada persona debe asumir las consecuencias de sus actos. No podemos justificar nuestras acciones culpando a las estrellas.",
+  "astroArte.titulo": "ASTROLOGÍA EN EL ARTE",
   /** Página «Cómo veo la Astrología» (/astrologia): frase bajo el titular. La 2.ª línea (entre **) sale en negrita. */
   "astroVision.frase": "La Astrología acompaña a la humanidad desde hace 4.000 años.\n**Descubre qué puede aportarte a ti.**",
 } as const;

@@ -115,11 +115,6 @@ export const web = {
   "consentimiento.error": "It couldn't be saved. Try again in a moment.",
 
   // ── Cookie banner (the bar at the bottom, not the legal page) ──────────
-  "cookies.aviso":
-    "We use cookies so the site works and to keep you logged in. We'd also like to use Google Analytics cookies to improve the site, but **only if you allow it**.",
-  "cookies.masInfo": "More information",
-  "cookies.rechazar": "Decline",
-  "cookies.aceptar": "Accept",
 
   // ── Error screen (ErrorBoundary) ───────────────────────────────────────
   "error.titulo": "Something went sideways for a moment",

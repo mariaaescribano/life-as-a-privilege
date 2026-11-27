@@ -7,13 +7,13 @@ import { FONDO_PAGINA_TURQUESA as T } from "../../GlobalVariables";
  * Título de sección con una raya horizontal fina a cada lado: ———  CIENCIA  ———.
  * Las rayas se difuminan hacia fuera (como las del mandala separador) y todo entra con `Reveal` al llegar a él.
  */
-export function TituloSeccion({ children }: { children: React.ReactNode }) {
+export function TituloSeccion({ children, color = T }: { children: React.ReactNode; color?: string }) {
   return (
     <Reveal inView direction="up" distance={16} duration={0.9} w="100%">
       <Flex align="center" justify="center" gap={{ base: 4, md: 8 }} w="100%">
-        <Box flex="1" h="1px" maxW="320px" bg={`linear-gradient(to right, ${T}00, ${T}99)`} />
+        <Box flex="1" h="1px" maxW="320px" bg={`linear-gradient(to right, ${color}00, ${color}99)`} />
         <Text
-          color={T}
+          color={color}
           fontFamily="'EB Garamond', serif"
           fontWeight="700"
           fontSize={{ base: "lg", md: "2xl" }}
@@ -25,7 +25,7 @@ export function TituloSeccion({ children }: { children: React.ReactNode }) {
         >
           {children}
         </Text>
-        <Box flex="1" h="1px" maxW="320px" bg={`linear-gradient(to left, ${T}00, ${T}99)`} />
+        <Box flex="1" h="1px" maxW="320px" bg={`linear-gradient(to left, ${color}00, ${color}99)`} />
       </Flex>
     </Reveal>
   );

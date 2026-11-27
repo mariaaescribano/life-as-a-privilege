@@ -56,6 +56,31 @@ const SiteFooter = () => {
           <GlifoSigno nombre="Géminis" color={T} size={16} glow={false} />
           {t("footer.quienSoy")}
         </Flex>
+        {/* Contactar: lleva a la página para mandarme un correo. Icono de sobre a la izquierda. */}
+        <Flex
+          as="button"
+          type="button"
+          align="center"
+          gap="6px"
+          bg="transparent"
+          border="none"
+          p={0}
+          borderRadius="md"
+          color={`${T}a6`}
+          fontSize="sm"
+          letterSpacing="0.05em"
+          cursor="pointer"
+          _hover={{ color: T }}
+          _focusVisible={focoEnlace}
+          transition="color 0.2s"
+          onClick={() => navigate("/contacto/escribir")}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" height="16px" width="16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <rect x="2" y="4" width="20" height="16" rx="2" />
+            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+          </svg>
+          {t("footer.contactar")}
+        </Flex>
         <Box
           as="a"
           href={INSTAGRAM_URL}

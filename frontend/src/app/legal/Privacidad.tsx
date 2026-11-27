@@ -167,8 +167,7 @@ export default function Privacidad() {
               <strong>Stripe</strong> — procesamiento de los pagos.
             </>,
             <>
-              <strong>Google</strong> — envío de los emails del servicio (Gmail) y, solo si lo
-              aceptas, Google Analytics.
+              <strong>Google</strong> — envío de los emails del servicio (Gmail).
             </>,
             <>
               <strong>YouTube</strong> — los vídeos de los cursos, incrustados en su modo de
