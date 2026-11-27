@@ -33,7 +33,7 @@ export default function TituloPestana() {
       const [a, b] = partes;
       if (!a || a === "welcome") return undefined;
       switch (a) {
-        case "quienSoy": return t("header.sobreMi");
+        case "quienSoy": return t("header.quienSoy");
         case "asesoria": return t("header.asesoria");
         case "premium": return t("header.premium");
         case "disciplinas": return t("header.disciplinas");

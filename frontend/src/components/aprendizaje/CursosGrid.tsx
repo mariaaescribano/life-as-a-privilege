@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Box, SimpleGrid } from "@chakra-ui/react";
 import type { Curso } from "../../hardCoded/cursos";
-import { CursoCardDetalle } from "./CursoCardDetalle";
+import { CursoCardSimple } from "./CursoCardSimple";
 
 /* ────────────────────────────────────────────────────────────────────────
  * CursosGrid — PLANTILLA ÚNICA de la cuadrícula de tarjetas de curso.
@@ -44,10 +44,6 @@ const useReveal = (threshold = 0.15) => {
   return { ref, visible };
 };
 
-// Las dos primeras filas (3 columnas en escritorio) bajan su portada ya; el
-// resto espera a acercarse, que es cuando la tarjeta se enciende con su reveal.
-const FILAS_PRIORITARIAS = 2;
-
 function CursoRevealCell({ it, i }: { it: CursoGridItem; i: number }) {
   const { ref, visible } = useReveal();
   return (
@@ -59,16 +55,8 @@ function CursoRevealCell({ it, i }: { it: CursoGridItem; i: number }) {
       filter={visible ? "none" : "blur(6px)"}
       transition={`opacity 0.7s cubic-bezier(0.22,1,0.36,1) ${(i % 3) * 0.12}s, transform 0.7s cubic-bezier(0.22,1,0.36,1) ${(i % 3) * 0.12}s, filter 0.7s cubic-bezier(0.22,1,0.36,1) ${(i % 3) * 0.12}s`}
     >
-      {/* El levantar al pasar el ratón va en un envoltorio propio, para que no
-          se pise con el transform de la entrada. */}
-      <Box
-        h="100%"
-        borderRadius="2xl"
-        transition="transform 0.45s cubic-bezier(0.22,1,0.36,1), box-shadow 0.45s ease"
-        _hover={{ transform: "translateY(-6px)", boxShadow: "0 18px 40px rgba(0,0,0,0.22)" }}
-      >
-        <CursoCardDetalle curso={it.curso} bgColor={it.bgColor} color={it.color} nom={it.nom} prioritaria={i < FILAS_PRIORITARIAS * 3} proporcionFoto={it.proporcionFoto} sinAccesoLibre={it.sinAccesoLibre} />
-      </Box>
+      {/* Fondo de la disciplina; icono, nombre y flecha. */}
+      <CursoCardSimple curso={it.curso} color={it.color} bgColor={it.bgColor} nom={it.nom} />
     </Box>
   );
 }

@@ -69,7 +69,21 @@ export function recordarSoloLectura(si: boolean): void {
  * cuentas (admin, usuarias en asesoría, quien entra a la plataforma) nunca pierden el menú ni el idioma, aunque
  * antes se hubiera entrado en ese mismo navegador con el enlace de una lectura.
  */
+/**
+ * ¿Estoy en la zona de las CUENTAS (la de la persona en sesión o la de lectura: su Home, su camino, su espacio)?
+ * Todo lo demás es la PLATAFORMA (portada, Asesoría, Quién soy, disciplinas, materiales…), que no es una
+ * cuenta: ahí no cuenta ninguna persona abierta ni ninguna marca de «solo lectura», aunque se hayan quedado
+ * guardadas en el navegador. Así lo público nunca actúa sobre la cuenta de nadie.
+ */
+export function esZonaDeCuenta(): boolean {
+  const p = window.location.pathname.toLowerCase();
+  return ["/home", "/camino", "/metodo", "/espacio", "/aprendizaje", "/user", "/premium", "/acceso", "/checkoutmetodo"].some(
+    (z) => p === z || p.startsWith(z + "/"),
+  );
+}
+
 export function esSoloLectura(): boolean {
+  if (!esZonaDeCuenta()) return false;
   try {
     if ((localStorage.getItem("userId") ?? "").startsWith("lec_")) return true;
     const crudo = localStorage.getItem("persona");

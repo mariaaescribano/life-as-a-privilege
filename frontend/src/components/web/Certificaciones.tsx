@@ -5,6 +5,7 @@ import { Reveal } from "../global/Reveal";
 import { focoBlanco } from "../global/foco";
 import { useT, type ClaveTexto } from "../../i18n";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
+import { FONDO_PAGINA_BEIGE } from "../../GlobalVariables";
 
 /**
  * Los diplomas de María. En la página, el título y un botón sobre el mármol
@@ -53,7 +54,8 @@ const secciones: { tituloKey: ClaveTexto; items: Certificado[] }[] = GRUPOS.map(
 // Lista plana (mismo orden que se muestran)
 const certificados: Certificado[] = secciones.flatMap((s) => s.items);
 
-const TQ = "#004f4f";
+// Todo lo de este componente va en beige (`CB`): el título y el botón de la página, sobre el mármol chocolate, y el popup.
+const CB = FONDO_PAGINA_BEIGE;
 const ORO = "#b08d3f";
 
 // Entrada de cada pieza del popup: sube y se aclara, con su retraso. Ya con el mármol puesto.
@@ -62,8 +64,8 @@ const entra = (delay: number, dur = 0.8) => ({
   animation: `certSube ${dur}s cubic-bezier(0.22,1,0.36,1) ${delay}s both`,
   "@media (prefers-reduced-motion: reduce)": { animation: "none" },
 });
-const MARMOL_DESKTOP = "/img/fondos/marmol-bandas.webp";
-const MARMOL_MOVIL = "/img/fondos/marmol-bandas.webp";
+const MARMOL_DESKTOP = "/img/fondos/marmol-chocolate.webp";
+const MARMOL_MOVIL = "/img/fondos/marmol-chocolate-vertical.webp"; // vertical (girado 90°) para el móvil: así no se estira ni pierde calidad
 
 const Certificaciones = () => {
   const t = useT();
@@ -112,7 +114,7 @@ const Certificaciones = () => {
           <Reveal inView amount={0.5} direction="up" distance={18} duration={0.8}>
             <Text
               textAlign="center"
-              color={TQ}
+              color={CB}
               fontFamily="'EB Garamond', serif"
               fontWeight="700"
               fontSize={{ base: "2xl", md: "4xl" }}
@@ -133,19 +135,16 @@ const Certificaciones = () => {
                 px={{ base: 8, md: 10 }}
                 py={{ base: "12px", md: "14px" }}
                 borderRadius="full"
-                color={TQ}
+                color={CB}
                 fontFamily="'EB Garamond', serif"
                 fontWeight="700"
                 fontSize={{ base: "md", md: "lg" }}
                 letterSpacing="0.1em"
                 textTransform="uppercase"
-                bgImage="none /* MÁRMOL QUITADO 2026-11-27: antes url('/img/fondos/marmol-bandas.webp') */"
-                bgSize="cover"
-                bgPosition="center"
-                border={`1px solid ${TQ}88`}
-                boxShadow={`0 0 18px ${ORO}55, 0 0 40px ${ORO}2e`}
+                bg="transparent"
+                border={`1px solid ${CB}88`}
                 transition="all 0.25s ease"
-                _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 24px ${ORO}88, 0 0 54px ${ORO}44` }}
+                _hover={{ transform: "translateY(-2px)", bg: `${CB}1f`, borderColor: CB }}
                 _focusVisible={focoBlanco}
               >
                 {t("quienSoy.verCertificados")}
@@ -179,7 +178,7 @@ const Certificaciones = () => {
               inset={0}
               zIndex={0}
               pointerEvents="none"
-              bgImage="none" /* MÁRMOL QUITADO 2026-11-27: antes url(MARMOL_MOVIL/DESKTOP) */
+              bgImage={{ base: `url('${MARMOL_MOVIL}')`, md: `url('${MARMOL_DESKTOP}')` }}
               bgSize="cover"
               bgPosition="center"
               bgRepeat="no-repeat"
@@ -205,13 +204,13 @@ const Certificaciones = () => {
               display="flex"
               alignItems="center"
               justifyContent="center"
-              color={TQ}
-              bg="rgba(255,255,255,0.35)"
-              border={`1px solid ${TQ}88`}
+              color={CB}
+              bg="rgba(240,220,192,0.12)"
+              border={`1px solid ${CB}88`}
               boxShadow={`0 0 14px ${ORO}55`}
               cursor="pointer"
               transition="background 0.2s"
-              _hover={{ bg: "rgba(255,255,255,0.6)" }}
+              _hover={{ bg: "rgba(240,220,192,0.25)" }}
               _focusVisible={focoBlanco}
             >
               <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960" width="18" fill="currentColor">
@@ -231,7 +230,7 @@ const Certificaciones = () => {
               zIndex={1}
             >
               <Text
-                color={TQ}
+                color={CB}
                 fontWeight="700"
                 fontSize={{ base: "lg", md: "2xl", lg: "4xl" }}
                 letterSpacing="0.03em"
@@ -242,7 +241,7 @@ const Certificaciones = () => {
                 {t("quienSoy.certificados")}
               </Text>
               {seccionActual && (
-                <Text color={`${TQ}cc`} fontStyle="italic" fontSize={{ base: "sm", md: "lg" }} display={{ base: "none", lg: "block" }} sx={entra(0.25)}>
+                <Text color={`${CB}cc`} fontStyle="italic" fontSize={{ base: "sm", md: "lg" }} display={{ base: "none", lg: "block" }} sx={entra(0.25)}>
                   {t(seccionActual.tituloKey)}
                 </Text>
               )}
@@ -277,15 +276,15 @@ const Certificaciones = () => {
               zIndex={1}
               sx={{
                 scrollbarWidth: "thin",
-                scrollbarColor: `${TQ}99 ${TQ}22`,
+                scrollbarColor: `${CB}99 ${CB}22`,
                 "&::-webkit-scrollbar": { width: "8px" },
-                "&::-webkit-scrollbar-track": { background: `${TQ}22`, borderRadius: "8px" },
-                "&::-webkit-scrollbar-thumb": { background: `${TQ}99`, borderRadius: "8px" },
+                "&::-webkit-scrollbar-track": { background: `${CB}22`, borderRadius: "8px" },
+                "&::-webkit-scrollbar-thumb": { background: `${CB}99`, borderRadius: "8px" },
               }}
             >
               {visibles.map((sec, si) => (
                 <Box key={sec.tituloKey} mb={{ base: 5, lg: 7 }} sx={entra(0.45 + Math.min(si, 4) * 0.12)}>
-                  <Text color={TQ} fontWeight="700" fontSize={{ base: "md", md: "lg" }} letterSpacing="0.05em" mb={3}>
+                  <Text color={CB} fontWeight="700" fontSize={{ base: "md", md: "lg" }} letterSpacing="0.05em" mb={3}>
                     {t(sec.tituloKey)}
                   </Text>
                   <SimpleGrid columns={{ base: 2, sm: 3 }} spacing={{ base: 2, md: 3 }}>
@@ -302,7 +301,7 @@ const Certificaciones = () => {
                           aria-label={`${t(sec.tituloKey)} ${idx + 1}`}
                           borderRadius="md"
                           overflow="hidden"
-                          border={`2px solid ${on ? TQ : "transparent"}`}
+                          border={`2px solid ${on ? CB : "transparent"}`}
                           boxShadow={`0 0 10px ${ORO}33`}
                           opacity={on ? 1 : 0.85}
                           transition="all 0.25s ease"

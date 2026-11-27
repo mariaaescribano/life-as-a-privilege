@@ -63,6 +63,7 @@ corrige este documento):
   `#004f4f66`). Lo llevan Disciplinas, Asesoría, Contacto, Materiales, Quién soy, Pilares y la
   tarjeta de la creadora; las fotos sobre turquesa liso (las tres de «Mi propósito», la de Mapa) no.
   Usos: portada, `/asesoria`, `/disciplinas`.
+- **Marmol chocolate (nov-2026):** foto oscura `/img/fondos/marmol-chocolate.webp` (resolucion completa) en bandas con `BandaFoto foto=… fundido={55}`; letra beige `#F0DCC0`. La usan la seccion de las 4 fotos de Welcome y los libros de pago de /libros. El marmol claro antiguo esta quitado (buscar «MÁRMOL QUITADO»). Tarjeta de curso = `CursoCardSimple` (fondo de la disciplina; icono · nombre del curso · flecha; sin foto de curso ni precio).
 - **Mapa de disciplinas desplegable** (`/asesoria`, `components/web/MapaDisciplinas.tsx`): ocho
   disciplinas en vertical con flechas blancas que se dibujan; una abierta a la vez; cajitas con
   flechas y texto en pastilla. Sin hover. Datos y pendientes en `mapaDisciplinasData.tsx`.

@@ -8,7 +8,7 @@ import { focoBlanco } from "../../components/global/foco";
 import { BotonPaso } from "../../components/metodo/BotonPaso";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
 import { presentacionPorKey, type PresentacionDisciplina } from "../../data/presentacionDisciplinas";
-import { AprendizajeIcon } from "../../GlobalVariables";
+import { AprendizajeIcon, FONDO_PAGINA_TURQUESA } from "../../GlobalVariables";
 import FotoDisciplina from "../../components/web/FotoDisciplina";
 import ServiciosAstrologia from "../../components/web/ServiciosAstrologia";import WelcomeCabecera from "../../components/welcome/WelcomeCabecera";
 import { useCabeceraEscribiendo } from "../../components/global/cabeceraEntrada";
@@ -185,6 +185,8 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
     //   renderIcon: () => <d.Icon size="52px" />,
     // },
   ];
+  // Disciplinas cuya página aún no está disponible (clave de la disciplina).
+  const NO_DISPONIBLES = new Set(["psicologia", "fisiologia", "cultura"]);
   const pagada = usePagada(d.key);
   // La Teoría solo se ve pagada: si alguien llega por la URL sin pagar, vuelve a la portada.
   useEffect(() => {
@@ -201,6 +203,22 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
       {/* ── CABECERA: mandala, nombre de la disciplina, su frase y la línea con el mandala pequeño ── */}
       <WelcomeCabecera activo={mounted} titulo={nombreDe(d.nom)} subtitulo={segunIdioma(d.gancho)} mayusculas sinSeparador={esAstro} />
 
+      {/* Psicología, Cuerpo (Fisiología) y Filosofía (Cultura): todavía sin contenido. Solo la cabecera y el aviso. */}
+      {NO_DISPONIBLES.has(d.key) ? (
+        <Flex flex={1} align="flex-start" justify="center" px={{ base: 5, md: 10 }} pt={{ base: 10, md: 16 }} pb={{ base: 24, md: 32 }}>
+          <Text
+            color={FONDO_PAGINA_TURQUESA}
+            fontFamily="'EB Garamond', serif"
+            fontStyle="italic"
+            fontSize={{ base: "xl", md: "2xl" }}
+            letterSpacing="0.03em"
+            textAlign="center"
+          >
+            {t("portada.noDisponible")}
+          </Text>
+        </Flex>
+      ) : (
+      <>
       {/* ── BANDA CON LA FOTO DE LA DISCIPLINA DE FONDO (como el mármol, pero con su foto) ──
           A la izquierda, su foto cuadrada; a la derecha, las puertas apiladas con el mismo
           alto que la foto. */}
@@ -327,6 +345,8 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
 
         )}
       </Box>
+      </>
+      )}
 
       {/* Dentro de Teoría: volver a la portada (abajo a la izquierda, fuera de las cajas). */}
       {modo === "teoria" && pagada && (

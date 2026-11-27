@@ -51,6 +51,7 @@ export const web = {
   "portada.teoria": "Theory",
   "portada.ilustraciones": "Illustrations",
   "portada.cursos": "Courses",
+  "portada.noDisponible": "Not available yet.",
   "portada.recorrido": "The Map",
   "portada.contenidoAsesoramiento": "The coaching content",
   "presentacion.precioSesion": "per session",

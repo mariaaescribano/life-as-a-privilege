@@ -80,6 +80,7 @@ const TestDoshasPage = lazyConMetodo(() => import("./app/aprendizaje/TestDoshasP
 const EspacioHome = lazy(() => import("./app/espacio/main/EspacioHome"));
 const ExpandablePage = lazyConMetodo(() => import("./app/espacio/main/ThemePreguntas"));
 const QuienSoy = lazy(() => import("./app/web/QuienSoy"));
+const AstrologiaVision = lazy(() => import("./app/web/AstrologiaVision"));
 const ReservarCita = lazy(() => import("./app/web/ReservarCita"));
 const PedirLectura = lazy(() => import("./app/web/PedirLectura"));
 const AdminLecturas = lazy(() => import("./app/admin/AdminLecturas"));
@@ -452,6 +453,7 @@ export default function App({ antigua = false }: { antigua?: boolean } = {})
       <Route path="/terminos" element={<Terminos />} />
       <Route path="/home" element={<PrivateRoute>{antigua ? <HomeAntigua /> : <Home />}</PrivateRoute>} />
       <Route path="/quienSoy" element={<QuienSoy />} />
+      <Route path="/astrologia" element={<AstrologiaVision />} />
       <Route path="/reservar-cita" element={<ReservarCita />} />
       <Route path="/astrologia/pedir" element={<PedirLectura />} />
       <Route path="/asesoria" element={<Asesoria />} />

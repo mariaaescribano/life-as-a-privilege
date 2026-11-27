@@ -181,19 +181,22 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   // Las opciones de la web, iguales con sesión y sin ella (cambia solo la
   // última). «El Mapa» y «Materiales» salieron del menú mientras esas páginas
   // no se usan; las rutas /elMetodo y /materiales siguen vivas.
+  const itAsesorias: ItemMenu = { etiqueta: t("header.asesorias"), onSelect: () => navigate("/asesoria"), activo: path.startsWith("/asesoria") };
+  const itRecursos: ItemMenu = { etiqueta: t("header.formacion"), onSelect: () => navigate("/materiales"), activo: isMaterialesPage };
+  const itQuienSoy: ItemMenu = { etiqueta: t("header.quienSoy"), onSelect: () => navigate("/quienSoy"), activo: path.startsWith("/quiensoy") };
+  // Menú desplegable (hamburguesa): Asesorías, las cuatro perspectivas (portada de cada disciplina) y luego Recursos y Quién soy.
   const itemsWeb: ItemMenu[] = [
-    { etiqueta: t("header.asesoria"),    onSelect: () => navigate("/asesoria"),    activo: path.startsWith("/asesoria") },
+    itAsesorias,
+    { etiqueta: t("header.psicologia"), onSelect: () => navigate("/disciplina/psicologia"), activo: path.startsWith("/disciplina/psicologia") },
+    { etiqueta: t("header.cuerpo"),     onSelect: () => navigate("/disciplina/fisiologia"), activo: path.startsWith("/disciplina/fisiologia") },
+    { etiqueta: t("header.filosofia"),  onSelect: () => navigate("/disciplina/cultura"),    activo: path.startsWith("/disciplina/cultura") },
+    { etiqueta: t("header.astrologia"), onSelect: () => navigate("/disciplina/astrologia"), activo: path.startsWith("/disciplina/astrologia") },
+    itRecursos,
+    itQuienSoy,
     // Premium APARCADO (ver App.tsx): { etiqueta: t("header.premium"), onSelect: () => navigate("/premium"), activo: path.startsWith("/premium") },
-    // POR AHORA solo estas cuatro en la cabecera. Astrología y Formación apuntan a páginas provisionales
-    // (la portada de la disciplina y Materiales) hasta que estén las nuevas. El resto, aparcado:
-    { etiqueta: t("header.astrologia"),  onSelect: () => navigate("/disciplina/astrologia"), activo: path.startsWith("/disciplina/astrologia") },
-    { etiqueta: t("header.formacion"),   onSelect: () => navigate("/materiales"),   activo: isMaterialesPage },
-    { etiqueta: t("header.quienSoy"),    onSelect: () => navigate("/quienSoy"),     activo: path.startsWith("/quiensoy") },
-    // { etiqueta: t("header.disciplinas"), onSelect: () => navigate("/disciplinas"), activo: path.startsWith("/disciplinas") },
-    // { etiqueta: t("header.material"),    onSelect: () => navigate("/materiales"),   activo: isMaterialesPage },
-    // { etiqueta: t("header.sobreMi"),     onSelect: () => navigate("/quienSoy"),     activo: path.startsWith("/quiensoy") },
-    // { etiqueta: t("header.contacto"),    onSelect: () => navigate("/contacto"),     activo: isContactoPage },
   ];
+  // Las opciones a la vista en el centro del header (solo en ordenador): estas tres.
+  const itemsArriba: ItemMenu[] = [itAsesorias, itRecursos, itQuienSoy];
 
   // Premium APARCADO: el menú de las cuentas solo-Premium (Podcasts, Reels) y su detección están comentados.
   // const itemsPremium: ItemMenu[] = [
@@ -371,7 +374,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
           align="center"
           gap={{ lg: 6, xl: 10 }}
         >
-          {itemsWeb.slice(0, 4).map((it) => (
+          {itemsArriba.map((it) => (
             <Box
               key={it.etiqueta}
               as="button"

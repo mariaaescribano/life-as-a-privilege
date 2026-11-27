@@ -9,7 +9,7 @@ import WelcomeCabecera from "../../components/welcome/WelcomeCabecera";
 import { Reveal } from "../../components/global/Reveal";
 import { focoBlanco } from "../../components/global/foco";
 
-const TINTA = "#004f4f";
+const TINTA = "#3B2418";
 
 type Cajita = {
   titulo: string;

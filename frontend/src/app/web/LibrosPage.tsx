@@ -13,8 +13,8 @@ import { API_URL, FONDO_PAGINA_TURQUESA as T } from "../../GlobalVariables";
 
 const PRECIO_LIBRO_PAGO = "5 €";
 
-// Los cuatro libros de pago van sobre el mármol: letra turquesa oscuro (ver DISENO.md).
-const TINTA = "#004f4f";
+// Los libros de pago van sobre el mármol chocolate: letra beige (el resto de libros, gratis, va en chocolate sobre el beige de la página).
+const TINTA = "#F0DCC0";
 const ORO = "#b08d3f";
 
 // Portadas que se esperan antes de pintar la página (las de la primera
@@ -207,7 +207,7 @@ function PaidBookCell({ item, i, total, puerta }: { item: PaidItem; i: number; t
       {item.img && (
         <Box
           flexShrink={0}
-          w={{ base: "150px", md: "128px" }}
+          w={{ base: "180px", md: "164px" }}
           aspectRatio={1}
           borderRadius="lg"
           overflow="hidden"
@@ -240,7 +240,7 @@ function PaidBookCell({ item, i, total, puerta }: { item: PaidItem; i: number; t
         <Text
           color={TINTA}
           fontFamily="'EB Garamond', serif"
-          fontSize={{ base: "lg", md: "lg" }}
+          fontSize={{ base: "xl", md: "2xl" }}
           fontWeight="700"
           letterSpacing="0.03em"
           lineHeight="1.25"
@@ -250,7 +250,7 @@ function PaidBookCell({ item, i, total, puerta }: { item: PaidItem; i: number; t
         <Text
           color={TINTA}
           fontFamily="'EB Garamond', serif"
-          fontSize={{ base: "sm", md: "sm" }}
+          fontSize={{ base: "md", md: "md" }}
           fontStyle="italic"
           lineHeight="1.5"
         >
@@ -306,7 +306,7 @@ function PaidBookCell({ item, i, total, puerta }: { item: PaidItem; i: number; t
             transition="all 0.18s"
           >
             {acepta && (
-              <Box as="svg" viewBox="0 0 24 24" w="12px" h="12px" fill="none" stroke="#ffffff" strokeWidth="3.5">
+              <Box as="svg" viewBox="0 0 24 24" w="12px" h="12px" fill="none" stroke={T} strokeWidth="3.5">
                 <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
               </Box>
             )}
@@ -322,7 +322,7 @@ function PaidBookCell({ item, i, total, puerta }: { item: PaidItem; i: number; t
               as="span"
               textDecoration="underline"
               onClick={(e) => { e.stopPropagation(); window.open("/terminos", "_blank"); }}
-              _hover={{ color: "#003838" }}
+              _hover={{ color: "#ffffff" }}
             >
               {t("libros.condiciones")}
             </Text>
@@ -529,15 +529,15 @@ export default function LibrosPage() {
       <SiteHeader variant="auto" />
 
       {/* ── MANDALA + TÍTULO + FRASE + separación con el mandala (la cabecera de la portada) ── */}
-      <WelcomeCabecera activo={mounted} titulo={t("libros.titulo")} subtitulo={t("libros.subtitulo")} mayusculas />
+      <WelcomeCabecera activo={mounted} titulo={t("libros.titulo")} subtitulo={t("libros.subtitulo")} mayusculas sinSeparador />
 
       {/* ── LOS LIBROS DE PAGO, sobre el mármol; luego otra separación con el mandala ── */}
       <TrasCabecera flex="1" display="flex" flexDirection="column">
       {paidItems.length > 0 && (
         <>
           <Box mt={{ base: 8, md: 12 }}>
-            <BandaFoto pt={{ base: "104px", md: "72px" }} pb={{ base: "116px", md: "72px" }}>
-              <Box w="100%" maxW="820px" mx="auto" px={{ base: 5, md: 6 }}>
+            <BandaFoto foto="/img/fondos/marmol-chocolate.webp" fundido={55} pt={{ base: "70px", md: "80px" }} pb={{ base: "70px", md: "80px" }}>
+              <Box w="100%" maxW="1040px" mx="auto" px={{ base: 5, md: 6 }}>
                 <AvisaVisible visible={!escribiendo} onVisible={() => setMarmolListo(true)} />
                 <Grid templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }}>
                   {paidItems.map((item, i) => (

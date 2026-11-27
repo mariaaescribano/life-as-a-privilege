@@ -28,8 +28,8 @@ const ReservarCita = () => {
     <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="auto" />
       <Box flex="1" pb={{ base: 16, md: 24 }}>
-        <WelcomeCabecera activo={mounted} titulo={t("welcome.hero.pedirCita")} subtitulo={t("llamada.gratis")} mayusculas />
-        <TrasCabecera><BookCallModal isOpen enPagina onClose={() => navigate("/")} /></TrasCabecera>
+        <WelcomeCabecera activo={mounted} titulo={t("welcome.hero.pedirCita")} subtitulo={t("llamada.gratis")} mayusculas sinSeparador />
+        <TrasCabecera><Box px={{ base: 4, md: 0 }} pt={{ base: 6, md: 8 }}><BookCallModal isOpen enPagina onClose={() => navigate("/")} /></Box></TrasCabecera>
       </Box>
       <TrasCabecera><SiteFooter /></TrasCabecera>
     </Box>

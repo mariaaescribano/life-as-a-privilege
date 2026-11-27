@@ -21,7 +21,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 import axios from "axios";
 import { API_URL } from "../GlobalVariables";
-import { cerrarSesionLocal, esAdminDesbloqueado, recordarSoloLectura } from "./sesion";
+import { cerrarSesionLocal, esAdminDesbloqueado, esZonaDeCuenta, recordarSoloLectura } from "./sesion";
 
 /** La persona cuyo camino estoy abriendo ahora mismo (si hay alguna). */
 const CLAVE_PERSONA = "persona";
@@ -96,7 +96,7 @@ const poner = (k: string, v: string | null) => {
  * Vacía si no hay persona abierta. Las de axios la llevan solas (axiosSetup.ts).
  */
 export function cabeceraPersona(): Record<string, string> {
-  if (window.location.pathname.startsWith("/admin")) return {}; // el panel nunca va sobre una persona
+  if (window.location.pathname.startsWith("/admin") || !esZonaDeCuenta()) return {}; // ni el panel ni la plataforma pública van sobre una persona
   const p = personaActiva();
   return p ? { "X-Persona": p.id } : {};
 }

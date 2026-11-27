@@ -507,7 +507,7 @@ export function BookCallModal({ isOpen, onClose, enPagina = false }: BookCallMod
 
   if (enPagina) {
     return (
-      <Box w="100%" maxW="720px" mx="auto" px={{ base: 5, md: 8 }} py={{ base: 6, md: 8 }} fontFamily="'EB Garamond', serif" color={FG}>
+      <Box w="100%" maxW="720px" mx="auto" px={{ base: 5, md: 8 }} py={{ base: 6, md: 8 }} fontFamily="'EB Garamond', serif" color={FG} border={`1.5px solid ${FG}`} borderRadius="2xl">
         {contenido}
       </Box>
     );

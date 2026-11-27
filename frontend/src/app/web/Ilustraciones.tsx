@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { FONDO_PAGINA_TURQUESA as T } from "../../GlobalVariables";
 import { Box, Flex, Grid, Text } from "@chakra-ui/react";
+import TituloSeccion from "../../components/global/TituloSeccion";
+import { repartirCienciaTradicion } from "../../data/cienciaTradicion";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import FlorTitulo from "../../components/global/FlorTitulo";
@@ -8,7 +10,7 @@ import { LifeLoader } from "../../components/metodo/comicLoaders";
 import { ComicModal } from "../../components/metodo/ComicModal";
 import { ILUSTRACIONES, ILUSTRACIONES_GALERIA, type IlustracionEntry } from "../../components/metodo/ilustracionesGaleria";
 import { IlustracionCard } from "../../components/metodo/IlustracionCard";
-import { useT } from "../../i18n";
+import { useT, type ClaveTexto } from "../../i18n";
 import { useParams } from "react-router-dom";
 import DisciplinaHeader from "../../components/web/DisciplinaHeader";
 import { presentacionPorKey } from "../../data/presentacionDisciplinas";
@@ -187,16 +189,33 @@ export default function Ilustraciones() {
             {t("ilustraciones.vacio")}
           </Text>
         ) : (
-          <Grid
-            w="100%"
-            maxW="1180px"
-            templateColumns={{ base: "1fr", sm: "repeat(2, 1fr)", lg: "repeat(4, 1fr)" }}
-            gap={{ base: 6, md: 6 }}
-          >
-            {entradas.map((entry, i) => (
-              <IlustracionCard key={entry.id} entry={entry} i={i} onOpen={() => setAbierta(entry)} />
+          // Sin disciplina: dos bloques, CIENCIA y TRADICIÓN, cada uno con su título entre rayas.
+          // Con disciplina (/ilustraciones/:disciplina): una sola lista, sin títulos.
+          <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 12, md: 16 }}>
+            {(disciplina
+              ? [{ clave: "", entradas }]
+              : (() => {
+                  const { ciencia, tradicion } = repartirCienciaTradicion(entradas, (e) => e.disciplina);
+                  return [
+                    { clave: "seccion.ciencia" as const, entradas: ciencia },
+                    { clave: "seccion.tradicion" as const, entradas: tradicion },
+                  ].filter((g) => g.entradas.length > 0);
+                })()
+            ).map((grupo) => (
+              <Flex key={grupo.clave || "todas"} direction="column" align="center" w="100%" gap={{ base: 8, md: 10 }}>
+                {grupo.clave && <TituloSeccion>{t(grupo.clave as ClaveTexto)}</TituloSeccion>}
+                <Grid
+                  w="100%"
+                  templateColumns={{ base: "1fr", sm: "repeat(2, 1fr)", lg: "repeat(4, 1fr)" }}
+                  gap={{ base: 6, md: 6 }}
+                >
+                  {grupo.entradas.map((entry, i) => (
+                    <IlustracionCard key={entry.id} entry={entry} i={i} onOpen={() => setAbierta(entry)} />
+                  ))}
+                </Grid>
+              </Flex>
             ))}
-          </Grid>
+          </Flex>
         )}
       </Flex>
 

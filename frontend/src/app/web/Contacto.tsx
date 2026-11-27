@@ -58,7 +58,7 @@ const Contacto = () => {
                 <Box position="relative">
                   <Box position="absolute" inset="-9px" borderRadius="30px" border={`1px solid ${TINTA}66`} pointerEvents="none" />
                   <Box borderRadius="22px" overflow="hidden" boxShadow={`0 0 22px ${ORO}55, 0 0 48px ${ORO}28`}>
-                    <Image src="/img/me/asesoria.webp" alt="María Escribano" w="100%" h="auto" display="block" />
+                    <Image src="/img/me/maria-quiensoy.webp" alt="María Escribano" w="100%" h="auto" display="block" />
                   </Box>
                 </Box>
               </Reveal>

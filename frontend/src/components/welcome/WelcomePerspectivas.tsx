@@ -29,7 +29,7 @@ const WelcomePerspectivas = () => {
   return (
     <Box w="100%">
       {/* El mármol chocolate hace de separación entre secciones: se funde arriba y abajo con el beige. */}
-      <BandaFoto foto="/img/fondos/marmol-chocolate.webp" fundido={110} pt={{ base: "96px", md: "130px" }} pb={{ base: "96px", md: "130px" }}>
+      <BandaFoto foto="/img/fondos/marmol-chocolate.webp" fundido={55} pt={{ base: "56px", md: "80px" }} pb={{ base: "56px", md: "80px" }}>
       <Box px={{ base: 4, md: 10, lg: 14 }} maxW="1440px" mx="auto">
       <Flex direction="column" align="center" px={{ base: 2, md: 8 }} py={{ base: 4, md: 6 }} gap={{ base: 5, md: 6 }}>
         {/* Entradilla en cursiva, centrada, antes de las fotos. */}

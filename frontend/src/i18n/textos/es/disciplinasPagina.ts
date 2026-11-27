@@ -16,4 +16,9 @@ export const disciplinasPagina = {
   "disciplinasPagina.comoTexto": "Integro y adapto los conocimientos de cada disciplina para ofrecerte una visión multidimensional de ti mismo. Un método que te permitirá descubrir nuevas perspectivas y profundizar en tu autoconocimiento.",
   "disciplinasPagina.mensaje": "No  te daré respuestas definitivas, sino herramientas para que puedas ampliar tu perspectiva.",
   "disciplinasPagina.encabezado": "Con acceso a contenido exclusivo que acompañará tu camino",
+  /** Títulos de sección de /ilustraciones y de los cursos. */
+  "seccion.ciencia": "Ciencia",
+  "seccion.tradicion": "Tradición",
+  /** Página «Cómo veo la Astrología» (/astrologia): frase bajo el titular. La 2.ª línea (entre **) sale en negrita. */
+  "astroVision.frase": "La Astrología acompaña a la humanidad desde hace 4.000 años.\n**Descubre qué puede aportarte a ti.**",
 } as const;

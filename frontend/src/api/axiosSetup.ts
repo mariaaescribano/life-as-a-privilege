@@ -1,5 +1,5 @@
 import axios from "axios";
-import { cerrarSesionLocal } from "./sesion";
+import { cerrarSesionLocal, esZonaDeCuenta } from "./sesion";
 import { personaActiva } from "./persona";
 
 /**
@@ -45,7 +45,8 @@ axios.interceptors.request.use((config) => {
   // siendo el de María; el servidor solo hace caso a la cabecera si lo es (ver
   // api/persona.ts y backend/src/auth/persona.util.ts).
   // El panel de administración (/admin…) nunca va sobre una persona: ahí María es María.
-  const persona = window.location.pathname.startsWith("/admin") ? null : personaActiva();
+  // Tampoco la plataforma pública (portada, Asesoría…): no es una cuenta, nunca va sobre una persona.
+  const persona = window.location.pathname.startsWith("/admin") || !esZonaDeCuenta() ? null : personaActiva();
   if (persona) {
     config.headers = config.headers ?? {};
     config.headers["X-Persona"] = persona.id;

@@ -9,6 +9,8 @@ import { useCursosData } from "../../data/cursosApi";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { LifeLoader } from "../../components/metodo/comicLoaders";
 import { useT } from "../../i18n";
+import TituloSeccion from "../../components/global/TituloSeccion";
+import { repartirCienciaTradicion } from "../../data/cienciaTradicion";
 // Cuántas portadas de curso se piden por adelantado: las dos primeras filas de
 // la cuadrícula (3 columnas en escritorio). El resto baja al acercarse.
 const PORTADAS_PRIMERA_PANTALLA = 6;
@@ -154,14 +156,28 @@ export const AprendizajeHome = () => {
           <Box w="100%">
             <Box h={{ base: 6, md: 8 }} />
 
-            <CursosGrid
-              items={allCourses.map((entry) => ({
-                curso: entry.curso,
-                color: entry.modalidad.color,
-                bgColor: entry.modalidad.bgColor,
-                nom: entry.modalidad.nom,
-              }))}
-            />
+            {/* Dos bloques, CIENCIA y TRADICIÓN, cada uno con su título entre rayas. */}
+            {(() => {
+              const { ciencia, tradicion } = repartirCienciaTradicion(allCourses, (e) => e.modalidad.nom);
+              return [
+                { clave: "seccion.ciencia" as const, cursos: ciencia },
+                { clave: "seccion.tradicion" as const, cursos: tradicion },
+              ]
+                .filter((g) => g.cursos.length > 0)
+                .map((g, n) => (
+                  <Box key={g.clave} mt={n === 0 ? 0 : { base: 12, md: 16 }}>
+                    <Box mb={{ base: 6, md: 8 }}><TituloSeccion>{t(g.clave)}</TituloSeccion></Box>
+                    <CursosGrid
+                      items={g.cursos.map((entry) => ({
+                        curso: entry.curso,
+                        color: entry.modalidad.color,
+                        bgColor: entry.modalidad.bgColor,
+                        nom: entry.modalidad.nom,
+                      }))}
+                    />
+                  </Box>
+                ));
+            })()}
           </Box>
         )}
       </Flex>

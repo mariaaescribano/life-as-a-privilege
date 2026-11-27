@@ -169,7 +169,7 @@ const Disciplinas = () => {
                 <Box position="relative">
                   <Box position="absolute" inset="-9px" borderRadius="30px" border={`1px solid ${TINTA}66`} pointerEvents="none" />
                   <Box borderRadius="22px" overflow="hidden" border={`1.5px solid ${TINTA}`} boxShadow={`0 0 18px ${ORO}44, 0 0 40px ${ORO}22`}>
-                    <Image src="/img/me/trajegrisconmapa.webp" alt="María Escribano" w="100%" h="auto" display="block" />
+                    <Image src="/img/me/maria-quiensoy.webp" alt="María Escribano" w="100%" h="auto" display="block" />
                   </Box>
                 </Box>
               </Reveal>
