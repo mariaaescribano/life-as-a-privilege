@@ -53,8 +53,16 @@ export const turquesa = "#48C0B5";
 export const FONDO_PAGINA_BEIGE = "#F0DCC0";
 // Turquesa clásico (el de antes):
 // export const FONDO_PAGINA_TURQUESA = "#008080";
-// Turquesa oscuro (activo): mandala, header, titulares y letra sobre el fondo de página.
-export const FONDO_PAGINA_TURQUESA = "#005F5F";
+// TURQUESA OSCURO ORIGINAL = #005F5F (rgba(0, 95, 95, …)). Hasta 2026-11-27 era el color de
+// mandala, header, titulares y letra sobre el fondo. Sustituido en TODO el frontend por marrón
+// chocolate (sed global). Para volver: sustituir "#3B2418" por "#005F5F" y "rgba(59, 36, 24"
+// por "rgba(0, 95, 95" en frontend/src. (Los correos del backend, mail.service.ts y
+// marco-marmol.ts, siguen en #005F5F.)
+// Opciones de chocolate para probar (cambiar con sed "s/#3B2418/<otro>/g"):
+//   #4B2E1E chocolate oscuro · #3E2417 cacao casi negro · #5C3A21 chocolate con leche
+//   #6B4226 chocolate medio · #7B3F00 chocolate clásico (más cálido/rojizo) · #3B2418 café espresso (ACTIVO, a medida)
+// Marrón chocolate (activo): mandala, header, titulares y letra sobre el fondo de página.
+export const FONDO_PAGINA_TURQUESA = "#3B2418";
 // Letra sobre el fondo de página (antes blanca). Turquesa oscuro.
 export const TEXTO_PAGINA = FONDO_PAGINA_TURQUESA;
 

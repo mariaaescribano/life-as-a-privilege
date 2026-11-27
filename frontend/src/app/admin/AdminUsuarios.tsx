@@ -212,7 +212,7 @@ export default function AdminUsuarios() {
                 </Flex>
               ))}
               {filtrados.length === 0 && (
-                <Text color="#005F5Fb3" fontStyle="italic" textAlign="center" py={8}>
+                <Text color="#3B2418b3" fontStyle="italic" textAlign="center" py={8}>
                   {usuarios.length === 0 ? "No hay cuentas todavía." : "Ninguna cuenta coincide con la búsqueda."}
                 </Text>
               )}

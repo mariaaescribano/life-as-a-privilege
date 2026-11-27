@@ -5,7 +5,7 @@ import { Box } from "@chakra-ui/react";
 // persona): el mandala turquesa y el botón en píldora.
 
 /** Mandala de la casa en turquesa (el PNG es blanco: se usa de máscara). */
-export const MandalaTurquesa = ({ tam, color = "#005F5F" }: { tam: string; color?: string }) => (
+export const MandalaTurquesa = ({ tam, color = "#3B2418" }: { tam: string; color?: string }) => (
   <Box
     flexShrink={0}
     w={tam}
@@ -54,9 +54,9 @@ export function BotonPildora({ children, onClick, solido, peligro, titulo, ocupa
       px={{ base: 4, md: 5 }}
       py="8px"
       borderRadius="full"
-      border={marmol ? "1.5px solid #004f4f" : peligro ? "1.5px solid #b3261e" : "1.5px solid #005F5F"}
-      bg={marmol ? (solido ? "#004f4f" : "rgba(255,255,255,0.45)") : solido ? "#005F5F" : "transparent"}
-      color={marmol ? (solido ? "#F0DCC0" : "#004f4f") : solido ? "#F0DCC0" : peligro ? "#b3261e" : "#005F5F"}
+      border={marmol ? "1.5px solid #004f4f" : peligro ? "1.5px solid #b3261e" : "1.5px solid #3B2418"}
+      bg={marmol ? (solido ? "#004f4f" : "rgba(255,255,255,0.45)") : solido ? "#3B2418" : "transparent"}
+      color={marmol ? (solido ? "#F0DCC0" : "#004f4f") : solido ? "#F0DCC0" : peligro ? "#b3261e" : "#3B2418"}
       fontWeight="700"
       fontSize="sm"
       letterSpacing="0.04em"
@@ -64,8 +64,8 @@ export function BotonPildora({ children, onClick, solido, peligro, titulo, ocupa
       cursor={desactivado ? "not-allowed" : ocupado ? "wait" : "pointer"}
       opacity={desactivado ? 0.4 : ocupado ? 0.6 : 1}
       transition="all 0.2s ease"
-      _hover={desactivado ? {} : marmol ? { transform: "translateY(-1px)", boxShadow: "0 0 18px #004f4f55" } : { transform: "translateY(-1px)", bg: solido ? "#004a4a" : peligro ? "#b3261e14" : "#005F5F14" }}
-      _focusVisible={{ outline: marmol ? "2px solid #004f4f" : "2px solid #005F5Fcc", outlineOffset: "2px" }}
+      _hover={desactivado ? {} : marmol ? { transform: "translateY(-1px)", boxShadow: "0 0 18px #004f4f55" } : { transform: "translateY(-1px)", bg: solido ? "#004a4a" : peligro ? "#b3261e14" : "#3B241814" }}
+      _focusVisible={{ outline: marmol ? "2px solid #004f4f" : "2px solid #3B2418cc", outlineOffset: "2px" }}
     >
       {children}
     </Box>

@@ -60,7 +60,7 @@ export function CorreoEditable({
     } finally { setEnviando(false); }
   };
 
-  const T = "#005F5F";
+  const T = "#3B2418";
   const campo = { bg: "#F7EBD9", border: `1.5px solid ${T}66`, color: T, fontFamily: "'EB Garamond', serif", _placeholder: { color: `${T}8c` }, _focus: { borderColor: T, boxShadow: "none" }, _focusVisible: { borderColor: T, boxShadow: "none" } } as const;
   const etiqueta = { display: "block", color: T, fontSize: "sm", letterSpacing: "0.14em", textTransform: "uppercase", fontWeight: 600, mb: 2 } as const;
 

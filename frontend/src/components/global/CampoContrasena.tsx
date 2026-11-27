@@ -14,8 +14,8 @@ import { useT } from "../../i18n";
  */
 export const inputAuthStyles = {
   bg: "#F7EBD9",
-  border: "1.5px solid #005F5F66",
-  color: "#005F5F",
+  border: "1.5px solid #3B241866",
+  color: "#3B2418",
   borderRadius: "full",
   size: "lg" as const,
   h: { base: "50px", md: "54px" },
@@ -23,19 +23,19 @@ export const inputAuthStyles = {
   textAlign: "center" as const,
   fontFamily: "'EB Garamond', serif",
   letterSpacing: "0.04em",
-  boxShadow: "0 0 0 1px #005F5F00, 0 0 0 #005F5F00",
-  _placeholder: { color: "#005F5F8c" },
-  _hover: { border: "1.5px solid #005F5Faa" },
+  boxShadow: "0 0 0 1px #3B241800, 0 0 0 #3B241800",
+  _placeholder: { color: "#3B24188c" },
+  _hover: { border: "1.5px solid #3B2418aa" },
   // El campo con el foco: borde turquesa oscuro pleno y un halo tenue del mismo color.
   _focus: {
-    border: "1.5px solid #005F5F",
-    boxShadow: "0 0 0 1px #005F5F33, 0 0 16px #005F5F26",
+    border: "1.5px solid #3B2418",
+    boxShadow: "0 0 0 1px #3B241833, 0 0 16px #3B241826",
     bg: "#FAF1E2",
     outline: "none",
   },
   _focusVisible: {
-    border: "1.5px solid #005F5F",
-    boxShadow: "0 0 0 1px #005F5F33, 0 0 16px #005F5F26",
+    border: "1.5px solid #3B2418",
+    boxShadow: "0 0 0 1px #3B241833, 0 0 16px #3B241826",
     outline: "none",
   },
 };
@@ -59,7 +59,7 @@ export const focoAzul = {
   // (= NEGRO con alfa 0): el aro pasaba por azul casi negro y en el botón
   // «Entrar» se veían dos rayas oscuras un instante. El outline no es una
   // sombra: aparece nítido al momento, como el foco de cualquier programa.
-  outline: "2px solid #005F5Fcc",
+  outline: "2px solid #3B2418cc",
   outlineOffset: "2px",
 } as const;
 
@@ -97,7 +97,7 @@ export function CampoContrasena({
   return (
     <Box>
       <Text
-        color="#005F5F"
+        color="#3B2418"
         fontSize="sm"
         letterSpacing="0.18em"
         mb={2.5}
@@ -137,10 +137,10 @@ export function CampoContrasena({
             h="34px"
             borderRadius="full"
             bg="transparent"
-            color={visible ? "#005F5F" : "#005F5Fa6"}
+            color={visible ? "#3B2418" : "#3B2418a6"}
             cursor="pointer"
             transition="all 0.2s ease"
-            _hover={{ color: "#005F5F", bg: "#005F5F14" }}
+            _hover={{ color: "#3B2418", bg: "#3B241814" }}
             _focusVisible={focoAzul}
           >
             {visible ? <ViewOffIcon boxSize="20px" /> : <ViewIcon boxSize="20px" />}

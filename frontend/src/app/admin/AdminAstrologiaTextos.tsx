@@ -288,24 +288,24 @@ export default function AdminAstrologiaTextos() {
           {/* ── Cabecera ── */}
           <Flex align="flex-start" justify="space-between" gap={4} wrap="wrap">
             <Box>
-              <Text color="#005F5F" fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700">
+              <Text color="#3B2418" fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700">
                 Interpretaciones de la carta
               </Text>
-              <Text color="#005F5F" fontSize="sm">
+              <Text color="#3B2418" fontSize="sm">
                 Arquetipos del mapa · {totalPrivadas} privada{totalPrivadas === 1 ? "" : "s"} · {totalPublicas} pública{totalPublicas === 1 ? "" : "s"}
               </Text>
             </Box>
             <Box as="button" onClick={guardando || !hayCambios ? undefined : onGuardar}
                  px={7} py={2.5} borderRadius="full"
-                 bg={hayCambios ? "#005F5F" : "transparent"}
-                 color={hayCambios ? "#F0DCC0" : "#005F5F99"}
+                 bg={hayCambios ? "#3B2418" : "transparent"}
+                 color={hayCambios ? "#F0DCC0" : "#3B241899"}
                  fontWeight="700" fontSize="sm" letterSpacing="0.03em"
-                 border={hayCambios ? "1.5px solid #005F5F" : "1.5px solid #005F5F55"}
+                 border={hayCambios ? "1.5px solid #3B2418" : "1.5px solid #3B241855"}
                  cursor={guardando ? "wait" : hayCambios ? "pointer" : "default"}
                  opacity={guardando ? 0.6 : 1}
                  transition="all 0.2s"
                  _hover={guardando || !hayCambios ? {} : { bg: "#004a4a", transform: "translateY(-1px)" }}
-                 _focusVisible={{ outline: "2px solid #005F5Fcc", outlineOffset: "2px" }}>
+                 _focusVisible={{ outline: "2px solid #3B2418cc", outlineOffset: "2px" }}>
               {guardando ? "Guardando…" : hayCambios ? "Guardar cambios" : "Sin cambios"}
             </Box>
           </Flex>
@@ -318,16 +318,16 @@ export default function AdminAstrologiaTextos() {
               return (
                 <Flex key={c.key} as="button" onClick={() => seleccionarCuerpo(c.key)}
                       align="center" gap={2} px={3} py={2} borderRadius="xl"
-                      bg={activo ? "#005F5F14" : "transparent"}
-                      border={`1.5px solid ${activo ? "#005F5F" : "#005F5F55"}`}
+                      bg={activo ? "#3B241814" : "transparent"}
+                      border={`1.5px solid ${activo ? "#3B2418" : "#3B241855"}`}
                       cursor="pointer" transition="all 0.18s"
-                      _hover={{ borderColor: "#005F5F", bg: "#005F5F14" }}
-                      _focusVisible={{ outline: "2px solid #005F5Fcc", outlineOffset: "2px" }}>
+                      _hover={{ borderColor: "#3B2418", bg: "#3B241814" }}
+                      _focusVisible={{ outline: "2px solid #3B2418cc", outlineOffset: "2px" }}>
                   <Glifo symbol={c.symbol} color={c.color} size={20} />
-                  <Text color="#005F5F" fontSize="sm" fontWeight={activo ? "700" : "500"}>
+                  <Text color="#3B2418" fontSize="sm" fontWeight={activo ? "700" : "500"}>
                     {c.label}
                   </Text>
-                  <Text color="#005F5Fb3" fontSize="xs" fontWeight="700">{prog}/12</Text>
+                  <Text color="#3B2418b3" fontSize="xs" fontWeight="700">{prog}/12</Text>
                 </Flex>
               );
             })}
@@ -335,7 +335,7 @@ export default function AdminAstrologiaTextos() {
 
           {/* ── Caja estrellada con la rejilla + editor ── */}
           <Box position="relative" borderRadius="2xl" overflow="hidden"
-               border="1.5px solid #005F5F">
+               border="1.5px solid #3B2418">
             <SpaceBg overlay="rgba(8,13,30,0.38)" />
 
             <Flex position="relative" zIndex={1} direction="column" gap={5} p={{ base: 4, md: 7 }}>

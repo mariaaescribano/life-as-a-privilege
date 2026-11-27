@@ -50,7 +50,7 @@ const telefonoConPrefijo = (t: string) => /^\+\d{6,15}$/.test(t.replace(/[\s().-
 //   · el vidrio turquesa de siempre para eliminar, que es lo serio y va callado.
 // Las fotos van a resolución completa, sin velo ni desenfoque.
 const TINTA = "#004f4f";
-const MARMOL = "url('/img/fondos/marmol-bandas.webp')";
+const MARMOL = "none /* MÁRMOL QUITADO 2026-11-27: antes url('/img/fondos/marmol-bandas.webp') */";
 const CIELO = "url('/img/astrologia/space.webp')";
 
 const CAJA_BASE = {
@@ -86,7 +86,7 @@ const CAJA_CIELO = {
 const CAJA_VIDRIO = {
   ...CAJA_BASE,
   bg: "transparent",
-  color: "#005F5F",
+  color: "#3B2418",
   border: "1.5px solid #b3261e",
 } as const;
 
@@ -95,15 +95,15 @@ const ESTILO_CAMPO = {
   h: "50px",
   fontSize: "lg",
   bg: "#F7EBD9",
-  border: "1.5px solid #005F5F66",
+  border: "1.5px solid #3B241866",
   color: TINTA,
   borderRadius: "full",
   px: 5,
   fontFamily: "'EB Garamond', serif",
-  _placeholder: { color: "#005F5F8c" },
-  _hover: { borderColor: "#005F5Faa" },
-  _focus: { borderColor: "#005F5F", boxShadow: "none", outline: "none" },
-  _focusVisible: { borderColor: "#005F5F", boxShadow: "none", outline: "none" },
+  _placeholder: { color: "#3B24188c" },
+  _hover: { borderColor: "#3B2418aa" },
+  _focus: { borderColor: "#3B2418", boxShadow: "none", outline: "none" },
+  _focusVisible: { borderColor: "#3B2418", boxShadow: "none", outline: "none" },
 } as const;
 
 /** El campo de confirmar el borrado, sobre el vidrio. */
@@ -111,15 +111,15 @@ const ESTILO_CAMPO_VIDRIO = {
   h: "50px",
   fontSize: "md",
   bg: "#F7EBD9",
-  border: "1.5px solid #005F5F66",
-  color: "#005F5F",
+  border: "1.5px solid #3B241866",
+  color: "#3B2418",
   borderRadius: "full",
   px: 5,
   fontFamily: "'EB Garamond', serif",
-  _placeholder: { color: "#005F5F8c" },
-  _hover: { borderColor: "#005F5Faa" },
-  _focus: { borderColor: "#005F5F", boxShadow: "none", outline: "none" },
-  _focusVisible: { borderColor: "#005F5F", boxShadow: "none", outline: "none" },
+  _placeholder: { color: "#3B24188c" },
+  _hover: { borderColor: "#3B2418aa" },
+  _focus: { borderColor: "#3B2418", boxShadow: "none", outline: "none" },
+  _focusVisible: { borderColor: "#3B2418", boxShadow: "none", outline: "none" },
 } as const;
 
 /** Botón en píldora para las cajas de mármol: turquesa oscuro, o solo el contorno. */
@@ -328,7 +328,7 @@ export default function AdminDatosUsuario() {
       <Box minH="100vh" display="flex" flexDirection="column" bg="#F0DCC0" fontFamily="'EB Garamond', serif">
         <SiteHeader variant="private" />
         <Flex flex="1" direction="column" align="center" justify="center" gap={5} px={5}>
-          <Text color="#005F5F" fontSize="xl" fontStyle="italic">{aviso ?? "Esa cuenta no existe (¿ya la has eliminado?)."}</Text>
+          <Text color="#3B2418" fontSize="xl" fontStyle="italic">{aviso ?? "Esa cuenta no existe (¿ya la has eliminado?)."}</Text>
           <BotonPildora onClick={() => navigate("/admin/asesorias")}>Volver a Asesorías</BotonPildora>
         </Flex>
         <SiteFooter />
@@ -359,7 +359,7 @@ export default function AdminDatosUsuario() {
   const dato = (texto: string, valor?: string | null) => (
     <Box>
       {etiqueta(texto)}
-      <Flex align="center" minH="50px" px={5} borderRadius="full" bg="transparent" border="1.5px solid #005F5F55">
+      <Flex align="center" minH="50px" px={5} borderRadius="full" bg="transparent" border="1.5px solid #3B241855">
         <Text fontSize="lg" fontWeight="600" noOfLines={1} wordBreak="break-all">{valor || "—"}</Text>
       </Flex>
     </Box>
@@ -394,16 +394,16 @@ export default function AdminDatosUsuario() {
           <Reveal direction="down" distance={16}>
             <Flex direction="column" align="center" textAlign="center" mb={{ base: 7, md: 9 }}>
               <Box mb={4}><MandalaTurquesa tam="56px" /></Box>
-              <Text color="#005F5F" fontSize={{ base: "2xl", md: "4xl" }} fontWeight="700" letterSpacing="0.08em"
+              <Text color="#3B2418" fontSize={{ base: "2xl", md: "4xl" }} fontWeight="700" letterSpacing="0.08em"
                     textTransform="uppercase" lineHeight="1.15">
                 {persona.name}
               </Text>
-              <Text color="#005F5F" opacity={0.8} fontSize="lg" fontStyle="italic" mt={1}>{persona.email}</Text>
+              <Text color="#3B2418" opacity={0.8} fontSize="lg" fontStyle="italic" mt={1}>{persona.email}</Text>
             </Flex>
           </Reveal>
 
           {aviso && (
-            <Text role="status" color="#005F5F" fontSize="md" fontStyle="italic" textAlign="center" mb={5}>{aviso}</Text>
+            <Text role="status" color="#3B2418" fontSize="md" fontStyle="italic" textAlign="center" mb={5}>{aviso}</Text>
           )}
 
           {/* ── Datos personales ── */}
@@ -462,7 +462,7 @@ export default function AdminDatosUsuario() {
           <Reveal direction="up" distance={22} delay={0.4} mb={{ base: 5, md: 7 }}>
             <Box {...CAJA_MARMOL}>
               <Box mb={5}>{tituloMarmol(pendiente ? "Activación" : "Acceso")}</Box>
-              <Text color="#005F5F" opacity={0.85} fontSize="md" fontStyle="italic" mb={4}>
+              <Text color="#3B2418" opacity={0.85} fontSize="md" fontStyle="italic" mb={4}>
                 {pendiente
                   ? "Aún no ha entrado. La cuenta se activa cuando entre la primera vez con la contraseña que tú le pongas."
                   : "Ya la ha activado. Puedes mandarle un correo con una contraseña nueva."}

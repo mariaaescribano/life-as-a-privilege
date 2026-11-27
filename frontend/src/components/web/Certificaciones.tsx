@@ -139,7 +139,7 @@ const Certificaciones = () => {
                 fontSize={{ base: "md", md: "lg" }}
                 letterSpacing="0.1em"
                 textTransform="uppercase"
-                bgImage="url('/img/fondos/marmol-bandas.webp')"
+                bgImage="none /* MÁRMOL QUITADO 2026-11-27: antes url('/img/fondos/marmol-bandas.webp') */"
                 bgSize="cover"
                 bgPosition="center"
                 border={`1px solid ${TQ}88`}
@@ -179,7 +179,7 @@ const Certificaciones = () => {
               inset={0}
               zIndex={0}
               pointerEvents="none"
-              bgImage={{ base: `url('${MARMOL_MOVIL}')`, md: `url('${MARMOL_DESKTOP}')` }}
+              bgImage="none" /* MÁRMOL QUITADO 2026-11-27: antes url(MARMOL_MOVIL/DESKTOP) */
               bgSize="cover"
               bgPosition="center"
               bgRepeat="no-repeat"

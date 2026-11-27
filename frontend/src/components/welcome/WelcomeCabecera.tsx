@@ -115,10 +115,18 @@ const WelcomeCabecera = ({
           transform={frase ? "translateY(0)" : "translateY(14px)"}
           transition="opacity 0.9s ease, transform 0.9s ease"
         >
-          {/* `**palabra` = esa palabra en negrita. */}
-          {(subtitulo ?? t("elMetodo.hero.secundaria")).split(/(\*\*[\p{L}\p{N}]+)/u).map((trozo, i) =>
-            trozo.startsWith("**") ? <b key={i}>{trozo.slice(2)}</b> : trozo,
-          )}
+          {/* `**palabra` = esa palabra en negrita. `\n` = salto de línea. Una línea entera
+              entre `**…**` = toda la línea en negrita. */}
+          {(subtitulo ?? t("elMetodo.hero.secundaria")).split("\n").map((linea, n) => (
+            <React.Fragment key={n}>
+              {n > 0 && <br />}
+              {/^\*\*.+\*\*$/.test(linea)
+                ? <b>{linea.slice(2, -2)}</b>
+                : linea.split(/(\*\*[\p{L}\p{N}]+)/u).map((trozo, i) =>
+                    trozo.startsWith("**") ? <b key={i}>{trozo.slice(2)}</b> : trozo,
+                  )}
+            </React.Fragment>
+          ))}
         </Text>
         )}
       </Flex>

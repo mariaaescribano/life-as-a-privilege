@@ -97,7 +97,7 @@ export default function AdminAyurvedaLectura() {
           <AdminDisciplinaHeader disc={disc} subtitle={`${nombre || "Usuario"}${email ? ` · ${email}` : ""}`} />
 
           {doshasConDatos.length === 0 ? (
-            <LecturaVacio txt="#005F5F">
+            <LecturaVacio txt="#3B2418">
               Este usuario todavía no ha escrito nada en su mapa de {disc.nombre.toLowerCase()}.
             </LecturaVacio>
           ) : (
@@ -126,7 +126,7 @@ export default function AdminAyurvedaLectura() {
                     <Box>
                       <meta.Icon size="34px" color={meta.color} />
                     </Box>
-                    <Text color="#005F5F" fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.06em">
+                    <Text color="#3B2418" fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.06em">
                       {meta.label}
                     </Text>
                   </Flex>

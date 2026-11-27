@@ -17,7 +17,7 @@ export default function AdminMiDiario() {
       <SiteHeader variant="private" />
       <Flex flex="1" justify="center" px={{ base: 5, md: 10 }} pt={{ base: 8, md: 12 }} pb={{ base: 10, md: 16 }}>
         <Box w="100%" maxW="820px">
-          <Text color="#005F5F" fontSize={{ base: "2xl", md: "4xl" }} fontWeight="700" letterSpacing="0.08em" textTransform="uppercase"
+          <Text color="#3B2418" fontSize={{ base: "2xl", md: "4xl" }} fontWeight="700" letterSpacing="0.08em" textTransform="uppercase"
                 lineHeight="1.15" textAlign="center" mb={{ base: 6, md: 8 }}>
             Diario
           </Text>

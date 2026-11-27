@@ -28,7 +28,7 @@ export const DISCIPLINAS = [
 ] as const;
 
 export const TQ = "#004f4f";
-export const MARMOL = "url('/img/fondos/marmol-bandas.webp')";
+export const MARMOL = "none /* MÁRMOL QUITADO 2026-11-27: antes url('/img/fondos/marmol-bandas.webp') */";
 
 /** El borrador del informe (PDF). */
 export interface BorradorInforme { disciplina: string; titulo: string; para: string; cuerpo: string }
@@ -75,12 +75,12 @@ export const caja = {
 export const pildora = (texto: string, onClick: () => void, activo: boolean, relleno = false) => (
   <Box as="button" type="button" onClick={onClick} disabled={!activo}
        px={{ base: 6, md: 8 }} py={2.5} borderRadius="full"
-       bg={relleno ? "#005F5F" : "transparent"} color={relleno ? "#F0DCC0" : "#005F5F"}
-       border="1.5px solid #005F5F"
+       bg={relleno ? "#3B2418" : "transparent"} color={relleno ? "#F0DCC0" : "#3B2418"}
+       border="1.5px solid #3B2418"
        fontSize={{ base: "md", md: "lg" }} fontWeight="700" letterSpacing="0.04em"
        opacity={activo ? 1 : 0.5} cursor={activo ? "pointer" : "not-allowed"} transition="all 0.2s"
-       _hover={activo ? (relleno ? { transform: "translateY(-2px)" } : { bg: "#005F5F14" }) : undefined}
-       _focusVisible={{ outline: "2px solid #005F5Fcc", outlineOffset: "2px" }}>
+       _hover={activo ? (relleno ? { transform: "translateY(-2px)" } : { bg: "#3B241814" }) : undefined}
+       _focusVisible={{ outline: "2px solid #3B2418cc", outlineOffset: "2px" }}>
     {texto}
   </Box>
 );
@@ -94,7 +94,7 @@ export const SelectorDisciplina = ({ valor, onCambia }: { valor: string; onCambi
         <Box key={d.clave} as="button" type="button" onClick={() => onCambia(d.clave)} aria-pressed={sel}
              px={3.5} py={1.5} borderRadius="full" fontSize="sm" fontWeight={700} bg={d.bg} color={d.txt}
              border={`2px solid ${sel ? TQ : "transparent"}`}
-             opacity={sel ? 1 : 0.8} _hover={{ opacity: 1 }} _focusVisible={{ outline: "2px solid #005F5Fcc", outlineOffset: "2px" }}>
+             opacity={sel ? 1 : 0.8} _hover={{ opacity: 1 }} _focusVisible={{ outline: "2px solid #3B2418cc", outlineOffset: "2px" }}>
           {d.nombre}
         </Box>
       );

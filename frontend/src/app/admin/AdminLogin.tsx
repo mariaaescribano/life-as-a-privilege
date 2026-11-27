@@ -75,13 +75,13 @@ export default function AdminLogin() {
           w={{ base: "100%", sm: "440px" }}
           bg="transparent"
           borderRadius="3xl"
-          border="1.5px solid #005F5F"
+          border="1.5px solid #3B2418"
           px={{ base: 9, md: 12 }}
           py={{ base: 12, md: 14 }}
           gap={6}
         >
           <Text
-            color="#005F5F"
+            color="#3B2418"
             fontSize={{ base: "2xl", md: "3xl" }}
             fontWeight="700"
             letterSpacing="0.06em"
@@ -90,7 +90,7 @@ export default function AdminLogin() {
             Acceso a administración
           </Text>
 
-          <Box w="70%" h="1px" bgGradient="linear(to-r, transparent, #005F5F99, transparent)" />
+          <Box w="70%" h="1px" bgGradient="linear(to-r, transparent, #3B241899, transparent)" />
 
           <Box w="100%">
             <Input
@@ -128,8 +128,8 @@ export default function AdminLogin() {
               px={9}
               py={3}
               borderRadius="full"
-              border="1.5px solid #005F5F"
-              bg="#005F5F"
+              border="1.5px solid #3B2418"
+              bg="#3B2418"
               color="#F0DCC0"
               fontSize="md"
               fontWeight="700"
@@ -139,7 +139,7 @@ export default function AdminLogin() {
               opacity={!puede ? 0.45 : 1}
               transition="all 0.2s ease"
               _hover={!puede ? undefined : { bg: "#004a4a", transform: "translateY(-1px)" }}
-              _focusVisible={{ outline: "2px solid #005F5Fcc", outlineOffset: "2px" }}
+              _focusVisible={{ outline: "2px solid #3B2418cc", outlineOffset: "2px" }}
             >
               {enviando ? "Verificando…" : "Entrar"}
             </Box>
@@ -151,15 +151,15 @@ export default function AdminLogin() {
               py={3}
               borderRadius="full"
               bg="transparent"
-              border="1.5px solid #005F5F"
-              color="#005F5F"
+              border="1.5px solid #3B2418"
+              color="#3B2418"
               fontSize="md"
               fontWeight="600"
               letterSpacing="0.06em"
               cursor="pointer"
               transition="all 0.2s ease"
-              _hover={{ bg: "#005F5F14" }}
-              _focusVisible={{ outline: "2px solid #005F5Fcc", outlineOffset: "2px" }}
+              _hover={{ bg: "#3B241814" }}
+              _focusVisible={{ outline: "2px solid #3B2418cc", outlineOffset: "2px" }}
             >
               Volver
             </Box>

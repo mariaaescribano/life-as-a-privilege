@@ -101,13 +101,13 @@ export default function AccesoPersona({ persona, onCambio, onAviso }: Props) {
   return (
     <Box>
       {persona.acceso_libre && (
-        <Text color="#005F5F" fontSize="sm" fontStyle="italic" mb={3}>
+        <Text color="#3B2418" fontSize="sm" fontStyle="italic" mb={3}>
           Esta cuenta tiene acceso libre por ACCESO_LIBRE_EMAILS: lo ve todo aunque aquí figure cerrado.
         </Text>
       )}
 
       {/* regalar / cerrar */}
-      <Text color="#005F5F" opacity={0.85} fontSize="sm" mb={2}>
+      <Text color="#3B2418" opacity={0.85} fontSize="sm" mb={2}>
         Toca una disciplina para regalársela; tócala otra vez para cerrarla. Van sueltas: abrir una no abre las anteriores.
       </Text>
       <Flex wrap="wrap" gap={2} mb={5}>
@@ -125,16 +125,16 @@ export default function AccesoPersona({ persona, onCambio, onAviso }: Props) {
               px={3}
               py={1.5}
               borderRadius="full"
-              bg={abiertaYa ? "#005F5F" : "transparent"}
-              border="1.5px solid #005F5F"
-              color={abiertaYa ? "#F0DCC0" : "#005F5F"}
+              bg={abiertaYa ? "#3B2418" : "transparent"}
+              border="1.5px solid #3B2418"
+              color={abiertaYa ? "#F0DCC0" : "#3B2418"}
               fontSize="sm"
               fontWeight="600"
               cursor={ocupado ? "wait" : "pointer"}
               opacity={ocupado ? 0.6 : 1}
               transition="all 0.18s"
-              _hover={{ transform: ocupado ? "none" : "translateY(-1px)", bg: abiertaYa ? "#004a4a" : "#005F5F14" }}
-              _focusVisible={{ outline: "2px solid #005F5Fcc", outlineOffset: "2px" }}
+              _hover={{ transform: ocupado ? "none" : "translateY(-1px)", bg: abiertaYa ? "#004a4a" : "#3B241814" }}
+              _focusVisible={{ outline: "2px solid #3B2418cc", outlineOffset: "2px" }}
             >
               {abiertaYa ? "✓ " : ""}{d.nombre}
             </Box>
@@ -143,7 +143,7 @@ export default function AccesoPersona({ persona, onCambio, onAviso }: Props) {
       </Flex>
 
       {/* el mapa: hasta qué paso llega cada disciplina */}
-      <Text color="#005F5F" opacity={0.85} fontSize="sm" mb={2}>
+      <Text color="#3B2418" opacity={0.85} fontSize="sm" mb={2}>
         Mapa: el paso hasta el que puede entrar. Solo lo abres tú; la persona no lo desbloquea haciendo los ejercicios.
       </Text>
       <Flex wrap="wrap" gap={2} mb={5}>
@@ -165,12 +165,12 @@ export default function AccesoPersona({ persona, onCambio, onAviso }: Props) {
               w="26px"
               h="26px"
               borderRadius="full"
-              border="1.5px solid #005F5F"
-              color="#005F5F"
+              border="1.5px solid #3B2418"
+              color="#3B2418"
               fontWeight="700"
               cursor={ocupadoMapa ? "wait" : "pointer"}
               opacity={ocupadoMapa || nuevo < 1 || nuevo > total ? 0.4 : 1}
-              _focusVisible={{ outline: "2px solid #005F5Fcc", outlineOffset: "2px" }}
+              _focusVisible={{ outline: "2px solid #3B2418cc", outlineOffset: "2px" }}
             >
               {texto}
             </Box>
@@ -184,11 +184,11 @@ export default function AccesoPersona({ persona, onCambio, onAviso }: Props) {
               py={1}
               borderRadius="full"
               bg="transparent"
-              border="1.5px solid #005F5F"
+              border="1.5px solid #3B2418"
             >
-              <Text color="#005F5F" fontSize="sm" fontWeight="600">{d.nombre}</Text>
+              <Text color="#3B2418" fontSize="sm" fontWeight="600">{d.nombre}</Text>
               {botonPaso("−", paso - 1, `Cerrar el último paso abierto de ${d.nombre}`)}
-              <Text color="#005F5F" fontSize="sm" minW="48px" textAlign="center">
+              <Text color="#3B2418" fontSize="sm" minW="48px" textAlign="center">
                 {cargado ? `${paso} / ${total}` : "…"}
               </Text>
               {botonPaso("+", paso + 1, `Abrir el siguiente paso de ${d.nombre}`)}

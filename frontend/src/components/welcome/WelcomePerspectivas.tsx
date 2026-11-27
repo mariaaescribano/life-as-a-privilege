@@ -1,49 +1,37 @@
 import React from "react";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 import { Reveal } from "../global/Reveal";
-import { FONDO_PAGINA_TURQUESA as T } from "../../GlobalVariables";
+import BandaFoto from "../global/BandaFoto";
+import { FONDO_PAGINA_BEIGE as T } from "../../GlobalVariables";
 import { useT, type ClaveTexto } from "../../i18n";
 
 /**
- * Segundo apartado de la portada: separación con el mandala (turquesa oscuro), el titular
- * «Lo importante eres tú, las perspectivas se adaptan a ti.» y cuatro fotos en cuadrícula
+ * Segundo apartado de la portada: sobre el mármol chocolate (que hace de separación), la entradilla y cuatro fotos en cuadrícula
  * (cuatro en horizontal en escritorio; una debajo de otra en móvil). Cada foto entra al llegar a ella, con un fundido
  * que sube y se enfoca; al pasar el ratón la foto hace zoom.
  *
  * Cada foto tiene hueco para su texto DEBAJO (`titulo` y `texto`); mientras no haya texto,
  * no se pinta nada.
  */
-type Perspectiva = { foto: string; alt: string; titulo?: ClaveTexto; texto?: ClaveTexto };
+type Perspectiva = { foto: string; alt: string; ruta: string; titulo?: ClaveTexto; texto?: ClaveTexto };
 
 const PERSPECTIVAS: Perspectiva[] = [
-  { foto: "/img/welcome/perspectiva-mente.webp", alt: "", titulo: "welcome.persp.1.titulo" },
-  { foto: "/img/welcome/perspectiva-filosofia.webp", alt: "", titulo: "welcome.persp.2.titulo" },
-  { foto: "/img/welcome/perspectiva-astrologia.webp", alt: "", titulo: "welcome.persp.3.titulo" },
-  { foto: "/img/welcome/perspectiva-acompanar.webp", alt: "", titulo: "welcome.persp.4.titulo" },
+  { foto: "/img/welcome/perspectiva-mente.webp", alt: "", ruta: "/disciplina/psicologia", titulo: "welcome.persp.1.titulo" },
+  { foto: "/img/welcome/perspectiva-filosofia.webp", alt: "", ruta: "/disciplina/cultura", titulo: "welcome.persp.2.titulo" },
+  { foto: "/img/welcome/perspectiva-astrologia.webp", alt: "", ruta: "/disciplina/astrologia", titulo: "welcome.persp.3.titulo" },
+  { foto: "/img/welcome/perspectiva-acompanar.webp", alt: "", ruta: "/disciplina/fisiologia", titulo: "welcome.persp.4.titulo" },
 ];
 
 const WelcomePerspectivas = () => {
   const t = useT();
+  const navigate = useNavigate();
   return (
     <Box w="100%">
-      <Box px={{ base: 4, md: 10, lg: 14 }} pt={{ base: 8, md: 12 }} pb={{ base: 16, md: 24 }} maxW="1440px" mx="auto">
+      {/* El mármol chocolate hace de separación entre secciones: se funde arriba y abajo con el beige. */}
+      <BandaFoto foto="/img/fondos/marmol-chocolate.webp" fundido={110} pt={{ base: "96px", md: "130px" }} pb={{ base: "96px", md: "130px" }}>
+      <Box px={{ base: 4, md: 10, lg: 14 }} maxW="1440px" mx="auto">
       <Flex direction="column" align="center" px={{ base: 2, md: 8 }} py={{ base: 4, md: 6 }} gap={{ base: 5, md: 6 }}>
-        <Reveal inView direction="up" distance={22} blur duration={1} w="100%">
-          <Text
-            color={T}
-            fontFamily="'EB Garamond', serif"
-            fontWeight="700"
-            textAlign="center"
-            fontSize={{ base: "md", md: "lg", lg: "xl" }}
-            lineHeight="1.35"
-            letterSpacing="0.02em"
-            maxW="520px"
-            mx="auto"
-          >
-            {t("welcome.perspectivas.titular")}
-          </Text>
-        </Reveal>
-
         {/* Entradilla en cursiva, centrada, antes de las fotos. */}
         <Reveal inView direction="up" distance={16} duration={1} delay={0.2} w="100%">
           <Text
@@ -72,7 +60,18 @@ const WelcomePerspectivas = () => {
         >
           {PERSPECTIVAS.map((p, i) => (
             <Reveal key={p.foto} inView direction="up" distance={34} scaleFrom={0.96} blur duration={1.1} delay={i * 0.15}>
-              <Flex direction="column" gap={4} role="group">
+              <Flex
+                as="button"
+                type="button"
+                direction="column"
+                gap={4}
+                role="group"
+                w="100%"
+                cursor="pointer"
+                borderRadius="18px"
+                onClick={() => navigate(p.ruta)}
+                _focusVisible={{ outline: `2px solid ${T}`, outlineOffset: "4px" }}
+              >
                 <Box borderRadius="18px" overflow="hidden" border={`1px solid ${T}40`} sx={{ aspectRatio: "1 / 1" }}>
                   <Image
                     src={p.foto}
@@ -97,6 +96,7 @@ const WelcomePerspectivas = () => {
         </Box>
       </Flex>
       </Box>
+      </BandaFoto>
     </Box>
   );
 };

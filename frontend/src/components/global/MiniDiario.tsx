@@ -501,7 +501,7 @@ function VistaEscribir({
         borderRadius="xl"
         minH={{ base: "150px", md: "170px" }}
         bg={disciplinaSel ? disciplinaSel.bg : "#f2e9d9"}
-        bgImage={marmol ? "url('/img/fondos/marmol-bandas.webp')" : undefined}
+        bgImage={marmol ? "none /* MÁRMOL QUITADO 2026-11-27: antes url('/img/fondos/marmol-bandas.webp') */" : undefined}
         bgSize="cover"
         bgPosition="center"
         bgRepeat="no-repeat"
@@ -727,7 +727,7 @@ export function NotaCard({ nota, onBorrar }: { nota: Nota; onBorrar: (id: string
       overflow="hidden"
       borderRadius="xl"
       bg={disc ? disc.bg : "#efe5cf"}
-      bgImage={disc ? undefined : "url('/img/fondos/marmol-bandas.webp')"}
+      bgImage={disc ? undefined : "none /* MÁRMOL QUITADO 2026-11-27: antes url('/img/fondos/marmol-bandas.webp') */"}
       bgSize="cover"
       bgPosition="center"
       border={disc ? "1px solid rgba(255,255,255,0.15)" : "1px solid #004f4f55"}

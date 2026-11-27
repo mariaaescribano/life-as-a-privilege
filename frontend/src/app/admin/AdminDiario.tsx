@@ -660,7 +660,7 @@ const Enlace = ({
     fontSize="sm"
     textDecoration="underline"
     cursor="pointer"
-    _focusVisible={{ outline: "2px solid #005F5Fcc", outlineOffset: "2px" }}
+    _focusVisible={{ outline: "2px solid #3B2418cc", outlineOffset: "2px" }}
     _hover={{ color: peligro ? (color && color !== T ? "#ffcccc" : "#b3261e") : color || T }}
   >
     {children}

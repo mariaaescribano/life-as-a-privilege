@@ -10,7 +10,7 @@ import BandaFoto from "../global/BandaFoto";
 /**
  * Las experiencias de las personas (TODAS las opiniones publicadas), debajo de las cuatro fotos de la portada.
  * Van en una fila que se desliza hacia los lados (con el dedo en móvil, con las flechas en escritorio), cada
- * opinión en una tarjeta de borde turquesa oscuro y sin fondo; las tarjetas se frenan alineadas al borde.
+ * opinión en una tarjeta (en escritorio caben tres a la vez) de borde turquesa oscuro y sin fondo; las tarjetas se frenan alineadas al borde.
  * Sin opiniones publicadas no se pinta nada.
  */
 const Flecha = ({ dir, onClick, label }: { dir: "izq" | "dcha"; onClick: () => void; label: string }) => (
@@ -94,7 +94,7 @@ const WelcomeOpiniones = () => {
                   direction="column"
                   gap={4}
                   flex="0 0 auto"
-                  w={{ base: "82%", sm: "340px", md: "360px" }}
+                  w={{ base: "82%", sm: "340px", md: "calc((100% - 40px) / 3)" }}
                   px={{ base: 6, md: 7 }}
                   py={{ base: 7, md: 8 }}
                   borderRadius="2xl"

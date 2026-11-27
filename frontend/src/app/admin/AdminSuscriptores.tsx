@@ -114,11 +114,11 @@ export default function AdminSuscriptores() {
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10 }} py={{ base: 8, md: 12 }}>
         <Box w="100%" maxW="760px">
-          <Text color="#005F5F" fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" letterSpacing="0.06em"
+          <Text color="#3B2418" fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" letterSpacing="0.06em"
                 textTransform="uppercase" textAlign="center">
             Suscriptores
           </Text>
-          <Text color="#005F5Fcc" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
+          <Text color="#3B2418cc" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                 textAlign="center" mt={2} mb={{ base: 6, md: 8 }}>
             Los correos que ha dejado la gente, del más nuevo al más antiguo.
           </Text>
@@ -129,40 +129,40 @@ export default function AdminSuscriptores() {
             placeholder="Buscar por correo…"
             mb={4}
             bg="#F7EBD9"
-            border="1.5px solid #005F5F66"
-            color="#005F5F"
+            border="1.5px solid #3B241866"
+            color="#3B2418"
             borderRadius="full"
             fontFamily="'EB Garamond', serif"
-            _placeholder={{ color: "#005F5F8c" }}
-            _hover={{ borderColor: "#005F5Faa" }}
-            _focus={{ borderColor: "#005F5F", boxShadow: "none" }}
+            _placeholder={{ color: "#3B24188c" }}
+            _hover={{ borderColor: "#3B2418aa" }}
+            _focus={{ borderColor: "#3B2418", boxShadow: "none" }}
           />
 
           <Flex justify="space-between" align="center" gap={3} wrap="wrap" mb={4}>
-            <Text color="#005F5Fcc" fontSize="sm">
+            <Text color="#3B2418cc" fontSize="sm">
               {filtrados.length} {filtrados.length === 1 ? "correo" : "correos"}
             </Text>
             <Flex gap={3}>
               <Box as="button" onClick={copiar}
-                   px={5} py={2} borderRadius="full" bg="#005F5F"
-                   border="1.5px solid #005F5F" color="#F0DCC0" fontWeight="700"
+                   px={5} py={2} borderRadius="full" bg="#3B2418"
+                   border="1.5px solid #3B2418" color="#F0DCC0" fontWeight="700"
                    fontSize="sm" cursor="pointer" transition="all 0.2s"
-                   _hover={{ bg: "#004a4a", transform: "translateY(-2px)" }} _focusVisible={{ outline: "2px solid #005F5Fcc", outlineOffset: "2px" }}>
+                   _hover={{ bg: "#004a4a", transform: "translateY(-2px)" }} _focusVisible={{ outline: "2px solid #3B2418cc", outlineOffset: "2px" }}>
                 Copiar todos
               </Box>
               <Box as="button"
                    onClick={() => copiarTexto(enlaceBajaGenerico, "Enlace de baja copiado: pégalo al final del correo.")}
                    px={5} py={2} borderRadius="full" bg="transparent"
-                   border="1.5px solid #005F5F" color="#005F5F" fontWeight="600"
+                   border="1.5px solid #3B2418" color="#3B2418" fontWeight="600"
                    fontSize="sm" cursor="pointer" transition="all 0.2s"
-                   _hover={{ bg: "#005F5F14", transform: "translateY(-2px)" }} _focusVisible={{ outline: "2px solid #005F5Fcc", outlineOffset: "2px" }}>
+                   _hover={{ bg: "#3B241814", transform: "translateY(-2px)" }} _focusVisible={{ outline: "2px solid #3B2418cc", outlineOffset: "2px" }}>
                 Copiar enlace de baja
               </Box>
               <Box as="button" onClick={descargar}
                    px={5} py={2} borderRadius="full" bg="transparent"
-                   border="1.5px solid #005F5F" color="#005F5F" fontWeight="600"
+                   border="1.5px solid #3B2418" color="#3B2418" fontWeight="600"
                    fontSize="sm" cursor="pointer" transition="all 0.2s"
-                   _hover={{ bg: "#005F5F14", transform: "translateY(-2px)" }} _focusVisible={{ outline: "2px solid #005F5Fcc", outlineOffset: "2px" }}>
+                   _hover={{ bg: "#3B241814", transform: "translateY(-2px)" }} _focusVisible={{ outline: "2px solid #3B2418cc", outlineOffset: "2px" }}>
                 Descargar CSV
               </Box>
             </Flex>
@@ -187,15 +187,15 @@ export default function AdminSuscriptores() {
                   py={3}
                   borderRadius="xl"
                   bg="transparent"
-                  border="1.5px solid #005F5F55"
+                  border="1.5px solid #3B241855"
                 >
                   <Box minW={0} flex="1">
-                    <Text color="#005F5F" fontWeight="600" noOfLines={1}>{s.email}</Text>
+                    <Text color="#3B2418" fontWeight="600" noOfLines={1}>{s.email}</Text>
                     {s.origen && (
-                      <Text color="#005F5Fb3" fontSize="sm" noOfLines={1}>{s.origen}</Text>
+                      <Text color="#3B2418b3" fontSize="sm" noOfLines={1}>{s.origen}</Text>
                     )}
                   </Box>
-                  <Text color="#005F5Fa0" fontSize="sm" flexShrink={0}>
+                  <Text color="#3B2418a0" fontSize="sm" flexShrink={0}>
                     {fecha(s.created_at)}
                   </Text>
                   {s.baja && (
@@ -203,9 +203,9 @@ export default function AdminSuscriptores() {
                          onClick={() => copiarTexto(s.baja!, `Enlace de baja de ${s.email} copiado.`)}
                          title="Copiar el enlace de baja de esta persona"
                          px={3} py={1} borderRadius="full" bg="transparent"
-                         border="1px solid #005F5F88" color="#005F5F"
+                         border="1px solid #3B241888" color="#3B2418"
                          fontSize="xs" cursor="pointer" transition="all 0.2s"
-                         _hover={{ bg: "#005F5F14" }} _focusVisible={{ outline: "2px solid #005F5Fcc", outlineOffset: "2px" }}>
+                         _hover={{ bg: "#3B241814" }} _focusVisible={{ outline: "2px solid #3B2418cc", outlineOffset: "2px" }}>
                       Baja
                     </Box>
                   )}
@@ -213,7 +213,7 @@ export default function AdminSuscriptores() {
               ))}
 
               {filtrados.length === 0 && (
-                <Text color="#005F5Fb3" fontStyle="italic" textAlign="center" py={8}>
+                <Text color="#3B2418b3" fontStyle="italic" textAlign="center" py={8}>
                   {lista.length === 0 ? "No hay suscriptores todavía." : "Ningún correo coincide con la búsqueda."}
                 </Text>
               )}
@@ -223,10 +223,10 @@ export default function AdminSuscriptores() {
           {/* Volver — abajo a la derecha, fuera de la lista */}
           <Flex justify="flex-end" mt={{ base: 8, md: 10 }}>
             <Box as="button" onClick={() => navigate("/admin")}
-                 px={6} py={2.5} borderRadius="full" bg="#005F5F"
-                 border="1.5px solid #005F5F" color="#F0DCC0" fontWeight="700"
+                 px={6} py={2.5} borderRadius="full" bg="#3B2418"
+                 border="1.5px solid #3B2418" color="#F0DCC0" fontWeight="700"
                  fontSize={{ base: "sm", md: "md" }} cursor="pointer" transition="all 0.2s"
-                 _hover={{ bg: "#004a4a", transform: "translateY(-2px)" }} _focusVisible={{ outline: "2px solid #005F5Fcc", outlineOffset: "2px" }}>
+                 _hover={{ bg: "#004a4a", transform: "translateY(-2px)" }} _focusVisible={{ outline: "2px solid #3B2418cc", outlineOffset: "2px" }}>
               Volver
             </Box>
           </Flex>

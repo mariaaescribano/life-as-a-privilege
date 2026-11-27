@@ -306,7 +306,7 @@ export class Taller {
   static async abrir(tema: Tema, opts: TallerOpts): Promise<Taller> {
     const img = await cargarImagen(opts.acuarela ?? tema.acuarela);
     const fondoImg = opts.fondo ? await cargarImagen(opts.fondo) : null;
-    const mandala = opts.informe ? await cargarImagen("/img/correo/mandala-turquesa.png") : null;
+    const mandala = opts.informe ? await cargarImagen("/img/correo/mandala-chocolate.png") : null;
     return new Taller(tema, opts, img, fondoImg, mandala);
   }
 

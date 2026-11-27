@@ -32,7 +32,7 @@ const TQ = "#004f4f";
 const ORO = "#b08d3f";
 const cajaMarmol = {
   bgColor: "#efe5cf",
-  bgImage: "url('/img/fondos/marmol-bandas.webp')",
+  bgImage: "none /* MÁRMOL QUITADO 2026-11-27: antes url('/img/fondos/marmol-bandas.webp') */",
   bgSize: "cover",
   bgPosition: "center",
   border: "1px solid rgba(255,255,255,0.7)",
@@ -383,7 +383,7 @@ function DejarOpinion({
               pointerEvents={status === "sending" ? "none" : "auto"}
             >
               <Image
-                src="/img/correo/mandala-turquesa.png"
+                src="/img/correo/mandala-chocolate.png"
                 alt=""
                 h={{ base: "26px", md: "32px" }}
                 objectFit="contain"

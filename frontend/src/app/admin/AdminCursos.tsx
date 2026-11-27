@@ -89,15 +89,15 @@ async function copiarAlPortapapeles(texto: string): Promise<boolean> {
 }
 
 // Foco de teclado sobre el beige (el focoBlanco no se ve).
-const focoT = { outline: "2px solid #005F5Fcc", outlineOffset: "2px" } as const;
+const focoT = { outline: "2px solid #3B2418cc", outlineOffset: "2px" } as const;
 // Campos de los popups.
 const campoSx = {
-  bg: "#F7EBD9", border: "1.5px solid #005F5F66", color: T, borderRadius: "lg",
-  _placeholder: { color: "#005F5F8c" }, _hover: { borderColor: "#005F5Faa" },
+  bg: "#F7EBD9", border: "1.5px solid #3B241866", color: T, borderRadius: "lg",
+  _placeholder: { color: "#3B24188c" }, _hover: { borderColor: "#3B2418aa" },
   _focus: { borderColor: T, boxShadow: "none" }, _focusVisible: { borderColor: T, boxShadow: "none" },
 } as const;
 // Botón secundario (contorno) y principal (relleno), en turquesa oscuro.
-const btnSec = { color: T, bg: "transparent", border: `1.5px solid ${T}`, _hover: { bg: "#005F5F14" }, _focusVisible: focoT } as const;
+const btnSec = { color: T, bg: "transparent", border: `1.5px solid ${T}`, _hover: { bg: "#3B241814" }, _focusVisible: focoT } as const;
 const btnPri = { color: "#F0DCC0", bg: T, border: `1.5px solid ${T}`, _hover: { bg: "#004a4a" }, _focusVisible: focoT } as const;
 
 const btnStyle = {

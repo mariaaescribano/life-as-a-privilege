@@ -87,7 +87,7 @@ export function EntradaDiario({ e, onBorrar, plana = false }: { e: EntradaMaria;
       py={plana ? 2 : 3}
       // Suelta (en el popup): su propia tarjeta de mármol. «plana» (dentro de la caja del inicio, que ya es mármol): sin fondo, con una raya fina.
       bgColor={plana ? "transparent" : "#efe5cf"}
-      bgImage={plana ? undefined : "url('/img/fondos/marmol-bandas.webp')"}
+      bgImage={plana ? undefined : "none /* MÁRMOL QUITADO 2026-11-27: antes url('/img/fondos/marmol-bandas.webp') */"}
       bgSize="cover"
       bgPosition="center"
       border={plana ? "none" : `1px solid ${TQ}55`}
@@ -143,14 +143,14 @@ export function VistaDiarioMaria() {
 
   return (
     <Flex direction="column" gap={4} flex="1" minH={0} overflowY="auto" pr={1}
-          sx={{ scrollbarWidth: "thin", scrollbarColor: "#005F5F66 transparent",
-                "&::-webkit-scrollbar": { width: "8px" }, "&::-webkit-scrollbar-thumb": { background: "#005F5F55", borderRadius: "8px" } }}>
-      <Text color="#005F5F" fontSize={{ base: "xl", md: "2xl" }} fontWeight="800" letterSpacing="0.08em" textAlign="center" textTransform="uppercase">
+          sx={{ scrollbarWidth: "thin", scrollbarColor: "#3B241866 transparent",
+                "&::-webkit-scrollbar": { width: "8px" }, "&::-webkit-scrollbar-thumb": { background: "#3B241855", borderRadius: "8px" } }}>
+      <Text color="#3B2418" fontSize={{ base: "xl", md: "2xl" }} fontWeight="800" letterSpacing="0.08em" textAlign="center" textTransform="uppercase">
         Diario
       </Text>
 
       <Box borderRadius="xl" overflow="hidden" flexShrink={0} minH={{ base: "150px", md: "170px" }}
-           bgColor="#f2e9d9" bgImage="url('/img/fondos/marmol-bandas.webp')" bgSize="cover" bgPosition="center"
+           bgColor="#f2e9d9" bgImage="none /* MÁRMOL QUITADO 2026-11-27: antes url('/img/fondos/marmol-bandas.webp') */" bgSize="cover" bgPosition="center"
            border={`1px solid ${TQ}55`} boxShadow={`0 0 18px ${ORO}33`}>
         <Textarea
           value={texto}
@@ -194,7 +194,7 @@ export function ListaDiarioMaria() {
       {cargando ? (
         <Flex justify="center" py={6}><LifeLoader size="48px" /></Flex>
       ) : entradas.length === 0 ? (
-        <Text color="#005F5F" fontSize="lg" fontStyle="italic" textAlign="center">Todavía no has apuntado nada.</Text>
+        <Text color="#3B2418" fontSize="lg" fontStyle="italic" textAlign="center">Todavía no has apuntado nada.</Text>
       ) : (
         entradas.map((e) => <EntradaDiario key={e.id} e={e} onBorrar={borrar} />)
       )}

@@ -36,7 +36,7 @@
 html,
 body {
   background-color: #F0DCC0;
-  color: #005F5F;
+  color: #3B2418;
 }
 
 /* El foco NUNCA se ve. Al abrir un modal, Chakra enfoca el primer botón: eso

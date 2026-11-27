@@ -404,7 +404,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
           pegado al margen derecho. */}
       <Flex align="center" gap={{ base: 3, md: 5 }}>
         {/* La persona de lectura (sin cuenta) no cambia de idioma: sin «ES · EN». */}
-        {!sinCuenta && <SelectorIdioma compact={compact} />}
+        {(!sinCuenta || !isPrivate) && <SelectorIdioma compact={compact} />}
 
         {isPrivate && !sinCuenta && (
           <Box
@@ -436,7 +436,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
         )}
 
         {/* La cuenta «solo carta» va FOCALIZADA: sin menú, solo el camino (el mandala de la izquierda siempre vuelve a él). */}
-        {(!sinCuenta || enCaminoDePersona) && (
+        {(!sinCuenta || enCaminoDePersona || !isPrivate) && (
           <MenuHamburguesa
             abierto={menuAbierto}
             onToggle={() => setMenuAbierto((v) => !v)}

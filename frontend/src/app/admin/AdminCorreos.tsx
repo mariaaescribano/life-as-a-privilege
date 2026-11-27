@@ -178,7 +178,7 @@ export default function AdminCorreos() {
       <Flex flex="1" justify="center" px={{ base: 4, md: 8 }} pt={{ base: 8, md: 10 }} pb={{ base: 10, md: 14 }}>
         <Box w="100%" maxW="720px">
           <FlorTitulo mandala pt={{ base: 0, md: 0 }} />
-          <Text color="#005F5F" fontSize={{ base: "2xl", md: "4xl" }} fontWeight="700" letterSpacing="0.08em" textTransform="uppercase"
+          <Text color="#3B2418" fontSize={{ base: "2xl", md: "4xl" }} fontWeight="700" letterSpacing="0.08em" textTransform="uppercase"
                 lineHeight="1.15" textAlign="center" mt={{ base: 4, md: 5 }} mb={{ base: 6, md: 8 }}>
             Correos
           </Text>
@@ -294,7 +294,7 @@ export default function AdminCorreos() {
           </Box>
 
           {estado && (
-            <Text color={estado.tipo === "error" ? "#b3261e" : "#005F5F"} fontSize="md" fontStyle="italic" textAlign="center" mt={4}>
+            <Text color={estado.tipo === "error" ? "#b3261e" : "#3B2418"} fontSize="md" fontStyle="italic" textAlign="center" mt={4}>
               {estado.texto}
             </Text>
           )}

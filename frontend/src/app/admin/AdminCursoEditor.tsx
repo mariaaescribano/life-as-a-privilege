@@ -35,22 +35,22 @@ const fieldFoto = {
 } as const;
 const fieldBeige = {
   bg: "#F7EBD9",
-  border: "1.5px solid #005F5F66",
+  border: "1.5px solid #3B241866",
   color: T,
-  _placeholder: { color: "#005F5F8c" },
-  _hover: { borderColor: "#005F5Faa" },
+  _placeholder: { color: "#3B24188c" },
+  _hover: { borderColor: "#3B2418aa" },
   _focus: { borderColor: T, boxShadow: "none" },
   _focusVisible: { borderColor: T, boxShadow: "none" },
 } as const;
 
-const focoT = { outline: "2px solid #005F5Fcc", outlineOffset: "2px" } as const;
+const focoT = { outline: "2px solid #3B2418cc", outlineOffset: "2px" } as const;
 // Botones sobre el beige: contorno, relleno y peligro (turquesa oscuro).
-const bSec = { color: T, border: `1.5px solid ${T}`, _hover: { bg: "#005F5F14" }, _focusVisible: focoT } as const;
+const bSec = { color: T, border: `1.5px solid ${T}`, _hover: { bg: "#3B241814" }, _focusVisible: focoT } as const;
 const bPri = { color: "#F0DCC0", bg: T, border: `1.5px solid ${T}`, _hover: { bg: "#004a4a" }, _focusVisible: focoT } as const;
 // Botones dentro de la caja con foto (los de siempre) o, sin foto, sobre el beige.
 const bFoto = (foto: boolean) => foto
   ? { border: `1px solid rgba(255,255,255,0.3)`, _hover: { bg: "rgba(255,255,255,0.12)" } }
-  : { color: T, border: `1.5px solid ${T}`, _hover: { bg: "#005F5F14" }, _focusVisible: focoT };
+  : { color: T, border: `1.5px solid ${T}`, _hover: { bg: "#3B241814" }, _focusVisible: focoT };
 const bFotoPeligro = (foto: boolean) => foto
   ? { border: "1px solid rgba(255,255,255,0.3)", _hover: { borderColor: "#ff8a8a", color: "#ff8a8a" } }
   : { color: "#b3261e", border: "1.5px solid #b3261e", _hover: { bg: "#b3261e14" }, _focusVisible: focoT };
@@ -239,10 +239,10 @@ export default function AdminCursoEditor() {
       el.scrollIntoView({ behavior: "smooth", block: "center" });
       el.animate(
         [
-          { boxShadow: "0 0 0 0 rgba(0,95,95,0)" },
-          { boxShadow: "0 0 0 3px rgba(0,95,95,0.9)", offset: 0.2 },
-          { boxShadow: "0 0 0 3px rgba(0,95,95,0.9)", offset: 0.75 },
-          { boxShadow: "0 0 0 0 rgba(0,95,95,0)" },
+          { boxShadow: "0 0 0 0 rgba(59, 36, 24,0)" },
+          { boxShadow: "0 0 0 3px rgba(59, 36, 24,0.9)", offset: 0.2 },
+          { boxShadow: "0 0 0 3px rgba(59, 36, 24,0.9)", offset: 0.75 },
+          { boxShadow: "0 0 0 0 rgba(59, 36, 24,0)" },
         ],
         { duration: 2600, easing: "ease-in-out" },
       );
@@ -399,7 +399,7 @@ export default function AdminCursoEditor() {
                   resultados.map((r, i) => (
                     <Box key={r.lecId + "-" + i} as="button" onClick={() => saltarA(r)} display="block" textAlign="left" w="100%"
                          px={4} py={3} borderTop={i === 0 ? undefined : `1px solid ${T}33`}
-                         transition="background 0.15s" _hover={{ bg: "#005F5F14" }} _focusVisible={focoT}>
+                         transition="background 0.15s" _hover={{ bg: "#3B241814" }} _focusVisible={focoT}>
                       <Text fontSize="xs" opacity={0.65} mb={0.5}>
                         Módulo {r.mi + 1} · {r.moduloTitle} → <Box as="span" fontWeight="700">{r.leccionNom}</Box>
                       </Text>

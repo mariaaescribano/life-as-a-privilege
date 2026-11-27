@@ -87,7 +87,7 @@ const BandaMarmol = ({
         position="absolute"
         inset={0}
         // Mármol de las bandas de la portada (`marmol-bandas.webp`), el mismo en móvil y escritorio.
-        bgImage="url('/img/fondos/marmol-bandas.webp')"
+        bgImage="none /* MÁRMOL QUITADO 2026-11-27: antes url('/img/fondos/marmol-bandas.webp') */"
         // Como en Welcome (BandaFoto): en escritorio la foto se estira a toda la banda para que se vean sus
         // vetas de las esquinas (con `cover` solo se veía el centro); en móvil, `cover`.
         bgSize={{ base: "cover", md: "100% 100%" }}

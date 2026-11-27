@@ -13,14 +13,14 @@ import { FONDO_PAGINA_TURQUESA } from "../../GlobalVariables";
  * secciones de alrededor NO ponen su propio padding junto a este separador: todo
  * el hueco lo pone él, en un solo sitio.
  */
-const SeparadorFlor = ({ icono = "/img/icono/life.webp" }: { icono?: string }) => (
+const SeparadorFlor = ({ icono = "/img/icono/life.webp", py = { base: 10, md: 14 } }: { icono?: string; py?: { base: number; md: number } }) => (
   <Reveal inView amount={0.5} direction="none" scaleFrom={0.7} duration={0.9} w="100%">
     <Flex
       align="center"
       justify="center"
       gap={{ base: 4, md: 6 }}
       w="100%"
-      py={{ base: 10, md: 14 }}
+      py={py}
     >
       {/* Mismo tamaño que la separación de debajo del titular (WelcomeCabecera):
           mandala de 26/34 px y rayas de 60/150 px. */}

@@ -6,13 +6,19 @@ import { Box } from "@chakra-ui/react";
  * arriba y abajo desvanecidos hasta el beige de la página. El contenido va por encima y la banda tiene el
  * relleno justo para que no toque los fundidos. En escritorio la foto se estira a toda la banda (así se ven sus vetas turquesa de las esquinas; con `cover` solo se veía el centro crema). La foto se cambia en un solo sitio: `/img/fondos/marmol-bandas.webp`.
  */
-const FOTO = "/img/fondos/marmol-bandas.webp";
+// MÁRMOL QUITADO 2026-11-27 (antes la banda pintaba esta foto): "/img/fondos/marmol-bandas.webp"
 
 const BandaFoto = ({
   children,
   pt = { base: "56px", md: "72px" },
   pb = { base: "56px", md: "72px" },
+  foto,
+  fundido = 40,
 }: {
+  /** Foto de fondo de ESTA banda (sin ella, la banda va sin foto). */
+  foto?: string;
+  /** Alto en px del difuminado de arriba y de abajo. */
+  fundido?: number;
   children: React.ReactNode;
   pt?: { base: string; md: string };
   pb?: { base: string; md: string };
@@ -23,13 +29,13 @@ const BandaFoto = ({
       inset={0}
       pointerEvents="none"
       aria-hidden="true"
-      bgImage={`url('${FOTO}')`}
+      bgImage={foto ? `url('${foto}')` : "none"}
       bgSize={{ base: "cover", md: "100% 100%" }}
       bgPosition="center"
       bgRepeat="no-repeat"
       sx={{
-        WebkitMaskImage: "linear-gradient(to bottom, transparent 0, #000 40px, #000 calc(100% - 40px), transparent 100%)",
-        maskImage: "linear-gradient(to bottom, transparent 0, #000 40px, #000 calc(100% - 40px), transparent 100%)",
+        WebkitMaskImage: `linear-gradient(to bottom, transparent 0, #000 ${fundido}px, #000 calc(100% - ${fundido}px), transparent 100%)`,
+        maskImage: `linear-gradient(to bottom, transparent 0, #000 ${fundido}px, #000 calc(100% - ${fundido}px), transparent 100%)`,
       }}
     />
     <Box position="relative" zIndex={1}>{children}</Box>

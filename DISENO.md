@@ -43,7 +43,7 @@ corrige este documento):
 
 ## 2. Lienzo y estructura de página
 
-- **NUEVO ESTILO (nov-2026): fondo de página SIEMPRE beige sólido `#F0DCC0`** (`FONDO_PAGINA_BEIGE` en `GlobalVariables.tsx`). **Letra, mandala, header, footer, menú, spinners e iconos del navegador en turquesa oscuro `#005F5F`** (`FONDO_PAGINA_TURQUESA`, alias `TEXTO_PAGINA`); el turquesa clásico `#008080` queda comentado ahí mismo. Sin brillos blancos: sobre el beige no se ven. El mandala se pinta con `components/global/MandalaTinte.tsx` (silueta de `life.webp` en un color). **Pendiente de adaptar:** las páginas de dentro (recorridos `/metodo/*`, espacios, cómics) siguen con letra blanca pensada para el turquesa. Nunca la imagen de una disciplina como
+- **NUEVO ESTILO (nov-2026): fondo de página SIEMPRE beige sólido `#F0DCC0`** (`FONDO_PAGINA_BEIGE` en `GlobalVariables.tsx`). **Letra, mandala, header, footer, menú, spinners e iconos del navegador en marrón chocolate `#3B2418` (antes turquesa oscuro `#005F5F`, comentado en GlobalVariables; opciones allí)** (`FONDO_PAGINA_TURQUESA`, alias `TEXTO_PAGINA`); el turquesa clásico `#008080` queda comentado ahí mismo. Sin brillos blancos: sobre el beige no se ven. El mandala se pinta con `components/global/MandalaTinte.tsx` (silueta de `life.webp` en un color). **Pendiente de adaptar:** las páginas de dentro (recorridos `/metodo/*`, espacios, cómics) siguen con letra blanca pensada para el turquesa. Nunca la imagen de una disciplina como
   fondo de página (ni oscurecida, ni con velo). `html, body` también van en beige
   (`style.css`), para que el rebote del scroll en móvil no enseñe blanco. Única excepción
   histórica: la landing de la casa (ver memoria `landing-dos-proyectos`).
@@ -388,7 +388,7 @@ Cada página de dentro de una disciplina es una **cajita con la foto y el color 
 - [ ] Fondo de página beige `#F0DCC0`; fuente EB Garamond puesta en la raíz.
 - [ ] `Txt` solo en letra/icono; `Bg`/`Txt` correctos de la disciplina (no el rojo de TCM para
       algo de otro elemento).
-- [ ] Texto fuera de cajas: turquesa oscuro `#005F5F` (antes blanco), sin sombra. Texto dentro: `sombraTexto`.
+- [ ] Texto fuera de cajas: marrón chocolate `#3B2418` (antes turquesa oscuro `#005F5F`), sin sombra. Texto dentro: `sombraTexto`.
 - [ ] Cajas con halo de §5.2, sin sombra oscura, sin filo; radio de la foto = radio de la caja.
 - [ ] Ninguna foto con blur, ningún velo oscuro nuevo, fondos a resolución completa.
 - [ ] Botones: píldora, `as="button"`, halo, `_hover`, `_active`, `_focusVisible={focoBlanco}`.

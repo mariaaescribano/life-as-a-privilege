@@ -92,7 +92,7 @@ export default function AdminInformes() {
         <Box w="100%" maxW="1180px">
           {/* El mandala de la casa encima del título, como en /opiniones. */}
           <FlorTitulo mandala pt={{ base: 0, md: 0 }} />
-          <Text color="#005F5F" fontSize={{ base: "2xl", md: "4xl" }} fontWeight="700" letterSpacing="0.08em" textTransform="uppercase"
+          <Text color="#3B2418" fontSize={{ base: "2xl", md: "4xl" }} fontWeight="700" letterSpacing="0.08em" textTransform="uppercase"
                 lineHeight="1.15" textAlign="center" mt={{ base: 4, md: 5 }} mb={{ base: 6, md: 8 }}>
             Informes
           </Text>
@@ -138,9 +138,9 @@ export default function AdminInformes() {
                 )}
               </Box>
               <Flex justify="space-between" align="center" mt={2} px={1} gap={3} wrap="wrap">
-                <Text color="#005F5F" fontSize="sm" fontStyle="italic">{componiendo ? "Actualizando…" : "Así saldrá el PDF."}</Text>
+                <Text color="#3B2418" fontSize="sm" fontStyle="italic">{componiendo ? "Actualizando…" : "Así saldrá el PDF."}</Text>
                 {url && (
-                  <Text as="a" href={url} target="_blank" rel="noreferrer" color="#005F5F" fontSize="sm" textDecoration="underline"
+                  <Text as="a" href={url} target="_blank" rel="noreferrer" color="#3B2418" fontSize="sm" textDecoration="underline"
                         _focusVisible={{ outline: "2px solid #004f4fcc", outlineOffset: "2px" }}>
                     Abrir en otra pestaña
                   </Text>
@@ -148,7 +148,7 @@ export default function AdminInformes() {
               </Flex>
 
               {estado && (
-                <Text color={estado.tipo === "error" ? "#b3261e" : "#005F5F"} fontSize="md" fontStyle="italic" textAlign="center" mt={4}>
+                <Text color={estado.tipo === "error" ? "#b3261e" : "#3B2418"} fontSize="md" fontStyle="italic" textAlign="center" mt={4}>
                   {estado.texto}
                 </Text>
               )}

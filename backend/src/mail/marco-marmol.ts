@@ -8,7 +8,7 @@
 export const FONDO_CORREO = '#F0DCC0';
 
 /** El turquesa oscuro de la letra: el mismo de la web (FONDO_PAGINA_TURQUESA). */
-export const TINTA_MARMOL = '#005F5F';
+export const TINTA_MARMOL = '#3B2418';
 
 // Garamond que sí tiene la gente (Gmail no carga tipografías de la web).
 export const SERIF_CORREO =
@@ -50,7 +50,7 @@ export function marcoMarmol({ web, titulo, cuerpo, firma = true }: { web: string
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="${B}" style="max-width:600px;margin:0 auto;background-color:${B};border-radius:16px;">
 <tr><td style="padding:44px 40px 12px;font-family:${SERIF};">
   <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
-    <td style="padding-right:14px;vertical-align:middle;"><img src="${imagenes}/img/correo/mandala-turquesa.png" width="58" height="58" alt="" style="display:block;border:0;"></td>
+    <td style="padding-right:14px;vertical-align:middle;"><img src="${imagenes}/img/correo/mandala-chocolate.png" width="58" height="58" alt="" style="display:block;border:0;"></td>
     <td style="vertical-align:middle;font-family:${SERIF};color:${T};font-size:20px;font-weight:600;letter-spacing:0.18em;line-height:1.2;">MARÍA<br>ESCRIBANO</td>
   </tr></table>
   <div style="height:1px;background:${T};opacity:0.45;margin:26px 0 0;"></div>

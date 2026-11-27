@@ -95,11 +95,11 @@ export default function AdminHome() {
           {/* ── Título + CREAR USUARIO ── */}
           <Flex align="center" justify="space-between" gap={4} wrap="wrap" mb={{ base: 6, md: 8 }}>
             <Box>
-              <Text color="#005F5F" fontSize={{ base: "2xl", md: "4xl" }} fontWeight="700" letterSpacing="0.08em"
+              <Text color="#3B2418" fontSize={{ base: "2xl", md: "4xl" }} fontWeight="700" letterSpacing="0.08em"
                     textTransform="uppercase" lineHeight="1.15">
                 Asesorías
               </Text>
-              <Text color="#005F5Fcc" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}>
+              <Text color="#3B2418cc" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}>
                 {personas.length} {personas.length === 1 ? "persona" : "personas"}
               </Text>
             </Box>
@@ -107,12 +107,12 @@ export default function AdminHome() {
           </Flex>
 
           {aviso && (
-            <Text role="status" color="#005F5F" fontSize="md" fontStyle="italic" textAlign="center" mb={5}>{aviso}</Text>
+            <Text role="status" color="#3B2418" fontSize="md" fontStyle="italic" textAlign="center" mb={5}>{aviso}</Text>
           )}
 
           {/* ── Lista ── */}
           {personas.length === 0 ? (
-            <Text color="#005F5Fdd" fontSize="lg" fontStyle="italic" textAlign="center" pt={10}>
+            <Text color="#3B2418dd" fontSize="lg" fontStyle="italic" textAlign="center" pt={10}>
               Todavía no hay nadie. Crea la primera cuenta con el botón de arriba.
             </Text>
           ) : (
@@ -128,7 +128,7 @@ export default function AdminHome() {
                   borderRadius="2xl"
                   // El mármol de María, a resolución completa, con la letra en turquesa oscuro.
                   bgColor="#efe5cf"
-                  bgImage="url('/img/fondos/marmol-bandas.webp')"
+                  bgImage="none /* MÁRMOL QUITADO 2026-11-27: antes url('/img/fondos/marmol-bandas.webp') */"
                   bgSize="cover"
                   bgPosition="center"
                   border="1.5px solid #004f4f"

@@ -68,7 +68,7 @@ export default function AdminInicio() {
                 borderRadius="28px"
                 // El mármol de María, con la letra en turquesa oscuro.
                 bgColor="#efe5cf"
-                bgImage="url('/img/fondos/marmol-bandas.webp')"
+                bgImage="none /* MÁRMOL QUITADO 2026-11-27: antes url('/img/fondos/marmol-bandas.webp') */"
                 bgSize="cover"
                 bgPosition="center"
                 border="1.5px solid #004f4f"
@@ -116,7 +116,7 @@ export default function AdminInicio() {
               py={{ base: 6, md: 8 }}
               borderRadius="28px"
               bgColor="#efe5cf"
-              bgImage="url('/img/fondos/marmol-bandas.webp')"
+              bgImage="none /* MÁRMOL QUITADO 2026-11-27: antes url('/img/fondos/marmol-bandas.webp') */"
               bgSize="cover"
               bgPosition="center"
               border="1.5px solid #004f4f"
