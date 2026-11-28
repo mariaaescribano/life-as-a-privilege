@@ -186,6 +186,9 @@ mismo** que el de la caja.
   **Excepción pedida por María:** las cuatro cajas de `/asesoria` llevan la foto NÍTIDA y, detrás
   de cada frase, un cristal esmerilado (`backdrop-filter: blur(12px)` + blanco al 12 %): es el
   texto el que desenfoca lo que tiene detrás, no la foto entera (`CajaFoto` en `Asesoria.tsx`).
+  **(nov-2026, obsoleta)** `/asesoria` se rehízo: sus cuatro cajas (Carta astral, Psicología, Fisiología,
+  Filosofía) llevan ahora `DisciplinaBgLayer` + `glowHeader` + `sombraTexto`, como el resto; los popups de
+  «Mi formación» (`FormacionPopup`) son beige con letra marrón.
 - **Resolución completa** en `public/img/fondos/*` y `recorrido/tcm/fondos`: `adelgazar.mjs` no
   debe volver a encogerlas (en móvil con `cover` se ven borrosas).
 - **Velos:** el cielo de Astrología va a `opacity 1` con velo `rgba(8,13,30,0.25)` por defecto

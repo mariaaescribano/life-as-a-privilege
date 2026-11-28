@@ -92,6 +92,8 @@ interface MetodoStepHeaderProps {
   /** Oculta el botón "Cursos" que Psicología añade por defecto. Útil en páginas
    *  donde ya se está dentro de un curso (lección, módulos). */
   hideCursos?: boolean;
+  /** Sin halo ni sombra de letra (las páginas de los cursos). */
+  sinLuz?: boolean;
   /** El título va SIEMPRE en una sola línea: si a su tamaño natural no cabe,
    *  se encoge (paso a paso) hasta que quepa. Nunca salta a dos líneas ni se
    *  trunca. Ignora el modo `tituloUniforme` de las disciplinas (que sí
@@ -338,6 +340,7 @@ export function MetodoStepHeader({
   boxShadow,
   tallTitle = false,
   hideCursos = false,
+  sinLuz: sinLuzProp = false,
   fitTitle = false,
   titleScale = 1,
   multiline = false,
@@ -373,7 +376,7 @@ export function MetodoStepHeader({
   // prop `space` se mantiene como alias para Astrología.
   const headerNom = nom ?? (space ? astrologiaNom : undefined);
   // Astrología, por ahora, sin luz: sin halo en la caja, sin la luz que recorre el título y sin brillo en los botones.
-  const sinLuz = headerNom === astrologiaNom;
+  const sinLuz = sinLuzProp || headerNom === astrologiaNom;
   const useDiscBg = !!headerNom && hasDisciplinaBg(headerNom);
   // En el header de Medicina China los botones llevan un fondo blanco mínimo
   // (casi transparente) para que el texto se lea sobre su fondo.

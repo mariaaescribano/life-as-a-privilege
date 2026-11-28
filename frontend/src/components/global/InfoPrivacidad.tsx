@@ -23,14 +23,14 @@ export function InfoPrivacidad({
 }: {
   tipo: "registro" | "opinion";
   mt?: number;
-  /** "oscuro" = letra turquesa oscuro, para cuando va dentro de una caja de mármol. */
+  /** "oscuro" = letra marrón chocolate, más plena (dentro de una caja). */
   tono?: "claro" | "oscuro";
 }) {
   const t = useT();
   return (
     <Text
       mt={mt}
-      color={tono === "oscuro" ? "#004f4f" : "rgba(255,255,255,0.55)"}
+      color={tono === "oscuro" ? "#3B2418" : "#3B2418cc"}
       fontSize="xs"
       fontFamily="'EB Garamond', serif"
       letterSpacing="0.03em"
@@ -44,7 +44,7 @@ export function InfoPrivacidad({
         target="_blank"
         rel="noopener"
         textDecoration="underline"
-        _hover={{ color: tono === "oscuro" ? "#002f2f" : "rgba(255,255,255,0.9)" }}
+        _hover={{ color: "#2a1810" }}
       >
         {t("privacidad.enlace")}
       </Text>

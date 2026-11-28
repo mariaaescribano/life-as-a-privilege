@@ -27,22 +27,17 @@ function rutaInterna(valor: string | null): string | null {
 }
 
 // El mármol VERTICAL de la casa (crema, 760×1230, a resolución completa) de fondo de cada opinión y del
-// formulario. Sobre mármol la letra no es blanca: turquesa oscuro (#004f4f) y oro (#b08d3f) en los filos.
-const TQ = "#004f4f";
-const ORO = "#b08d3f";
+// formulario. Sobre mármol la letra no es blanca: marrón chocolate (#3B2418).
+const TQ = "#3B2418";
+const ORO = "#3B2418";
 const cajaMarmol = {
-  bgColor: "#efe5cf",
-  bgImage: "none /* MÁRMOL QUITADO 2026-11-27: antes url('/img/fondos/marmol-bandas.webp') */",
-  bgSize: "cover",
-  bgPosition: "center",
-  border: "1px solid rgba(255,255,255,0.7)",
+  bgColor: "#F7EBD9",
+  border: `1.5px solid ${TQ}`,
   borderRadius: "2xl",
-  // Luz, no sombra: un halo claro y otro dorado muy suave.
-  boxShadow: "0 0 18px rgba(255,255,255,0.4), 0 0 44px rgba(180,255,245,0.18), 0 0 30px rgba(176,141,63,0.18)",
 };
 
 /** Botón de vuelta: el mismo arriba y en la pantalla de gracias. */
-function BotonVolver({ a, texto, onIr, sobreMarmol }: { a: string; texto: string; onIr: (a: string) => void; sobreMarmol?: boolean }) {
+function BotonVolver({ a, texto, onIr }: { a: string; texto: string; onIr: (a: string) => void; sobreMarmol?: boolean }) {
   return (
     <Flex
       as="button"
@@ -52,9 +47,9 @@ function BotonVolver({ a, texto, onIr, sobreMarmol }: { a: string; texto: string
       px={{ base: 6, md: 8 }}
       py={{ base: "10px", md: "12px" }}
       borderRadius="full"
-      border={sobreMarmol ? `1.5px solid ${TQ}` : "1px solid rgba(255,255,255,0.55)"}
-      bg={sobreMarmol ? "rgba(255,255,255,0.35)" : "rgba(255,255,255,0.08)"}
-      color={sobreMarmol ? TQ : "white"}
+      border={`1.5px solid ${TQ}`}
+      bg="transparent"
+      color={TQ}
       fontFamily="'EB Garamond', serif"
       fontWeight="600"
       fontSize={{ base: "sm", md: "md" }}
@@ -62,7 +57,7 @@ function BotonVolver({ a, texto, onIr, sobreMarmol }: { a: string; texto: string
       cursor="pointer"
       whiteSpace="nowrap"
       transition="all 0.25s ease"
-      _hover={sobreMarmol ? { bg: "rgba(255,255,255,0.6)" } : { bg: "rgba(255,255,255,0.18)", borderColor: "white" }}
+      _hover={{ bg: `${TQ}14` }}
     >
       {texto}
     </Flex>
@@ -98,7 +93,7 @@ const inputStyles = {
   _hover: { border: `1px solid ${TQ}99` },
   _focus: {
     border: `1px solid ${TQ}`,
-    boxShadow: `0 0 0 1px ${TQ}33, 0 0 14px rgba(176,141,63,0.35)`,
+    boxShadow: `0 0 0 1px ${TQ}33`,
     bg: "rgba(255,255,255,0.75)",
     outline: "none",
   },
@@ -118,21 +113,19 @@ function OpinionesList({ opiniones, loading, listReveal }: { opiniones: Opinion[
     <Box ref={listReveal.ref} w="100%" maxW="950px" mx="auto">
       {loading ? (
         <Text
-          color="rgba(255,255,255,0.75)"
+          color={TQ}
           textAlign="center"
           fontStyle="italic"
           fontSize={{ base: "md", md: "lg" }}
-          textShadow="0 0 8px rgba(255,255,255,0.19)"
         >
           {t("comun.cargando")}
         </Text>
       ) : opiniones.length === 0 ? (
         <Text
-          color="rgba(255,255,255,0.75)"
+          color={TQ}
           textAlign="center"
           fontStyle="italic"
           fontSize={{ base: "md", md: "lg" }}
-          textShadow="0 0 8px rgba(255,255,255,0.19)"
         >
           {t("opiniones.vacio")}
         </Text>
@@ -250,7 +243,6 @@ function DejarOpinion({
                 "50%": { transform: "scale(1.18)" },
               },
               display: "inline-block",
-              filter: "drop-shadow(0 0 14px rgba(255,180,180,0.8)) drop-shadow(0 0 30px rgba(255,180,180,0.4))",
             }}
           >
             ♥
@@ -285,7 +277,7 @@ function DejarOpinion({
             py={{ base: "10px", md: "12px" }}
             borderRadius="full"
             border={`1.5px solid ${TQ}`}
-            bg="rgba(255,255,255,0.35)"
+            bg="transparent"
             cursor="pointer"
             color={TQ}
             fontFamily="'EB Garamond', serif"
@@ -293,10 +285,8 @@ function DejarOpinion({
             fontSize={{ base: "sm", md: "md" }}
             letterSpacing="0.16em"
             textTransform="uppercase"
-            boxShadow="0 0 14px rgba(176,141,63,0.3)"
             _hover={{
-              bg: "rgba(255,255,255,0.65)",
-              boxShadow: "0 0 24px rgba(176,141,63,0.5)",
+              bg: `${TQ}14`
             }}
             transition="all 0.25s ease"
             mt={2}
@@ -371,13 +361,11 @@ function DejarOpinion({
               py={{ base: "14px", md: "16px" }}
               borderRadius="full"
               border={`1.5px solid ${TQ}`}
-              bg="rgba(255,255,255,0.4)"
+              bg="transparent"
               cursor={status === "sending" ? "not-allowed" : "pointer"}
               opacity={status === "sending" ? 0.55 : 1}
-              boxShadow="0 0 18px rgba(176,141,63,0.35), 0 0 40px rgba(255,255,255,0.3)"
               _hover={status === "sending" ? {} : {
-                bg: "rgba(255,255,255,0.7)",
-                boxShadow: "0 0 28px rgba(176,141,63,0.55), 0 0 58px rgba(255,255,255,0.45)",
+                bg: `${TQ}14`
               }}
               transition="all 0.25s ease"
               pointerEvents={status === "sending" ? "none" : "auto"}
@@ -475,13 +463,12 @@ export default function Opiniones() {
         gap={{ base: 3, md: 4 }}
       >
         <Text
-          color="white"
+          color={TQ}
           fontSize={{ base: "3xl", md: "5xl", lg: "6xl" }}
           fontWeight="700"
           letterSpacing="0.1em"
           lineHeight="1.1"
           textTransform="uppercase"
-          textShadow="0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(255,255,255,0.39), 0 0 56px rgba(180,255,245,0.32)"
           opacity={mounted ? 1 : 0}
           transform={mounted ? "translateY(0)" : "translateY(20px)"}
           transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
@@ -503,7 +490,7 @@ export default function Opiniones() {
             Justo en medio: misma separación arriba y abajo, idéntica en
             móvil y escritorio (mt = mb = 20 en todos los breakpoints). */}
       <Flex justify="center" px={{ base: 5, md: 10 }} mt={20} mb={20}>
-        <Box w="100%" maxW="500px" h="1px" bg="rgba(255,255,255,0.15)" />
+        <Box w="100%" maxW="500px" h="1px" bg={`${TQ}55`} />
       </Flex>
 
       {/* ── TÍTULO DEJAR OPINIÓN ── */}
@@ -519,13 +506,12 @@ export default function Opiniones() {
         gap={{ base: 3, md: 4 }}
       >
         <Text
-          color="white"
+          color={TQ}
           fontSize={{ base: "2xl", md: "4xl" }}
           fontWeight="700"
           letterSpacing="0.08em"
           lineHeight="1.1"
           textTransform="uppercase"
-          textShadow="0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(255,255,255,0.39), 0 0 54px rgba(180,255,245,0.32)"
           opacity={dejarTitleReveal.visible ? 1 : 0}
           transform={dejarTitleReveal.visible ? "translateY(0)" : "translateY(18px)"}
           transition="opacity 0.8s ease, transform 0.8s ease"

@@ -18,16 +18,12 @@ export function ModuloAcordeon(props:{
   const [open, setOpen] = useState(false);
   const disc = props.disciplina;
   const hasBg = !!disc && hasDisciplinaBg(disc);
-  const tShadow = `0 1px 4px ${props.bgColor}, 0 0 10px ${props.bgColor}, 0 0 20px ${props.bgColor}`;
 
   const handleToggle = () => {
     const next = !open;
     setOpen(next);
     props.onToggle?.(next);
   };
-
-  const glow = `0 0 16px rgba(255,255,255,0.16), 0 0 40px rgba(180,255,245,0.12), 0 0 22px ${props.color}55`;
-  const glowHover = `0 0 24px rgba(255,255,255,0.24), 0 0 58px rgba(180,255,245,0.18), 0 0 34px ${props.color}88`;
 
   return (
     <Box w="100%" maxW="800px" mx="auto" mb={5}>
@@ -37,17 +33,16 @@ export function ModuloAcordeon(props:{
         overflow="hidden"
         borderRadius="2xl"
         bg={props.bgColor ?? "white"}
-        boxShadow={glow}
         cursor="pointer"
         onClick={handleToggle}
         transition="all 0.25s"
-        _hover={{ transform: "translateY(-3px)", boxShadow: glowHover }}
+        _hover={{ transform: "translateY(-3px)" }}
       >
         {hasBg && <DisciplinaBgLayer nom={disc!} borderRadius="2xl" />}
         <Flex position="relative" zIndex={1} align="center" justify="space-between" p={5} color={props.color}>
           <HStack>
             {< props.icon color={props.color} />}
-            <Text fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" style={{ textShadow: tShadow }}>
+            <Text fontSize={{ base: "xl", md: "2xl" }} fontWeight="700">
               {props.title}
             </Text>
           </HStack>
@@ -98,7 +93,7 @@ export function ModuloAcordeon(props:{
                       <Box as={Play} w="14px" h="14px" fill="currentColor" ml="1px" />
                     </Flex>
                   )}
-                  <Text fontWeight="600" fontSize={{ base: "md", md: "lg" }} style={{ textShadow: tShadow }}>
+                  <Text fontWeight="600" fontSize={{ base: "md", md: "lg" }}>
                     {sub.nom}
                   </Text>
                 </Flex>

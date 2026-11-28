@@ -52,6 +52,7 @@ export default function ModulosPage() {
               color={modalidad.color}
               nom={modalidad.nom}
               hideCursos
+              sinLuz
               // Este header va GRANDE, como el del recorrido: es la portada del
               // curso y la página más importante de Materiales. El resto de la
               // sección (cursos, lección, herbario, alimentos) va en `dense`.

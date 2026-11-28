@@ -1,3 +1,4 @@
+import { MandalaTinte } from "../global/MandalaTinte";
 import React from "react";
 import { Box, Flex, Image } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
@@ -5,7 +6,7 @@ import { Reveal } from "../global/Reveal";
 import { focoBlanco } from "../global/foco";
 import WelcomeCabecera from "./WelcomeCabecera";
 import { useT } from "../../i18n";
-import { FONDO_PAGINA_BEIGE, FONDO_PAGINA_TURQUESA } from "../../GlobalVariables";
+import { FONDO_PAGINA_TURQUESA } from "../../GlobalVariables";
 
 /**
  * Apertura de la portada: a la izquierda la foto de María; a la derecha, en medio,
@@ -96,8 +97,9 @@ const WelcomeHero = ({ activo, compacto = false }: { activo: boolean; marmol?: b
             px={{ base: 7, md: 9 }}
             py="13px"
             borderRadius="full"
-            bg={FONDO_PAGINA_TURQUESA}
-            color={FONDO_PAGINA_BEIGE}
+            bg="transparent"
+            border={`1.5px solid ${FONDO_PAGINA_TURQUESA}`}
+            color={FONDO_PAGINA_TURQUESA}
             fontFamily="'EB Garamond', serif"
             fontWeight="700"
             fontSize={{ base: "md", md: "lg" }}
@@ -106,10 +108,11 @@ const WelcomeHero = ({ activo, compacto = false }: { activo: boolean; marmol?: b
             whiteSpace="nowrap"
             cursor="pointer"
             transition="transform 0.3s cubic-bezier(0.22,1,0.36,1), opacity 0.3s ease"
-            _hover={{ transform: "translateY(-2px)", opacity: 0.92 }}
+            _hover={{ transform: "translateY(-2px)", bg: `${FONDO_PAGINA_TURQUESA}14` }}
             _active={{ transform: "translateY(0)" }}
             _focusVisible={focoBlanco}
           >
+            <MandalaTinte h="26px" color={FONDO_PAGINA_TURQUESA} />
             {t("welcome.hero.pedirCita")}
           </Flex>
         </Reveal>
