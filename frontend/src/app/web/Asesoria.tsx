@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import TrasCabecera from "../../components/global/TrasCabecera";
@@ -8,7 +8,7 @@ import { Reveal } from "../../components/global/Reveal";
 import WelcomeCabecera from "../../components/welcome/WelcomeCabecera";
 import { focoBlanco } from "../../components/global/foco";
 import {
-  FONDO_PAGINA_TURQUESA as T,
+  FONDO_PAGINA_BEIGE as BEIGE, FONDO_PAGINA_TURQUESA as T,
   astrologiaNom, astrologiaBg, astrologiaTxt,
   neuropsicologiaNom, neuropsicologiaBg, neuropsicologiaTxt,
   fisiologiaNom, fisiologiaBg, fisiologiaTxt,
@@ -16,6 +16,9 @@ import {
 } from "../../GlobalVariables";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { sombraTexto } from "../../components/global/disciplinaSombras";
+import { PlataformaGaleria } from "../../components/web/PlataformaGaleria";
+import BandaFoto from "../../components/global/BandaFoto";
+import TextoRico from "../../components/global/TextoRico";
 import { MandalaTinte } from "../../components/global/MandalaTinte";
 import { FlechaBonita } from "../../components/global/FlechaBonita";
 import { glowHeader } from "../../components/metodo/FotoBox";
@@ -36,6 +39,16 @@ const CAJAS = [
   { n: 2, nom: neuropsicologiaNom, bg: neuropsicologiaBg, txt: neuropsicologiaTxt, ruta: "/disciplina/psicologia", parrafos: 2, enlace: "formacion" as const, lista: FORMACION_PSICOLOGIA },
   { n: 3, nom: fisiologiaNom, bg: fisiologiaBg, txt: fisiologiaTxt, ruta: "/disciplina/fisiologia", parrafos: 1, enlace: "formacion" as const, lista: FORMACION_FISIOLOGIA },
   { n: 4, nom: culturaNom, bg: culturaBg, txt: culturaTxt, ruta: "/disciplina/filosofia", parrafos: 3, enlace: null },
+];
+
+// El texto junto a mi foto: todo del mismo tamaño y fuente.
+const HISTORIA = [
+  { k: "asesoria.historia.p1" as const },
+  { k: "asesoria.historia.p2" as const },
+  { k: "asesoria.historia.p3" as const },
+  { k: "asesoria.historia.p4" as const },
+  { k: "asesoria.historia.p5" as const },
+  { k: "asesoria.historia.p6" as const },
 ];
 
 const Asesoria = () => {
@@ -61,11 +74,51 @@ const Asesoria = () => {
 
         <TrasCabecera>
 
+        {/* ── Mi foto a la izquierda y mi texto a la derecha, sobre el mármol chocolate (letra beige) ── */}
+        <Box mt={{ base: 10, md: 16 }}>
+          <BandaFoto foto="/img/fondos/marmol-chocolate.webp" fundido={55} pt={{ base: "56px", md: "80px" }} pb={{ base: "56px", md: "80px" }}>
+            <Flex
+              w="100%"
+              maxW="1180px"
+              mx="auto"
+              px={{ base: 5, md: 10, lg: 16 }}
+              direction={{ base: "column", md: "row" }}
+              align="center"
+              gap={{ base: 8, md: 12, lg: 16 }}
+            >
+              <Reveal activo={mounted} direction="right" distance={36} scaleFrom={0.94} blur duration={1.2} w={{ base: "260px", md: "340px", lg: "400px" }} flexShrink={0}>
+                {/* Doble marco: la foto con su borde y, por fuera, un filo fino desplazado. */}
+                <Box position="relative">
+                  <Box position="absolute" inset="-9px" borderRadius="30px" border={`1px solid ${BEIGE}66`} pointerEvents="none" />
+                  <Box borderRadius="22px" overflow="hidden" border={`1.5px solid ${BEIGE}`}>
+                    <Image src="/img/me/maria-quiensoy.webp" alt="María Escribano" w="100%" h="auto" display="block" />
+                  </Box>
+                </Box>
+              </Reveal>
+
+              <Flex direction="column" flex="1" minW={0} gap={{ base: 4, md: 5 }} align={{ base: "center", md: "flex-start" }} textAlign={{ base: "center", md: "left" }}>
+                {HISTORIA.map((h, i) => (
+                  <Reveal key={h.k} activo={mounted} direction="left" distance={30} duration={0.9} delay={0.3 + i * 0.15}>
+                    <Text
+                      color={BEIGE}
+                      fontSize={{ base: "lg", md: "xl", lg: "2xl" }}
+                      lineHeight="1.65"
+                      letterSpacing="0.01em"
+                    >
+                      <TextoRico texto={t(h.k)} />
+                    </Text>
+                  </Reveal>
+                ))}
+              </Flex>
+            </Flex>
+          </BandaFoto>
+        </Box>
+
         {/* ── La frase de la metodología y, debajo, las cuatro cajas ── */}
         <Box px={{ base: 5, md: 10 }} pt={{ base: 8, md: 12 }}>
           <Reveal activo={mounted} direction="up" distance={16} duration={0.9}>
             <Text color={T} textAlign="center" maxW="1080px" mx="auto" fontSize={{ base: "lg", md: "2xl", lg: "3xl" }} lineHeight="1.5" fontStyle="italic" letterSpacing="0.04em">
-              {t("asesoria.metodologia")}
+              <TextoRico texto={t("asesoria.metodologia")} />
             </Text>
           </Reveal>
 
@@ -188,13 +241,14 @@ const Asesoria = () => {
         ))}
 
         {/* ── El botón, en medio ── */}
-        <Flex justify="center" pt={{ base: 12, md: 16 }} pb={{ base: 24, md: 32 }} px={5}>
+        <Flex justify="center" pt={{ base: 12, md: 16 }} pb={{ base: 2, md: 4 }} px={5}>
           <Reveal activo={mounted} direction="up" distance={16} duration={0.9} delay={0.2}>
             <Flex
               as="button"
               type="button"
               onClick={() => navigate("/reservar-cita")}
               align="center"
+              gap={{ base: 4, md: 6 }}
               px={{ base: 8, md: 10 }}
               py="14px"
               borderRadius="full"
@@ -218,6 +272,10 @@ const Asesoria = () => {
             </Flex>
           </Reveal>
         </Flex>
+
+        {/* ── La plataforma: mármol chocolate, el título entre dos rayas y las fotos ── */}
+        <PlataformaGaleria titulo={t("asesoria.plataforma.titulo")} />
+        <Box pb={{ base: 20, md: 28 }} />
         </TrasCabecera>
       </Box>
 

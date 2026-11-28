@@ -1,20 +1,41 @@
-import React, { useEffect, useState } from "react";
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
-import { FlechaBonita } from "../global/FlechaBonita";
-import { focoBlanco } from "../global/foco";
+import React, { useEffect, useRef, useState } from "react";
+import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
 import { Reveal } from "../global/Reveal";
+import FotoViva from "../global/FotoViva";
+import PalabrasVivas from "../global/PalabrasVivas";
+import { Flecha } from "./LineaTiempoAstrologia";
 import type { Vineta } from "../metodo/ComicViewer";
 
 /**
- * Un cómic leído EN la página (sin popup): la viñeta a la izquierda, su texto a la derecha y dos flechas
- * debajo del texto para ir pasando. El texto de todas las viñetas ocupa el mismo hueco (el de la más larga),
- * así la caja no salta de alto al cambiar. Pensado para ir sobre la foto de la disciplina.
+ * Un cómic leído EN la página (sin popup), con el MISMO estilo que el de la Astrología (`LineaTiempoAstrologia`): la
+ * foto a la izquierda (se descorre desde el lado hacia el que se avanza y se inclina con el puntero), el texto a la
+ * derecha en un box transparente con su filo y su scroll, una flecha a cada lado (en móvil, debajo), y en medio el
+ * contador con su barra de progreso. Al pasar, entran la foto y el texto nuevos. Pensado para ir sobre la foto de la
+ * disciplina.
  *
- * `color` = la tinta de la disciplina (letra, flechas, filo); `sombra` = su sombra de texto.
+ * `color` = la tinta de la disciplina (letra, flechas, filos); `sombra` = su sombra de texto.
  */
+const EASE = "cubic-bezier(0.22,1,0.36,1)";
+const entra = (sentido: 1 | -1, retraso = 0) => ({
+  "@keyframes comicEntraSig": { from: { opacity: 0, transform: "translateX(34px)", filter: "blur(4px)" }, to: { opacity: 1, transform: "none", filter: "blur(0)" } },
+  "@keyframes comicEntraAnt": { from: { opacity: 0, transform: "translateX(-34px)", filter: "blur(4px)" }, to: { opacity: 1, transform: "none", filter: "blur(0)" } },
+  animation: `${sentido === 1 ? "comicEntraSig" : "comicEntraAnt"} 0.8s ${EASE} ${retraso}s both`,
+  "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+});
+const entraTexto = (retraso: number) => ({
+  "@keyframes comicTexto": { from: { opacity: 0, transform: "translateY(12px)" }, to: { opacity: 1, transform: "none" } },
+  animation: `comicTexto 0.7s ${EASE} ${retraso}s both`,
+  "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+});
+
 const ComicEnLinea = ({ vinetas, color, sombra }: { vinetas: Vineta[]; color: string; sombra: string }) => {
   const [i, setI] = useState(0);
-  const n = vinetas.length;
+  // Hacia dónde se va (1 = siguiente, -1 = anterior), para que la viñeta nueva llegue desde ese lado.
+  const sentido = useRef<1 | -1>(1);
+  const total = vinetas.length;
+  const ir = (f: (n: number) => number) =>
+    setI((n) => { const m = f(n); if (m !== n) sentido.current = m > n ? 1 : -1; return m; });
+  const v = vinetas[Math.min(i, total - 1)];
 
   // La siguiente viñeta se baja con antelación para que el cambio no espere a la red.
   useEffect(() => {
@@ -22,86 +43,98 @@ const ComicEnLinea = ({ vinetas, color, sombra }: { vinetas: Vineta[]; color: st
     if (sig) { const img = new window.Image(); img.src = encodeURI(sig.src); }
   }, [i, vinetas]);
 
-  const Flecha = ({ dir, desactivada }: { dir: "prev" | "next"; desactivada: boolean }) => (
-    <Box
-      as="button"
-      type="button"
-      aria-label={dir === "prev" ? "Anterior" : "Siguiente"}
-      disabled={desactivada}
-      onClick={() => setI((x) => Math.min(n - 1, Math.max(0, x + (dir === "prev" ? -1 : 1))))}
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      w={{ base: "52px", md: "60px" }}
-      h={{ base: "52px", md: "60px" }}
-      borderRadius="full"
-      color={color}
-      border={`1.5px solid ${color}aa`}
-      bg={`${color}1a`}
-      boxShadow={`0 0 10px rgba(255,255,255,0.16), 0 0 22px ${color}44, inset 0 0 12px ${color}22`}
-      cursor={desactivada ? "default" : "pointer"}
-      opacity={desactivada ? 0.35 : 1}
-      transition="background 0.2s ease, transform 0.2s ease, opacity 0.2s ease"
-      _hover={desactivada ? {} : { bg: `${color}2b`, transform: "translateY(-2px)" }}
-      _active={desactivada ? {} : { transform: "scale(0.96)" }}
-      _focusVisible={focoBlanco}
-    >
-      <FlechaBonita dir={dir} size="26px" />
-    </Box>
-  );
+  // Teclado: ← y → pasan de viñeta.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const t = e.target as HTMLElement | null;
+      if (t && /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)) return;
+      if (e.key === "ArrowLeft") ir((n) => Math.max(0, n - 1));
+      if (e.key === "ArrowRight") ir((n) => Math.min(total - 1, n + 1));
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [total]);
+
+  if (!v) return null;
+  const anterior = () => ir((n) => Math.max(0, n - 1));
+  const siguiente = () => ir((n) => Math.min(total - 1, n + 1));
+  const s = sentido.current;
 
   return (
-    <Flex direction={{ base: "column", md: "row" }} align="center" gap={{ base: 8, md: 12, lg: 16 }} maxW="1180px" mx="auto" w="100%" px={{ base: 6, md: 10, lg: 16 }}>
-      {/* Izquierda: la viñeta, con un fundido corto al cambiar. */}
-      <Reveal inView direction="right" distance={36} scaleFrom={0.94} duration={1.2} w={{ base: "100%", md: "46%" }} maxW={{ base: "420px", md: "none" }} flexShrink={0}>
-        <Box
-          position="relative"
-          borderRadius="22px"
-          overflow="hidden"
-          border={`1.5px solid ${color}`}
-          sx={{ "@keyframes vinetaEntra": { from: { opacity: 0 }, to: { opacity: 1 } } }}
-        >
-          <Image
-            key={i}
-            src={encodeURI(vinetas[i].src)}
-            alt=""
-            w="100%"
-            h="auto"
-            display="block"
-            sx={{ animation: "vinetaEntra 0.5s ease both", "@media (prefers-reduced-motion: reduce)": { animation: "none" } }}
-          />
+    <Reveal inView direction="up" distance={30} scaleFrom={0.97} blur duration={1} delay={0.1} w="100%">
+      <Flex w="100%" maxW="1180px" mx="auto" px={{ base: 4, md: 8 }} align="center" gap={{ base: 3, md: 6 }} fontFamily="'EB Garamond', serif" color={color}>
+        <Box display={{ base: "none", md: "block" }}>
+          <Flecha dir="prev" onClick={anterior} desactivada={i === 0} label="‹" color={color} />
         </Box>
-      </Reveal>
 
-      {/* Derecha: el texto y las flechas. */}
-      <Flex direction="column" flex="1" minW={0} gap={{ base: 6, md: 8 }} align={{ base: "center", md: "flex-start" }} textAlign={{ base: "center", md: "left" }}>
-        <Box display="grid" w="100%">
-          {vinetas.map((v, k) => (
-            <Flex
-              key={k}
-              direction="column"
-              gap={4}
-              gridArea="1 / 1"
-              visibility={k === i ? "visible" : "hidden"}
-              aria-hidden={k === i ? undefined : true}
-              opacity={k === i ? 1 : 0}
-              transition="opacity 0.5s ease"
-              align={{ base: "center", md: "flex-start" }}
+        <Flex direction="column" flex="1" minW={0} gap={{ base: 4, md: 5 }}>
+          <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={{ base: 5, md: 8 }} alignItems="stretch">
+            {/* Foto, a la izquierda: se descorre desde el lado hacia el que se avanza. */}
+            <FotoViva key={`f${i}`} desde={s === 1 ? "der" : "izq"} radio="12px" border={`1px solid ${color}66`} alignSelf="start" w="100%" maxW={{ base: "320px", md: "none" }} mx={{ base: "auto", md: 0 }}>
+              <Image src={encodeURI(v.src)} alt="" w="100%" h="auto" display="block" />
+            </FotoViva>
+
+            {/* Texto, a la derecha: box transparente con el scroll vertical a la vista. */}
+            <Box
+              key={`t${i}`}
+              sx={entra(s, 0.08)}
+              position="relative"
+              border={`1.5px solid ${color}80`}
+              borderRadius="2xl"
+              bg="transparent"
+              minH={{ base: "240px", md: "0" }}
             >
-              {v.paragraphs.map((p, j) => (
-                <Text key={j} color={color} textShadow={sombra} fontSize={{ base: "lg", md: "xl", lg: "2xl" }} lineHeight="1.55" letterSpacing="0.01em">
-                  {p}
-                </Text>
-              ))}
+              <Box
+                position={{ base: "relative", md: "absolute" }}
+                inset={{ md: 0 }}
+                maxH={{ base: "300px", md: "none" }}
+                overflowY="scroll"
+                overscrollBehavior="contain"
+                px={{ base: 5, md: 7 }}
+                py={{ base: 5, md: 6 }}
+                tabIndex={0}
+                textShadow={sombra}
+                sx={{
+                  scrollbarWidth: "thin",
+                  scrollbarColor: `${color}b3 ${color}26`,
+                  "&::-webkit-scrollbar": { width: "9px" },
+                  "&::-webkit-scrollbar-track": { background: `${color}26`, borderRadius: "8px", margin: "14px 0" },
+                  "&::-webkit-scrollbar-thumb": { background: `${color}b3`, borderRadius: "8px" },
+                }}
+              >
+                {v.paragraphs.map((p, j) => (
+                  <Text key={j} fontSize={{ base: "md", md: "lg" }} lineHeight="1.65" mt={j === 0 ? 0 : 3}>
+                    <PalabrasVivas texto={p} cursivas total={1.3} retraso={0.5 + j * 0.25} />
+                  </Text>
+                ))}
+              </Box>
+            </Box>
+          </Grid>
+
+          {/* Móvil: las flechas debajo; en escritorio, a los lados. Contador y barra de progreso en medio. */}
+          <Flex align="center" justify="center" gap={5}>
+            <Box display={{ base: "block", md: "none" }}>
+              <Flecha dir="prev" onClick={anterior} desactivada={i === 0} label="‹" color={color} />
+            </Box>
+            <Flex direction="column" align="center" gap={2}>
+              <Text key={i} sx={entraTexto(0)} fontSize={{ base: "sm", md: "md" }} letterSpacing="0.2em" opacity={0.8} textShadow={sombra}>
+                {i + 1} / {total}
+              </Text>
+              <Box w={{ base: "120px", md: "180px" }} h="1.5px" bg={`${color}33`} borderRadius="full" overflow="hidden">
+                <Box h="100%" bg={color} borderRadius="full" style={{ width: `${((i + 1) / total) * 100}%` }} transition={`width 0.7s ${EASE}`} />
+              </Box>
             </Flex>
-          ))}
-        </Box>
-        <Flex align="center" gap={4}>
-          <Flecha dir="prev" desactivada={i === 0} />
-          <Flecha dir="next" desactivada={i === n - 1} />
+            <Box display={{ base: "block", md: "none" }}>
+              <Flecha dir="next" onClick={siguiente} desactivada={i === total - 1} label="›" color={color} />
+            </Box>
+          </Flex>
         </Flex>
+
+        <Box display={{ base: "none", md: "block" }}>
+          <Flecha dir="next" onClick={siguiente} desactivada={i === total - 1} label="›" color={color} />
+        </Box>
       </Flex>
-    </Flex>
+    </Reveal>
   );
 };
 

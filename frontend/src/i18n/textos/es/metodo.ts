@@ -277,7 +277,7 @@ export const metodo = {
   "metodo.borrarHerida": "Borrar herida",
   "metodo.uniendose": "…uniéndose…",
   "metodo.volverAHacer": "↺ Volver a hacer",
-  "metodo.tusCelulas": "Tus células",
+  "metodo.tusCelulas": "Nuestras células",
   "metodo.celulasPronto": "Pronto podrás explorar las células de este órgano.",
   "metodo.cartaParaTi": "Tu carta para ti",
   "metodo.cartaCuandoVuelvas": "Para cuando vuelvas a sentirte bloqueado:",

@@ -93,7 +93,7 @@ const WelcomeHero = ({ activo, compacto = false }: { activo: boolean; marmol?: b
             type="button"
             onClick={() => navigate("/reservar-cita")}
             align="center"
-            gap={3}
+            gap={{ base: 4, md: 6 }}
             px={{ base: 7, md: 9 }}
             py="13px"
             borderRadius="full"

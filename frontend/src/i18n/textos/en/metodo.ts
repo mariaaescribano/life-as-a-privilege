@@ -226,7 +226,7 @@ export const metodo = {
   "metodo.borrarHerida": "Delete wound",
   "metodo.uniendose": "…coming together…",
   "metodo.volverAHacer": "↺ Do it again",
-  "metodo.tusCelulas": "Your cells",
+  "metodo.tusCelulas": "Our cells",
   "metodo.celulasPronto": "You'll be able to explore this organ's cells soon.",
   "metodo.cartaParaTi": "Your letter to yourself",
   "metodo.cartaCuandoVuelvas": "For when you feel stuck again:",
