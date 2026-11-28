@@ -141,7 +141,7 @@ export default function AdminInformes() {
                 <Text color="#3B2418" fontSize="sm" fontStyle="italic">{componiendo ? "Actualizando…" : "Así saldrá el PDF."}</Text>
                 {url && (
                   <Text as="a" href={url} target="_blank" rel="noreferrer" color="#3B2418" fontSize="sm" textDecoration="underline"
-                        _focusVisible={{ outline: "2px solid #004f4fcc", outlineOffset: "2px" }}>
+                        _focusVisible={{ outline: "2px solid #3B2418cc", outlineOffset: "2px" }}>
                     Abrir en otra pestaña
                   </Text>
                 )}

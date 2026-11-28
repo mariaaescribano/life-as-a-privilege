@@ -49,7 +49,7 @@ const telefonoConPrefijo = (t: string) => /^\+\d{6,15}$/.test(t.replace(/[\s().-
 //   · el CIELO estrellado de Astrología para la carta astral;
 //   · el vidrio turquesa de siempre para eliminar, que es lo serio y va callado.
 // Las fotos van a resolución completa, sin velo ni desenfoque.
-const TINTA = "#004f4f";
+const TINTA = "#3B2418";
 const MARMOL = "none /* MÁRMOL QUITADO 2026-11-27: antes url('/img/fondos/marmol-bandas.webp') */";
 const CIELO = "url('/img/astrologia/space.webp')";
 
@@ -148,7 +148,7 @@ function PildoraMarmol({ children, onClick, contorno, off, titulo }: {
       cursor={off ? "not-allowed" : "pointer"}
       opacity={off ? 0.5 : 1}
       transition="all 0.2s ease"
-      _hover={off ? undefined : { transform: "translateY(-1px)", bg: contorno ? "#004f4f14" : "#003f3f" }}
+      _hover={off ? undefined : { transform: "translateY(-1px)", bg: contorno ? "#3B241814" : "#2a1810" }}
       _focusVisible={{ outline: `2px solid ${TINTA}`, outlineOffset: "2px" }}
     >
       {children}
@@ -411,7 +411,7 @@ export default function AdminDatosUsuario() {
             <Box {...CAJA_MARMOL}>
               <Flex align="center" justify="space-between" gap={3} wrap="wrap" mb={6}>
                 {tituloMarmol("Datos personales")}
-                <Flex align="center" gap={2} px={4} py="5px" borderRadius="full" bg="transparent" border="1.5px solid #004f4f88">
+                <Flex align="center" gap={2} px={4} py="5px" borderRadius="full" bg="transparent" border="1.5px solid #3B241888">
                   <Box w="9px" h="9px" borderRadius="full" bg={pendiente ? "#d99a2b" : activada ? "#1f9d8f" : "#9aa"}
                        />
                   <Text fontSize="md" fontWeight="700">

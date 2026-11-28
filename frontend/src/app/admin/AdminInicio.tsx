@@ -71,16 +71,16 @@ export default function AdminInicio() {
                 bgImage="none /* MÁRMOL QUITADO 2026-11-27: antes url('/img/fondos/marmol-bandas.webp') */"
                 bgSize="cover"
                 bgPosition="center"
-                border="1.5px solid #004f4f"
+                border="1.5px solid #3B2418"
                 boxShadow="0 0 18px #b08d3f44, 0 0 40px #b08d3f22"
                 cursor="pointer"
                 transition="transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease"
                 _hover={{ transform: "translateY(-4px)", boxShadow: "0 0 26px #b08d3f66, 0 0 56px #b08d3f33" }}
-                _focusVisible={{ outline: "2px solid #004f4fcc", outlineOffset: "2px" }}
+                _focusVisible={{ outline: "2px solid #3B2418cc", outlineOffset: "2px" }}
                 role="group"
               >
                 <Text
-                  color="#004f4f"
+                  color="#3B2418"
                   fontSize={{ base: "xl", md: "2xl" }}
                   fontWeight="700"
                   letterSpacing="0.08em"
@@ -93,7 +93,7 @@ export default function AdminInicio() {
                 <Box
                   h="1px"
                   w="36px"
-                  bg="#004f4f"
+                  bg="#3B2418"
                   transition="width 0.35s ease"
                   _groupHover={{ w: "72px" }}
                 />
@@ -119,18 +119,18 @@ export default function AdminInicio() {
               bgImage="none /* MÁRMOL QUITADO 2026-11-27: antes url('/img/fondos/marmol-bandas.webp') */"
               bgSize="cover"
               bgPosition="center"
-              border="1.5px solid #004f4f"
+              border="1.5px solid #3B2418"
               boxShadow="0 0 18px #b08d3f44, 0 0 40px #b08d3f22"
               cursor="pointer"
               transition="transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease"
               _hover={{ transform: "translateY(-4px)", boxShadow: "0 0 26px #b08d3f66, 0 0 56px #b08d3f33" }}
-              _focusVisible={{ outline: "2px solid #004f4fcc", outlineOffset: "2px" }}
+              _focusVisible={{ outline: "2px solid #3B2418cc", outlineOffset: "2px" }}
               role="group"
             >
-              <Text color="#004f4f" fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.08em" textTransform="uppercase" lineHeight="1.2" textAlign="center">
+              <Text color="#3B2418" fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.08em" textTransform="uppercase" lineHeight="1.2" textAlign="center">
                 Diario
               </Text>
-              <Box h="1px" w="36px" bg="#004f4f" transition="width 0.35s ease" _groupHover={{ w: "72px" }} />
+              <Box h="1px" w="36px" bg="#3B2418" transition="width 0.35s ease" _groupHover={{ w: "72px" }} />
             </Flex>
           </Reveal>
         </Grid>

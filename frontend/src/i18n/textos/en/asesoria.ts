@@ -14,7 +14,7 @@ export const asesoria = {
   "asesoria.logro.cultura": "How to create your own philosophy and learn to adapt it to every moment of your life.",
   "asesoria.intro": "I accompany you in exploring new ways of understanding yourself, of relating to yourself and of facing life's challenges.\n\nThe methodology is a path of self-knowledge that integrates ancestral wisdom and scientific knowledge to discover new possibilities and expand your awareness.",
   "asesoria.titulo": "1:1 Coaching",
-  "asesoria.subtitulo": "I advise you on mind, body and tradition to build an integrated view of yourself.",
+  "asesoria.subtitulo": "I walk with you to remember that your mind, your body and your story are one.",
   "asesoria.comoTrabajo": "How do I work?",
   "asesoria.sistema.titulo": "The step-by-step system we will follow together.",
   "asesoria.sistema.aviso": "You will have access to exclusive theoretical and practical content to support your process.",

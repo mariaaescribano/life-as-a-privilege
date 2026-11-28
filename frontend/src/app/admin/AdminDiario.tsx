@@ -635,7 +635,7 @@ const Boton = ({
     cursor={disabled ? "not-allowed" : "pointer"}
     opacity={disabled ? 0.55 : 1}
     transition="all 0.2s"
-    _hover={disabled ? undefined : { bg: principal && !conFoto ? "#004a4a" : `${txt}22`, transform: "translateY(-2px)" }}
+    _hover={disabled ? undefined : { bg: principal && !conFoto ? "#5a3624" : `${txt}22`, transform: "translateY(-2px)" }}
     _focusVisible={{ outline: `2px solid ${txt}cc`, outlineOffset: "2px" }}
   >
     {children}

@@ -147,7 +147,7 @@ export default function AdminSuscriptores() {
                    px={5} py={2} borderRadius="full" bg="#3B2418"
                    border="1.5px solid #3B2418" color="#F0DCC0" fontWeight="700"
                    fontSize="sm" cursor="pointer" transition="all 0.2s"
-                   _hover={{ bg: "#004a4a", transform: "translateY(-2px)" }} _focusVisible={{ outline: "2px solid #3B2418cc", outlineOffset: "2px" }}>
+                   _hover={{ bg: "#5a3624", transform: "translateY(-2px)" }} _focusVisible={{ outline: "2px solid #3B2418cc", outlineOffset: "2px" }}>
                 Copiar todos
               </Box>
               <Box as="button"
@@ -226,7 +226,7 @@ export default function AdminSuscriptores() {
                  px={6} py={2.5} borderRadius="full" bg="#3B2418"
                  border="1.5px solid #3B2418" color="#F0DCC0" fontWeight="700"
                  fontSize={{ base: "sm", md: "md" }} cursor="pointer" transition="all 0.2s"
-                 _hover={{ bg: "#004a4a", transform: "translateY(-2px)" }} _focusVisible={{ outline: "2px solid #3B2418cc", outlineOffset: "2px" }}>
+                 _hover={{ bg: "#5a3624", transform: "translateY(-2px)" }} _focusVisible={{ outline: "2px solid #3B2418cc", outlineOffset: "2px" }}>
               Volver
             </Box>
           </Flex>

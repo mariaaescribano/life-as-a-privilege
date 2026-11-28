@@ -1,5 +1,4 @@
 // LogIn.tsx
-import { MandalaTinte } from "../../components/global/MandalaTinte";
 import { olvidarPersona } from "../../api/persona";
 import { recordarSoloLectura } from "../../api/sesion";
 import React, { useEffect, useRef, useState } from "react";
@@ -16,23 +15,12 @@ import { gestionaError } from "../../GlobalHelper";
 import TrasCabecera from "../../components/global/TrasCabecera";
 import SiteFooter from "../../components/global/Footer";
 import WelcomeCabecera from "../../components/welcome/WelcomeCabecera";
-import { Reveal } from "../../components/global/Reveal";
-import { focoBlanco } from "../../components/global/foco";
-import BandaMarmol from "../../components/global/BandaMarmol";
 import { CampoContrasena, inputAuthStyles, focoAzul } from "../../components/global/CampoContrasena";
 import { useT } from "../../i18n";
 
 // El estilo de los campos vive en CampoContrasena, para que el campo con ojo y
 // los normales no puedan quedar distintos.
 const inputStyles = inputAuthStyles;
-
-// Las dos puertas van sobre el mármol: letra turquesa oscuro y oro en el halo (ver DISENO.md).
-const TINTA = "#004f4f";
-const ORO = "#b08d3f";
-const OPCIONES = [
-  { modo: "asesoria" as const, texto: "auth.login.opcion.asesoria" as const },
-  { modo: "premium" as const, texto: "auth.login.opcion.lectura" as const },
-];
 
 export default function LogIn() {
   const navigate = useNavigate();
@@ -53,13 +41,9 @@ export default function LogIn() {
   // volver a mandar el correo.
   const [sinConfirmar, setSinConfirmar] = useState(false);
   const [reenviado, setReenviado] = useState(false);
-  // Qué inicio de sesión se ha elegido (null = todavía se está eligiendo).
-  // `?modo=premium` (el botón EMPEZAR de Premium) llega con la puerta ya elegida.
-  const [modo, setModo] = useState<"asesoria" | "premium" | null>(
-    params.get("modo") === "premium" ? "premium" : null,
-  );
   const formRef = useRef<HTMLDivElement>(null);
   const [formVisible, setFormVisible] = useState(false);
+  useEffect(() => { const id = setTimeout(() => setFormVisible(true), 40); return () => clearTimeout(id); }, []);
   // Enter en «nombre o email» salta a la contraseña (allí Enter ya entra).
   const contraRef = useRef<HTMLInputElement>(null);
 
@@ -68,16 +52,6 @@ export default function LogIn() {
     const t = setTimeout(() => setMounted(true), 60);
     return () => clearTimeout(t);
   }, []);
-
-  useEffect(() => {
-    // Al elegir una puerta, el formulario se enseña debajo.
-    if (!modo) { setFormVisible(false); return; }
-    const id = setTimeout(() => {
-      setFormVisible(true);
-      formRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-    }, 40);
-    return () => clearTimeout(id);
-  }, [modo]);
 
   // Llegada desde el enlace del correo de bienvenida: /logIn?confirmar=<token>.
   // Se confirma la cuenta y se deja el email puesto para que solo falte la
@@ -231,78 +205,7 @@ export default function LogIn() {
       <WelcomeCabecera activo={mounted} titulo={t("auth.login.titulo")} sinFrase sinSeparador mayusculas />
 
       <TrasCabecera flex="1" display="flex" flexDirection="column">
-      {/* ── PRIMERO, ELEGIR: dos puertas sobre el mármol ── */}
-      <Box mt={{ base: 6, md: 10 }}>
-        <BandaMarmol pt={{ base: "104px", md: "84px" }} pb={{ base: "116px", md: "88px" }}>
-          {(visible) => (
-            <Flex
-              w="100%"
-              maxW="820px"
-              mx="auto"
-              px={{ base: 5, md: 10 }}
-              direction={{ base: "column", md: "row" }}
-              align="stretch"
-              justify="center"
-              gap={{ base: 6, md: 8 }}
-            >
-              {OPCIONES.map((o, i) => {
-                const elegida = modo === o.modo;
-                return (
-                  <Reveal key={o.modo} activo={visible} direction="up" distance={26} scaleFrom={0.96} duration={0.9} delay={i * 0.2} flex="1" display="flex">
-                    <Flex
-                      as="button"
-                      type="button"
-                      onClick={() => setModo(o.modo)}
-                      aria-pressed={elegida}
-                      direction="column"
-                      align="center"
-                      justify="center"
-                      gap={{ base: 4, md: 5 }}
-                      flex="1"
-                      w="100%"
-                      px={{ base: 5, md: 6 }}
-                      py={{ base: 8, md: 10 }}
-                      borderRadius="2xl"
-                      bg={elegida ? `${TINTA}14` : "transparent"}
-                      border={`${elegida ? 2 : 1.5}px solid ${TINTA}`}
-                      boxShadow={`0 0 ${elegida ? 26 : 16}px ${ORO}${elegida ? "77" : "44"}, 0 0 ${elegida ? 56 : 36}px ${ORO}${elegida ? "44" : "22"}`}
-                      cursor="pointer"
-                      transition="background 0.25s ease, box-shadow 0.3s ease, transform 0.28s ease"
-                      _hover={{ bg: `${TINTA}12`, transform: "translateY(-3px)" }}
-                      _focusVisible={focoBlanco}
-                    >
-                      {o.modo === "premium" ? (
-                        // «Lectura de mi carta astral»: el icono de las estrellas de Astrología, en turquesa.
-                        <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill={TINTA} w={{ base: "52px", md: "64px" }} h={{ base: "52px", md: "64px" }} aria-hidden="true">
-                          <path d="m354-287 126-76 126 77-33-144 111-96-146-13-58-136-58 135-146 13 111 97-33 143ZM233-120l65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Zm457-560 21-89-71-59 94-8 36-84 36 84 94 8-71 59 21 89-80-47-80 47ZM480-481Z" />
-                        </Box>
-                      ) : (
-                        <MandalaTinte h={{ base: "52px", md: "64px" }} color={TINTA} />
-                      )}
-                      <Box h="1px" w="56px" bg={`linear-gradient(to right, transparent, ${TINTA}99, transparent)`} />
-                      <Text
-                        color={TINTA}
-                        fontFamily="'EB Garamond', serif"
-                        fontWeight="700"
-                        fontSize={{ base: "lg", md: "xl" }}
-                        letterSpacing="0.1em"
-                        textTransform="uppercase"
-                        lineHeight="1.3"
-                        textAlign="center"
-                      >
-                        {t(o.texto)}
-                      </Text>
-                    </Flex>
-                  </Reveal>
-                );
-              })}
-            </Flex>
-          )}
-        </BandaMarmol>
-      </Box>
-
       {/* ── FORMULARIO, debajo de la puerta elegida ── */}
-      {modo && (
       <Flex ref={formRef} flex="1" justify="center" px={{ base: 5, md: 10 }} pt={{ base: 6, md: 8 }} pb={{ base: 24, md: 32 }}>
         <VStack
           w={{ base: "100%", sm: "440px" }}
@@ -312,12 +215,6 @@ export default function LogIn() {
           transform={formVisible ? "translateY(0)" : "translateY(28px)"}
           transition="opacity 0.8s ease, transform 0.8s ease"
         >
-          {modo === "asesoria" && (
-            <Text color={T} fontStyle="italic" fontSize={{ base: "md", md: "lg" }} lineHeight="1.6" textAlign="center">
-              {t("auth.login.soloYo")}
-            </Text>
-          )}
-
           <Box>
             <Text {...etiqueta}>{t("auth.campo.nombreOEmail")}</Text>
             <Input
@@ -430,33 +327,8 @@ export default function LogIn() {
             </Text>
           </Flex>
 
-          {/* Link a registrarse: solo en Premium. Las personas asesoradas no se registran,
-              su cuenta la crea María. */}
-          {modo === "premium" && (
-          <Flex justify="center" pt={2}>
-            <Text
-              as="button"
-              onClick={() => navigate(`/signIn${next !== "/home" ? `?next=${encodeURIComponent(next)}` : ""}`)}
-              color={`${T}cc`}
-              fontSize="sm"
-              letterSpacing="0.06em"
-              bg="transparent"
-              cursor="pointer"
-              textDecoration="underline"
-              textUnderlineOffset="3px"
-              borderRadius="md"
-              px={2}
-              _hover={{ color: T }}
-              _focusVisible={focoAzul}
-              transition="all 0.22s ease"
-            >
-              {t("auth.login.sinCuenta")}
-            </Text>
-          </Flex>
-          )}
         </VStack>
       </Flex>
-      )}
       </TrasCabecera>
 
       </Box>

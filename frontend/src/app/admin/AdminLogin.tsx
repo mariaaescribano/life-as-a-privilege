@@ -138,7 +138,7 @@ export default function AdminLogin() {
               cursor={!puede ? "not-allowed" : "pointer"}
               opacity={!puede ? 0.45 : 1}
               transition="all 0.2s ease"
-              _hover={!puede ? undefined : { bg: "#004a4a", transform: "translateY(-1px)" }}
+              _hover={!puede ? undefined : { bg: "#5a3624", transform: "translateY(-1px)" }}
               _focusVisible={{ outline: "2px solid #3B2418cc", outlineOffset: "2px" }}
             >
               {enviando ? "Verificando…" : "Entrar"}

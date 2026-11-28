@@ -133,7 +133,7 @@ export default function AccesoPersona({ persona, onCambio, onAviso }: Props) {
               cursor={ocupado ? "wait" : "pointer"}
               opacity={ocupado ? 0.6 : 1}
               transition="all 0.18s"
-              _hover={{ transform: ocupado ? "none" : "translateY(-1px)", bg: abiertaYa ? "#004a4a" : "#3B241814" }}
+              _hover={{ transform: ocupado ? "none" : "translateY(-1px)", bg: abiertaYa ? "#5a3624" : "#3B241814" }}
               _focusVisible={{ outline: "2px solid #3B2418cc", outlineOffset: "2px" }}
             >
               {abiertaYa ? "✓ " : ""}{d.nombre}

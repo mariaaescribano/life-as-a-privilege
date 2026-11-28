@@ -49,6 +49,8 @@ export default function AdminCrearCuenta() {
   // Con la cuenta ya creada: el texto de la confirmación y los datos para escribirle el correo.
   const [creada, setCreada] = useState<{ texto: string; id: string; nombre: string; email: string; password: string } | null>(null);
   const [correoAbierto, setCorreoAbierto] = useState(false);
+  // El correo ya salió: desaparece el botón de escribirlo y el aviso de «todavía no le ha llegado nada».
+  const [correoEnviado, setCorreoEnviado] = useState(false);
 
   const crear = async (e?: React.FormEvent) => {
     e?.preventDefault();
@@ -166,11 +168,11 @@ export default function AdminCrearCuenta() {
                   </Flex>
                 </Flex>
                 <Text color="#3B2418" fontSize={{ base: "lg", md: "xl" }} fontWeight="600" lineHeight="1.6">
-                  {creada.texto}
+                  {correoEnviado ? `Cuenta creada. Correo enviado a ${creada.email}.` : creada.texto}
                 </Text>
                 <Flex justify="center" gap={3} wrap="wrap" mt={5}>
-                  <Box as="button" type="button" onClick={() => setCorreoAbierto(true)} px={7} py="10px" borderRadius="full" bg="#3B2418" border="1.5px solid #3B2418" color="#F0DCC0" fontWeight={700}
-                       _hover={{ bg: "#004a4a" }} _focusVisible={{ outline: "2px solid #3B2418cc", outlineOffset: "2px" }}>Escribir el correo</Box>
+                  {!correoEnviado && <Box as="button" type="button" onClick={() => setCorreoAbierto(true)} px={7} py="10px" borderRadius="full" bg="#3B2418" border="1.5px solid #3B2418" color="#F0DCC0" fontWeight={700}
+                       _hover={{ bg: "#5a3624" }} _focusVisible={{ outline: "2px solid #3B2418cc", outlineOffset: "2px" }}>Escribir el correo</Box>}
                   <Box as="button" type="button" onClick={() => navigate("/admin/asesorias")} px={7} py="10px" borderRadius="full" border="1.5px solid #3B2418" color="#3B2418" fontWeight={600}
                        _hover={{ bg: "#3B241812" }} _focusVisible={{ outline: "2px solid #3B2418cc", outlineOffset: "2px" }}>Ir a Asesorías</Box>
                 </Flex>
@@ -283,7 +285,7 @@ export default function AdminCrearCuenta() {
                   cursor={enviando ? "wait" : "pointer"}
                   opacity={enviando ? 0.6 : 1}
                   transition="all 0.2s"
-                  _hover={enviando ? undefined : { bg: "#004a4a", transform: "translateY(-1px)" }}
+                  _hover={enviando ? undefined : { bg: "#5a3624", transform: "translateY(-1px)" }}
                   _focusVisible={{ outline: "2px solid #3B2418cc", outlineOffset: "2px" }}
                 >
                   {enviando ? "Creando…" : "Crear usuario"}
@@ -305,6 +307,7 @@ export default function AdminCrearCuenta() {
           etiquetaBoton="Entrar a mi cuenta"
           onEnviar={async (d) => {
             const r = await axios.post<{ correoEnviado: boolean }>(`${API_URL}/user/admin/usuario/${creada.id}/correo`, d, { headers: adminHeaders() });
+            if (r.data.correoEnviado) setCorreoEnviado(true);
             return r.data.correoEnviado
               ? { ok: true, mensaje: `Correo enviado a ${creada.email}.` }
               : { ok: false, mensaje: "El correo NO ha salido. Vuelve a intentarlo en un momento." };

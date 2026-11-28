@@ -46,7 +46,7 @@ const fieldBeige = {
 const focoT = { outline: "2px solid #3B2418cc", outlineOffset: "2px" } as const;
 // Botones sobre el beige: contorno, relleno y peligro (turquesa oscuro).
 const bSec = { color: T, border: `1.5px solid ${T}`, _hover: { bg: "#3B241814" }, _focusVisible: focoT } as const;
-const bPri = { color: "#F0DCC0", bg: T, border: `1.5px solid ${T}`, _hover: { bg: "#004a4a" }, _focusVisible: focoT } as const;
+const bPri = { color: "#F0DCC0", bg: T, border: `1.5px solid ${T}`, _hover: { bg: "#5a3624" }, _focusVisible: focoT } as const;
 // Botones dentro de la caja con foto (los de siempre) o, sin foto, sobre el beige.
 const bFoto = (foto: boolean) => foto
   ? { border: `1px solid rgba(255,255,255,0.3)`, _hover: { bg: "rgba(255,255,255,0.12)" } }
@@ -296,13 +296,13 @@ export default function AdminCursoEditor() {
   const hasBg = hasDisciplinaBg(discNom);
   // Con foto de disciplina se conservan sus colores; sin foto, turquesa oscuro sobre el beige.
   const color = hasBg ? (disc?.color ?? "#ffffff") : T;
-  const bg = disc?.bg ?? "#003535";
+  const bg = disc?.bg ?? "#3B2418";
   const fieldStyle = hasBg ? fieldFoto : fieldBeige;
   // Halo con el acento de la disciplina (solo si hay foto).
   const GLOW = hasBg ? `0 0 28px ${color}40` : "none";
   // Sombra del texto con el color de fondo de la disciplina (solo sobre la foto).
   const TEXT_SHADOW = hasBg ? `0 1px 4px ${bg}, 0 0 10px ${bg}, 0 0 22px ${bg}` : "none";
-  const cajaBg = hasBg ? "#05403f" : "transparent";
+  const cajaBg = hasBg ? "#2a1810" : "transparent";
   const cajaBorde = hasBg ? undefined : `1.5px solid ${T}`;
 
   return (
@@ -355,9 +355,9 @@ export default function AdminCursoEditor() {
                           placeholder="Si lo dejas vacío, se usa la descripción de arriba." {...fieldStyle} />
               </Box>
               <Flex gap={6} align="center" flexWrap="wrap">
-                <Checkbox colorScheme="teal" isChecked={curso.de_pago} onChange={(e) => set({ de_pago: e.target.checked })}>De pago (5 €)</Checkbox>
-                <Checkbox colorScheme="teal" isChecked={curso.publicado} onChange={(e) => set({ publicado: e.target.checked })}>Publicado</Checkbox>
-                <Checkbox colorScheme="teal" isChecked={curso.completado} onChange={(e) => set({ completado: e.target.checked })}>Completado</Checkbox>
+                <Checkbox colorScheme="orange" isChecked={curso.de_pago} onChange={(e) => set({ de_pago: e.target.checked })}>De pago (5 €)</Checkbox>
+                <Checkbox colorScheme="orange" isChecked={curso.publicado} onChange={(e) => set({ publicado: e.target.checked })}>Publicado</Checkbox>
+                <Checkbox colorScheme="orange" isChecked={curso.completado} onChange={(e) => set({ completado: e.target.checked })}>Completado</Checkbox>
                 <Flex align="center" gap={2}>
                   <Text fontSize="sm" opacity={0.8}>Orden</Text>
                   <Input type="number" value={curso.orden} onChange={(e) => set({ orden: Number(e.target.value) })} w="80px" {...fieldStyle} />

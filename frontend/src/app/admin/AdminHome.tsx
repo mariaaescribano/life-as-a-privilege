@@ -131,11 +131,11 @@ export default function AdminHome() {
                   bgImage="none /* MÁRMOL QUITADO 2026-11-27: antes url('/img/fondos/marmol-bandas.webp') */"
                   bgSize="cover"
                   bgPosition="center"
-                  border="1.5px solid #004f4f"
+                  border="1.5px solid #3B2418"
                   boxShadow="0 0 18px #b08d3f44, 0 0 40px #b08d3f22"
                 >
                   <Box minW={0}>
-                    <Text color="#004f4f" fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.03em" noOfLines={1}>
+                    <Text color="#3B2418" fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.03em" noOfLines={1}>
                       {p.name}
                     </Text>
                     {p.email_confirmado === false && (

@@ -13,7 +13,7 @@ export const auth = {
   "auth.contrasena.ocultar": "Hide password",
 
   // ── Log in ─────────────────────────────────────────────────────────────
-  "auth.login.titulo": "Sign in to your account",
+  "auth.login.titulo": "Sign in",
   "auth.login.subtitulo": "Log in to your account on The Map",
   "auth.login.soloYo": "Only I create your account. You'll get an email to activate it.",
   // «Entrar» is shorter than the title in Spanish; in English the natural

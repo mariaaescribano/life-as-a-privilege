@@ -14,7 +14,7 @@ export const auth = {
   "auth.contrasena.ocultar": "Ocultar contraseña",
 
   // ── Iniciar sesión ─────────────────────────────────────────────────────
-  "auth.login.titulo": "Entra a tu cuenta",
+  "auth.login.titulo": "Inicia sesión",
   "auth.login.subtitulo": "Entra a tu cuenta de El Mapa",
   "auth.login.soloYo": "Solo María puede crear tu cuenta. Si estás siendo asesorado, te llegará un correo para activarla.",
   "auth.login.opcion.asesoria": "Estoy siendo asesorado",

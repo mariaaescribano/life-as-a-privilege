@@ -203,7 +203,7 @@ export default function AdminCorreos() {
                       <Box key={v} as="button" type="button" onClick={() => cambiar({ fondoCorreo: v })} aria-pressed={sel}
                            px={4} py={1.5} borderRadius="full" fontSize="sm" fontWeight={700} color={TQ}
                            bg={sel ? "#ffffffb3" : "#ffffff4d"}
-                           border={`2px solid ${sel ? TQ : `${TQ}44`}`} _hover={{ bg: "#ffffff99" }} _focusVisible={{ outline: "2px solid #004f4fcc", outlineOffset: "2px" }}>
+                           border={`2px solid ${sel ? TQ : `${TQ}44`}`} _hover={{ bg: "#ffffff99" }} _focusVisible={{ outline: "2px solid #3B2418cc", outlineOffset: "2px" }}>
                         {nombre}
                       </Box>
                     );
@@ -238,7 +238,7 @@ export default function AdminCorreos() {
                       <Box as="button" type="button" onClick={() => quitarFoto(f.id)} aria-label="Quitar foto"
                            position="absolute" top="3px" right="3px" w="22px" h="22px" borderRadius="full"
                            bg="#ffffffe6" color={TQ} fontSize="xs" fontWeight={700} lineHeight="1"
-                           _focusVisible={{ outline: "2px solid #004f4fcc", outlineOffset: "2px" }}>
+                           _focusVisible={{ outline: "2px solid #3B2418cc", outlineOffset: "2px" }}>
                         ✕
                       </Box>
                     </Box>
@@ -247,7 +247,7 @@ export default function AdminCorreos() {
                     <Box as="button" type="button" onClick={() => entradaFotos.current?.click()}
                          w="84px" h="84px" borderRadius="lg" border={`1.5px dashed ${TQ}88`} color={TQ} fontSize="2xl"
                          display="flex" alignItems="center" justifyContent="center" aria-label="Añadir fotos"
-                         _hover={{ bg: `${TQ}14` }} _focusVisible={{ outline: "2px solid #004f4fcc", outlineOffset: "2px" }}>
+                         _hover={{ bg: `${TQ}14` }} _focusVisible={{ outline: "2px solid #3B2418cc", outlineOffset: "2px" }}>
                       +
                     </Box>
                   )}
@@ -271,7 +271,7 @@ export default function AdminCorreos() {
                       <Text noOfLines={1} wordBreak="break-all">{a.nombre}</Text>
                       <Box as="button" type="button" onClick={() => quitarPdf(a.id)} aria-label={`Quitar ${a.nombre}`}
                            w="22px" h="22px" borderRadius="full" border={`1px solid ${TQ}66`} fontSize="xs" fontWeight={700} flexShrink={0}
-                           _focusVisible={{ outline: "2px solid #004f4fcc", outlineOffset: "2px" }}>
+                           _focusVisible={{ outline: "2px solid #3B2418cc", outlineOffset: "2px" }}>
                         ✕
                       </Box>
                     </Flex>
@@ -279,7 +279,7 @@ export default function AdminCorreos() {
                   {adjuntos.length < MAX_ADJUNTOS && (
                     <Box as="button" type="button" onClick={() => entradaPdf.current?.click()}
                          px={4} py={1.5} borderRadius="full" border={`1.5px dashed ${TQ}88`} color={TQ} fontSize="sm" fontWeight={700}
-                         _hover={{ bg: `${TQ}14` }} _focusVisible={{ outline: "2px solid #004f4fcc", outlineOffset: "2px" }}>
+                         _hover={{ bg: `${TQ}14` }} _focusVisible={{ outline: "2px solid #3B2418cc", outlineOffset: "2px" }}>
                       + Adjuntar PDF
                     </Box>
                   )}

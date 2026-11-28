@@ -462,7 +462,7 @@ export default function AdminAstrologiaEditor() {
                    position="relative" overflow="hidden"
                    px={8} py={2.5} borderRadius="full" border="1.5px solid #3B2418"
                    cursor={guardando ? "wait" : "pointer"} opacity={guardando ? 0.7 : 1}
-                   bg="#3B2418" _hover={{ bg: "#004a4a" }} _focusVisible={FOCO} transition="all 0.2s">
+                   bg="#3B2418" _hover={{ bg: "#5a3624" }} _focusVisible={FOCO} transition="all 0.2s">
                 <Text position="relative" zIndex={1} color="#F0DCC0" fontWeight="700" letterSpacing="0.06em">
                   {guardando ? "Guardando…" : "Guardar"}
                 </Text>

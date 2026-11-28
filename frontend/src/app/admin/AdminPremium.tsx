@@ -110,7 +110,7 @@ export default function AdminPremium() {
       borderRadius="full"
       border="1.5px solid white"
       bg={tipo === t ? "white" : "transparent"}
-      color={tipo === t ? "#004f4f" : "white"}
+      color={tipo === t ? "#3B2418" : "white"}
       fontWeight="700"
       fontSize="lg"
       letterSpacing="0.12em"
@@ -183,7 +183,7 @@ export default function AdminPremium() {
             py="18px"
             borderRadius="full"
             bg="white"
-            color="#004f4f"
+            color="#3B2418"
             fontWeight="700"
             fontSize="xl"
             letterSpacing="0.16em"

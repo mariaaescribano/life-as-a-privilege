@@ -304,7 +304,7 @@ export default function AdminAstrologiaTextos() {
                  cursor={guardando ? "wait" : hayCambios ? "pointer" : "default"}
                  opacity={guardando ? 0.6 : 1}
                  transition="all 0.2s"
-                 _hover={guardando || !hayCambios ? {} : { bg: "#004a4a", transform: "translateY(-1px)" }}
+                 _hover={guardando || !hayCambios ? {} : { bg: "#5a3624", transform: "translateY(-1px)" }}
                  _focusVisible={{ outline: "2px solid #3B2418cc", outlineOffset: "2px" }}>
               {guardando ? "Guardando…" : hayCambios ? "Guardar cambios" : "Sin cambios"}
             </Box>

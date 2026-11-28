@@ -98,7 +98,7 @@ const campoSx = {
 } as const;
 // Botón secundario (contorno) y principal (relleno), en turquesa oscuro.
 const btnSec = { color: T, bg: "transparent", border: `1.5px solid ${T}`, _hover: { bg: "#3B241814" }, _focusVisible: focoT } as const;
-const btnPri = { color: "#F0DCC0", bg: T, border: `1.5px solid ${T}`, _hover: { bg: "#004a4a" }, _focusVisible: focoT } as const;
+const btnPri = { color: "#F0DCC0", bg: T, border: `1.5px solid ${T}`, _hover: { bg: "#5a3624" }, _focusVisible: focoT } as const;
 
 const btnStyle = {
   fontFamily: "'EB Garamond', serif", fontWeight: 700, letterSpacing: "0.06em",
@@ -202,17 +202,17 @@ export default function AdminCursos() {
     const hasBg = !!disc && hasDisciplinaBg(disc.nom);
     // Con foto de disciplina se conservan sus colores; sin foto, turquesa oscuro sobre el beige.
     const color = hasBg ? (disc?.color ?? "#ffffff") : T;
-    const bg = disc?.bg ?? "#003535";
+    const bg = disc?.bg ?? "#3B2418";
     const Icon = disc?.Icon;
     const tShadow = hasBg ? `0 1px 4px ${bg}, 0 0 10px ${bg}, 0 0 20px ${bg}` : "none";
     // Botones: sobre la foto, translúcidos oscuros con letra blanca; sobre el beige, turquesa.
     const bSec = hasBg
       ? { color: "white", bg: "rgba(0,0,0,0.28)", border: "1px solid rgba(255,255,255,0.4)", _hover: { borderColor: "white" } }
       : btnSec;
-    const bPri = hasBg ? { color: "#008080", bg: "rgba(255,255,255,0.92)", _hover: { bg: "white" } } : btnPri;
+    const bPri = hasBg ? { color: "#3B2418", bg: "rgba(255,255,255,0.92)", _hover: { bg: "white" } } : btnPri;
     return (
       <Box key={c.id} position="relative" overflow="hidden" borderRadius="xl"
-           bg={hasBg ? "#05403f" : "transparent"} border={hasBg ? undefined : `1.5px solid ${T}`}
+           bg={hasBg ? "#2a1810" : "transparent"} border={hasBg ? undefined : `1.5px solid ${T}`}
            boxShadow={hasBg ? `0 0 28px ${color}40` : undefined}>
         {hasBg && disc && <DisciplinaBgLayer nom={disc.nom} borderRadius="xl" />}
         <Flex position="relative" zIndex={1} align="center" gap={3} p={{ base: 4, md: 5 }} flexWrap="wrap">
@@ -229,7 +229,7 @@ export default function AdminCursos() {
             </Text>
             <Flex gap={2} mt={1.5} align="center" flexWrap="wrap">
               <Badge colorScheme={c.de_pago ? "yellow" : "green"}>{c.de_pago ? "De pago" : "Gratis"}</Badge>
-              <Badge colorScheme={c.publicado ? "teal" : "gray"}>{c.publicado ? "Publicado" : "Oculto"}</Badge>
+              <Badge colorScheme={c.publicado ? "orange" : "gray"}>{c.publicado ? "Publicado" : "Oculto"}</Badge>
               <Text color={color} fontSize="sm" opacity={0.85} style={{ textShadow: tShadow }}>{nLecciones(c)} lecciones</Text>
             </Flex>
           </Box>
@@ -237,7 +237,7 @@ export default function AdminCursos() {
           <Checkbox
             isChecked={!!c.revisado}
             onChange={() => toggleRevisado(c)}
-            colorScheme="teal"
+            colorScheme="orange"
             size="lg"
             title="Marca los cursos que ya has revisado (solo lo ves tú)"
             sx={{
@@ -311,7 +311,7 @@ export default function AdminCursos() {
         </Text>
         <Box as="button" onClick={() => setCrearOpen(true)} {...btnStyle}
              {...btnPri} px={6} py="11px" fontSize={{ base: "md", md: "lg" }}
-             _hover={{ transform: "translateY(-1px)", bg: "#004a4a" }}>
+             _hover={{ transform: "translateY(-1px)", bg: "#5a3624" }}>
           + Nuevo curso
         </Box>
       </Flex>
@@ -385,8 +385,8 @@ export default function AdminCursos() {
                             placeholder="Breve frase del curso" {...campoSx} rows={2} />
                 </Box>
                 <Flex gap={6} align="center">
-                  <Checkbox colorScheme="teal" isChecked={form.de_pago} onChange={(e) => setForm({ ...form, de_pago: e.target.checked })}>De pago</Checkbox>
-                  <Checkbox colorScheme="teal" isChecked={form.publicado} onChange={(e) => setForm({ ...form, publicado: e.target.checked })}>Publicado</Checkbox>
+                  <Checkbox colorScheme="orange" isChecked={form.de_pago} onChange={(e) => setForm({ ...form, de_pago: e.target.checked })}>De pago</Checkbox>
+                  <Checkbox colorScheme="orange" isChecked={form.publicado} onChange={(e) => setForm({ ...form, publicado: e.target.checked })}>Publicado</Checkbox>
                 </Flex>
               </Flex>
 

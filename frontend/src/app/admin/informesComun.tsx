@@ -27,7 +27,7 @@ export const DISCIPLINAS = [
   { clave: "cultura", nombre: "Cultura", bg: culturaBg, txt: culturaTxt },
 ] as const;
 
-export const TQ = "#004f4f";
+export const TQ = "#3B2418";
 export const MARMOL = "none /* MÁRMOL QUITADO 2026-11-27: antes url('/img/fondos/marmol-bandas.webp') */";
 
 /** El borrador del informe (PDF). */
@@ -68,7 +68,7 @@ export const campo = {
 
 export const caja = {
   borderRadius: "2xl",
-  border: "1.5px solid #004f4f",
+  border: "1.5px solid #3B2418",
   boxShadow: "0 0 18px #b08d3f44, 0 0 40px #b08d3f22",
 };
 
