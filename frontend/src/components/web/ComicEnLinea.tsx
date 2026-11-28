@@ -82,14 +82,14 @@ const ComicEnLinea = ({ vinetas, color, sombra }: { vinetas: Vineta[]; color: st
               border={`1.5px solid ${color}80`}
               borderRadius="2xl"
               bg="transparent"
-              minH={{ base: "240px", md: "0" }}
+              w="100%"
+              maxW={{ base: "320px", md: "none" }}
+              mx={{ base: "auto", md: 0 }}
             >
               <Box
                 position={{ base: "relative", md: "absolute" }}
                 inset={{ md: 0 }}
-                maxH={{ base: "300px", md: "none" }}
-                overflowY="scroll"
-                overscrollBehavior="contain"
+                overflowY={{ base: "visible", md: "auto" }}
                 px={{ base: 5, md: 7 }}
                 py={{ base: 5, md: 6 }}
                 tabIndex={0}

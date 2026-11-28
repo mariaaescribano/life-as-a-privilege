@@ -144,9 +144,8 @@ const Asesoria = () => {
                   >
                     <DisciplinaBgLayer nom={c.nom} borderRadius="2xl" />
                     <Flex position="relative" zIndex={1} direction="column" flex="1" textShadow={sombra}>
-                      {/* Cabecera: el mandala, el título a la izquierda y una raya fina debajo */}
+                      {/* Cabecera: el título a la izquierda y una raya fina debajo */}
                       <Flex align="center" gap={3}>
-                        <MandalaTinte h={{ base: "30px", md: "36px" }} color={c.txt} />
                         <Text fontWeight="700" fontSize={{ base: "2xl", md: "3xl" }} letterSpacing="0.03em" lineHeight="1.15">
                           {t(`asesoria.caja${c.n}.titulo` as any)}
                         </Text>

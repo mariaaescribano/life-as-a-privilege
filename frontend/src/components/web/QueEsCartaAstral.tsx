@@ -11,7 +11,6 @@ import { FONDO_PAGINA_BEIGE as BEIGE, FONDO_PAGINA_TURQUESA as T, astrologiaNom 
 import { MandalaTinte } from "../global/MandalaTinte";
 import { useT } from "../../i18n";
 import { useNavigate } from "react-router-dom";
-import { motion, useInView, useReducedMotion } from "framer-motion";
 import FotoViva, { type FotoDesde } from "../global/FotoViva";
 
 /**
@@ -23,24 +22,6 @@ import FotoViva, { type FotoDesde } from "../global/FotoViva";
 const rnd = (min: number, max: number) => min + Math.random() * (max - min);
 
 const unicas = (v: { src: string }[]) => Array.from(new Set(v.map((x) => x.src)));
-
-/** Raya fina que se abre desde el centro hacia los lados al llegar a ella (se difumina en las puntas). */
-function RayaCentro() {
-  const reduce = useReducedMotion();
-  const ref = useRef<HTMLDivElement>(null);
-  const visto = useInView(ref, { once: true, amount: 1 });
-  const on = reduce || visto;
-  return (
-    <Box ref={ref} w="100%" h="1px" pt={0}>
-      <motion.div
-        style={{ height: 1, width: "100%", transformOrigin: "center", background: `linear-gradient(to right, ${T}00, ${T}99 30%, ${T}99 70%, ${T}00)` }}
-        initial={reduce ? false : { scaleX: 0, opacity: 0 }}
-        animate={{ scaleX: on ? 1 : 0, opacity: on ? 1 : 0 }}
-        transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
-      />
-    </Box>
-  );
-}
 
 function CajaFotos({ fotos, activo, desde, delay }: { fotos: string[]; activo: boolean; desde: FotoDesde; delay: number }) {
   const [actual, setActual] = useState(() => Math.floor(Math.random() * fotos.length));
@@ -111,7 +92,6 @@ function CajaFotos({ fotos, activo, desde, delay }: { fotos: string[]; activo: b
 
 export default function QueEsCartaAstral({ activo }: { activo: boolean }) {
   const t = useT();
-  const navigate = useNavigate();
   const columnas = useMemo(
     () => [
       { frase: "astroCarta.casa" as const, fotos: unicas(VINETAS_CASAS) },
@@ -158,8 +138,6 @@ export default function QueEsCartaAstral({ activo }: { activo: boolean }) {
         </Flex>
       </Grid>
 
-      {/* Raya que nace en el centro y se extiende hacia los dos lados, antes de las tres columnas. */}
-      <RayaCentro />
 
       <Grid w="100%" templateColumns={{ base: "1fr", md: "repeat(3, minmax(0, 1fr))" }} gap={{ base: 8, md: 8 }} pt={{ base: 2, md: 4 }}>
         {columnas.map((c, i) => (
@@ -176,17 +154,78 @@ export default function QueEsCartaAstral({ activo }: { activo: boolean }) {
         ))}
       </Grid>
 
-      {/* Botón de cierre: píldora de borde fino beige que se enciende al pasar el ratón; la flecha avanza. */}
-      <Reveal inView direction="up" distance={18} duration={0.9} delay={0.1}>
+      <BotonesLectura />
+    </Flex>
+  );
+}
+
+/**
+ * Los dos botones de la lectura: el grande (la carta gratis) y, debajo, uno más pequeño (la lectura completa de pago).
+ * Se usan aquí y al final de la página de Astrología.
+ */
+export function BotonesLectura({ mt }: { mt?: React.ComponentProps<typeof Flex>["mt"] }) {
+  const t = useT();
+  const navigate = useNavigate();
+  return (
+    <Flex direction="column" align="center" gap={{ base: 4, md: 5 }} mt={mt ?? { base: 6, md: 10 }} maxW="100%">
+    {/* Botón de cierre: píldora de borde fino beige que se enciende al pasar el ratón; la flecha avanza. */}
+    <Reveal inView direction="up" distance={18} duration={0.9} delay={0.1}>
+      <Box
+        as="button"
+        type="button"
+        role="group"
+        onClick={() => navigate("/astrologia/carta-gratis")}
+        position="relative"
+        overflow="hidden"
+        display="inline-flex"
+              borderRadius="full"
+        border={`1.5px solid ${BEIGE}`}
+        bg="#0b1026"
+        color={BEIGE}
+        fontFamily="'EB Garamond', serif"
+        fontWeight="700"
+        cursor="pointer"
+        transition="transform 0.3s ease, border-color 0.3s ease"
+        _hover={{ transform: "translateY(-3px) scale(1.015)" }}
+        _active={{ transform: "scale(0.98)" }}
+        _focusVisible={focoBlanco}
+      >
+        {/* Fondo: el cielo estrellado de Astrología, dentro de la píldora. */}
+        <Box position="absolute" inset={0} borderRadius="full" overflow="hidden" pointerEvents="none">
+          <DisciplinaBgLayer nom={astrologiaNom} borderRadius="full" />
+        </Box>
+        <Flex
+          position="relative"
+          zIndex={1}
+          align="center"
+          justify="center"
+          gap={{ base: 3, md: 4 }}
+          px={{ base: 6, md: 10 }}
+          py={{ base: "14px", md: "18px" }}
+          fontSize={{ base: "sm", md: "lg" }}
+          letterSpacing={{ base: "0.1em", md: "0.16em" }}
+          textTransform="uppercase"
+          textAlign="center"
+        >
+          <MandalaTinte h={{ base: "24px", md: "32px" }} color={BEIGE} />
+          {t("astroCarta.boton")}
+          <Box display="flex" transition="transform 0.35s cubic-bezier(0.22,1,0.36,1)" _groupHover={{ transform: "translateX(5px)" }}>
+            <FlechaBonita size={{ base: "22px", md: "28px" }} />
+          </Box>
+        </Flex>
+      </Box>
+    </Reveal>
+
+      {/* El pequeño: la misma píldora con el cielo de Astrología, más contenida. */}
+      <Reveal inView direction="up" distance={14} duration={0.9} delay={0.25}>
         <Box
           as="button"
           type="button"
           role="group"
-          onClick={() => navigate("/astrologia/carta-gratis")}
+          onClick={() => navigate("/astrologia/pedir?servicio=plataforma")}
           position="relative"
           overflow="hidden"
           display="inline-flex"
-          mt={{ base: 6, md: 10 }}
           borderRadius="full"
           border={`1.5px solid ${BEIGE}`}
           bg="#0b1026"
@@ -194,12 +233,11 @@ export default function QueEsCartaAstral({ activo }: { activo: boolean }) {
           fontFamily="'EB Garamond', serif"
           fontWeight="700"
           cursor="pointer"
-          transition="transform 0.3s ease, border-color 0.3s ease"
-          _hover={{ transform: "translateY(-3px) scale(1.015)" }}
+          transition="transform 0.3s ease"
+          _hover={{ transform: "translateY(-2px) scale(1.012)" }}
           _active={{ transform: "scale(0.98)" }}
           _focusVisible={focoBlanco}
         >
-          {/* Fondo: el cielo estrellado de Astrología, dentro de la píldora. */}
           <Box position="absolute" inset={0} borderRadius="full" overflow="hidden" pointerEvents="none">
             <DisciplinaBgLayer nom={astrologiaNom} borderRadius="full" />
           </Box>
@@ -208,19 +246,15 @@ export default function QueEsCartaAstral({ activo }: { activo: boolean }) {
             zIndex={1}
             align="center"
             justify="center"
-            gap={{ base: 3, md: 4 }}
-            px={{ base: 6, md: 10 }}
-            py={{ base: "14px", md: "18px" }}
-            fontSize={{ base: "sm", md: "lg" }}
-            letterSpacing={{ base: "0.1em", md: "0.16em" }}
+            gap={{ base: 2, md: 3 }}
+            px={{ base: 5, md: 7 }}
+            py={{ base: "10px", md: "12px" }}
+            fontSize={{ base: "xs", md: "md" }}
+            letterSpacing={{ base: "0.08em", md: "0.14em" }}
             textTransform="uppercase"
             textAlign="center"
           >
-            <MandalaTinte h={{ base: "24px", md: "32px" }} color={BEIGE} />
-            {t("astroCarta.boton")}
-            <Box display="flex" transition="transform 0.35s cubic-bezier(0.22,1,0.36,1)" _groupHover={{ transform: "translateX(5px)" }}>
-              <FlechaBonita size={{ base: "22px", md: "28px" }} />
-            </Box>
+            {t("astroCarta.botonCompleta")} · {t("astro.serv.3.precio")}
           </Flex>
         </Box>
       </Reveal>

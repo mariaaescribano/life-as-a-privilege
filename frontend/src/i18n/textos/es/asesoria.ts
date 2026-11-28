@@ -31,6 +31,7 @@ export const asesoria = {
   "asesoria.caja1.titulo": "Carta astral",
   "asesoria.caja1.p1": "Para facilitar el acercamiento a los patrones, se empieza por la carta astral.",
   "asesoria.caja1.p2": "Este paso es opcional y no científico. Lo recomiendo porque, en mi experiencia, puede facilitar el proceso.",
+  "asesoria.caja1.p3": "Para conocer experiencias reales, pulsa el botón de abajo a la izquierda.",
   "asesoria.caja1.boton": "Saber más de Astrología",
   "asesoria.caja1.enlace": "Ver experiencias",
   "asesoria.caja2.titulo": "Psicología",

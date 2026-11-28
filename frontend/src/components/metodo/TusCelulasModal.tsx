@@ -145,10 +145,7 @@ export function TusCelulasModal({
           h="100%"
           style={{ objectFit: "cover", objectPosition: "center" }}
         />
-        {/* Velo más claro + capa blanca: aclara la foto y crea distinción con
-            los boxes de las células, que quedan más oscuros por encima. */}
-        <Box position="absolute" inset={0} bg={`${BG}59`} />
-        <Box position="absolute" inset={0} bg="rgba(255,255,255,0.22)" />
+        {/* La foto se ve entera: sin velos ni capa blanca encima. */}
         </>)}
       </Box>
 

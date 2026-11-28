@@ -16,7 +16,7 @@ const EASE = [0.22, 1, 0.36, 1] as const;
  *   2. de los extremos del título nacen las RAYAS y se extienden hacia los lados;
  *   3. un destello de luz recorre cada raya hasta su punta.
  */
-export function TituloSeccion({ children, color = T }: { children: React.ReactNode; color?: string }) {
+export function TituloSeccion({ children, color = T, grande = false }: { children: React.ReactNode; color?: string; /** Letra más grande (los títulos de las bandas con foto). */ grande?: boolean }) {
   const reduce = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
   const visto = useInView(ref, { once: true, amount: 0.6 });
@@ -63,7 +63,7 @@ export function TituloSeccion({ children, color = T }: { children: React.ReactNo
           color={color}
           fontFamily="'EB Garamond', serif"
           fontWeight="700"
-          fontSize={{ base: "lg", md: "2xl" }}
+          fontSize={grande ? { base: "xl", md: "4xl" } : { base: "lg", md: "2xl" }}
           textTransform="uppercase"
           textAlign="center"
           // Las letras arrancan muy abiertas y se recogen hasta su espaciado final.

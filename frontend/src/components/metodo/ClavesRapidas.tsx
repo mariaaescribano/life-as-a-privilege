@@ -1,8 +1,9 @@
 import React from "react";
 import { Box, Flex, Text } from "@chakra-ui/react";
+import { FONDO_PAGINA_BEIGE } from "../../GlobalVariables";
 
 // ─────────────────────────────────────────────────────────────────────────
-// LAS 3 CLAVES · cajas blancas apiladas con un punto de acento.
+// LAS 3 CLAVES · cajas beige apiladas con un punto del color de la letra.
 //
 // Van SIEMPRE encima del texto largo, justo bajo el título: quien tenga tres
 // segundos se lleva lo esencial sin leer nada más; quien tenga tres minutos
@@ -15,14 +16,13 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 
 export function ClavesRapidas({
   claves,
-  accent,
   tinta = "#1a1a1a",
   mb = { base: 5, md: 6 },
 }: {
   /** Las pocas cosas (tres, normalmente) que hay que llevarse de la ficha. */
   claves?: string[];
   /** Color del punto de la izquierda: el acento de la disciplina. */
-  accent: string;
+  accent?: string;
   /** Color de la LETRA. Va sobre blanco, así que tiene que ser oscuro: por eso
    *  no se hereda el color del texto de la ficha (en Medicina China es blanco y
    *  en Nutrición el fondo de la disciplina es casi blanco). */
@@ -37,7 +37,7 @@ export function ClavesRapidas({
           key={i}
           align="center"
           gap={3}
-          bg="rgba(255,255,255,0.96)"
+          bg={FONDO_PAGINA_BEIGE}
           borderRadius="lg"
           px={{ base: 3.5, md: 4 }}
           py={{ base: 2, md: 2.5 }}
@@ -46,7 +46,7 @@ export function ClavesRapidas({
           {/* El punto va LIMPIO, sin halo: el glow del color de la disciplina
               está pensado para brillar sobre fondo oscuro, y aquí la caja es
               blanca — se veía como una mancha sucia alrededor del punto. */}
-          <Box flexShrink={0} w="8px" h="8px" borderRadius="full" bg={accent} />
+          <Box flexShrink={0} w="8px" h="8px" borderRadius="full" bg={tinta} />
           <Text color={tinta} fontWeight={700} fontSize={{ base: "sm", md: "md" }}
                 lineHeight="1.3" letterSpacing="0.01em" fontFamily="'EB Garamond', serif"
                 textAlign="left">

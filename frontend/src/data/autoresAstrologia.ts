@@ -139,7 +139,7 @@ export const AUTORES_ASTROLOGIA: AutorAstrologia[] = [
     fechas: { es: "1571-1630", en: "1571–1630" },
     foto: F("kepler"),
     texto: {
-      es: "Astrónomo alemán que formuló las leyes del movimiento planetario. Levantó cartas astrales, como la del general **Wallenstein** en 1608. Criticó buena parte de la astrología tradicional y quiso reformarla. Pedía no «tirar al niño con el agua del baño»: descartar los errores sin rechazarlo todo.",
+      es: "Astrónomo alemán que formuló las leyes del movimiento planetario. Levantó cartas astrales, como la del general **Wallenstein** en 1608. Criticó buena parte de la astrología tradicional y quiso reformarla. Pedía descartar los errores sin rechazarlo todo.",
       en: "German astronomer who formulated the laws of planetary motion. He cast birth charts, such as that of General **Wallenstein** in 1608. He criticised much of traditional astrology and wanted to reform it. He asked not to «throw out the baby with the bathwater»: to discard the errors without rejecting everything.",
     },
   },

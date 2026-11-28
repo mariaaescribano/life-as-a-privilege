@@ -70,12 +70,14 @@ export function PalabrasVivas({
 
   // Trozos de texto (palabras y espacios) marcados como negrita/cursiva o no.
   const trozos: { p: string; negrita: boolean; cursiva: boolean }[] = [];
-  const corte = cursivas ? /(\*\*[^*]+\*\*|\*[^*]+\*)/g : /(\*\*[^*]+\*\*)/g;
+  // `***x***` = negrita Y cursiva a la vez (con `cursivas`); sin él, queda como negrita.
+  const corte = cursivas ? /(\*\*\*[^*]+\*\*\*|\*\*[^*]+\*\*|\*[^*]+\*)/g : /(\*\*\*[^*]+\*\*\*|\*\*[^*]+\*\*)/g;
   for (const seg of texto.split(corte)) {
     if (seg === "") continue;
-    const negrita = seg.startsWith("**") && seg.endsWith("**") && seg.length > 4;
-    const cursiva = cursivas && !negrita && seg.startsWith("*") && seg.endsWith("*") && seg.length > 2;
-    const limpio = negrita ? seg.slice(2, -2) : cursiva ? seg.slice(1, -1) : seg;
+    const ambas = seg.length > 6 && seg.startsWith("***") && seg.endsWith("***");
+    const negrita = ambas || (seg.startsWith("**") && seg.endsWith("**") && seg.length > 4);
+    const cursiva = cursivas && (ambas || (!negrita && seg.startsWith("*") && seg.endsWith("*") && seg.length > 2));
+    const limpio = ambas ? seg.slice(3, -3) : negrita ? seg.slice(2, -2) : cursiva ? seg.slice(1, -1) : seg;
     for (const p of limpio.split(/(\s+)/)) if (p !== "") trozos.push({ p, negrita, cursiva });
   }
   const textoLimpio = cursivas ? texto.replace(/\*/g, "") : texto.replace(/\*\*/g, "");

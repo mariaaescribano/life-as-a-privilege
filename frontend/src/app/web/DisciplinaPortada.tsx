@@ -41,6 +41,9 @@ import { useTemasProfundiza } from "../../hardCoded/espacio/useTemaProfundiza";
 import type { TemaProfundiza } from "../../hardCoded/espacio/ProfundizaFisiologia";
 import { TemaProfundizaModal } from "../../components/metodo/TemaProfundizaModal";
 import { MandalaTinte } from "../../components/global/MandalaTinte";
+import { BotonesLectura } from "../../components/web/QueEsCartaAstral";
+import TituloSeccion from "../../components/global/TituloSeccion";
+import { BandaParalaje, RayaMandala, FotoPsico, BotonReserva } from "../../components/web/PsicologiaVida";
 import LineaTiempoFilosofia from "../../components/web/LineaTiempoFilosofia";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -408,6 +411,12 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
                 </Reveal>
               ))}
             </SimpleGrid>
+            {/* Bajo las ocho tarjetas: una frase pequeña, en cursiva, con dos palabras en negrita. */}
+            <Reveal inView once direction="up" distance={14} duration={0.9}>
+              <Text mt={{ base: 8, md: 12 }} textAlign="center" fontStyle="italic" color={FONDO_PAGINA_TURQUESA} fontSize={{ base: "md", md: "lg" }} letterSpacing="0.01em" lineHeight="1.5">
+                <PalabrasVivas texto={t("fisioPortada.nocurso")} total={1.2} />
+              </Text>
+            </Reveal>
           </Box>
 
           {/* Otra banda con la foto de la disciplina: el cómic del origen según la ciencia, leído aquí mismo
@@ -415,6 +424,9 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
           <Box position="relative" mb={{ base: "56px", md: "96px" }} pt={{ base: "88px", md: "120px" }} pb={{ base: "88px", md: "120px" }}>
             <FondoBanda nom={d.nom} visible={banda} />
             <Box position="relative" zIndex={1}>
+              <Box px={{ base: 5, md: 10, lg: 14 }} mb={{ base: 10, md: 14 }}>
+                <TituloSeccion color={d.txt} grande>{t("fisioPortada.origen")}</TituloSeccion>
+              </Box>
               <ComicEnLinea vinetas={vinetasCiencia} color={d.txt} sombra={sombraTexto(d.nom, d.bg)} />
             </Box>
           </Box>
@@ -431,19 +443,6 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
             px={{ base: 6, md: 10, lg: 16 }}
             pb={{ base: 20, md: 28 }}
           >
-            <Reveal inView direction="up" distance={20} duration={1} w="100%">
-              <Text
-                color={FONDO_PAGINA_TURQUESA}
-                fontStyle="italic"
-                fontSize={{ base: "xl", md: "2xl", lg: "3xl" }}
-                lineHeight="1.5"
-                letterSpacing="0.01em"
-                textAlign="center"
-                w="100%"
-              >
-                {t("fisioPortada.sesiones")}
-              </Text>
-            </Reveal>
             <Reveal inView direction="up" distance={16} duration={0.9} delay={0.15}>
               <Flex
                 as="button"
@@ -481,14 +480,14 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
         <Box flex={1}>
           {/* Apertura: el mármol de Filosofía, la foto a la izquierda y los tres textos a la derecha. */}
           <Box position="relative" mt={{ base: 8, md: 14 }} pt={{ base: "88px", md: "120px" }} pb={{ base: "88px", md: "120px" }}>
-            <FondoBanda nom={d.nom} visible={banda} src="/img/fondos/filosofia-marmol.webp" />
-            <Flex position="relative" zIndex={1} maxW="1180px" mx="auto" w="100%" px={{ base: 6, md: 10, lg: 16 }}>
-              <FotoPsico src="/img/disciplinas/filosofia-estatua.webp" desde="izq" listo={banda} color={d.txt} />
+            <FondoBanda nom={d.nom} visible={banda} src="/img/fondos/filosofia-marmol.webp" deriva />
+            <Flex position="relative" zIndex={1} direction={{ base: "column", md: "row" }} align="center" gap={{ base: 10, md: 12, lg: 16 }} maxW="1180px" mx="auto" w="100%" px={{ base: 6, md: 10, lg: 16 }}>
+              <FotoPsico src="/img/disciplinas/filosofia-estatua.webp" desde="izq" listo={banda} color={d.txt} respira />
               <Flex direction="column" flex="1" minW={0} gap={{ base: 6, md: 8 }} align={{ base: "center", md: "flex-start" }} textAlign={{ base: "center", md: "left" }}>
-                {(["filoPortada.p1", "filoPortada.p1b", "filoPortada.cierre"] as const).map((k, i) => (
+                {(["filoPortada.p1", "filoPortada.p1b", "filoPortada.cierre", "filoLinea.t1", "filoLinea.t2", "filoLinea.t3"] as const).map((k, i) => (
                   <Reveal key={k} inView listo={banda} direction="left" distance={30} blur duration={1} delay={FONDO_ESPERA + i * 0.35}>
-                    <Text color={d.txt} textShadow={sombraTexto(d.nom, d.bg)} fontSize={{ base: "lg", md: "xl", lg: "2xl" }} lineHeight="1.55" letterSpacing="0.01em">
-                      <PalabrasVivas texto={t(k)} cursivas={k !== "filoPortada.cierre"} listo={banda} retraso={FONDO_ESPERA + 0.1 + i * 0.5} total={1.5} />
+                    <Text color={d.txt} textShadow={sombraTexto(d.nom, d.bg)} fontSize={{ base: "lg", md: "lg", lg: "xl" }} lineHeight="1.55" letterSpacing="0.01em">
+                      <PalabrasVivas texto={t(k)} cursivas listo={banda} retraso={FONDO_ESPERA + 0.1 + i * 0.5} total={1.5} />
                     </Text>
                   </Reveal>
                 ))}
@@ -501,13 +500,6 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
             <LineaTiempoFilosofia color={FONDO_PAGINA_TURQUESA} />
           </Box>
           <Flex direction="column" align="center" gap={{ base: 6, md: 8 }} maxW="900px" mx="auto" w="100%" px={{ base: 6, md: 10 }} pt={{ base: 14, md: 20 }} pb={{ base: 20, md: 28 }} textAlign="center">
-            {(["filoLinea.t1", "filoLinea.t2", "filoLinea.t3"] as const).map((k, i) => (
-              <Reveal key={k} inView once direction="up" distance={24} blur duration={1} delay={i * 0.25}>
-                <Text color={FONDO_PAGINA_TURQUESA} fontSize={{ base: "lg", md: "xl", lg: "2xl" }} lineHeight="1.55" letterSpacing="0.01em">
-                  <PalabrasVivas texto={t(k)} total={1.5} />
-                </Text>
-              </Reveal>
-            ))}
             <Reveal inView once direction="up" distance={16} duration={0.9} delay={0.2}>
               <Flex
                 as="button"
@@ -521,8 +513,7 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
                 py="14px"
                 borderRadius="full"
                 color={FONDO_PAGINA_BEIGE}
-                textShadow={sombraTexto(d.nom, d.bg)}
-                style={{ backgroundImage: "url(/img/fondos/filosofia-marmol.webp)", backgroundSize: "cover", backgroundPosition: "center" }}
+                style={{ backgroundImage: "url(/img/fondos/marmol-chocolate.webp)", backgroundSize: "cover", backgroundPosition: "center" }}
                 fontFamily="'EB Garamond', serif"
                 fontWeight="700"
                 fontSize={{ base: "md", md: "lg" }}
@@ -530,9 +521,25 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
                 textTransform="uppercase"
                 lineHeight="1.3"
                 cursor="pointer"
-                boxShadow={`0 0 22px ${d.bg}66`}
-                transition="transform 0.3s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s ease"
-                _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 32px ${d.bg}99` }}
+                position="relative"
+                overflow="hidden"
+                sx={{
+                  "@keyframes destelloBoton": { "0%": { left: "-55%" }, "45%,100%": { left: "130%" } },
+                  "&::after": {
+                    content: '""',
+                    position: "absolute",
+                    top: 0,
+                    bottom: 0,
+                    width: "40%",
+                    left: "-55%",
+                    background: `linear-gradient(105deg, ${FONDO_PAGINA_BEIGE}00, ${FONDO_PAGINA_BEIGE}40, ${FONDO_PAGINA_BEIGE}00)`,
+                    animation: "destelloBoton 6s ease-in-out 1.5s infinite",
+                    pointerEvents: "none",
+                  },
+                  "@media (prefers-reduced-motion: reduce)": { "&::after": { animation: "none", opacity: 0 } },
+                }}
+                transition="transform 0.3s cubic-bezier(0.22,1,0.36,1), filter 0.3s ease"
+                _hover={{ transform: "translateY(-2px)", filter: "brightness(1.12)" }}
                 _active={{ transform: "translateY(0) scale(0.99)" }}
                 _focusVisible={focoBlanco}
               >
@@ -545,10 +552,9 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
       ) : esPsico ? (
         <Box flex={1}>
           {/* Primer mármol (el fondo de Psicología): la foto a la izquierda y los tres primeros textos a la derecha. */}
-          <Box position="relative" mt={{ base: 8, md: 14 }} pt={{ base: "88px", md: "120px" }} pb={{ base: "88px", md: "120px" }}>
-            <FondoBanda nom={d.nom} visible={banda} />
+          <BandaParalaje nom={d.nom} visible={banda} color={d.txt} mandala="der" mt={{ base: 8, md: 14 }} pt={{ base: "88px", md: "120px" }} pb={{ base: "88px", md: "120px" }}>
             <Flex position="relative" zIndex={1} direction={{ base: "column", md: "row" }} align="center" gap={{ base: 10, md: 12, lg: 16 }} maxW="1180px" mx="auto" w="100%" px={{ base: 6, md: 10, lg: 16 }}>
-              <FotoPsico src="/img/psicologia/portada-1.webp" desde="izq" listo={banda} color={d.txt} />
+              <FotoPsico src="/img/psicologia/portada-1.webp" desde="izq" listo={banda} color={d.txt} delay={FONDO_ESPERA} />
               <Flex direction="column" flex="1" minW={0} gap={{ base: 6, md: 8 }} align={{ base: "center", md: "flex-start" }} textAlign={{ base: "center", md: "left" }}>
                 {(["psicoPortada.p1", "psicoPortada.p2", "psicoPortada.p3"] as const).map((k, i) => (
                   <Reveal key={k} inView listo={banda} direction="left" distance={30} blur duration={1} delay={FONDO_ESPERA + i * 0.35}>
@@ -559,10 +565,13 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
                 ))}
               </Flex>
             </Flex>
-          </Box>
+          </BandaParalaje>
+
+          {/* Un separador: dos rayas que nacen del centro y el mandala en medio. */}
+          <Box pt={{ base: 12, md: 20 }}><RayaMandala color={FONDO_PAGINA_TURQUESA} /></Box>
 
           {/* Sobre el beige: el texto a la izquierda y la foto a la derecha. */}
-          <Flex maxW="1180px" mx="auto" w="100%" px={{ base: 6, md: 10, lg: 16 }} py={{ base: 14, md: 24 }} direction={{ base: "column", md: "row" }} align="center" gap={{ base: 10, md: 12, lg: 16 }}>
+          <Flex maxW="1180px" mx="auto" w="100%" px={{ base: 6, md: 10, lg: 16 }} pt={{ base: 10, md: 16 }} pb={{ base: 14, md: 24 }} direction={{ base: "column", md: "row" }} align="center" gap={{ base: 10, md: 12, lg: 16 }}>
             <Flex direction="column" flex="1" minW={0} gap={{ base: 6, md: 8 }} align={{ base: "center", md: "flex-start" }} textAlign={{ base: "center", md: "left" }}>
               {(["psicoPortada.p4", "psicoPortada.p5"] as const).map((k, i) => (
                 <Reveal key={k} inView direction="right" distance={30} blur duration={1} delay={i * 0.2}>
@@ -576,44 +585,24 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
           </Flex>
 
           {/* Segundo mármol: la historia del origen del sufrimiento, con el mismo formato que la de Astrología. */}
-          <Box position="relative" mb={{ base: "56px", md: "96px" }} pt={{ base: "72px", md: "110px" }} pb={{ base: "72px", md: "110px" }}>
-            <FondoBanda nom={d.nom} visible={banda} />
+          <BandaParalaje nom={d.nom} visible={banda} color={d.txt} mandala="izq" mb={{ base: "56px", md: "96px" }} pt={{ base: "72px", md: "110px" }} pb={{ base: "72px", md: "110px" }}>
             <Box position="relative" zIndex={1}>
+              <Box px={{ base: 5, md: 10, lg: 14 }} mb={{ base: 10, md: 14 }}>
+                <TituloSeccion color={d.txt} grande>{t("psicoPortada.origen")}</TituloSeccion>
+              </Box>
               <ComicEnLinea vinetas={vinetasSufrimiento} color={d.txt} sombra={sombraTexto(d.nom, d.bg)} />
             </Box>
-          </Box>
+          </BandaParalaje>
 
           {/* Abajo del todo: el botón de reservar la primera sesión. */}
           <Flex direction="column" align="center" maxW="1180px" mx="auto" w="100%" px={{ base: 6, md: 10, lg: 16 }} pb={{ base: 20, md: 28 }}>
             <Reveal inView direction="up" distance={16} duration={0.9}>
-              <Flex
-                as="button"
-                type="button"
-                onClick={() => navigate("/reservar-cita")}
-                align="center"
-                justify="center"
-                gap={{ base: 4, md: 6 }}
-                px={{ base: 8, md: 10 }}
-                py="14px"
-                borderRadius="full"
-                bg="transparent"
-                color={FONDO_PAGINA_TURQUESA}
-                border={`1.5px solid ${FONDO_PAGINA_TURQUESA}`}
-                fontFamily="'EB Garamond', serif"
-                fontWeight="700"
-                fontSize={{ base: "md", md: "lg" }}
-                letterSpacing="0.16em"
-                textTransform="uppercase"
-                lineHeight="1.3"
-                cursor="pointer"
-                transition="transform 0.3s cubic-bezier(0.22,1,0.36,1), background 0.3s ease"
-                _hover={{ transform: "translateY(-2px)", bg: `${FONDO_PAGINA_TURQUESA}14` }}
-                _active={{ transform: "translateY(0) scale(0.99)" }}
-                _focusVisible={focoBlanco}
-              >
-                <MandalaTinte h="26px" color={FONDO_PAGINA_TURQUESA} />
-                {t("welcome.hero.pedirCita")}
-              </Flex>
+              <BotonReserva onClick={() => navigate("/reservar-cita")} color={FONDO_PAGINA_TURQUESA} ancho="auto">
+                <Flex align="center" gap={{ base: 4, md: 5 }}>
+                  <MandalaTinte h="26px" color={FONDO_PAGINA_TURQUESA} />
+                  {t("welcome.hero.pedirCita")}
+                </Flex>
+              </BotonReserva>
             </Reveal>
           </Flex>
         </Box>
@@ -809,6 +798,12 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
           </Box>
         </Box>
       )}
+      {/* Abajo del todo, bajo Astrología en el arte: los mismos dos botones de la lectura. */}
+      {esAstro && (
+        <Flex justify="center" px={{ base: 5, md: 10 }} pb={{ base: 20, md: 28 }}>
+          <BotonesLectura mt={0} />
+        </Flex>
+      )}
       {/* Los cuatro boxes de servicios (ServiciosAstrologia) están quitados de esta página por ahora; el componente sigue en components/web. */}
       </>
       )}
@@ -836,19 +831,8 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
   );
 }
 
-/** Foto de la portada de Psicología: se descorre al entrar y, si el fichero aún no existe, no se pinta (el texto ocupa el ancho). */
-function FotoPsico({ src, desde, listo = true, color }: { src: string; desde: "izq" | "der"; listo?: boolean; color: string }) {
-  const [rota, setRota] = useState(false);
-  if (rota) return null;
-  return (
-    <FotoViva desde={desde} listo={listo} delay={FONDO_ESPERA} radio="22px" border={`1.5px solid ${color}`} w={{ base: "260px", md: "340px", lg: "400px" }} flexShrink={0} sx={{ aspectRatio: "4 / 5" }}>
-      <Image src={src} alt="" w="100%" h="100%" objectFit="cover" display="block" onError={() => setRota(true)} />
-    </FotoViva>
-  );
-}
-
 /** Capa de fondo de una banda: la foto (o el cielo estrellado) de la disciplina, con un difuminado CORTO arriba y abajo (55 px), el mismo de las bandas de Welcome. */
-function FondoBanda({ nom, visible, src }: { nom: string; visible: boolean; src?: string }) {
+function FondoBanda({ nom, visible, src, deriva = false }: { nom: string; visible: boolean; src?: string; /** El mármol se desplaza y respira muy despacio (solo con `src`). */ deriva?: boolean }) {
   const mascara = "linear-gradient(to bottom, transparent 0, #000 55px, #000 calc(100% - 55px), transparent 100%)";
   return (
     <Box
@@ -857,9 +841,10 @@ function FondoBanda({ nom, visible, src }: { nom: string; visible: boolean; src?
       pointerEvents="none"
       opacity={visible ? 1 : 0}
       transition="opacity 0.5s ease"
+      overflow="hidden"
       sx={{ WebkitMaskImage: mascara, maskImage: mascara }}
     >
-      {src ? <Box position="absolute" inset={0} bgImage={`url(${src})`} bgSize="cover" bgPosition="center" /> : <DisciplinaBgLayer nom={nom} borderRadius="0" />}
+      {src ? <Box position="absolute" inset={0} bgImage={`url(${src})`} bgSize="cover" bgPosition="center" sx={deriva ? { "@keyframes marmolDeriva": { from: { transform: "scale(1.06) translate(-1.5%, 0.8%)" }, to: { transform: "scale(1.14) translate(1.5%, -0.8%)" } }, animation: "marmolDeriva 38s ease-in-out infinite alternate", "@media (prefers-reduced-motion: reduce)": { animation: "none" } } : undefined} /> : <DisciplinaBgLayer nom={nom} borderRadius="0" />}
     </Box>
   );
 }
