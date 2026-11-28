@@ -520,9 +520,9 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
                 px={{ base: 8, md: 10 }}
                 py="14px"
                 borderRadius="full"
-                bg="transparent"
-                color={FONDO_PAGINA_TURQUESA}
-                border={`1.5px solid ${FONDO_PAGINA_TURQUESA}`}
+                color={FONDO_PAGINA_BEIGE}
+                textShadow={sombraTexto(d.nom, d.bg)}
+                style={{ backgroundImage: "url(/img/fondos/filosofia-marmol.webp)", backgroundSize: "cover", backgroundPosition: "center" }}
                 fontFamily="'EB Garamond', serif"
                 fontWeight="700"
                 fontSize={{ base: "md", md: "lg" }}
@@ -530,12 +530,13 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
                 textTransform="uppercase"
                 lineHeight="1.3"
                 cursor="pointer"
-                transition="transform 0.3s cubic-bezier(0.22,1,0.36,1), background 0.3s ease"
-                _hover={{ transform: "translateY(-2px)", bg: `${FONDO_PAGINA_TURQUESA}14` }}
+                boxShadow={`0 0 22px ${d.bg}66`}
+                transition="transform 0.3s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s ease"
+                _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 32px ${d.bg}99` }}
                 _active={{ transform: "translateY(0) scale(0.99)" }}
                 _focusVisible={focoBlanco}
               >
-                <MandalaTinte h="26px" color={FONDO_PAGINA_TURQUESA} />
+                <MandalaTinte h="26px" color={FONDO_PAGINA_BEIGE} />
                 {t("welcome.hero.pedirCita")}
               </Flex>
             </Reveal>
