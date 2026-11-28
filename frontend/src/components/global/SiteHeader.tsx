@@ -189,7 +189,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
     itAsesorias,
     { etiqueta: t("header.psicologia"), onSelect: () => navigate("/disciplina/psicologia"), activo: path.startsWith("/disciplina/psicologia") },
     { etiqueta: t("header.cuerpo"),     onSelect: () => navigate("/disciplina/fisiologia"), activo: path.startsWith("/disciplina/fisiologia") },
-    { etiqueta: t("header.filosofia"),  onSelect: () => navigate("/disciplina/cultura"),    activo: path.startsWith("/disciplina/cultura") },
+    { etiqueta: t("header.filosofia"),  onSelect: () => navigate("/disciplina/filosofia"),  activo: path.startsWith("/disciplina/filosofia") || path.startsWith("/disciplina/cultura") },
     { etiqueta: t("header.astrologia"), onSelect: () => navigate("/disciplina/astrologia"), activo: path.startsWith("/disciplina/astrologia") },
     itRecursos,
     itQuienSoy,

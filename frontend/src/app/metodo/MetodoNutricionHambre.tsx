@@ -117,9 +117,9 @@ export default function MetodoNutricionHambre() {
 
           {/* Frase de cierre, directamente sobre el fondo turquesa (sin box) */}
           <Reveal inView direction="up" distance={18} delay={0.2} duration={0.7} w="100%" display="flex" justifyContent="center">
-            <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontStyle="italic" fontWeight="400"
+            <Text color={nutricionTxt} fontSize={{ base: "xl", md: "2xl" }} fontStyle="italic" fontWeight="400"
                   textAlign="center" maxW="740px" lineHeight="1.7" mt={{ base: 2, md: 4 }}
-                  style={{ textShadow: "0 1px 12px rgba(0,0,0,0.4)" }}>
+                 >
               {t("metodo.nutri.hambreCierre")}
             </Text>
           </Reveal>

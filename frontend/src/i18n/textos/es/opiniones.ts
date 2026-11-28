@@ -1,6 +1,7 @@
 /** Experiencias reales (/opiniones): listado y formulario para dejar la tuya. */
 export const opiniones = {
   "opiniones.titulo": "Experiencias reales",
+  "opiniones.cargando": "Cargando experiencias reales…",
   "opiniones.vacio": "Todavía no hay opiniones publicadas. ¡Sé la primera persona en compartir la tuya!",
 
   "opiniones.dejar.titulo": "Deja tu opinión",

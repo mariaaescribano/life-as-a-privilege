@@ -122,9 +122,12 @@ export function Reveal({
   amount = 0.2,
   inView = false,
   activo,
+  listo = true,
   ...rest
 }: EntradaBase & {
   delay?: number;
+  /** false = aunque ya se vea, se queda oculto hasta que pase a true (p. ej. «cuando haya salido el fondo»). */
+  listo?: boolean;
   once?: boolean;
   amount?: number;
   /** false (por defecto): entra al MONTAR (siempre ocurre; robusto ante cambios
@@ -142,17 +145,20 @@ export function Reveal({
   if (reduce) return <Box {...rest}>{children}</Box>;
 
   const conEspera = cuerpo.espera > 0.001;
+  // Con `listo={false}` la entrada se controla a mano, igual que con la espera del cuerpo.
+  const manual = conEspera || !listo;
+  const pasa = (!conEspera || cuerpo.pasado) && listo;
   const trigger = activo !== undefined
     ? { animate: activo ? finalDe(blur) : initialDe(direction, distance, scaleFrom, blur) }
     : inView
     // Con espera de cuerpo, «entra al asomar» se controla a mano: hace falta que
     // se vea Y que haya pasado la espera (si ya se ve al cargar, no se gasta
     // junto a la cabecera; si hay que bajar, entra al llegar sin esperar).
-    ? (conEspera
-        ? { ref: cuerpo.ref, animate: cuerpo.visto && cuerpo.pasado ? finalDe(blur) : initialDe(direction, distance, scaleFrom, blur) }
+    ? (manual
+        ? { ref: cuerpo.ref, animate: cuerpo.visto && pasa ? finalDe(blur) : initialDe(direction, distance, scaleFrom, blur) }
         : { whileInView: finalDe(blur), viewport: { once, amount } })
-    : (conEspera
-        ? { animate: cuerpo.pasado ? finalDe(blur) : initialDe(direction, distance, scaleFrom, blur) }
+    : (manual
+        ? { animate: pasa ? finalDe(blur) : initialDe(direction, distance, scaleFrom, blur) }
         : { animate: finalDe(blur) });
 
   return (

@@ -16,7 +16,7 @@ import { FONDO_PAGINA_BEIGE, FONDO_PAGINA_TURQUESA } from "../../GlobalVariables
  * La foto solo ENTRA con dinamismo (desliza, se enfoca y se dibuja su filo); después
  * se queda quieta.
  */
-const FILO = "#004f4f40";
+const FILO = "#3B2418";
 const HALO_FOTO = "0 0 16px rgba(255,255,255,0.11), 0 0 34px rgba(255,255,255,0.06), 0 0 60px rgba(180,255,245,0.06)";
 
 const WelcomeHero = ({ activo, compacto = false }: { activo: boolean; marmol?: boolean; compacto?: boolean }) => {

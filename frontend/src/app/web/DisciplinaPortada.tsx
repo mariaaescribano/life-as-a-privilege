@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Box, Flex, Grid, Text } from "@chakra-ui/react";
+import { Box, Flex, Grid, Image, SimpleGrid, Text } from "@chakra-ui/react";
 import { useNavigate, useParams } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { Reveal } from "../../components/global/Reveal";
 import { focoBlanco } from "../../components/global/foco";
+import { sombraTexto } from "../../components/global/disciplinaSombras";
 import { BotonPaso } from "../../components/metodo/BotonPaso";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
 import { presentacionPorKey, type PresentacionDisciplina } from "../../data/presentacionDisciplinas";
-import { AprendizajeIcon, FONDO_PAGINA_TURQUESA } from "../../GlobalVariables";
+import { AprendizajeIcon, FONDO_PAGINA_BEIGE, FONDO_PAGINA_TURQUESA } from "../../GlobalVariables";
+import { TusCelulasModal } from "../../components/metodo/TusCelulasModal";
 import FotoDisciplina from "../../components/web/FotoDisciplina";
 import LineaTiempoAstrologia from "../../components/web/LineaTiempoAstrologia";
 import QueEsCartaAstral from "../../components/web/QueEsCartaAstral";
@@ -20,6 +22,25 @@ import { useCabeceraEscribiendo } from "../../components/global/cabeceraEntrada"
 import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
 import { getUserMe } from "../../api/userMe";
 import { useIdioma, useT } from "../../i18n";
+import TextoRico from "../../components/global/TextoRico";
+import PalabrasVivas from "../../components/global/PalabrasVivas";
+import CitasFilosofia from "../../components/web/CitasFilosofia";
+import FotoViva from "../../components/global/FotoViva";
+
+/** Lo que tarda en encenderse la foto de fondo de una banda (FondoBanda, 0,5 s): lo de encima entra DESPUÉS, nunca antes. */
+const FONDO_ESPERA = 0.45;
+import CarruselCelulas from "../../components/web/CarruselCelulas";
+import { FotoBox } from "../../components/metodo/FotoBox";
+import { SistemaModal } from "../../components/metodo/SistemaModal";
+import { ORIGEN_CIENCIA } from "../../components/metodo/ComicCienciaModal";
+import ComicEnLinea from "../../components/web/ComicEnLinea";
+import { useComic } from "../../i18n/comics";
+import { type Sistema } from "../../hardCoded/espacio/SistemasFisiologia";
+import { useSistemas } from "../../hardCoded/espacio/SistemasFisiologia.en";
+import { useTemasProfundiza } from "../../hardCoded/espacio/useTemaProfundiza";
+import type { TemaProfundiza } from "../../hardCoded/espacio/ProfundizaFisiologia";
+import { TemaProfundizaModal } from "../../components/metodo/TemaProfundizaModal";
+import { MandalaTinte } from "../../components/global/MandalaTinte";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // /disciplina/:disciplina — PORTADA COMÚN de una disciplina.
@@ -110,6 +131,9 @@ function usePagada(key: string): boolean | null {
   return pagada;
 }
 
+/** Las portadas de Profundiza que se enseñan en la portada de Fisiología. */
+const PORTADAS_PROFUNDIZA = ["cerebro", "hormonas", "metabolismo", "inmunitario"];
+
 function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "portada" | "teoria" }) {
   const navigate = useNavigate();
   const t = useT();
@@ -117,6 +141,19 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
   const conFondo = hasDisciplinaBg(d.nom);
   // Astrología tiene su propia portada: cuatro cajas de servicios sobre su foto, con letra beige y sin la raya del mandala.
   const esAstro = d.key === "astrologia" && modo === "portada";
+  // Fisiología también tiene su propia portada: un texto de apertura en grande, sin puertas por ahora.
+  const esFisio = d.key === "fisiologia" && modo === "portada";
+  // Filosofía (en el menú; la disciplina interna es Cultura): apertura, cinco citas sobre su foto y un cierre.
+  const esFilo = d.key === "cultura" && modo === "portada";
+  const [celulasAbierto, setCelulasAbierto] = useState(false);
+  const [sistemaAbierto, setSistemaAbierto] = useState<Sistema | null>(null);
+  const [temaAbierto, setTemaAbierto] = useState<TemaProfundiza | null>(null);
+  // Sistemas (dos filas de cuatro) y portadas de Profundiza, en el idioma activo.
+  const sistemasPortada = useSistemas().slice(0, 4);
+  const temasProfundiza = useTemasProfundiza();
+  const portadasProfundiza = PORTADAS_PROFUNDIZA.map((k) => temasProfundiza.find((x) => x.key === k)).filter((x): x is NonNullable<typeof x> => !!x);
+  // El cómic del origen según la ciencia, en el idioma activo.
+  const vinetasCiencia = useComic("origen-ciencia", ORIGEN_CIENCIA);
   const nombreDe = useNombreDisciplina();
   // Secuencia de entrada: mandala, título, frase, línea con mandala... y DESPUÉS la banda con
   // la foto de la disciplina de fondo (la cabecera avisa cuando termina), y luego su contenido.
@@ -206,10 +243,263 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
       <SiteHeader variant="auto" />
 
       {/* ── CABECERA: mandala, nombre de la disciplina, su frase y la línea con el mandala pequeño ── */}
-      <WelcomeCabecera activo={mounted} titulo={nombreDe(d.nom)} subtitulo={esAstro ? t("astroVision.frase") : segunIdioma(d.gancho)} mayusculas sinSeparador={esAstro} />
+      <WelcomeCabecera activo={mounted} titulo={esFilo ? t("header.filosofia") : nombreDe(d.nom)} subtitulo={esAstro ? t("astroVision.frase") : esFisio ? t("fisioPortada.frase") : esFilo ? t("filoPortada.frase") : segunIdioma(d.gancho)} mayusculas sinSeparador={esAstro || esFisio || esFilo} />
 
-      {/* Psicología, Cuerpo (Fisiología) y Filosofía (Cultura): todavía sin contenido. Solo la cabecera y el aviso. */}
-      {NO_DISPONIBLES.has(d.key) ? (
+      {/* Fisiología: los tres primeros bloques sobre la foto de la disciplina (difuminada arriba y abajo, letra
+          de la disciplina con su sombra) y el resto debajo, en grande, sobre el beige (letra chocolate). */}
+      {esFisio ? (
+        <Box flex={1}>
+          {/* Primer box: foto de la disciplina de fondo; el texto a la izquierda y la foto a la derecha. */}
+          <Box position="relative" mt={{ base: 8, md: 14 }} pt={{ base: "88px", md: "120px" }} pb={{ base: "88px", md: "120px" }}>
+            <FondoBanda nom={d.nom} visible={banda} />
+            <Flex position="relative" zIndex={1} direction={{ base: "column", md: "row" }} align="center" gap={{ base: 10, md: 12, lg: 16 }} maxW="1180px" mx="auto" w="100%" px={{ base: 6, md: 10, lg: 16 }}>
+              <Flex direction="column" flex="1" minW={0} gap={{ base: 6, md: 8 }} align={{ base: "center", md: "flex-start" }} textAlign={{ base: "center", md: "left" }} order={{ base: 1, md: 0 }}>
+                {/* Nada entra antes que el fondo: todo espera a `banda` (+ lo que tarda en encenderse la foto). */}
+                {(["fisioPortada.p1", "fisioPortada.p2"] as const).map((k, i) => (
+                  <Reveal key={k} inView listo={banda} direction="right" distance={30} blur duration={1} delay={FONDO_ESPERA + i * 0.35}>
+                    <Text color={d.txt} textShadow={sombraTexto(d.nom, d.bg)} fontSize={{ base: "lg", md: "xl", lg: "2xl" }} lineHeight="1.55" letterSpacing="0.01em">
+                      <PalabrasVivas texto={t(k)} cursivas listo={banda} retraso={FONDO_ESPERA + 0.1 + i * 0.5} total={1.5} />
+                    </Text>
+                  </Reveal>
+                ))}
+                <Reveal inView listo={banda} direction="right" distance={30} blur duration={1} delay={FONDO_ESPERA + 0.7}>
+                  <Flex direction="column" gap={3} align={{ base: "center", md: "flex-start" }}>
+                    <Text color={d.txt} textShadow={sombraTexto(d.nom, d.bg)} fontSize={{ base: "lg", md: "xl", lg: "2xl" }} lineHeight="1.55">
+                      <PalabrasVivas texto={t("fisioPortada.cita")} cursivas listo={banda} retraso={FONDO_ESPERA + 0.8} total={1.2} />
+                    </Text>
+                    {/* La raya nace junto a la cita y se extiende; después, el autor. */}
+                    <Reveal inView listo={banda} direction="none" duration={1.2} delay={FONDO_ESPERA + 1.9} w="100%" maxW="220px">
+                      <Box h="1px" w="100%" style={{ background: `linear-gradient(to right, ${d.txt}cc, ${d.txt}00)` }} />
+                    </Reveal>
+                    <Reveal inView listo={banda} direction="up" distance={10} blur duration={0.9} delay={FONDO_ESPERA + 2.2}>
+                      <Text color={d.txt} textShadow={sombraTexto(d.nom, d.bg)} fontSize={{ base: "md", md: "lg" }} letterSpacing="0.02em">
+                        <TextoRico texto={t("fisioPortada.citaAutor")} />
+                      </Text>
+                    </Reveal>
+                  </Flex>
+                </Reveal>
+              </Flex>
+              {/* El cuerpo: se descorre desde la derecha, se asienta con zoom, lo cruza un destello y se inclina hacia el ratón. */}
+              <Box w={{ base: "260px", md: "340px", lg: "400px" }} flexShrink={0} order={{ base: 0, md: 1 }}>
+                <FotoViva desde="der" listo={banda} delay={FONDO_ESPERA} radio="22px" border={`1.5px solid ${d.txt}`}>
+                  <Image src="/img/disciplinas/fisiologia-cuerpo.webp" alt="" w="100%" h="auto" display="block" loading="lazy" />
+                </FotoViva>
+              </Box>
+            </Flex>
+          </Box>
+
+          {/* Sobre el beige: la frase a todo lo ancho, en cursiva y negrita. */}
+          <Reveal inView direction="up" distance={20} duration={1} w="100%">
+            <Text color={FONDO_PAGINA_TURQUESA} textAlign="center" fontStyle="italic" fontWeight="700" w="100%" px={{ base: 6, md: 10, lg: 16 }} py={{ base: 14, md: 20 }} fontSize={{ base: "xl", md: "2xl", lg: "3xl" }} lineHeight="1.4" letterSpacing="0.01em">
+              <PalabrasVivas texto={t("fisioPortada.p3")} total={1.6} />
+            </Text>
+          </Reveal>
+
+          {/* Otra banda con la foto de la disciplina: «Descubres la grandeza…» y el siguiente párrafo. */}
+          <Box position="relative" mb={{ base: "40px", md: "88px" }} pt={{ base: "88px", md: "120px" }} pb={{ base: "88px", md: "120px" }}>
+            <FondoBanda nom={d.nom} visible={banda} />
+            <Flex position="relative" zIndex={1} direction={{ base: "column", md: "row" }} align="center" gap={{ base: 10, md: 12, lg: 16 }} maxW="1180px" mx="auto" w="100%" px={{ base: 6, md: 10, lg: 16 }}>
+              {/* Izquierda: las fotos de «Tus células», cambiando solas. */}
+              <Box w={{ base: "260px", md: "340px", lg: "400px" }} flexShrink={0}>
+                <FotoViva desde="izq" listo={banda} delay={FONDO_ESPERA} radio="22px" border={`1.5px solid ${d.txt}`} sx={{ aspectRatio: "1 / 1" }}>
+                  <CarruselCelulas color={d.txt} conBorde={false} />
+                </FotoViva>
+              </Box>
+              <Flex direction="column" flex="1" minW={0} gap={{ base: 6, md: 8 }} align={{ base: "center", md: "flex-start" }} textAlign={{ base: "center", md: "left" }}>
+                {(["fisioPortada.p4", "fisioPortada.p5"] as const).map((k, i) => (
+                  <Reveal key={k} inView listo={banda} direction="left" distance={30} blur duration={1} delay={FONDO_ESPERA + i * 0.35}>
+                    <Text color={d.txt} textShadow={sombraTexto(d.nom, d.bg)} fontSize={{ base: "lg", md: "xl", lg: "2xl" }} lineHeight="1.55" letterSpacing="0.01em">
+                      <PalabrasVivas texto={t(k)} cursivas listo={banda} retraso={FONDO_ESPERA + 0.1 + i * 0.5} total={1.5} />
+                    </Text>
+                  </Reveal>
+                ))}
+              </Flex>
+            </Flex>
+          </Box>
+
+          {/* Debajo: «Mis células». Botón grande con la foto de Fisiología de fondo y el mandala a la izquierda;
+              abre el popup inmersivo con todas las células. */}
+          <Reveal inView direction="up" distance={20} scaleFrom={0.95} duration={1} w="100%" display="flex" justifyContent="center">
+            <Box
+              as="button"
+              type="button"
+              onClick={() => setCelulasAbierto(true)}
+              role="group"
+              position="relative"
+              overflow="hidden"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              gap={{ base: 4, md: 6 }}
+              w={{ base: "calc(100% - 48px)", md: "auto" }}
+              maxW="560px"
+              minW={{ md: "400px" }}
+              px={{ base: 8, md: 12 }}
+              py={{ base: 4, md: 5 }}
+              mb={{ base: 14, md: 20 }}
+              borderRadius="full"
+              fontFamily="'EB Garamond', serif"
+              cursor="pointer"
+              boxShadow={`0 0 26px ${d.bg}88, 0 0 60px ${d.bg}44`}
+              transition="transform 0.35s cubic-bezier(0.22,1,0.36,1), box-shadow 0.35s ease"
+              _hover={{ transform: "translateY(-4px)", boxShadow: `0 0 34px ${d.bg}bb, 0 0 80px ${d.bg}66` }}
+              _active={{ transform: "translateY(-1px) scale(0.985)" }}
+              _focusVisible={focoBlanco}
+            >
+              {/* La foto de la disciplina, a resolución completa; respira con un zoom lento al pasar el puntero. */}
+              <Box position="absolute" inset={0} transition="transform 1.2s cubic-bezier(0.22,1,0.36,1)" _groupHover={{ transform: "scale(1.08)" }}>
+                <DisciplinaBgLayer nom={d.nom} borderRadius="full" />
+              </Box>
+              <Box position="relative" zIndex={1} transition="transform 1.4s cubic-bezier(0.22,1,0.36,1)" _groupHover={{ transform: "rotate(45deg) scale(1.08)" }}>
+                <MandalaTinte h={{ base: "34px", md: "42px" }} color={FONDO_PAGINA_BEIGE} />
+              </Box>
+              <Text
+                position="relative"
+                zIndex={1}
+                color={d.txt}
+                textShadow={sombraTexto(d.nom, d.bg)}
+                fontWeight="700"
+                fontSize={{ base: "lg", md: "2xl" }}
+                letterSpacing="0.16em"
+                textTransform="uppercase"
+                whiteSpace="nowrap"
+              >
+                {t("fisioPortada.boton")}
+              </Text>
+            </Box>
+          </Reveal>
+
+          {/* Sistemas del cuerpo (primera fila) y, como segunda fila de la misma rejilla, las portadas de Profundiza (al pulsar, popup
+              inmersivo con el contenido del tema). Tarjetas vivas: zoom, brillo y subida al pasar el puntero. */}
+          <Box w="100%" maxW="1560px" mx="auto" px={{ base: 3, md: 6, lg: 8 }} pb={{ base: 16, md: 24 }}>
+            <SimpleGrid columns={{ base: 2, md: 4 }} spacing={{ base: 2, md: 3 }}>
+              {sistemasPortada.map((s, i) => (
+                <Reveal key={s.key} inView once amount={0.2} direction="up" distance={40} scaleFrom={0.94} blur duration={0.9} delay={0.08 + (i % 4) * 0.14} display="flex">
+                  <FotoBox
+                    vivo
+                    cuadrada
+                    titulo={s.label}
+                    foto={s.foto}
+                    nom={d.nom}
+                    tinta={d.txt}
+                    bg={d.bg}
+                    glow="0 0 0 rgba(0,0,0,0)"
+                    onClick={() => setSistemaAbierto(s)}
+                  />
+                </Reveal>
+              ))}
+              {portadasProfundiza.map((tema, i) => (
+                <Reveal key={tema.key} inView once amount={0.2} direction="up" distance={40} scaleFrom={0.94} blur duration={0.9} delay={0.08 + (i % 4) * 0.14} display="flex">
+                  <FotoBox
+                    vivo
+                    cuadrada
+                    titulo={tema.label}
+                    foto={tema.foto}
+                    nom={d.nom}
+                    tinta={d.txt}
+                    bg={d.bg}
+                    glow="0 0 0 rgba(0,0,0,0)"
+                    onClick={() => setTemaAbierto(tema)}
+                  />
+                </Reveal>
+              ))}
+            </SimpleGrid>
+          </Box>
+
+          {/* Otra banda con la foto de la disciplina: el cómic del origen según la ciencia, leído aquí mismo
+              (viñeta a la izquierda, texto a la derecha y flechas para pasar). */}
+          <Box position="relative" mb={{ base: "56px", md: "96px" }} pt={{ base: "88px", md: "120px" }} pb={{ base: "88px", md: "120px" }}>
+            <FondoBanda nom={d.nom} visible={banda} />
+            <Box position="relative" zIndex={1}>
+              <ComicEnLinea vinetas={vinetasCiencia} color={d.txt} sombra={sombraTexto(d.nom, d.bg)} />
+            </Box>
+          </Box>
+
+          {/* Debajo del cómic, sobre el beige: la frase de las sesiones a todo lo ancho y, debajo, el botón alargado
+              (sin relleno: solo el borde y el texto) para pedir la primera llamada. */}
+          <Flex
+            direction="column"
+            align="center"
+            gap={{ base: 8, md: 10 }}
+            maxW="1180px"
+            mx="auto"
+            w="100%"
+            px={{ base: 6, md: 10, lg: 16 }}
+            pb={{ base: 20, md: 28 }}
+          >
+            <Reveal inView direction="up" distance={20} duration={1} w="100%">
+              <Text
+                color={FONDO_PAGINA_TURQUESA}
+                fontStyle="italic"
+                fontSize={{ base: "xl", md: "2xl", lg: "3xl" }}
+                lineHeight="1.5"
+                letterSpacing="0.01em"
+                textAlign="center"
+                w="100%"
+              >
+                {t("fisioPortada.sesiones")}
+              </Text>
+            </Reveal>
+            <Reveal inView direction="up" distance={16} duration={0.9} delay={0.15} w="100%">
+              <Flex
+                as="button"
+                type="button"
+                onClick={() => navigate("/reservar-cita")}
+                align="center"
+                justify="center"
+                w="100%"
+                px={{ base: 6, md: 10 }}
+                py={{ base: "16px", md: "20px" }}
+                borderRadius="full"
+                bg="transparent"
+                color={FONDO_PAGINA_TURQUESA}
+                border={`1.5px solid ${FONDO_PAGINA_TURQUESA}`}
+                fontFamily="'EB Garamond', serif"
+                fontWeight="700"
+                fontSize={{ base: "md", md: "lg" }}
+                letterSpacing="0.16em"
+                textTransform="uppercase"
+                textAlign="center"
+                lineHeight="1.3"
+                cursor="pointer"
+                transition="transform 0.3s cubic-bezier(0.22,1,0.36,1), background 0.3s ease"
+                _hover={{ transform: "translateY(-3px)", bg: `${FONDO_PAGINA_TURQUESA}14` }}
+                _active={{ transform: "translateY(0) scale(0.99)" }}
+                _focusVisible={focoBlanco}
+              >
+                {t("fisioPortada.llamada")}
+              </Flex>
+            </Reveal>
+          </Flex>
+        </Box>
+      ) : esFilo ? (
+        <Box flex={1}>
+          {/* Apertura sobre el beige: la idea de que todos tenemos una filosofía. */}
+          <Flex justify="center" px={{ base: 6, md: 10 }} pt={{ base: 12, md: 16 }} pb={{ base: 4, md: 8 }}>
+            <Text maxW="860px" textAlign="center" color={FONDO_PAGINA_TURQUESA} fontSize={{ base: "xl", md: "2xl", lg: "3xl" }} lineHeight="1.55" letterSpacing="0.01em">
+              <PalabrasVivas texto={t("filoPortada.p1")} cursivas total={1.6} />
+            </Text>
+          </Flex>
+
+          {/* Banda con la foto de la disciplina: las cinco citas, de una en una. */}
+          <Box position="relative" mt={{ base: 8, md: 12 }} pt={{ base: "72px", md: "110px" }} pb={{ base: "72px", md: "110px" }}>
+            {/* Mármol turquesa oscuro de fondo, letra beige de la disciplina con su sombra. */}
+            <FondoBanda nom={d.nom} visible={banda} src="/img/fondos/filosofia-marmol.webp" />
+            <Box position="relative" zIndex={1} w="100%" px={{ base: 5, md: 10, lg: 14 }}>
+              <Reveal inView direction="up" distance={24} scaleFrom={0.98} blur duration={1}>
+                <CitasFilosofia color={d.txt} sombra={sombraTexto(d.nom, d.bg)} />
+              </Reveal>
+            </Box>
+          </Box>
+
+          {/* Cierre sobre el beige: la frase en negrita, a todo lo ancho. */}
+          <Flex justify="center" px={{ base: 6, md: 10 }} py={{ base: 14, md: 24 }}>
+            <Text maxW="900px" textAlign="center" color={FONDO_PAGINA_TURQUESA} fontSize={{ base: "xl", md: "2xl", lg: "3xl" }} lineHeight="1.45" letterSpacing="0.01em">
+              <PalabrasVivas texto={t("filoPortada.cierre")} total={1.6} />
+            </Text>
+          </Flex>
+        </Box>
+      ) : NO_DISPONIBLES.has(d.key) ? (
         <Flex flex={1} align="flex-start" justify="center" px={{ base: 5, md: 10 }} pt={{ base: 10, md: 16 }} pb={{ base: 24, md: 32 }}>
           <Text
             color={FONDO_PAGINA_TURQUESA}
@@ -363,7 +653,7 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
             lineHeight="1.6"
             letterSpacing="0.01em"
           >
-            {t("astroAutores.critica")}
+            <PalabrasVivas texto={t("astroAutores.critica")} cursivas total={1.4} />
           </Text>
         </Flex>
       )}
@@ -388,7 +678,7 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
             lineHeight="1.6"
             letterSpacing="0.01em"
           >
-            {t("astroAutores.acuerdo")}
+            <PalabrasVivas texto={t("astroAutores.acuerdo")} cursivas total={1.4} />
           </Text>
         </Flex>
       )}
@@ -420,12 +710,16 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
       )}
 
       <SiteFooter />
+
+      {esFisio && <TusCelulasModal fondoSolido isOpen={celulasAbierto} onClose={() => setCelulasAbierto(false)} />}
+      {esFisio && <TemaProfundizaModal tema={temaAbierto} onClose={() => setTemaAbierto(null)} />}
+      {esFisio && <SistemaModal sistema={sistemaAbierto} sistemas={sistemasPortada} onSelect={setSistemaAbierto} onClose={() => setSistemaAbierto(null)} />}
     </Box>
   );
 }
 
 /** Capa de fondo de una banda: la foto (o el cielo estrellado) de la disciplina, con un difuminado CORTO arriba y abajo (55 px), el mismo de las bandas de Welcome. */
-function FondoBanda({ nom, visible }: { nom: string; visible: boolean }) {
+function FondoBanda({ nom, visible, src }: { nom: string; visible: boolean; src?: string }) {
   const mascara = "linear-gradient(to bottom, transparent 0, #000 55px, #000 calc(100% - 55px), transparent 100%)";
   return (
     <Box
@@ -436,7 +730,7 @@ function FondoBanda({ nom, visible }: { nom: string; visible: boolean }) {
       transition="opacity 0.5s ease"
       sx={{ WebkitMaskImage: mascara, maskImage: mascara }}
     >
-      <DisciplinaBgLayer nom={nom} borderRadius="0" />
+      {src ? <Box position="absolute" inset={0} bgImage={`url(${src})`} bgSize="cover" bgPosition="center" /> : <DisciplinaBgLayer nom={nom} borderRadius="0" />}
     </Box>
   );
 }
@@ -450,7 +744,9 @@ export default function DisciplinaPortada({ modo = "portada" }: { modo?: "portad
   // /d/:disciplina, para no dejar un 404 seco).
   useEffect(() => {
     if (!d) navigate("/welcome", { replace: true });
-  }, [d, navigate]);
+    // La URL antigua de Filosofía (/disciplina/cultura) pasa a la nueva.
+    else if (d.key === "cultura" && disciplina !== "filosofia") navigate(modo === "teoria" ? "/disciplina/filosofia/teoria" : "/disciplina/filosofia", { replace: true });
+  }, [d, disciplina, modo, navigate]);
   if (!d) return null;
 
   // key: al saltar de una disciplina a otra (o de la portada a su Teoría) se

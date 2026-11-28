@@ -51,6 +51,7 @@ export function TusCelulasModal({
   onClose,
   titulo,
   celulas: celulasProp,
+  fondoSolido = false,
 }: {
   isOpen: boolean;
   onClose: () => void;
@@ -58,6 +59,8 @@ export function TusCelulasModal({
   titulo?: string;
   /** Lista de células a mostrar. Por defecto todas las de Fisiología. */
   celulas?: Celula[];
+  /** Fondo liso del lila oscuro de Fisiología al 100 % (sin la foto ni los velos). */
+  fondoSolido?: boolean;
 }) {
   const t = useT();
   // Por defecto, todas las de Fisiología en el idioma activo (no se puede poner
@@ -130,6 +133,7 @@ export function TusCelulasModal({
     <Box position="fixed" inset={0} zIndex={1000} fontFamily="'EB Garamond', serif">
       {/* ── Fondo inmersivo: foto de Fisiología cubriendo TODA la pantalla ── */}
       <Box position="absolute" inset={0} bg={BG} overflow="hidden">
+        {!fondoSolido && (<>
         <Box
           as="img"
           src={FISIO_IMG}
@@ -145,6 +149,7 @@ export function TusCelulasModal({
             los boxes de las células, que quedan más oscuros por encima. */}
         <Box position="absolute" inset={0} bg={`${BG}59`} />
         <Box position="absolute" inset={0} bg="rgba(255,255,255,0.22)" />
+        </>)}
       </Box>
 
       {/* ── X cerrar ── */}

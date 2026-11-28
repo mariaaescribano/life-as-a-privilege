@@ -57,6 +57,7 @@ export function FotoBox({
   aspect = 1,
   glow,
   vivo = false,
+  cuadrada = false,
   descripcion,
   lineasDescripcion = 3,
 }: {
@@ -97,6 +98,8 @@ export function FotoBox({
    *  porque este box lo comparten Nutrición, Fisiología y Cultura, y de momento
    *  solo Nutrición lo pide. */
   vivo?: boolean;
+  /** La tarjeta ENTERA es un cuadrado 1:1 (foto + pie): la foto ocupa lo que sobra del pie. */
+  cuadrada?: boolean;
 }) {
   const [imgErr, setImgErr] = useState(false);
   // La foto se enciende con un fundido cuando llega (no aparece de golpe dentro
@@ -136,7 +139,8 @@ export function FotoBox({
       display="flex"
       flexDirection="column"
       w="100%"
-      h="100%"
+      h={cuadrada ? "auto" : "100%"}
+      sx={cuadrada ? { aspectRatio: "1 / 1" } : undefined}
       borderRadius="2xl"
       cursor="pointer"
       fontFamily="'EB Garamond', serif"
@@ -175,8 +179,8 @@ export function FotoBox({
       )}
 
       {/* Imagen a sangre en la parte superior. */}
-      <Box position="relative" zIndex={1} w="100%" aspectRatio={aspect} overflow="hidden"
-           flexShrink={0} bg={colorTint ?? `${tinta}12`}
+      <Box position="relative" zIndex={1} w="100%" aspectRatio={cuadrada ? undefined : aspect} overflow="hidden"
+           flexShrink={cuadrada ? 1 : 0} flex={cuadrada ? "1 1 0" : undefined} minH={cuadrada ? 0 : undefined} bg={colorTint ?? `${tinta}12`}
            display="flex" alignItems="center" justifyContent="center">
         {hayFoto ? (
           <Image ref={imgRef} src={srcFoto} alt={typeof titulo === "string" ? titulo : ""} w="100%" h="100%"
@@ -212,7 +216,7 @@ export function FotoBox({
       )}
 
       {/* Pie: título alineado a la izquierda. */}
-      <Flex position="relative" zIndex={1} flex="1" direction={descripcion ? "column" : "row"}
+      <Flex position="relative" zIndex={1} flex={cuadrada ? "0 0 auto" : "1"} direction={descripcion ? "column" : "row"}
             align={descripcion ? "stretch" : "center"} justify={descripcion ? "flex-start" : undefined} gap={descripcion ? 1.5 : 0}
             px={{ base: 3.5, md: 4 }} py={{ base: 3, md: 3.5 }}>
         <Text color={tinta} fontWeight="700" fontSize={descripcion ? { base: "md", md: "xl" } : { base: "sm", md: "md" }} lineHeight="1.25"

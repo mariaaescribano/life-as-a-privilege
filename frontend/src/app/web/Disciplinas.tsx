@@ -29,7 +29,7 @@ import { useT } from "../../i18n";
  *   Debajo, un espacio turquesa y el pie: la tercera sección es la última.
  */
 /** Las ocho del mandala: las del mapa, con su portada (mismo orden que MAPA). */
-const SLUGS = ["psicologia", "fisiologia", "nutricion", "cultura", "medicinachina", "astrologia", "cabala", "ayurveda"];
+const SLUGS = ["psicologia", "fisiologia", "nutricion", "filosofia", "medicinachina", "astrologia", "cabala", "ayurveda"];
 const DISCIPLINAS_MANDALA = MAPA.map((d, i) => ({ name: d.name, bg: d.bg, txt: d.txt, renderIcon: d.renderIcon, lemaKey: d.lemaKey, link: `/disciplina/${SLUGS[i]}` }));
 
 const TINTA = "#004f4f";

@@ -113,7 +113,7 @@ export default function MetodoNutricionMacronutrientes() {
               «Micro →» de arriba ya está encendido). */}
           {!faltanMacro && (
             <Reveal direction="up" distance={18} delay={0.15} duration={0.6} w="100%" display="flex" justifyContent="center">
-              <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontStyle="italic"
+              <Text color={nutricionTxt} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic"
                     textAlign="center" lineHeight="1.7" maxW="760px">
                 {t("metodo.nutri.macroCompletado")}
               </Text>

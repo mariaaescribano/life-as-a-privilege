@@ -5,7 +5,7 @@
  * «Escríbeme» de /contacto. Antes colgaba debajo de las tarjetas y había
  * que bajar hasta él.
  */
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box, Flex, Text, Input, Textarea,
 } from "@chakra-ui/react";
@@ -17,22 +17,7 @@ import TrasCabecera from "../../components/global/TrasCabecera";
 import { MandalaTinte } from "../../components/global/MandalaTinte";
 import { FONDO_PAGINA_TURQUESA as T } from "../../GlobalVariables";
 import { useT } from "../../i18n";
-
-const useReveal = (threshold = 0.15) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
-      { threshold }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [threshold]);
-  return { ref, visible };
-};
+import { useVistoConEspera } from "../../hooks/useVistoConEspera";
 
 const inputStyle = {
   bg: "transparent",
@@ -59,13 +44,40 @@ const textareaStyle = {
   py: 4,
 };
 
+/** Corazón de línea fina, del color de la letra (chocolate): cierra la frase de la cabecera con un latido muy suave. */
+const CorazonFino = () => (
+  <Box
+    as="svg"
+    aria-hidden
+    viewBox="0 0 24 24"
+    display="inline-block"
+    w="0.95em"
+    h="0.95em"
+    verticalAlign="-0.12em"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.6"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    sx={{
+      "@keyframes corazonFino": { "0%, 100%": { transform: "scale(1)" }, "50%": { transform: "scale(1.14)" } },
+      animation: "corazonFino 2.4s ease-in-out infinite",
+      "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+    }}
+  >
+    <path d="M12 20.5s-7.5-4.7-9.4-9.6C1.3 7.600 3.200 4.500 6.500 4.500c2 0 3.700 1.100 5.500 3.100 1.800-2 3.500-3.100 5.500-3.100 3.300 0 5.200 3.100 3.900 6.400-1.900 4.900-9.400 9.600-9.400 9.600z" />
+  </Box>
+);
+
 const ContactoFormulario = () => {
   const t = useT();
   const [form, setForm] = useState({ nombre: "", email: "", titulo: "", mensaje: "" });
   const [status, setStatus] = useState<"idle" | "sending" | "ok" | "error">("idle");
   const [serverSlow, setServerSlow] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const formReveal = useReveal(0.1);
+  // Ref de CALLBACK: el formulario se monta DESPUÉS de la cabecera (TrasCabecera), y con un ref normal el observador
+  // se preparaba antes de que existiera y el formulario se quedaba a opacidad 0.
+  const formReveal = useVistoConEspera("0px", 0);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -114,7 +126,7 @@ const ContactoFormulario = () => {
       <SiteHeader variant="auto" />
 
       {/* ── Mandala, título y frase (la cabecera de la casa) ── */}
-      <WelcomeCabecera activo={mounted} titulo={t("contacto.titulo")} subtitulo={t("contacto.formSubtitulo")} mayusculas sinSeparador />
+      <WelcomeCabecera activo={mounted} titulo={t("contacto.titulo")} subtitulo={t("contacto.formSubtitulo")} mayusculas sinSeparador iconoFrase={<CorazonFino />} />
 
       {/* ── FORMULARIO (sin caja) ── */}
       <TrasCabecera flex="1" display="flex" flexDirection="column">
@@ -122,8 +134,14 @@ const ContactoFormulario = () => {
         <Flex
           ref={formReveal.ref}
           direction="column"
-          w={{ base: "100%", sm: "520px" }}
+          w={{ base: "100%", sm: "560px" }}
           gap={5}
+          // Caja con borde fino del color de la letra: el formulario (y su mensaje de enviado) dentro.
+          border={`1.5px solid ${T}66`}
+          borderRadius="2xl"
+          px={{ base: 4, md: 8 }}
+          py={{ base: 8, md: 10 }}
+          alignSelf="flex-start"
           opacity={formReveal.visible ? 1 : 0}
           transform={formReveal.visible ? "translateY(0)" : "translateY(28px)"}
           transition="opacity 0.8s ease, transform 0.8s ease"

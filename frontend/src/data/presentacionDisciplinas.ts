@@ -233,6 +233,8 @@ const base: Record<string, PresentacionDisciplina> = {
     resumenPago:
       "Cierra El Mapa recorriendo la Historia de la Filosofía, la Medicina, la Religión y la cultura general: recuerda de dónde venimos para entender dónde estamos y poder crear un futuro más bonito.",
     video: "/videos/culturavideo.mp4",
+    // La web la llama Filosofía: su portada pública vive en /disciplina/filosofia (la clave interna sigue siendo «cultura»).
+    alias: ["filosofia"],
   },
 };
 

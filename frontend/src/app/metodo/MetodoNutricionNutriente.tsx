@@ -402,7 +402,7 @@ export default function MetodoNutricionNutriente() {
           {anteriorNutriente && (
             <Reveal direction="right" distance={12} duration={0.5} delay={0.06} w="100%">
               <Box as="button" type="button" onClick={() => navigate(rutaListaNutriente(n.key))}
-                   color="white" fontSize={{ base: "md", md: "lg" }} fontWeight="700"
+                   color={nutricionTxt} fontSize={{ base: "md", md: "lg" }} fontWeight="700"
                    letterSpacing="0.04em" mt={-2}
                    _hover={{ opacity: 0.8 }}
                    _focusVisible={{ outline: "2px solid white", outlineOffset: "3px", borderRadius: "md" }}>
@@ -508,7 +508,7 @@ export default function MetodoNutricionNutriente() {
                         return (
                           <Reveal direction="right" distance={16} duration={0.5}>
                             <Flex align="center" gap={{ base: 2.5, md: 3 }} w="100%" mb={{ base: 4, md: 5 }}>
-                              <Text color="white" fontWeight="800" fontSize={{ base: "md", md: "lg" }}
+                              <Text color={nutricionTxt} fontWeight="800" fontSize={{ base: "md", md: "lg" }}
                                     letterSpacing="0.08em" textTransform="uppercase" whiteSpace="nowrap"
                                     style={{ textShadow: "0 1px 6px rgba(0,0,0,0.4)" }}>
                                 {nombre}

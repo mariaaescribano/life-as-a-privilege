@@ -15,6 +15,7 @@ export function FichaExploraModal({
   temaColor,
   onSelect,
   onClose,
+  onVolver,
   leida = false,
 }: {
   ficha: Ficha | null;
@@ -24,6 +25,8 @@ export function FichaExploraModal({
   temaColor: string;
   onSelect?: (f: Ficha) => void;
   onClose: () => void;
+  /** Flecha de volver atrás sin cerrar lo de debajo (ver FichaFisioModal). */
+  onVolver?: () => void;
   /** Ya se había leído antes de abrirla → aviso «✓ Leída» arriba. */
   leida?: boolean;
 }) {
@@ -46,6 +49,7 @@ export function FichaExploraModal({
       parrafos={ficha.explicacion}
       accent={accent}
       onClose={onClose}
+      onVolver={onVolver}
       onPrev={puedeNavegar ? () => salta(-1) : undefined}
       onNext={puedeNavegar ? () => salta(1) : undefined}
       contador={puedeNavegar && fichas ? `${idx + 1} / ${fichas.length}` : null}

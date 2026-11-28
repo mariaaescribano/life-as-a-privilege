@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
 import { Flecha } from "./LineaTiempoAstrologia";
 import TituloSeccion from "../global/TituloSeccion";
+import FotoViva from "../global/FotoViva";
+import PalabrasVivas from "../global/PalabrasVivas";
 import { ARTE_ASTROLOGIA } from "../../data/astrologiaArte";
 import { FONDO_PAGINA_BEIGE as BEIGE } from "../../GlobalVariables";
 import { useIdioma, useT } from "../../i18n";
@@ -42,37 +44,34 @@ export default function ArteAstrologia() {
             direction="column"
             gap={{ base: 5, md: 6 }}
             align="center"
+            // Las imágenes llegan con un zoom lento que se asienta; el pie entra después, desde abajo.
             sx={{
-              "@keyframes arteEntra": { from: { opacity: 0, transform: "translateY(14px)" }, to: { opacity: 1, transform: "none" } },
-              animation: "arteEntra 0.6s cubic-bezier(0.22,1,0.36,1) both",
-              "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+              // (las imágenes se descorren solas con FotoViva y el pie se enciende palabra a palabra)
             }}
           >
             {pieza.fotos.length === 2 ? (
               // Dos imágenes: MISMO tamaño exacto (misma proporción 5:4 y mismo ancho), recortando al centro con `cover`
               // si hace falta (un pequeño zoom en la que sea más cuadrada o más apaisada), para que queden alineadas y limpias.
               <Grid templateColumns={{ base: "1fr", md: "repeat(2, minmax(0, 1fr))" }} gap={{ base: 4, md: 6 }} w="100%" maxW={{ base: "420px", md: "1000px" }} mx="auto">
-                {pieza.fotos.map((src) => (
-                  <Box key={src} borderRadius="xl" overflow="hidden" border={`1.5px solid ${BEIGE}99`} bg={`${BEIGE}14`} lineHeight={0} sx={{ aspectRatio: "5 / 4" }}>
+                {pieza.fotos.map((src, k) => (
+                  <FotoViva key={src} desde={k === 0 ? "izq" : "der"} delay={k * 0.18} radio="12px" border={`1.5px solid ${BEIGE}99`} bg={`${BEIGE}14`} lineHeight={0} sx={{ aspectRatio: "5 / 4" }}>
                     <Image src={src} alt={en ? pieza.nombre.en : pieza.nombre.es} display="block" w="100%" h="100%" objectFit="cover" objectPosition="center" />
-                  </Box>
+                  </FotoViva>
                 ))}
               </Grid>
             ) : (
               // Una sola imagen: entera, todo lo grande que deja la pantalla.
               <Flex justify="center" w="100%">
                 {pieza.fotos.map((src) => (
-                  <Box key={src} borderRadius="xl" overflow="hidden" border={`1.5px solid ${BEIGE}99`} maxW="100%" bg={`${BEIGE}14`} lineHeight={0}>
+                  <FotoViva key={src} desde="centro" radio="12px" border={`1.5px solid ${BEIGE}99`} maxW="100%" bg={`${BEIGE}14`} lineHeight={0}>
                     <Image src={src} alt={en ? pieza.nombre.en : pieza.nombre.es} display="block" w="auto" h="auto" maxW="100%" maxH={{ base: "420px", md: "500px" }} objectFit="contain" />
-                  </Box>
+                  </FotoViva>
                 ))}
               </Flex>
             )}
 
             <Text textAlign="center" fontSize={{ base: "md", md: "xl" }} lineHeight="1.5" maxW="760px">
-              <Text as="span" fontWeight="700">{en ? pieza.nombre.en : pieza.nombre.es}</Text>
-              {" · "}
-              {en ? pieza.detalle.en : pieza.detalle.es}
+              <PalabrasVivas texto={`**${en ? pieza.nombre.en : pieza.nombre.es}** · ${en ? pieza.detalle.en : pieza.detalle.es}`} total={1} retraso={0.6} />
             </Text>
           </Flex>
 

@@ -6,6 +6,7 @@ import type { Opinion } from "../../dtos/opinion.type";
 import { useT } from "../../i18n";
 import { focoBlanco } from "../global/foco";
 import BandaFoto from "../global/BandaFoto";
+import { LifeLoader } from "../metodo/comicLoaders";
 
 /**
  * Las experiencias de las personas (TODAS las opiniones publicadas), debajo de las cuatro fotos de la portada.
@@ -42,14 +43,28 @@ const Flecha = ({ dir, onClick, label }: { dir: "izq" | "dcha"; onClick: () => v
 const WelcomeOpiniones = () => {
   const t = useT();
   const [opiniones, setOpiniones] = useState<Opinion[]>([]);
+  const [cargando, setCargando] = useState(true);
   const pista = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     fetch(`${API_URL}/opinion`)
       .then((r) => (r.ok ? r.json() : []))
       .then((data: Opinion[]) => setOpiniones(Array.isArray(data) ? data : []))
-      .catch(() => setOpiniones([]));
+      .catch(() => setOpiniones([]))
+      .finally(() => setCargando(false));
   }, []);
+
+  // Mientras llegan: la flor pequeña y debajo una frase en cursiva.
+  if (cargando) {
+    return (
+      <Flex direction="column" align="center" gap={3} py={{ base: 10, md: 14 }}>
+        <LifeLoader size="44px" />
+        <Text color={T} fontFamily="'EB Garamond', serif" fontStyle="italic" fontSize={{ base: "md", md: "lg" }}>
+          {t("opiniones.cargando")}
+        </Text>
+      </Flex>
+    );
+  }
 
   if (opiniones.length === 0) return null;
 

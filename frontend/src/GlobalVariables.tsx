@@ -180,8 +180,9 @@ export const fisiologiaDescrip = "No tenemos un cuerpo, somos un cuerpo. Redesc�
 export const neuropsicologiaNom = "Psicología";
 // export const neuropsicologiaBg = "#daa889"; // el de antes (claro: con letra beige no se leería)
 // export const neuropsicologiaTxt = "#5e2d10"; // el de antes
-export const neuropsicologiaBg = "#5e2d10";
-export const neuropsicologiaTxt = FONDO_PAGINA_BEIGE;
+// Foto de fondo clara (mármol crema): superficie clara y letra chocolate.
+export const neuropsicologiaBg = "#daa889";
+export const neuropsicologiaTxt = FONDO_PAGINA_TURQUESA;
 export function NeuropsicologiaIcon({ size = { base: "24px", md: "24px" } }: { size?: string | { base: string; md: string } }) {
   return (
     <Box
@@ -246,8 +247,10 @@ export const nutricionNom = "Nutrición";
 export const nutricionNomLink = "nutricion";
 // export const nutricionBg = "#e4f8e1"; // el de antes (claro: con letra beige no se leería)
 // export const nutricionTxt = "#2b362a"; // el de antes
-export const nutricionBg = "#2b362a";
-export const nutricionTxt = FONDO_PAGINA_BEIGE;
+// PRUEBA con la foto clara (nutri-anterior.webp): superficie clara y letra chocolate.
+// Para volver a la oscura: DisciplinaBgLayer → nutri.webp, Bg "#2b362a", Txt FONDO_PAGINA_BEIGE.
+export const nutricionBg = "#e4f8e1";
+export const nutricionTxt = FONDO_PAGINA_TURQUESA;
 export function NutricionIcon({ size = { base: "24px", md: "24px" }}) {
    return (
    <Box as="svg" xmlns="http://www.w3.org/2000/svg" height={size} viewBox="0 -960 960 960" width={size} fill={nutricionTxt}>

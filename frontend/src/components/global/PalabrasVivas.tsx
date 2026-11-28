@@ -51,6 +51,7 @@ export function PalabrasVivas({
   /** Sombra de las palabras en **negrita**. */
   sombraNegrita,
   cursivas = false,
+  listo = true,
 }: {
   texto: string;
   retraso?: number;
@@ -61,8 +62,11 @@ export function PalabrasVivas({
   sombraNegrita?: string;
   /** Entiende también *cursivas* (un solo asterisco), como los textos de Ayurveda. */
   cursivas?: boolean;
+  /** false = espera (aunque ya se vea) hasta que pase a true. */
+  listo?: boolean;
 }) {
-  const visto = useVistoConEspera("0px 0px -12% 0px", 0);
+  const visto0 = useVistoConEspera("0px 0px -12% 0px", 0);
+  const visto = { ref: visto0.ref, visible: visto0.visible && listo };
 
   // Trozos de texto (palabras y espacios) marcados como negrita/cursiva o no.
   const trozos: { p: string; negrita: boolean; cursiva: boolean }[] = [];

@@ -149,12 +149,12 @@ export default function MetodoNutricionCursos() {
                     border={`1px dashed ${nutricionTxt}44`} px={{ base: 6, md: 10 }} py={{ base: 12, md: 14 }}>
                 <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay="rgba(0,0,0,0.5)" />
                 <Text position="relative" zIndex={1} fontSize="4xl">🎓</Text>
-                <Text position="relative" zIndex={1} color="white" fontWeight={700} fontSize={{ base: "lg", md: "xl" }}
-                      style={{ textShadow: "0 1px 6px rgba(0,0,0,0.6)" }}>
+                <Text position="relative" zIndex={1} color={nutricionTxt} fontWeight={700} fontSize={{ base: "lg", md: "xl" }}
+                     >
                   {t("metodo.cursosPreparando")}
                 </Text>
                 <Text position="relative" zIndex={1} color="rgba(255,255,255,0.85)" fontSize={{ base: "sm", md: "md" }}
-                      fontStyle="italic" lineHeight="1.7" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}>{t("metodo.cursosAvanzadosPronto", { disciplina: t("disciplina.nutricion") })}</Text>
+                      fontStyle="italic" lineHeight="1.7">{t("metodo.cursosAvanzadosPronto", { disciplina: t("disciplina.nutricion") })}</Text>
               </Flex>
             </Reveal>
           )}

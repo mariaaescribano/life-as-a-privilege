@@ -1,5 +1,6 @@
 export const opiniones = {
   "opiniones.titulo": "Real experiences",
+  "opiniones.cargando": "Loading real experiences…",
   "opiniones.vacio": "No reviews published yet. Be the first to share yours!",
 
   "opiniones.dejar.titulo": "Leave your review",

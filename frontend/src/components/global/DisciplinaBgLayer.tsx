@@ -26,7 +26,7 @@ const DISCIPLINA_BG_IMG: Record<string, string> = {
   [ayurvedaNom]: "/img/fondos/hinduismo.webp",
   [neuropsicologiaNom]: "/img/fondos/psciologia.webp",
   [fisiologiaNom]: "/img/fondos/fisio.webp",
-  [nutricionNom]: "/img/fondos/nutri.webp",
+  [nutricionNom]: "/img/fondos/nutri-anterior.webp",
   [cabalaNom]: "/img/fondos/cabala.webp",
   [culturaNom]: "/img/fondos/cultura.webp",
 };

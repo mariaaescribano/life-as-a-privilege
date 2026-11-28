@@ -58,7 +58,8 @@ export default function TituloPestana() {
           if (b === "test-doshas") return t("aprendizaje.btn.testDoshas");
           return t("header.cursos");
         }
-        case "disciplina":
+        // La portada de Cultura se llama Filosofía en pantalla (y en la pestaña).
+        case "disciplina": return presentacionPorKey(b)?.key === "cultura" ? t("header.filosofia") : disciplina(b);
         case "d": return disciplina(b);
         case "elMetodo": return t("header.mapa");
         case "home": return t("header.home");

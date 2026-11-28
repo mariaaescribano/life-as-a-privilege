@@ -8,6 +8,8 @@ import { AvisoLeida } from "./MarcaLeido";
 import { ClavesRapidas } from "./ClavesRapidas";
 import { fisiologiaTxt, fisiologiaBg, fisiologiaNom } from "../../GlobalVariables";
 import { BotonCerrarDisciplina } from "./BotonCerrarDisciplina";
+import { FlechaBonita } from "../global/FlechaBonita";
+import { fondoDeDisciplina } from "../../utils/fondoDisciplina";
 import type { Celula } from "../../hardCoded/espacio/CelulasCuerpoData";
 
 const TXT = fisiologiaTxt;
@@ -66,6 +68,7 @@ export function FichaFisioModal({
   claves,
   parrafos,
   onClose,
+  onVolver,
   onPrev,
   onNext,
   contador = null,
@@ -89,6 +92,9 @@ export function FichaFisioModal({
   /** Uno o varios párrafos; se maquetan con el mismo estilo y separación. */
   parrafos: React.ReactNode[];
   onClose: () => void;
+  /** Si se pasa, aparece una flecha arriba a la izquierda que VUELVE atrás (a la lista de la que se abrió la
+   *  ficha) sin cerrar el popup de debajo; Escape hace lo mismo. La X sigue llamando a `onClose`. */
+  onVolver?: () => void;
   /** Si se pasan onPrev + onNext, aparecen las flechas y funciona el teclado. */
   onPrev?: () => void;
   onNext?: () => void;
@@ -144,13 +150,13 @@ export function FichaFisioModal({
 
   useEffect(() => {
     const h = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") (onVolver ?? onClose)();
       else if (e.key === "ArrowLeft") onPrev?.();
       else if (e.key === "ArrowRight") onNext?.();
     };
     window.addEventListener("keydown", h);
     return () => window.removeEventListener("keydown", h);
-  }, [onClose, onPrev, onNext]);
+  }, [onClose, onVolver, onPrev, onNext]);
 
   const scrollbarSx = {
     "&::-webkit-scrollbar": { width: "6px" },
@@ -241,6 +247,35 @@ export function FichaFisioModal({
 
       {/* X cerrar: la de la casa, con la acuarela de Fisiología */}
       <BotonCerrarDisciplina onClose={(e) => { e.stopPropagation(); onClose(); }} bg={fisiologiaBg} txt={fisiologiaTxt} zIndex={10} />
+
+      {/* Flecha de volver atrás (sin cerrarlo todo): la misma píldora redonda que la X, a la izquierda */}
+      {onVolver && (
+        <IconButton
+          aria-label={t("comun.volver")}
+          onClick={(e) => { e.stopPropagation(); onVolver(); }}
+          position="fixed"
+          top={{ base: 3, md: 5 }}
+          left={{ base: 3, md: 5 }}
+          zIndex={10}
+          variant="ghost"
+          borderRadius="full"
+          w={{ base: "42px", md: "48px" }}
+          h={{ base: "42px", md: "48px" }}
+          minW={{ base: "42px", md: "48px" }}
+          bg={fisiologiaBg}
+          backgroundImage={fondoDeDisciplina(fisiologiaBg) ? `url('${fondoDeDisciplina(fisiologiaBg)}')` : undefined}
+          backgroundSize="cover"
+          backgroundPosition="center"
+          border={`2px solid ${fisiologiaTxt}`}
+          color={fisiologiaTxt}
+          boxShadow={`0 0 12px ${fisiologiaTxt}55, 0 2px 10px rgba(0,0,0,0.4)`}
+          transition="transform 0.18s ease, box-shadow 0.18s ease"
+          _hover={{ bg: fisiologiaBg, transform: "scale(1.08)", boxShadow: `0 0 16px ${fisiologiaTxt}88, 0 2px 10px rgba(0,0,0,0.4)` }}
+          _active={{ bg: fisiologiaBg }}
+          _focusVisible={{ boxShadow: `0 0 0 2px ${fisiologiaTxt}` }}
+          icon={<FlechaBonita dir="prev" size="22px" />}
+        />
+      )}
 
       {/* Flechas para pasar de una ficha a otra (por encima del box) */}
       {puedeNavegar && (

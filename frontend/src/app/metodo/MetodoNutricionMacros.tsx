@@ -275,7 +275,7 @@ export default function MetodoNutricionMacros() {
           {/* El lema de la página */}
           <Reveal direction="up" distance={18} delay={0.1} duration={0.6} w="100%" display="flex" justifyContent="center">
             <Flex direction="column" align="center" gap={2} maxW="720px">
-              <Text color="white" fontSize={{ base: "xl", md: "3xl" }} fontWeight={600} fontStyle="italic"
+              <Text color={nutricionTxt} fontSize={{ base: "xl", md: "3xl" }} fontWeight={600} fontStyle="italic"
                     textAlign="center" lineHeight="1.5">
                 {t("metodo.nutri.macros.lema")}
               </Text>

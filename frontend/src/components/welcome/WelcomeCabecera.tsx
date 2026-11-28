@@ -22,6 +22,8 @@ const WelcomeCabecera = ({
   sinSeparador = false,
   izquierda = false,
 }: {
+  /** Un icono que cierra la frase (en la misma línea, del color de la letra). */
+  iconoFrase?: React.ReactNode;
   /** Sin la frase en cursiva de debajo del titular. */
   sinFrase?: boolean;
   /** En columna junto a la foto (la portada): sin mandala, titular más pequeño y más aire hasta la frase. */
@@ -120,10 +122,12 @@ const WelcomeCabecera = ({
           {(subtitulo ?? t("elMetodo.hero.secundaria")).split("\n").map((linea, n) => (
             <React.Fragment key={n}>
               {n > 0 && <br />}
-              {/^\*\*.+\*\*$/.test(linea)
+              {/^\*\*[^*]+\*\*$/.test(linea)
                 ? <b>{linea.slice(2, -2)}</b>
-                : linea.split(/(\*\*[\p{L}\p{N}]+)/u).map((trozo, i) =>
-                    trozo.startsWith("**") ? <b key={i}>{trozo.slice(2)}</b> : trozo,
+                : linea.split(/(\*\*[^*]+\*\*|\*\*[\p{L}\p{N}]+)/u).map((trozo, i) =>
+                    trozo.length > 4 && trozo.startsWith("**") && trozo.endsWith("**")
+                      ? <b key={i}>{trozo.slice(2, -2)}</b>
+                      : trozo.startsWith("**") ? <b key={i}>{trozo.slice(2)}</b> : trozo,
                   )}
             </React.Fragment>
           ))}

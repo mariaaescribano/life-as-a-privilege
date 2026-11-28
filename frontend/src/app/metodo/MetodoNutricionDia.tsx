@@ -462,8 +462,8 @@ export default function MetodoNutricionDia() {
                    textAlign="center" bg={`${nutricionBg}66`} border={`1px solid ${nutricionTxt}55`}
                    style={{ boxShadow: `inset 0 0 26px rgba(0,0,0,0.2), 0 0 18px ${nutricionTxt}18` }}>
                 <Text fontSize={{ base: "3xl", md: "4xl" }} mb={2}>🔒</Text>
-                <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight={700}
-                      style={{ textShadow: "0 1px 8px rgba(0,0,0,0.5)" }}>
+                <Text color={nutricionTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight={700}
+                     >
                   {t("metodo.dia.primeroCalorias")}
                 </Text>
                 <Text color="rgba(255,255,255,0.85)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.7" mt={3} mb={6}>

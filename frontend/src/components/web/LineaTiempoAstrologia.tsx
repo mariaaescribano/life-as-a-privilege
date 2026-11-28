@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
 import { Reveal } from "../global/Reveal";
+import FotoViva from "../global/FotoViva";
+import PalabrasVivas from "../global/PalabrasVivas";
 import { FlechaBonita } from "../global/FlechaBonita";
 import { focoBlanco } from "../global/foco";
 import { HISTORIA_ASTROLOGIA } from "../metodo/comicHistoriaAstrologia";
@@ -14,17 +16,27 @@ import { FONDO_PAGINA_BEIGE as BEIGE } from "../../GlobalVariables";
  * banda se sigue viendo detrás). A los lados, una flecha para pasar a la viñeta anterior o a la siguiente: al pasar,
  * entran la foto y el texto nuevos. Letra en beige.
  */
-const entra = {
-  "@keyframes lineaEntra": { from: { opacity: 0, transform: "translateY(14px)" }, to: { opacity: 1, transform: "none" } },
-  animation: "lineaEntra 0.55s cubic-bezier(0.22,1,0.36,1) both",
+// Entrada de la viñeta: llega desde el lado hacia el que se avanza (derecha si va a la siguiente, izquierda si vuelve),
+// con un desenfoque leve que se aclara. Los párrafos entran después, uno a uno (`entraTexto`).
+const EASE = "cubic-bezier(0.22,1,0.36,1)";
+const entra = (sentido: 1 | -1, retraso = 0) => ({
+  "@keyframes lineaEntraSig": { from: { opacity: 0, transform: "translateX(34px)", filter: "blur(4px)" }, to: { opacity: 1, transform: "none", filter: "blur(0)" } },
+  "@keyframes lineaEntraAnt": { from: { opacity: 0, transform: "translateX(-34px)", filter: "blur(4px)" }, to: { opacity: 1, transform: "none", filter: "blur(0)" } },
+  animation: `${sentido === 1 ? "lineaEntraSig" : "lineaEntraAnt"} 0.8s ${EASE} ${retraso}s both`,
   "@media (prefers-reduced-motion: reduce)": { animation: "none" },
-};
+});
+const entraTexto = (retraso: number) => ({
+  "@keyframes lineaTexto": { from: { opacity: 0, transform: "translateY(12px)" }, to: { opacity: 1, transform: "none" } },
+  animation: `lineaTexto 0.7s ${EASE} ${retraso}s both`,
+  "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+});
 
-export function Flecha({ dir, onClick, desactivada, label }: { dir: "prev" | "next"; onClick: () => void; desactivada: boolean; label: string }) {
+export function Flecha({ dir, onClick, desactivada, label, color = BEIGE }: { dir: "prev" | "next"; onClick: () => void; desactivada: boolean; label: string; color?: string }) {
   return (
     <Box
       as="button"
       type="button"
+      role="group"
       onClick={onClick}
       disabled={desactivada}
       aria-label={label}
@@ -35,16 +47,20 @@ export function Flecha({ dir, onClick, desactivada, label }: { dir: "prev" | "ne
       h={{ base: "44px", md: "52px" }}
       flexShrink={0}
       borderRadius="full"
-      border={`1.5px solid ${BEIGE}`}
+      border={`1.5px solid ${color}`}
       bg="transparent"
-      color={BEIGE}
+      color={color}
       cursor={desactivada ? "default" : "pointer"}
       opacity={desactivada ? 0.3 : 1}
-      transition="background 0.25s ease, opacity 0.25s ease"
-      _hover={desactivada ? {} : { bg: `${BEIGE}1f` }}
+      transition="background 0.25s ease, opacity 0.25s ease, transform 0.25s ease"
+      _hover={desactivada ? {} : { bg: `${color}1f`, transform: "scale(1.06)" }}
+      _active={desactivada ? {} : { transform: "scale(0.94)" }}
       _focusVisible={focoBlanco}
     >
-      <FlechaBonita dir={dir} size="22px" />
+      {/* La flecha se adelanta un poco hacia donde lleva. */}
+      <Box display="flex" transition={`transform 0.35s ${EASE}`} _groupHover={desactivada ? {} : { transform: `translateX(${dir === "next" ? 3 : -3}px)` }}>
+        <FlechaBonita dir={dir} size="22px" />
+      </Box>
     </Box>
   );
 }
@@ -52,6 +68,10 @@ export function Flecha({ dir, onClick, desactivada, label }: { dir: "prev" | "ne
 export default function LineaTiempoAstrologia({ activo }: { activo: boolean }) {
   const vinetas = useComic("astrologia-historia", HISTORIA_ASTROLOGIA);
   const [i, setI] = useState(0);
+  // Hacia dónde se va (1 = siguiente, -1 = anterior), para que la viñeta nueva llegue desde ese lado.
+  const sentido = useRef<1 | -1>(1);
+  const ir = (f: (n: number) => number) =>
+    setI((n) => { const m = f(n); if (m !== n) sentido.current = m > n ? 1 : -1; return m; });
   const total = vinetas.length;
   const v = vinetas[Math.min(i, total - 1)];
 
@@ -66,16 +86,17 @@ export default function LineaTiempoAstrologia({ activo }: { activo: boolean }) {
     const onKey = (e: KeyboardEvent) => {
       const t = e.target as HTMLElement | null;
       if (t && /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)) return;
-      if (e.key === "ArrowLeft") setI((n) => Math.max(0, n - 1));
-      if (e.key === "ArrowRight") setI((n) => Math.min(total - 1, n + 1));
+      if (e.key === "ArrowLeft") ir((n) => Math.max(0, n - 1));
+      if (e.key === "ArrowRight") ir((n) => Math.min(total - 1, n + 1));
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [total]);
 
   if (!v) return null;
-  const anterior = () => setI((n) => Math.max(0, n - 1));
-  const siguiente = () => setI((n) => Math.min(total - 1, n + 1));
+  const anterior = () => ir((n) => Math.max(0, n - 1));
+  const siguiente = () => ir((n) => Math.min(total - 1, n + 1));
+  const s = sentido.current;
 
   return (
     <Reveal activo={activo} direction="up" distance={30} scaleFrom={0.97} blur duration={1} delay={0.2} w="100%">
@@ -87,14 +108,15 @@ export default function LineaTiempoAstrologia({ activo }: { activo: boolean }) {
         <Flex direction="column" flex="1" minW={0} gap={{ base: 4, md: 5 }}>
           <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={{ base: 5, md: 8 }} alignItems="stretch">
             {/* Foto, a la izquierda */}
-            <Box key={`f${i}`} sx={entra} borderRadius="xl" overflow="hidden" border={`1px solid ${BEIGE}66`} alignSelf="start" w="100%" maxW={{ base: "320px", md: "none" }} mx={{ base: "auto", md: 0 }}>
+            {/* La foto se descorre desde el lado hacia el que se avanza, se asienta con zoom y, al pasar el ratón, se inclina. */}
+            <FotoViva key={`f${i}`} desde={s === 1 ? "der" : "izq"} radio="12px" border={`1px solid ${BEIGE}66`} alignSelf="start" w="100%" maxW={{ base: "320px", md: "none" }} mx={{ base: "auto", md: 0 }}>
               <Image src={v.src} alt={v.eyebrow ?? ""} w="100%" h="auto" display="block" />
-            </Box>
+            </FotoViva>
 
             {/* Texto, a la derecha: box transparente con el scroll vertical a la vista. */}
             <Box
               key={`t${i}`}
-              sx={entra}
+              sx={entra(s, 0.08)}
               position="relative"
               border={`1.5px solid ${BEIGE}80`}
               borderRadius="2xl"
@@ -120,12 +142,13 @@ export default function LineaTiempoAstrologia({ activo }: { activo: boolean }) {
               >
                 {v.eyebrow && (
                   <Text fontWeight="700" fontSize={{ base: "sm", md: "md" }} letterSpacing="0.18em" textTransform="uppercase" mb={3} opacity={0.9}>
-                    {v.eyebrow}
+                    <PalabrasVivas texto={v.eyebrow} total={0.7} retraso={0.35} />
                   </Text>
                 )}
+                {/* El texto se enciende palabra a palabra, párrafo tras párrafo, y las que quedan más abajo esperan a que bajes. */}
                 {v.paragraphs.map((p, j) => (
                   <Text key={j} fontSize={{ base: "md", md: "lg" }} lineHeight="1.65" mt={j === 0 ? 0 : 3}>
-                    {p}
+                    <PalabrasVivas texto={p} cursivas total={1.3} retraso={0.5 + j * 0.25} />
                   </Text>
                 ))}
               </Box>
@@ -137,9 +160,15 @@ export default function LineaTiempoAstrologia({ activo }: { activo: boolean }) {
             <Box display={{ base: "block", md: "none" }}>
               <Flecha dir="prev" onClick={anterior} desactivada={i === 0} label="‹" />
             </Box>
-            <Text fontSize={{ base: "sm", md: "md" }} letterSpacing="0.2em" opacity={0.8}>
-              {i + 1} / {total}
-            </Text>
+            <Flex direction="column" align="center" gap={2}>
+              <Text key={i} sx={entraTexto(0)} fontSize={{ base: "sm", md: "md" }} letterSpacing="0.2em" opacity={0.8}>
+                {i + 1} / {total}
+              </Text>
+              {/* Barra de progreso: la línea se va llenando con el tiempo recorrido. */}
+              <Box w={{ base: "120px", md: "180px" }} h="1.5px" bg={`${BEIGE}33`} borderRadius="full" overflow="hidden">
+                <Box h="100%" bg={BEIGE} borderRadius="full" style={{ width: `${((i + 1) / total) * 100}%` }} transition={`width 0.7s ${EASE}`} />
+              </Box>
+            </Flex>
             <Box display={{ base: "block", md: "none" }}>
               <Flecha dir="next" onClick={siguiente} desactivada={i === total - 1} label="›" />
             </Box>

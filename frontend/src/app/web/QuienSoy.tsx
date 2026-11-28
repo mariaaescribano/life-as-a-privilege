@@ -7,7 +7,6 @@ import WelcomeCabecera from "../../components/welcome/WelcomeCabecera";
 import { Reveal } from "../../components/global/Reveal";
 import Certificaciones from "../../components/web/Certificaciones";
 import BandaFoto from "../../components/global/BandaFoto";
-import SeparadorFlor from "../../components/welcome/SeparadorFlor";
 import TextoRico from "../../components/global/TextoRico";
 import { FONDO_PAGINA_BEIGE as BEIGE, FONDO_PAGINA_TURQUESA as T } from "../../GlobalVariables";
 import { useT } from "../../i18n";
@@ -102,24 +101,6 @@ const QuienSoy = () => {
             </Box>
           </Reveal>
         </Flex>
-
-        {/* ── Cierre: las dos frases entre dos separaciones con el mandala ── */}
-        <Box pt={{ base: 6, md: 10 }}>
-          <SeparadorFlor />
-          <Flex direction="column" align="center" textAlign="center" gap={{ base: 4, md: 5 }} maxW="860px" mx="auto" px={{ base: 5, md: 10 }} py={{ base: 2, md: 4 }}>
-            <Reveal inView direction="up" distance={20} duration={1}>
-              <Text color={T} fontSize={{ base: "xl", md: "2xl", lg: "3xl" }} lineHeight="1.45" letterSpacing="0.01em">
-                <TextoRico texto={t("quienSoy.c1")} />
-              </Text>
-            </Reveal>
-            <Reveal inView direction="up" distance={16} duration={1} delay={0.2}>
-              <Text color={T} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.6" letterSpacing="0.01em">
-                <TextoRico texto={t("quienSoy.c2")} />
-              </Text>
-            </Reveal>
-          </Flex>
-          <SeparadorFlor />
-        </Box>
 
         {/* ── Mi formación y herramientas para asesorarte + el botón: sobre el mármol chocolate, letra beige ── */}
         <Box mt={{ base: 10, md: 16 }} pb={{ base: 20, md: 28 }}>

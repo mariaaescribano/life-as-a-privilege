@@ -116,7 +116,7 @@ export default function MetodoNutricionUltraprocesados() {
           </Reveal>
 
           <Reveal direction="up" distance={14} delay={0.16} duration={0.6} w="100%" display="flex" justifyContent="center">
-            <Text color="white" fontSize={{ base: "sm", md: "md" }} lineHeight="1.85"
+            <Text color={nutricionTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.85"
                   textAlign="center" maxW="720px">
               {t("metodo.nutri.ultra.intro")}
             </Text>
@@ -161,7 +161,7 @@ export default function MetodoNutricionUltraprocesados() {
           {/* ── CÓMO LEER UNA ETIQUETA: lo único accionable ───────────────── */}
           <Reveal inView direction="up" distance={18} duration={0.6} w="100%" display="flex"
                   justifyContent="center" flexDirection="column" alignItems="center" gap={3}>
-            <Text color="white" fontWeight={700} fontSize={{ base: "xl", md: "2xl" }} textAlign="center">
+            <Text color={nutricionTxt} fontWeight={700} fontSize={{ base: "xl", md: "2xl" }} textAlign="center">
               {t("metodo.nutri.ultra.etiquetaTitulo")}
             </Text>
             <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
@@ -209,7 +209,7 @@ export default function MetodoNutricionUltraprocesados() {
           {/* ── LAS FICHAS, por nivel de certeza ──────────────────────────── */}
           <Reveal inView direction="up" distance={18} duration={0.6} w="100%" display="flex"
                   justifyContent="center" flexDirection="column" alignItems="center" gap={3}>
-            <Text color="white" fontWeight={700} fontSize={{ base: "xl", md: "2xl" }} textAlign="center">
+            <Text color={nutricionTxt} fontWeight={700} fontSize={{ base: "xl", md: "2xl" }} textAlign="center">
               {t("metodo.nutri.ultra.fichasTitulo")}
             </Text>
             <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
@@ -223,7 +223,7 @@ export default function MetodoNutricionUltraprocesados() {
               {/* Encabezado del bloque: solo el texto y una rayita fina. */}
               <Reveal inView direction="up" distance={12} duration={0.5} w="100%">
                 <Flex align="center" gap={4} w="100%">
-                  <Text color="white" fontWeight={700} fontSize={{ base: "sm", md: "md" }}
+                  <Text color={nutricionTxt} fontWeight={700} fontSize={{ base: "sm", md: "md" }}
                         letterSpacing="0.08em" textTransform="uppercase" flexShrink={0}>
                     {grupo}
                   </Text>
@@ -248,7 +248,7 @@ export default function MetodoNutricionUltraprocesados() {
           {/* Cierre: el cóctel que nadie ha estudiado. Sobre el turquesa, sin caja. */}
           <Reveal inView direction="up" distance={18} delay={0.1} duration={0.7} w="100%"
                   display="flex" justifyContent="center">
-            <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontStyle="italic" fontWeight="400"
+            <Text color={nutricionTxt} fontSize={{ base: "xl", md: "2xl" }} fontStyle="italic" fontWeight="400"
                   textAlign="center" maxW="740px" lineHeight="1.7" mt={{ base: 2, md: 4 }}>
               {t("metodo.nutri.ultra.cierre")}
             </Text>

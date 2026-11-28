@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Box, Flex, Grid, Image, Text, useBreakpointValue } from "@chakra-ui/react";
 import { Flecha } from "./LineaTiempoAstrologia";
-import TextoRico from "../global/TextoRico";
+import PalabrasVivas from "../global/PalabrasVivas";
+import FotoViva from "../global/FotoViva";
 import { MandalaTinte } from "../global/MandalaTinte";
 import { type AutorAstrologia } from "../../data/autoresAstrologia";
 import TituloSeccion from "../global/TituloSeccion";
@@ -33,9 +34,11 @@ function Ficha({ autor, fotoALaIzquierda, compacta = false }: { autor: AutorAstr
   const parrafos = (idioma === "en" ? autor.texto.en : autor.texto.es).split(/\n\s*\n/);
 
   const foto = (
-    <Box position="relative" w="100%" maxW={compacta ? "136px" : "180px"} mx="auto">
-      <Box position="absolute" inset="-6px" borderRadius="20px" border={`1px solid ${BEIGE}55`} pointerEvents="none" />
-      <Box borderRadius="15px" overflow="hidden" border={`1.5px solid ${BEIGE}`} sx={{ aspectRatio: "4 / 5" }} bg={`${BEIGE}14`}>
+    <Box position="relative" role="group" w="100%" maxW={compacta ? "136px" : "180px"} mx="auto">
+      {/* El filo exterior respira hacia fuera al pasar el ratón. */}
+      <Box position="absolute" inset="-6px" borderRadius="20px" border={`1px solid ${BEIGE}55`} pointerEvents="none" transition="inset 0.5s cubic-bezier(0.22,1,0.36,1), border-color 0.4s ease" _groupHover={{ inset: "-10px", borderColor: `${BEIGE}99` }} />
+      {/* El retrato se descorre desde el lado de su texto, se asienta con zoom y se inclina hacia el ratón. */}
+      <FotoViva desde={fotoALaIzquierda ? "izq" : "der"} delay={0.25} radio="15px" border={`1.5px solid ${BEIGE}`} sx={{ aspectRatio: "4 / 5" }} bg={`${BEIGE}14`}>
         {autor.foto && !fotoRota ? (
           <Image src={autor.foto} alt={nombre} w="100%" h="100%" objectFit="cover" display="block" loading="lazy" onError={() => setFotoRota(true)} />
         ) : (
@@ -43,13 +46,13 @@ function Ficha({ autor, fotoALaIzquierda, compacta = false }: { autor: AutorAstr
             <MandalaTinte h="40px" color={BEIGE} />
           </Flex>
         )}
-      </Box>
+      </FotoViva>
     </Box>
   );
 
   const titulo = (
     <Text fontWeight="700" fontSize={{ base: "lg", md: "xl" }} letterSpacing="0.04em" lineHeight="1.25">
-      {nombre}
+      <PalabrasVivas texto={nombre} total={0.6} retraso={0.3} />
       {fechas && (
         <Text as="span" fontWeight="400" fontSize={{ base: "sm", md: "md" }} opacity={0.8} display={compacta ? "block" : "inline"}>
           {compacta ? fechas : ` · ${fechas}`}
@@ -81,7 +84,7 @@ function Ficha({ autor, fotoALaIzquierda, compacta = false }: { autor: AutorAstr
       >
         {parrafos.map((p, i) => (
           <Text key={i} fontSize={{ base: "sm", md: "md" }} lineHeight="1.6" mt={i === 0 ? 0 : 2}>
-            <TextoRico texto={p} />
+            <PalabrasVivas texto={p} cursivas total={1.2} retraso={0.5 + i * 0.25} />
           </Text>
         ))}
       </Box>
@@ -149,14 +152,20 @@ export default function AutoresAstrologia({ lista, titulo }: { lista: AutorAstro
           key={n}
           direction="column"
           gap={{ base: 8, md: 8 }}
-          sx={{
-            "@keyframes autoresEntra": { from: { opacity: 0, transform: "translateY(14px)" }, to: { opacity: 1, transform: "none" } },
-            animation: "autoresEntra 0.55s cubic-bezier(0.22,1,0.36,1) both",
-            "@media (prefers-reduced-motion: reduce)": { animation: "none" },
-          }}
         >
+          {/* Cada ficha entra a su turno, desde el lado de su foto. */}
           {pareja.map((a, k) => (
-            <Ficha key={a.nombre} autor={a} fotoALaIzquierda={k === 0} compacta={movil} />
+            <Box
+              key={a.nombre}
+              sx={{
+                "@keyframes autoresEntraIzq": { from: { opacity: 0, transform: "translateX(-28px)", filter: "blur(4px)" }, to: { opacity: 1, transform: "none", filter: "blur(0)" } },
+                "@keyframes autoresEntraDer": { from: { opacity: 0, transform: "translateX(28px)", filter: "blur(4px)" }, to: { opacity: 1, transform: "none", filter: "blur(0)" } },
+                animation: `${k === 0 ? "autoresEntraIzq" : "autoresEntraDer"} 0.85s cubic-bezier(0.22,1,0.36,1) ${k * 0.2}s both`,
+                "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+              }}
+            >
+              <Ficha autor={a} fotoALaIzquierda={k === 0} compacta={movil} />
+            </Box>
           ))}
         </Flex>
 

@@ -1,6 +1,6 @@
 export const aprendizaje = {
   "aprendizaje.titulo": "COURSES",
-  "aprendizaje.lema": "Eight ways of looking. One human being.",
+  "aprendizaje.lema": "Different perspectives that can help us",
 
   "aprendizaje.enConstruccion": "Discipline under construction.",
   "aprendizaje.cursoNoEncontrado": "Course not found.",

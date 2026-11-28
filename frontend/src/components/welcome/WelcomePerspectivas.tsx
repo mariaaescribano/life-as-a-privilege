@@ -18,7 +18,7 @@ type Perspectiva = { foto: string; alt: string; ruta: string; titulo?: ClaveText
 
 const PERSPECTIVAS: Perspectiva[] = [
   { foto: "/img/welcome/perspectiva-mente.webp", alt: "", ruta: "/disciplina/psicologia", titulo: "welcome.persp.1.titulo" },
-  { foto: "/img/welcome/perspectiva-filosofia.webp", alt: "", ruta: "/disciplina/cultura", titulo: "welcome.persp.2.titulo" },
+  { foto: "/img/welcome/perspectiva-filosofia.webp", alt: "", ruta: "/disciplina/filosofia", titulo: "welcome.persp.2.titulo" },
   { foto: "/img/welcome/perspectiva-astrologia.webp", alt: "", ruta: "/disciplina/astrologia", titulo: "welcome.persp.3.titulo" },
   { foto: "/img/welcome/perspectiva-acompanar.webp", alt: "", ruta: "/disciplina/fisiologia", titulo: "welcome.persp.4.titulo" },
 ];

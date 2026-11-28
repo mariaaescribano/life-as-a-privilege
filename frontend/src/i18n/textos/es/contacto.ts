@@ -3,7 +3,7 @@ export const contacto = {
   "contacto.titulo": "Contáctame",
   "contacto.subtitulo": "¿Tienes alguna duda o te gustaría ponerte en contacto conmigo? ¡Escríbeme sin compromiso! Estaré encantada de ayudarte :)",
   // Subtítulo de la página del formulario (/contacto/escribir).
-  "contacto.formSubtitulo": "Escribe lo que quieras y te respondo al correo que me dejes.",
+  "contacto.formSubtitulo": "Escribe lo que necesites y te respondo lo antes posible",
 
   // ── Las vías (tarjetas de arriba) ────────────────────────────────────
   // Botón flotante «Contáctame» (su popup es el de «Hablemos juntos», elMetodo.llamada.*)

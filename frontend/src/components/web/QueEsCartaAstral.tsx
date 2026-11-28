@@ -5,12 +5,14 @@ import CartaEjemplo from "./CartaEjemplo";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
 import { FlechaBonita } from "../global/FlechaBonita";
 import { focoBlanco } from "../global/foco";
-import TextoRico from "../global/TextoRico";
+import PalabrasVivas from "../global/PalabrasVivas";
 import { VINETAS_CASAS, VINETAS_PLANETAS, VINETAS_SIGNOS } from "../metodo/ComicAstrologiaModal";
 import { FONDO_PAGINA_BEIGE as BEIGE, FONDO_PAGINA_TURQUESA as T, astrologiaNom } from "../../GlobalVariables";
 import { MandalaTinte } from "../global/MandalaTinte";
 import { useT } from "../../i18n";
 import { useNavigate } from "react-router-dom";
+import { motion, useInView, useReducedMotion } from "framer-motion";
+import FotoViva, { type FotoDesde } from "../global/FotoViva";
 
 /**
  * «¿Qué es una carta astral?»: título, una frase de apertura y tres columnas en fila (Casas · Signos · Planetas),
@@ -22,7 +24,25 @@ const rnd = (min: number, max: number) => min + Math.random() * (max - min);
 
 const unicas = (v: { src: string }[]) => Array.from(new Set(v.map((x) => x.src)));
 
-function CajaFotos({ fotos, activo }: { fotos: string[]; activo: boolean }) {
+/** Raya fina que se abre desde el centro hacia los lados al llegar a ella (se difumina en las puntas). */
+function RayaCentro() {
+  const reduce = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+  const visto = useInView(ref, { once: true, amount: 1 });
+  const on = reduce || visto;
+  return (
+    <Box ref={ref} w="100%" h="1px" pt={0}>
+      <motion.div
+        style={{ height: 1, width: "100%", transformOrigin: "center", background: `linear-gradient(to right, ${T}00, ${T}99 30%, ${T}99 70%, ${T}00)` }}
+        initial={reduce ? false : { scaleX: 0, opacity: 0 }}
+        animate={{ scaleX: on ? 1 : 0, opacity: on ? 1 : 0 }}
+        transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
+      />
+    </Box>
+  );
+}
+
+function CajaFotos({ fotos, activo, desde, delay }: { fotos: string[]; activo: boolean; desde: FotoDesde; delay: number }) {
   const [actual, setActual] = useState(() => Math.floor(Math.random() * fotos.length));
   const [previa, setPrevia] = useState<number | null>(null);
   const actualRef = useRef(actual);
@@ -57,13 +77,13 @@ function CajaFotos({ fotos, activo }: { fotos: string[]; activo: boolean }) {
   }, [activo, fotos]);
 
   return (
-    <Box
-      position="relative"
+    // Cada caja se descorre desde un lado distinto y se inclina hacia el ratón.
+    <FotoViva
+      desde={desde}
+      delay={delay}
+      radio="16px"
       w="100%"
-      borderRadius="2xl"
-      overflow="hidden"
       border={`1.5px solid ${T}80`}
-      bg="transparent"
       sx={{ aspectRatio: "1 / 1" }}
     >
       {previa !== null && (
@@ -79,12 +99,13 @@ function CajaFotos({ fotos, activo }: { fotos: string[]; activo: boolean }) {
         h="100%"
         objectFit="cover"
         sx={{
-          "@keyframes cartaFundido": { from: { opacity: 0 }, to: { opacity: 1 } },
-          animation: "cartaFundido 0.8s ease both",
+          // La foto nueva se funde y, a la vez, se asienta con un zoom lento.
+          "@keyframes cartaFundido": { from: { opacity: 0, transform: "scale(1.08)" }, to: { opacity: 1, transform: "scale(1)" } },
+          animation: "cartaFundido 1.4s cubic-bezier(0.22,1,0.36,1) both",
           "@media (prefers-reduced-motion: reduce)": { animation: "none" },
         }}
       />
-    </Box>
+    </FotoViva>
   );
 }
 
@@ -123,28 +144,32 @@ export default function QueEsCartaAstral({ activo }: { activo: boolean }) {
         <Flex direction="column" gap={{ base: 4, md: 5 }}>
           <Reveal inView direction="left" distance={22} duration={0.9} mb={{ base: 2, md: 3 }}>
             <Text fontWeight="700" fontSize={{ base: "2xl", md: "3xl", lg: "4xl" }} letterSpacing="0.05em" lineHeight="1.2" textTransform="uppercase">
-              {t("astroCarta.titulo")}
+              <PalabrasVivas texto={t("astroCarta.titulo")} total={0.8} />
             </Text>
           </Reveal>
+          {/* Cada párrafo entra con su caja y, dentro, sus palabras se encienden de una en una. */}
           {(["astroCarta.t1", "astroCarta.t2", "astroCarta.t3"] as const).map((k, i) => (
             <Reveal key={k} inView direction="left" distance={26} duration={0.9} delay={0.15 + i * 0.15}>
               <Text fontSize={{ base: "lg", md: "xl" }} lineHeight="1.7">
-                <TextoRico texto={t(k)} />
+                <PalabrasVivas texto={t(k)} cursivas retraso={0.2 + i * 0.15} />
               </Text>
             </Reveal>
           ))}
         </Flex>
       </Grid>
 
-      <Grid w="100%" templateColumns={{ base: "1fr", md: "repeat(3, minmax(0, 1fr))" }} gap={{ base: 8, md: 8 }} pt={{ base: 6, md: 12 }}>
+      {/* Raya que nace en el centro y se extiende hacia los dos lados, antes de las tres columnas. */}
+      <RayaCentro />
+
+      <Grid w="100%" templateColumns={{ base: "1fr", md: "repeat(3, minmax(0, 1fr))" }} gap={{ base: 8, md: 8 }} pt={{ base: 2, md: 4 }}>
         {columnas.map((c, i) => (
           <Reveal key={c.frase} inView direction="up" distance={26} scaleFrom={0.97} duration={0.9} delay={i * 0.15}>
             <Flex direction="column" gap={{ base: 3, md: 5 }} align={{ base: "center", md: "stretch" }}>
               <Text fontSize={{ base: "lg", md: "xl" }} lineHeight="1.4">
-                <TextoRico texto={t(c.frase)} />
+                <PalabrasVivas texto={t(c.frase)} cursivas retraso={i * 0.15} />
               </Text>
-              <Box w="100%" maxW={{ base: "280px", md: "none" }}>
-                <CajaFotos fotos={c.fotos} activo={activo} />
+              <Box w="100%" maxW={{ base: "280px", md: "none" }} transition="transform 0.4s cubic-bezier(0.22,1,0.36,1)" _hover={{ transform: "translateY(-4px)" }}>
+                <CajaFotos fotos={c.fotos} activo={activo} desde={(["izq", "abajo", "der"] as const)[i]} delay={0.35 + i * 0.12} />
               </Box>
             </Flex>
           </Reveal>
@@ -170,7 +195,8 @@ export default function QueEsCartaAstral({ activo }: { activo: boolean }) {
           fontWeight="700"
           cursor="pointer"
           transition="transform 0.3s ease, border-color 0.3s ease"
-          _hover={{ transform: "translateY(-2px)" }}
+          _hover={{ transform: "translateY(-3px) scale(1.015)" }}
+          _active={{ transform: "scale(0.98)" }}
           _focusVisible={focoBlanco}
         >
           {/* Fondo: el cielo estrellado de Astrología, dentro de la píldora. */}
